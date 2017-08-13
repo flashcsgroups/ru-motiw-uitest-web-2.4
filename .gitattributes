@@ -1,2 +1,2 @@
-src/test/* linguist-vendored
+src/test/java/ru/motiw/testsWeb/* linguist-vendored
 src/main/* linguist-vendored
