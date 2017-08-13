@@ -1,2 +1,3 @@
 src/test/java/ru/motiw/testsWeb/* linguist-vendored
 src/test/java/ru/motiw/testsWeb/UserAuthenticationTest.java linguist-vendored
+src/test/* linguist-language=Java
