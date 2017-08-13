@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
+  <test verbose="2" name="Default test">
+    <classes>
+      <class name="ru.motiw.web.steps.Documents.CreateDocument.NewDocumentSteps"/>
+      <class name="ru.motiw.testsWeb.Administration.SystemInformationTest"/>
+      <class name="ru.motiw.web.elements.elementsweb.Internal.InternalElements"/>
+      <class name="ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.ObligatoryFieldDocument"/>
+      <class name="ru.motiw.utils.WindowsUtil"/>
+      <class name="ru.motiw.web.model.Administration.Users.Module"/>
+      <class name="ru.motiw.web.elements.elementsweb.Tasks.TaskForm.ProjectFormElements"/>
+      <class name="ru.motiw.web.model.Administration.FieldsObject.TypeListFieldsDate"/>
+      <class name="ru.motiw.web.steps.Administration.TypesOfTables.TypesOfTablesEditSteps"/>
+      <class name="ru.motiw.web.steps.Options.EventTemplatesSteps"/>
+      <class name="ru.motiw.testsWeb.ValidationObjectsDataBase.DataBaseValidationUsersTest"/>
+      <class name="ru.motiw.web.steps.Administration.Users.DepartmentSteps"/>
+      <class name="ru.motiw.web.model.DocflowAdministration.RouteSchemeEditor.RouteSchemeEditor"/>
+      <class name="ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.FieldTypeDepartmentDocument"/>
+      <class name="ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.AutoCalculationOfNumeratorFields"/>
+      <class name="ru.motiw.web.model.Administration.FieldsObject.TypeListFieldsDirectory"/>
+      <class name="ru.motiw.web.model.DocflowAdministration.DictionaryEditor.DictionaryEditor"/>
+      <class name="ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.FieldDocument"/>
+      <class name="ru.motiw.testsWeb.DocflowAdministration.DocumentRegistrationCardsTest"/>
+      <class name="ru.motiw.web.model.Administration.FieldsObject.TypeListFieldsText"/>
+      <class name="ru.motiw.web.steps.Administration.TaskTypeListSteps"/>
+      <class name="ru.motiw.web.elements.elementspda.Task.TaskDescriptionStepsPDA"/>
+      <class name="ru.motiw.web.model.Administration.FieldsObject.TypeListFieldsImage"/>
+      <class name="ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.CreationOfLinkedDocuments"/>
+      <class name="ru.motiw.data.dataproviders.Options"/>
+      <class name="ru.motiw.web.model.Document.Document"/>
+      <class name="ru.motiw.web.model.Administration.FieldsObject.TypeListFieldsEmail"/>
+      <class name="ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditTasksSteps"/>
+      <class name="ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.SettingsFinalVersion"/>
+      <class name="ru.motiw.web.model.Administration.FieldsObject.TypeListFieldsInteger"/>
+      <class name="ru.motiw.web.model.Administration.FieldsObject.TypeListFieldsPhone"/>
+      <class name="ru.motiw.web.steps.DocflowAdministration.DictionaryEditorSteps"/>
+      <class name="ru.motiw.testsPda.TodayPDATest"/>
+      <class name="ru.motiw.web.elements.elementsweb.Administration.SystemOptionsElements"/>
+      <class name="ru.motiw.web.model.Tasks.Project"/>
+      <class name="ru.motiw.testsPda.HelpPDATest"/>
+      <class name="ru.motiw.testsWeb.Document.CreateDocumentTest"/>
+      <class name="ru.motiw.testsWeb.Administration.UsersTest"/>
+      <class name="ru.motiw.web.model.Administration.TasksTypes.RightsEditingTableEntries"/>
+      <class name="ru.motiw.web.model.Administration.FieldsObject.TypeListFieldsNumerator"/>
+      <class name="ru.motiw.web.steps.Administration.Directories.DirectoriesEditSteps"/>
+      <class name="ru.motiw.data.dataproviders.Administration"/>
+      <class name="ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.FieldTypeDocumentDocument"/>
+      <class name="ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditGeneralSteps"/>
+      <class name="ru.motiw.web.steps.Home.InternalSteps"/>
+      <class name="ru.motiw.web.model.Administration.FieldsObject.TypeListFieldsColor"/>
+      <class name="ru.motiw.web.model.Tasks.Action"/>
+      <class name="ru.motiw.web.elements.elementspda.Task.NewTaskStepsPDA"/>
+      <class name="ru.motiw.web.steps.Tasks.TaskForm.InsetEventsTaskFormSteps"/>
+      <class name="ru.motiw.web.elements.elementsweb.DocflowAdministration.DocumentRegistrationCards.GridDocRegisterCardsElements"/>
+      <class name="ru.motiw.web.steps.Administration.SystemOptionsSteps"/>
+      <class name="ru.motiw.web.steps.Administration.TaskTypeListEditSteps"/>
+      <class name="ru.motiw.web.elements.elementsweb.Internal.CalendarElements"/>
+      <class name="ru.motiw.web.elements.elementsweb.Administration.TaskTypeListFieldsElements"/>
+      <class name="ru.motiw.web.steps.Home.LibrarySteps"/>
+      <class name="ru.motiw.web.elements.elementsweb.Administration.SearchSystemElements"/>
+      <class name="ru.motiw.testsWeb.UserAuthenticationTest"/>
+      <class name="ru.motiw.testsWeb.DocflowAdministration.DictionaryEditorTest"/>
+      <class name="ru.motiw.web.model.Administration.FieldsObject.FieldObject"/>
+      <class name="ru.motiw.web.model.Tasks.Checkpoint"/>
+      <class name="ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.DocRegisterCards"/>
+      <class name="ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.FieldTypeEmployeeDocument"/>
+      <class name="ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.FieldTypeStringDocument"/>
+      <class name="ru.motiw.data.listeners.ScreenShotOnFailListener"/>
+      <class name="ru.motiw.web.elements.elementsweb.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditTasksElements"/>
+      <class name="ru.motiw.testsWeb.Tasks.UnionTasksTest"/>
+      <class name="ru.motiw.web.model.Administration.FieldsObject.TypeListFieldsLibraryLink"/>
+      <class name="ru.motiw.web.elements.elementsweb.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditConnectedRoutesElements"/>
+      <class name="ru.motiw.web.model.Administration.TasksTypes.ObligatoryField"/>
+      <class name="ru.motiw.web.steps.Documents.DocumentArchiveSteps"/>
+      <class name="ru.motiw.web.elements.elementspda.DocumentsStepsPDA"/>
+      <class name="ru.motiw.web.model.Tasks.Event"/>
+      <class name="ru.motiw.web.elements.elementsweb.Tasks.UnionTasks.EditFormFoldersElements"/>
+      <class name="ru.motiw.web.model.Administration.FieldsObject.TypeListFieldsDouble"/>
+      <class name="ru.motiw.web.elements.elementspda.HelpHtmlStepsPDA"/>
+      <class name="ru.motiw.web.elements.elementspda.Task.TasksReportsStepsPDA"/>
+      <class name="ru.motiw.web.elements.elementsweb.Administration.Directories.DirectoriesEditElements"/>
+      <class name="ru.motiw.web.steps.Administration.TasksTypes.TaskTypesSteps"/>
+      <class name="ru.motiw.web.model.Administration.Users.Department"/>
+      <class name="ru.motiw.web.steps.Tasks.ArchiveTasksGridSteps"/>
+      <class name="ru.motiw.testsWeb.EventTemplatesTest"/>
+      <class name="ru.motiw.web.steps.Administration.Directories.DirectoriesSteps"/>
+      <class name="ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.FieldTypeNumeratorDocument"/>
+      <class name="ru.motiw.web.model.Administration.FieldsObject.TypeListFieldsEnclosedDirectory"/>
+      <class name="ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditFieldsSteps"/>
+      <class name="ru.motiw.web.elements.elementsweb.Tasks.TaskForm.InsetDescriptionTaskFormElements"/>
+      <class name="ru.motiw.web.model.Administration.FieldsObject.TypeListFieldsEmployee"/>
+      <class name="ru.motiw.web.model.URLMenu"/>
+      <class name="ru.motiw.web.elements.elementsweb.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditRightsElements"/>
+      <class name="ru.motiw.web.steps.Administration.TasksTypes.TaskTypesEditSteps"/>
+      <class name="ru.motiw.web.steps.BaseSteps"/>
+      <class name="ru.motiw.web.model.ShiftDirection"/>
+      <class name="ru.motiw.web.elements.elementspda.Task.TaskActionsStepsPDA"/>
+      <class name="ru.motiw.web.model.Administration.FieldsObject.TypeListFieldsLink"/>
+      <class name="ru.motiw.web.elements.elementsweb.Tasks.TaskForm.UsersSelectTheFormElements"/>
+      <class name="ru.motiw.web.model.CorrectionMethod"/>
+      <class name="ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.FieldTypeNumberDocument"/>
+      <class name="ru.motiw.web.elements.elementsweb.Tasks.TaskForm.InsetDetailsTaskFormElements"/>
+      <class name="ru.motiw.web.model.Administration.TypesOfTables.RightsEditingTableEntries"/>
+      <class name="ru.motiw.web.steps.Tasks.Projects.GanttSteps"/>
+      <class name="ru.motiw.testsPda.OptionsPDATest"/>
+      <class name="ru.motiw.web.elements.elementsweb.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditFieldsElements"/>
+      <class name="ru.motiw.data.BaseTest"/>
+      <class name="ru.motiw.web.model.Options.ScheduledTimeEvent"/>
+      <class name="ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.GridDocRegisterCardsSteps"/>
+      <class name="ru.motiw.web.elements.elementsweb.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditGeneralElements"/>
+      <class name="ru.motiw.web.steps.Administration.TypesOfTables.TypesOfTablesSteps"/>
+      <class name="ru.motiw.web.steps.Administration.Users.UsersSteps"/>
+      <class name="ru.motiw.web.elements.elementspda.LoginStepsPDA"/>
+      <class name="ru.motiw.web.elements.elementsweb.Administration.Users.UsersElements"/>
+      <class name="ru.motiw.web.elements.elementspda.InternalStepsPDA"/>
+      <class name="ru.motiw.data.dataproviders.UserAuthentication"/>
+      <class name="ru.motiw.web.elements.elementspda.TodayStepsPDA"/>
+      <class name="ru.motiw.web.model.Tasks.Task"/>
+      <class name="ru.motiw.testsWeb.Administration.TasksTypeTest"/>
+      <class name="ru.motiw.web.elements.elementsweb.DocflowAdministration.DictionaryEditorElements"/>
+      <class name="ru.motiw.web.model.OpenFilesForEdit"/>
+      <class name="ru.motiw.web.elements.elementsweb.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditHandlersElements"/>
+      <class name="ru.motiw.web.elements.elementsweb.Tasks.TaskForm.InsetContactsTaskFormElements"/>
+      <class name="ru.motiw.web.model.Options.EventTemplates"/>
+      <class name="ru.motiw.web.model.Administration.TasksTypes.ComputeModeNumerator"/>
+      <class name="ru.motiw.testsPda.DocumentsPDATest"/>
+      <class name="ru.motiw.web.model.Tasks.IWG"/>
+      <class name="ru.motiw.web.model.Administration.TasksTypes.TasksTypes"/>
+      <class name="ru.motiw.web.elements.elementsweb.Tasks.TaskForm.InsetEventsTaskFormElements"/>
+      <class name="ru.motiw.web.model.Administration.FieldsObject.TypeListFieldsString"/>
+      <class name="ru.motiw.web.elements.elementsweb.Administration.Users.DepartmentElements"/>
+      <class name="ru.motiw.web.steps.Login.RestorePasswordSteps"/>
+      <class name="ru.motiw.web.model.Administration.Directories.Directories"/>
+      <class name="ru.motiw.web.model.Tasks.EventType"/>
+      <class name="ru.motiw.web.steps.Options.MyPropertiesSteps"/>
+      <class name="ru.motiw.testsWeb.Tasks.CreateTaskTest"/>
+      <class name="ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.SettingsForDocumentFields"/>
+      <class name="ru.motiw.web.model.Administration.TypesOfTables.TypesOfTables"/>
+      <class name="ru.motiw.web.elements.elementsweb.Administration.TypesOfTables.TypesOfTablesEditElements"/>
+      <class name="ru.motiw.web.elements.elementsweb.Options.EventTemplatesElements"/>
+      <class name="ru.motiw.web.elements.elementsweb.Tasks.TaskForm.IWGFormElements"/>
+      <class name="ru.motiw.web.elements.elementsweb.Login.LoginPageElements"/>
+      <class name="ru.motiw.data.dataproviders.DocflowAdministration"/>
+      <class name="ru.motiw.web.steps.Tasks.FormyControlSteps"/>
+      <class name="ru.motiw.web.elements.elementsweb.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditResolutionsElements"/>
+      <class name="ru.motiw.testsPda.CreateTaskPDATest"/>
+      <class name="ru.motiw.testsWeb.Administration.DirectoriesTest"/>
+      <class name="ru.motiw.data.dataproviders.Tasks"/>
+      <class name="ru.motiw.web.elements.elementsweb.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditMailNotifyElements"/>
+      <class name="ru.motiw.web.elements.elementsweb.Administration.TasksTypes.TaskTypesEditElements"/>
+      <class name="ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.FieldTypeDirectoryDocument"/>
+      <class name="ru.motiw.web.elements.elementspda.OptionsStepsPDA"/>
+      <class name="ru.motiw.web.model.Administration.FieldsObject.TypeListFieldsTable"/>
+      <class name="ru.motiw.web.elements.elementsweb.Tasks.UnionTasks.UnionTasksElements"/>
+      <class name="ru.motiw.web.elements.elementsweb.Administration.TaskTypeListEditElements"/>
+      <class name="ru.motiw.web.model.Administration.FieldsObject.TypeListFieldsBoolean"/>
+      <class name="ru.motiw.web.elements.elementsweb.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditFormatsElements"/>
+      <class name="ru.motiw.web.steps.Tasks.TaskForm.UnionMessageSteps"/>
+      <class name="ru.motiw.web.model.AccessRights"/>
+      <class name="ru.motiw.web.elements.elementsweb.Tasks.TaskForm.InsetPlanningTaskFormElements"/>
+      <class name="ru.motiw.web.elements.elementsweb.Administration.SettingsECPElements"/>
+      <class name="ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.FieldTypeDateDocument"/>
+      <class name="ru.motiw.web.model.DocflowAdministration.DictionaryEditor.DictionaryEditorField"/>
+      <class name="ru.motiw.web.steps.Administration.SearchSystemSteps"/>
+      <class name="ru.motiw.utils.ElementUtil"/>
+      <class name="ru.motiw.web.model.Period"/>
+      <class name="ru.motiw.web.elements.elementsweb.Administration.DirectionOfDateBiasingElements"/>
+      <class name="ru.motiw.testsWeb.Administration.TypesOfTablesTest"/>
+      <class name="ru.motiw.web.steps.Administration.SystemInformationSteps"/>
+      <class name="ru.motiw.testsPda.UsersAuthorizationPDATest"/>
+      <class name="ru.motiw.web.model.Administration.TasksTypes.SettingsForTaskTypeListFields"/>
+      <class name="ru.motiw.web.steps.Login.LoginStepsSteps"/>
+      <class name="ru.motiw.web.model.Administration.Users.Status"/>
+      <class name="ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.EditionOwnDocuments"/>
+      <class name="ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.FieldTypeDictionaryDocument"/>
+      <class name="ru.motiw.web.model.Administration.FieldsObject.TypeListFieldsDepartment"/>
+      <class name="ru.motiw.web.elements.elementsweb.Tasks.TaskForm.UnionMessageElements"/>
+      <class name="ru.motiw.web.model.Administration.FieldsObject.TypeListFieldsMultiDirectory"/>
+      <class name="ru.motiw.testsPda.SearchPDATest"/>
+      <class name="ru.motiw.web.elements.elementsweb.Documents.CreateDocument.NewDocumentCartTabElements"/>
+      <class name="ru.motiw.web.steps.Tasks.UnionTasksSteps"/>
+      <class name="ru.motiw.web.model.Administration.FieldsObject.TypeListFieldsFile"/>
+      <class name="ru.motiw.web.elements.elementsweb.Administration.TaskTypeListElements"/>
+      <class name="ru.motiw.web.model.Administration.Users.Employee"/>
+      <class name="ru.motiw.web.model.Administration.Users.Sex"/>
+      <class name="ru.motiw.testsWeb.NavigationMenuTest"/>
+      <class name="ru.motiw.web.steps.Home.CalendarSteps"/>
+      <class name="ru.motiw.web.elements.elementspda.SearchStepsPDA"/>
+      <class name="ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.FieldTypeTextDocument"/>
+      <class name="ru.motiw.web.model.Administration.TaskTypeListEditObject"/>
+      <class name="ru.motiw.utils.ScreenShotUtil"/>
+      <class name="ru.motiw.web.model.Tasks.LinkedTo"/>
+      <class name="ru.motiw.web.steps.Tasks.TaskForm.UnionMessageNewSteps"/>
+      <class name="ru.motiw.web.elements.elementsweb.Tasks.TaskForm.EventElements"/>
+      <class name="ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditRightsSteps"/>
+      <class name="ru.motiw.web.elements.elementsweb.Login.RestorePasswordElements"/>
+      <class name="ru.motiw.web.elements.elementsweb.Documents.CreateDocument.NewDocumentRouteTabElements"/>
+      <class name="ru.motiw.web.model.Tasks.Folder"/>
+      <class name="ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditConnectedRoutesSteps"/>
+      <class name="ru.motiw.web.model.Administration.FieldsObject.TypeListFieldsReferenceTask"/>
+    </classes>
+  </test> <!-- Default test -->
+  <test name="Default test(failed)">
+    <classes>
+      <class name="ru.motiw.testsWeb.Document.CreateDocumentTest">
+        <methods>
+          <include name="beforeTest"/>
+          <include name="verificationDocumentCreation" invocation-numbers="0"/>
+          <include name="setUpConfigurations"/>
+          <include name="clearCache"/>
+        </methods>
+      </class> <!-- ru.motiw.testsWeb.Document.CreateDocumentTest -->
+      <class name="ru.motiw.testsWeb.UserAuthenticationTest">
+        <methods>
+          <include name="beforeTest"/>
+          <include name="setUpConfigurations"/>
+          <include name="successfulAuthorization"/>
+          <include name="clearCache"/>
+        </methods>
+      </class> <!-- ru.motiw.testsWeb.UserAuthenticationTest -->
+      <class name="ru.motiw.testsWeb.Administration.SystemInformationTest">
+        <methods>
+          <include name="setUpConfigurations"/>
+          <include name="beforeTest"/>
+          <include name="clearCache"/>
+          <include name="verifyNotIndexingErrors"/>
+        </methods>
+      </class> <!-- ru.motiw.testsWeb.Administration.SystemInformationTest -->
+      <class name="ru.motiw.testsPda.TodayPDATest">
+        <methods>
+          <include name="setUpConfigurations"/>
+          <include name="verifyInfoToday" invocation-numbers="0"/>
+          <include name="beforeTest"/>
+          <include name="clearCache"/>
+        </methods>
+      </class> <!-- ru.motiw.testsPda.TodayPDATest -->
+      <class name="ru.motiw.testsPda.OptionsPDATest">
+        <methods>
+          <include name="setUpConfigurations"/>
+          <include name="verifyAttachmentAndDownloadFileInTheTask" invocation-numbers="0"/>
+          <include name="clearCache"/>
+        </methods>
+      </class> <!-- ru.motiw.testsPda.OptionsPDATest -->
+      <class name="ru.motiw.testsWeb.DocflowAdministration.DocumentRegistrationCardsTest">
+        <methods>
+          <include name="beforeTest"/>
+          <include name="setUpConfigurations"/>
+          <include name="clearCache"/>
+        </methods>
+      </class> <!-- ru.motiw.testsWeb.DocflowAdministration.DocumentRegistrationCardsTest -->
+      <class name="ru.motiw.testsWeb.DocflowAdministration.DictionaryEditorTest">
+        <methods>
+          <include name="setUpConfigurations"/>
+          <include name="createDictionaryEditor"/>
+          <include name="beforeTest"/>
+          <include name="clearCache"/>
+        </methods>
+      </class> <!-- ru.motiw.testsWeb.DocflowAdministration.DictionaryEditorTest -->
+      <class name="ru.motiw.testsWeb.Administration.UsersTest">
+        <methods>
+          <include name="setUpConfigurations"/>
+          <include name="beforeTest"/>
+          <include name="clearCache"/>
+        </methods>
+      </class> <!-- ru.motiw.testsWeb.Administration.UsersTest -->
+      <class name="ru.motiw.testsWeb.Administration.TypesOfTablesTest">
+        <methods>
+          <include name="setUpConfigurations"/>
+          <include name="clearCache"/>
+          <include name="beforeTest"/>
+        </methods>
+      </class> <!-- ru.motiw.testsWeb.Administration.TypesOfTablesTest -->
+      <class name="ru.motiw.testsWeb.EventTemplatesTest">
+        <methods>
+          <include name="beforeTest"/>
+          <include name="setUpConfigurations"/>
+          <include name="createEventTemplates" invocation-numbers="0"/>
+          <include name="clearCache"/>
+        </methods>
+      </class> <!-- ru.motiw.testsWeb.EventTemplatesTest -->
+      <class name="ru.motiw.testsPda.HelpPDATest">
+        <methods>
+          <include name="setUpConfigurations"/>
+          <include name="verifyElementsHelp"/>
+          <include name="clearCache"/>
+        </methods>
+      </class> <!-- ru.motiw.testsPda.HelpPDATest -->
+      <class name="ru.motiw.testsPda.CreateTaskPDATest">
+        <methods>
+          <include name="verifyCompletionOfTheTaskPDA" invocation-numbers="0"/>
+          <include name="verifyCreateTaskPDA" invocation-numbers="0"/>
+          <include name="setUpConfigurations"/>
+          <include name="checkEditingTaskPDA" invocation-numbers="0"/>
+          <include name="clearCache"/>
+          <include name="beforeTest"/>
+        </methods>
+      </class> <!-- ru.motiw.testsPda.CreateTaskPDATest -->
+      <class name="ru.motiw.testsPda.SearchPDATest">
+        <methods>
+          <include name="setUpConfigurations"/>
+          <include name="verifySearchContact"/>
+          <include name="clearCache"/>
+        </methods>
+      </class> <!-- ru.motiw.testsPda.SearchPDATest -->
+      <class name="ru.motiw.testsWeb.ValidationObjectsDataBase.DataBaseValidationUsersTest">
+        <methods>
+          <include name="beforeTest"/>
+          <include name="setUpConfigurations"/>
+          <include name="checkValidationOfUsersInTheDatabase"/>
+          <include name="clearCache"/>
+        </methods>
+      </class> <!-- ru.motiw.testsWeb.ValidationObjectsDataBase.DataBaseValidationUsersTest -->
+      <class name="ru.motiw.testsWeb.Tasks.CreateTaskTest">
+        <methods>
+          <include name="setUpConfigurations"/>
+          <include name="checkTheCreationOfATaskCheckpoints" invocation-numbers="0"/>
+          <include name="verifyCreateIWGTask" invocation-numbers="0"/>
+          <include name="clearCache"/>
+          <include name="beforeTest"/>
+        </methods>
+      </class> <!-- ru.motiw.testsWeb.Tasks.CreateTaskTest -->
+      <class name="ru.motiw.testsWeb.Tasks.UnionTasksTest">
+        <methods>
+          <include name="beforeTest"/>
+          <include name="setUpConfigurations"/>
+          <include name="verifyCreateFolder"/>
+          <include name="verifyDisplaySharedFolderTheNewUser"/>
+          <include name="clearCache"/>
+        </methods>
+      </class> <!-- ru.motiw.testsWeb.Tasks.UnionTasksTest -->
+      <class name="ru.motiw.testsWeb.Administration.DirectoriesTest">
+        <methods>
+          <include name="setUpConfigurations"/>
+          <include name="clearCache"/>
+          <include name="beforeTest"/>
+        </methods>
+      </class> <!-- ru.motiw.testsWeb.Administration.DirectoriesTest -->
+      <class name="ru.motiw.testsPda.UsersAuthorizationPDATest">
+        <methods>
+          <include name="setUpConfigurations"/>
+          <include name="verifyLoginSuccess"/>
+          <include name="secondVerifyFailAuthorization" invocation-numbers="0 1"/>
+          <include name="verifyFailAuthorization" invocation-numbers="0 1 2 3"/>
+          <include name="clearCache"/>
+        </methods>
+      </class> <!-- ru.motiw.testsPda.UsersAuthorizationPDATest -->
+      <class name="ru.motiw.testsPda.DocumentsPDATest">
+        <methods>
+          <include name="setUpConfigurations"/>
+          <include name="beforeTest"/>
+          <include name="clearCache"/>
+          <include name="checkWorkDocumentsPDA" invocation-numbers="0"/>
+        </methods>
+      </class> <!-- ru.motiw.testsPda.DocumentsPDATest -->
+      <class name="ru.motiw.testsWeb.Administration.TasksTypeTest">
+        <methods>
+          <include name="setUpConfigurations"/>
+          <include name="clearCache"/>
+          <include name="beforeTest"/>
+        </methods>
+      </class> <!-- ru.motiw.testsWeb.Administration.TasksTypeTest -->
+    </classes>
+  </test> <!-- Default test(failed) -->
+</suite> <!-- Failed suite [Default suite] -->

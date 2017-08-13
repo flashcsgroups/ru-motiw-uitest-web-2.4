@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="regression functional GUI test" verbose="5" data-provider-thread-count="1">
+    <listeners>
+        <listener class-name="com.codeborne.selenide.testng.TextReport"/>
+    </listeners>
+
+    <test name="module: PDA">
+        <classes>
+            <class name="ru.motiw.testsPda.UsersAuthorizationPDATest"/>
+            <class name="ru.motiw.testsPda.CreateTaskPDATest"/>
+            <class name="ru.motiw.testsPda.DocumentsPDATest"/>
+            <class name="ru.motiw.testsPda.SearchPDATest"/>
+            <class name="ru.motiw.testsPda.OptionsPDATest"/>
+            <class name="ru.motiw.testsPda.TodayPDATest"/>
+            <class name="ru.motiw.testsPda.HelpPDATest"/>
+        </classes>
+    </test>
+
+    <test name="module: Users (Web)">
+        <classes>
+            <class name="ru.motiw.testsWeb.UserAuthenticationTest"/>
+            <class name="ru.motiw.testsWeb.Administration.UsersTest"/>
+        </classes>
+    </test>
+
+    <test name="module: Administration (Web)">
+        <classes>
+            <class name="ru.motiw.testsWeb.Administration.SystemInformationTest"/>
+            <class name="ru.motiw.testsWeb.Administration.TypesOfTablesTest"/>
+            <class name="ru.motiw.testsWeb.Administration.DirectoriesTest"/>
+            <class name="ru.motiw.testsWeb.Administration.TasksTypeTest"/>
+        </classes>
+    </test>
+
+    <test name="module: Tasks (Web)">
+        <classes>
+            <class name="ru.motiw.testsWeb.Tasks.CreateTaskTest"/>
+        </classes>
+    </test>
+
+    <test name="module: Documents (Web)">
+        <classes>
+            <class name="ru.motiw.testsWeb.DocflowAdministration.DictionaryEditorTest"/>
+            <class name="ru.motiw.testsWeb.DocflowAdministration.DocumentRegistrationCardsTest"/>
+            <class name="ru.motiw.testsWeb.Document.CreateDocumentTest"/>
+        </classes>
+    </test>
+
+    <test name="module: Options (Web)">
+        <classes>
+            <class name="ru.motiw.testsWeb.EventTemplatesTest"/>
+        </classes>
+    </test>
+
+</suite>
