@@ -256,7 +256,7 @@ public class UnionTasksSteps extends BaseSteps {
             $(By.xpath("//span[contains(@class,'x-tree-node-text ')]/b[contains(text(),'"
                     + parseNameFolder(folder)[0] + "')]")).waitUntil(visible, 10000);
             $(By.xpath("//b[contains(text(), '" +
-                    parseNameFolder(folder)[0] + "')]/ancestor::div[contains(@class,'x-grid-cell')]/child::div[@class=' x-tree-icon x-tree-icon-custom x-tree-icon-leaf rfolder-smart' or @class=' x-tree-icon x-tree-icon-custom x-tree-icon-leaf bfolder-smart']")).waitUntil(visible, 10000).shouldBe(visible);
+                    parseNameFolder(folder)[0] + "')]/ancestor::div[contains(@class,'x-grid-cell')]/child::div[@class=' x-tree-icon x-tree-icon-custom x-tree-icon-leaf rfolder-smart' or @class=' x-tree-icon x-tree-icon-custom x-tree-icon-leaf bfolder-smart' or @class=' x-tree-icon x-tree-icon-custom x-tree-icon-leaf yfolder-smart']")).waitUntil(visible, 10000).shouldBe(visible);
         } else
             $(By.xpath("//span[contains(@class,'x-tree-node-text ')]/b[contains(text(),'" + parseNameFolder(folder)[0] + "')]"))
                     .waitUntil(visible, 10000);
