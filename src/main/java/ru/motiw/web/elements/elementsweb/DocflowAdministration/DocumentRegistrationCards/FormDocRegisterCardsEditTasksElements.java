@@ -12,16 +12,16 @@ public class FormDocRegisterCardsEditTasksElements {
     @FindBy(xpath = "//textarea[contains(@id,'textarea')]")
     private SelenideElement copyingFieldsWhenCreatingTask;
 
-    @FindBy(xpath = "(//fieldset)[6]/div/div/descendant::input[1]")
+    @FindBy(xpath = "//span[contains(text(),'авторов задач')]/ancestor::div[contains(@class,'x-field x-form-item')]//input")
     private SelenideElement authorsObjectives;
 
-    @FindBy(xpath = "(//fieldset)[6]/div/div/descendant::input[2]")
+    @FindBy(xpath = "//span[contains(text(),'контролеров задач')]/ancestor::div[contains(@class,'x-field x-form-item')]//input")
     private SelenideElement controllersOfTasks;
 
-    @FindBy(xpath = "(//fieldset)[6]/div/div/descendant::input[3]")
+    @FindBy(xpath = "//span[contains(text(),'ответственных руководителей задач')]/ancestor::div[contains(@class,'x-field x-form-item')]//input")
     private SelenideElement decisionMakersOfTasks;
 
-    @FindBy(xpath = "(//fieldset)[6]/div/div/descendant::input[4]")
+    @FindBy(xpath = "//span[contains(text(),'исполнителей задач')]/ancestor::div[contains(@class,'x-field x-form-item')]//input")
     private SelenideElement executorsOfTasks;
 
     @FindBy(xpath = "(//div[contains(@id,'tabbar')]/following-sibling::*)[1]//a[6]//span")
