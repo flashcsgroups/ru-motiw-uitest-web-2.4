@@ -84,7 +84,7 @@ public class DocumentRegistrationCardsTest extends DocflowAdministration {
         /*
          * Устанавливаем настройки для РКД (регистрационная карточка документа) на вкладке - ПОЛЯ
          */
-        fieldsTabRCD().addFieldsDocRegisterCards(registerCards);
+        fieldsTabRCD().addFieldsDocRegisterCards(registerCards);  // TODO при запуске подряд DocumentRegistrationCardsTest и CreateDocumentTest, почему-то здесь валится. Если отдельно запустить - проходит. Повторяется в 2.2
 
         /*
          * Устанавливаем настройки для РКД (регистрационная карточка документа) на вкладке - ОБЩЕЕ
