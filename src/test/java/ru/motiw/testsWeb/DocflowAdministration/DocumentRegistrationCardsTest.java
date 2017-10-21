@@ -90,7 +90,6 @@ public class DocumentRegistrationCardsTest extends DocflowAdministration {
          * Устанавливаем настройки для РКД (регистрационная карточка документа) на вкладке - ОБЩЕЕ
          */
         generalTabRCD().addNameDocumentRegisterCards(registerCards)
-                /*.displayNameTemplate(registerCards) // Шаблон отображения*/
                 .directionOfDisplacementOfTheDate(registerCards) // Направление смещения даты при попадании на нерабочее время
                 .defaultSettingsWhenYouSendTheDocumentBackForRevision(registerCards) // Настройки по умолчанию при отправке документа на доработку
                 .statusOfTheDocumentLifeCycle(registerCards) // Статусы документа
