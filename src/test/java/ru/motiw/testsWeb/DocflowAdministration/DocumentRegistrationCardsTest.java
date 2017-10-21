@@ -32,6 +32,7 @@ import static ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards
 import static ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditGeneralSteps.generalTabRCD;
 import static ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditRightsSteps.rightsTabRCD;
 import static ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditTasksSteps.tasksTabRCD;
+import static ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditTemplateSteps.TemplateTabRCD;
 
 
 @Listeners({ScreenShotOnFailListener.class, TextReport.class})
@@ -89,12 +90,17 @@ public class DocumentRegistrationCardsTest extends DocflowAdministration {
          * Устанавливаем настройки для РКД (регистрационная карточка документа) на вкладке - ОБЩЕЕ
          */
         generalTabRCD().addNameDocumentRegisterCards(registerCards)
-                .displayNameTemplate(registerCards) // Шаблон отображения
+                /*.displayNameTemplate(registerCards) // Шаблон отображения*/
                 .directionOfDisplacementOfTheDate(registerCards) // Направление смещения даты при попадании на нерабочее время
                 .defaultSettingsWhenYouSendTheDocumentBackForRevision(registerCards) // Настройки по умолчанию при отправке документа на доработку
                 .statusOfTheDocumentLifeCycle(registerCards) // Статусы документа
                 .openFilesForEditDocument(registerCards) // Открывать файлы для редактирования
                 .setAutoCalculationNumeratorFields(registerCards); // Автоматическое вычисление полей-нумераторов
+
+        /*
+        * Устанавливаем настройки для РКД (регистрационная карточка документа) на вкладке - ШАБЛОНЫ ОТОБРАЖЕНИЯ
+        * */
+        TemplateTabRCD().displayNameTemplate(registerCards);
 
         /*
          * Устанавливаем настройки для РКД (регистрационная карточка документа) на вкладке - ПРАВА
