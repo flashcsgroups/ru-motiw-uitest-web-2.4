@@ -151,11 +151,11 @@ public class UnionMessageSteps extends UnionMessageNewSteps {
         if ($(unionMessageElements.getTabIWG()).isDisplayed()) {
             checkDisplayedTabsInTheShapeOfAnObject(By.xpath("//span[text()][ancestor::em[contains(@class,'x-tab')]][ancestor::li[not(@style='display: none;')]]"), 10,
                     By.xpath("//span[text()][ancestor::em[contains(@class,'x-tab')]][ancestor::li[not(@style='display: none;')]]"),
-                    new String[]{"Действия", "Описание", "Изолированные рабочие группы", "Файлы", "Планирование", "События", "Контакты", "Журнал", "Видеоконференции", "Дополнительно"});
+                    new String[]{"Действия", "Описание", "Изолированные рабочие группы", "Файлы", "Планирование", "События", "Контакты", "Журнал", "Связь", "Дополнительно"});
         } else {
             checkDisplayedTabsInTheShapeOfAnObject(By.xpath("//span[text()][ancestor::em[contains(@class,'x-tab')]][ancestor::li[not(@style='display: none;')]]"), 9,
                     By.xpath("//span[text()][ancestor::em[contains(@class,'x-tab')]][ancestor::li[not(@style='display: none;')]]"),
-                    new String[]{"Действия", "Описание", "Файлы", "Планирование", "События", "Контакты", "Журнал", "Видеоконференции", "Дополнительно"});
+                    new String[]{"Действия", "Описание", "Файлы", "Планирование", "События", "Контакты", "Журнал", "Связь", "Дополнительно"});
         }
         return this;
     }

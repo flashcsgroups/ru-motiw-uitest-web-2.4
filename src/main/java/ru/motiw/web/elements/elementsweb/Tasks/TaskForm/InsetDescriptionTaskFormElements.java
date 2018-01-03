@@ -46,7 +46,7 @@ public class InsetDescriptionTaskFormElements {
     @FindBy(xpath = "(//*[contains (@type, 'button')])[1]")
     private SelenideElement buttonSaveCreateTask;
 
-    @FindBy(xpath = "(//*[contains (@type, 'button')])[2]")
+    @FindBy(xpath = "//button[text()=\"Сохранить\"]")
     private SelenideElement buttonCreateTask;
 
     @FindBy(xpath = "//a[contains (@onclick, 'selectproject')]/../../../../../../following-sibling::div[1]//*[contains (@class, 'col-value')]")
@@ -196,6 +196,8 @@ public class InsetDescriptionTaskFormElements {
     public SelenideElement getButtonCreateTask() {
         return buttonCreateTask;
     }
+
+
 
     /**
      * Поле Название задачи

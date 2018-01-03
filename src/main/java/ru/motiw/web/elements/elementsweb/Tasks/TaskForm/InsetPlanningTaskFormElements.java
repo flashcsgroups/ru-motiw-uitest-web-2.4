@@ -32,7 +32,7 @@ public class InsetPlanningTaskFormElements {
     @FindBy(xpath = "//*[contains (@id, 'tab_planning')]//*[contains (@class, 'scroller')]//*[contains (@class, 'row')][1]//td[5]")
     private SelenideElement checkpointPeriodField;
 
-    @FindBy(xpath = "//*[contains (@id, 'tab_planning')]//*[contains (@class, 'scroller')]//*[contains (@class, 'row')][1]//td[6]")
+    @FindBy(xpath = "//*[contains (@id, 'tab_planning')]//*[contains (@class, 'scroller')]//*[contains (@class, 'row')][1]//td[7]")
     private SelenideElement checkpointNameField;
 
     @FindBy(xpath = "(//img[contains (@onclick, 'Description')])[1]")
