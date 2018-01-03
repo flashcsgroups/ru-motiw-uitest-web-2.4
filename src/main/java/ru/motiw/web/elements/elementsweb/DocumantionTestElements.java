@@ -32,7 +32,7 @@ public class DocumantionTestElements {
     @FindBy(xpath = "//p/a[@href=\"/FAQ/User_Guide.pdf\"]")
     private SelenideElement  userGuide;
 
-    @FindBy(xpath = "//p/a[@href=\"/FAQ/arm_manual\"]")
+    @FindBy(xpath = "//p/a[@href=\"/FAQ/arm_manual.pdf\"]")
     private SelenideElement  armManual;
 
 

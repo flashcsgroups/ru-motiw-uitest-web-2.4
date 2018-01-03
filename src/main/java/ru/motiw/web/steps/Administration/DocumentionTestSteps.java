@@ -1,8 +1,11 @@
 package ru.motiw.web.steps.Administration;
 
 import com.codeborne.selenide.Condition;
+import org.openqa.selenium.WebElement;
 import ru.motiw.web.elements.elementsweb.DocumantionTestElements;
 import ru.motiw.web.steps.BaseSteps;
+
+import java.util.List;
 
 import static com.codeborne.selenide.Selenide.page;
 import static ru.motiw.web.model.URLMenu.MANUALS;
@@ -54,6 +57,30 @@ public class DocumentionTestSteps extends BaseSteps {
         return this;
     }
 
+    public  class list {
+
+            List<WebElement> vse = (List<WebElement>) documantionTestElements.getArmManual();
+
+    }
+
+
+
+    private DocumentionTestSteps test() {
+
+
+        //*for (int i = 0; i<2; i++);
+        //*for (List list : g())
+
+        {
+
+          //*  WebElement url = (WebElement) vse;
+          //*  url.click();
+            ensurePageLoaded();
+            openSectionOnURL(MANUALS.getMenuURL());
+            return this;
+        }
+    }
+
     /**
      * раздел: Справка - Руководства
      */
@@ -66,6 +93,8 @@ public class DocumentionTestSteps extends BaseSteps {
 
     public DocumentionTestSteps checkManuals() {
         checkPdfManuals();
+       /* test();*/
+        //*checkPdfManuals();
         return this;
     }
 
