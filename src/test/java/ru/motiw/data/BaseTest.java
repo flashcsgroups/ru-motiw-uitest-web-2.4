@@ -1,12 +1,9 @@
 package ru.motiw.data;
 
-import com.automation.remarks.video.recorder.VideoRecorder;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.testng.TextReport;
-import io.restassured.RestAssured;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import ru.motiw.web.model.Administration.Users.Employee;
 
@@ -18,7 +15,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Random;
 
-import static com.codeborne.selenide.Configuration.FileDownloadMode.PROXY;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.clearBrowserCache;
 import static org.testng.Assert.fail;
@@ -36,9 +32,9 @@ public abstract class BaseTest {
     @BeforeClass
     public void setUpConfigurations() throws Exception {
         setDriverByName("chrome");
-        VideoRecorder.conf()
-                .withVideoFolder("build/reports/video");
-        Configuration.baseUrl = http + "motiwtest4.test.lan";
+        /*VideoRecorder.conf()
+                .withVideoFolder("build/reports/video");*/
+        Configuration.baseUrl = http + "centos";
         Configuration.timeout = 8000;
         TextReport.onSucceededTest = true;
         TextReport.onFailedTest = true;

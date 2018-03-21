@@ -12,13 +12,13 @@ public class FormDocRegisterCardsEditRightsElements {
     @FindBy(xpath = "(//div[contains(@id,'tabbar')]/following-sibling::*)[1]//a[2]//span")
     private SelenideElement rightsTab;
 
-    @FindBy(xpath = "(//div[contains(@id,'radiofield-')]//span[@data-ref])[14]")
+    @FindBy(xpath = "(//div[contains(@id,'radio-')]//span[@data-ref])[14]")
     private SelenideElement personal;
 
-    @FindBy(xpath = "(//div[contains(@id,'radiofield-')]//span[@data-ref])[18]")
+    @FindBy(xpath = "(//div[contains(@id,'radio-')]//span[@data-ref])[18]")
     private SelenideElement accessAvailableToAll;
 
-    @FindBy(xpath = "(//div[contains(@id,'radiofield-')]//span[@data-ref])[22]")
+    @FindBy(xpath = "(//div[contains(@id,'radio-')]//span[@data-ref])[22]")
     private SelenideElement readOnly;
 
     @FindBy(xpath = "(//fieldset)[7]//div[count(div)=3]/div[1]//input")

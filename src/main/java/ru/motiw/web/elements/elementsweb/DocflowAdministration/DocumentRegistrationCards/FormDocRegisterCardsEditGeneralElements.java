@@ -44,7 +44,7 @@ public class FormDocRegisterCardsEditGeneralElements {
     private SelenideElement dateMovesBack;
     */
 
-    @FindBy(xpath = "(//div[contains(@id,'radiofield-')]//span[@data-ref])[10]")
+    @FindBy(xpath = "(//div[contains(@id,'radio-')]//span[@data-ref])[10]")
     private SelenideElement dateMovesBack;
 
 /*

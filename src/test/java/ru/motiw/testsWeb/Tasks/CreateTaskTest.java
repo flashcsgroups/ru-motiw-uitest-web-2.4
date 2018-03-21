@@ -86,7 +86,7 @@ public class CreateTaskTest extends Tasks {
                 .createUser(controller[0].setDepartment(department))
                 // Исполнители задачи
                 .createUser(worker[0].setDepartment(department));
-        //TODO Создание задачи по типу отличом от типа Обычный
+        //TODO Создание задачи по типу отличном от типа Обычный
         // Инициализация и переход на страницу - Задачи/Создать задачу
         goToURLUnionMessageNew().creatingTask(task).saveTask();
 
