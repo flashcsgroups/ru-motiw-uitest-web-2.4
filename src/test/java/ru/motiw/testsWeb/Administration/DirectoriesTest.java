@@ -34,6 +34,9 @@ public class DirectoriesTest extends Administration {
     @Test(priority = 1, dataProvider = "objectDataDirectories", dataProviderClass = Administration.class)
     public void checkCreateDirectories(Directories directories) throws Exception {
         loginPageSteps.loginAs(ADMIN);
+        assertThat("Check that the displayed menu item 8 (Logo; Tasks; Documents; Messages; Calendar; Library; Tools; Details)",
+                internalPage.hasMenuUserComplete()); // Проверяем отображение п.м. на внутренней странице
+
 
         // Переход в раздел Администрирование/Справочники
         goToURLDirectories().addObjectTaskTypeList(directories.getObjectTypeName());  // Добавляем объект - Справочник

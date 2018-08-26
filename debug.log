@@ -325,3 +325,107 @@
 [0316/095854.978:ERROR:file_io_win.cc(170)] CreateFile C:\Users\E3AD~1\AppData\Local\Temp\scoped_dir12032_6760\Crashpad\reports\3ffd91ad-c7a1-4dc6-8f55-1358a22663f6.dmp: Системе не удается найти указанный путь. (0x3)
 [0316/095854.978:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
 [0321/080401.633:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0321/133805.501:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0321/133957.971:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0321/134249.841:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0321/134707.983:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0321/134758.897:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0321/134906.656:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0321/222947.163:ERROR:file_io_win.cc(161)] CreateFile C:\Users\E3AD~1\AppData\Local\Temp\scoped_dir6328_9225\Crashpad\settings.dat: Системе не удается найти указанный путь. (0x3)
+[0321/222947.193:ERROR:file_io_win.cc(170)] CreateFile C:\Users\E3AD~1\AppData\Local\Temp\scoped_dir6328_9225\Crashpad\reports\25031dba-0e09-462e-ab3e-d4f65b7e1fb6.dmp: Системе не удается найти указанный путь. (0x3)
+[0321/222947.193:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
+[0322/102752.264:ERROR:file_io_win.cc(161)] CreateFile C:\Users\E3AD~1\AppData\Local\Temp\scoped_dir15428_5961\Crashpad\settings.dat: Системе не удается найти указанный путь. (0x3)
+[0322/102752.265:ERROR:file_io_win.cc(170)] CreateFile C:\Users\E3AD~1\AppData\Local\Temp\scoped_dir15428_5961\Crashpad\reports\033dd05e-ab7a-4e8e-8460-a01be2c4bc4c.dmp: Системе не удается найти указанный путь. (0x3)
+[0322/102752.265:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
+[0325/165059.890:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0325/165130.029:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0325/165529.223:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0325/170040.231:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0325/182058.790:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0325/182359.429:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0325/191450.303:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0325/192156.311:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0325/192514.272:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0325/193043.029:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0325/193644.367:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0325/200309.152:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0325/202102.754:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0325/202552.209:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0325/202817.258:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0325/203055.403:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0325/203229.564:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0325/203428.050:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0325/203701.516:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0325/204433.756:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0325/205346.419:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0325/205628.347:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0325/205856.374:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0325/210356.795:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0326/165055.930:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0326/170036.270:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0326/182054.831:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0326/182355.469:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0326/191446.344:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0326/193039.068:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0326/200320.185:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0326/202603.241:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0326/203712.550:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0326/204444.789:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0326/205357.455:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0326/205639.383:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0327/015547.546:ERROR:file_io_win.cc(161)] CreateFile C:\Users\E3AD~1\AppData\Local\Temp\scoped_dir9648_20859\Crashpad\settings.dat: Системе не удается найти указанный путь. (0x3)
+[0327/015547.547:ERROR:file_io_win.cc(170)] CreateFile C:\Users\E3AD~1\AppData\Local\Temp\scoped_dir9648_20859\Crashpad\reports\11215606-9398-41b0-8743-0192c5ceaa31.dmp: Системе не удается найти указанный путь. (0x3)
+[0327/015547.562:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
+[0327/041148.821:ERROR:file_io_win.cc(161)] CreateFile C:\Users\E3AD~1\AppData\Local\Temp\scoped_dir2708_11254\Crashpad\settings.dat: Системе не удается найти указанный путь. (0x3)
+[0327/041148.823:ERROR:file_io_win.cc(170)] CreateFile C:\Users\E3AD~1\AppData\Local\Temp\scoped_dir2708_11254\Crashpad\reports\008ec561-55e8-4bfd-98f5-faf509f1d3fa.dmp: Системе не удается найти указанный путь. (0x3)
+[0327/041148.823:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
+[0327/041240.184:ERROR:file_io_win.cc(161)] CreateFile C:\Users\E3AD~1\AppData\Local\Temp\scoped_dir4524_30489\Crashpad\settings.dat: Системе не удается найти указанный путь. (0x3)
+[0327/041240.185:ERROR:file_io_win.cc(170)] CreateFile C:\Users\E3AD~1\AppData\Local\Temp\scoped_dir4524_30489\Crashpad\reports\06bb48a0-f215-41c7-a781-e165b15700fa.dmp: Системе не удается найти указанный путь. (0x3)
+[0327/041240.185:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
+[0330/185425.508:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0330/185624.259:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0330/185927.421:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0331/185927.422:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0401/185927.422:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0406/182104.038:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0406/184300.916:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0406/184431.128:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0406/184604.096:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0407/114007.028:ERROR:file_io_win.cc(161)] CreateFile C:\Users\E3AD~1\AppData\Local\Temp\scoped_dir3432_23584\Crashpad\settings.dat: Системе не удается найти указанный путь. (0x3)
+[0407/114007.029:ERROR:file_io_win.cc(170)] CreateFile C:\Users\E3AD~1\AppData\Local\Temp\scoped_dir3432_23584\Crashpad\reports\c6edcb4d-15eb-41fe-afdb-d446f639e18e.dmp: Системе не удается найти указанный путь. (0x3)
+[0407/114007.029:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
+[0504/135024.695:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0504/135951.242:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0504/140303.484:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0505/020408.239:ERROR:file_io_win.cc(161)] CreateFile C:\Users\E3AD~1\AppData\Local\Temp\scoped_dir5788_643\Crashpad\settings.dat: Системе не удается найти указанный путь. (0x3)
+[0505/020408.255:ERROR:file_io_win.cc(170)] CreateFile C:\Users\E3AD~1\AppData\Local\Temp\scoped_dir5788_643\Crashpad\reports\068d704d-1f14-432a-9c93-77b32f1a8bed.dmp: Системе не удается найти указанный путь. (0x3)
+[0505/020408.255:ERROR:crash_report_exception_handler.cc(97)] PrepareNewCrashReport failed
+[0514/082240.567:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0514/083244.065:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0514/083747.373:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0514/084134.989:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0514/085031.798:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0514/085525.242:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0812/124918.611:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0812/125324.163:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0812/130707.651:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0812/130808.659:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0812/131714.486:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0812/132806.083:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0812/133423.245:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0812/134017.171:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0812/134140.283:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0812/134238.028:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0812/135550.954:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0812/135905.554:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0812/140803.996:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0812/141056.631:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0812/141517.641:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0812/141712.092:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0812/142344.799:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0812/142753.270:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0812/143016.760:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0812/143758.522:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0812/145932.257:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0812/150159.642:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0818/161929.364:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports

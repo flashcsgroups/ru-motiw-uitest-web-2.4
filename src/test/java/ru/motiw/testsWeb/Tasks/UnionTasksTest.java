@@ -111,6 +111,8 @@ public class UnionTasksTest extends BaseTest {
          * Верификация папки - ОП (общая папка)- под вновь созданными пользователями
          */
         loginPageSteps.loginAs(user);
+        assertThat("Check that the displayed menu item 8 (Logo; Tasks; Documents; Messages; Calendar; Library; Tools; Details)",
+                internalPageSteps.hasMenuUserComplete()); // Проверяем отображение п.м. на внутренней странице
 
         //---------------------------------------------------------------- Задачи/Задачи
         goToUnionTasks().checkTheMapASharedFolderFromTheNewlyCreatedUser(folder[4], 20);

@@ -1,12 +1,13 @@
 package ru.motiw.web.steps.Administration;
 
 import org.openqa.selenium.By;
-import ru.motiw.web.steps.BaseSteps;
 import ru.motiw.web.elements.elementsweb.Administration.TaskTypeListElements;
+import ru.motiw.web.steps.BaseSteps;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.page;
+import static com.codeborne.selenide.Selenide.sleep;
 
 
 /**
@@ -22,6 +23,7 @@ public abstract class TaskTypeListSteps extends BaseSteps {
      * @param nameObject передаваемое имя объекта
      */
     public void addObjectTaskTypeList(String nameObject) {
+        sleep(500);
         taskTypeListElements.getAddTypesObject().click();
         $(taskTypeListElements.getNameObject()).shouldBe(visible).setValue(nameObject);
         taskTypeListElements.getOkAddObject().click();

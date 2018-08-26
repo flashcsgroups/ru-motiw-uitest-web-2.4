@@ -11,6 +11,7 @@ import ru.motiw.web.steps.Home.InternalSteps;
 import ru.motiw.web.steps.Login.LoginStepsSteps;
 
 import static com.codeborne.selenide.Selenide.page;
+import static com.codeborne.selenide.Selenide.sleep;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testng.AssertJUnit.assertTrue;
 
@@ -30,6 +31,7 @@ public class UserAuthenticationTest extends UserAuthentication {
     @Test(priority = 1, dataProvider = "verifyFailAuthorizationWeb", dataProviderClass = UserAuthentication.class)
     public void notSuccessfulAuthorization(String login, String password) throws Exception {
         loginPageSteps.loginAs(login, password);
+        sleep(500);
         assertTrue("Log in to the dataproviders fails", loginPageSteps.isNotLoggedIn());
     }
 

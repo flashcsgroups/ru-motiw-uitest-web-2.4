@@ -342,6 +342,7 @@ public class UsersSteps extends DepartmentSteps {
         usersElements.getButtonAddUser().click(); // Добавить пользователя
 
         switchTo().frame($(By.xpath("//iframe[contains(@id,'component-')]")));
+        sleep(500);
         setEntryField(usersElements.getLastName(), user.getLastName()) // Фамилия
                 .setEntryField(usersElements.getName(), user.getName()) // Имя
                 .setEntryField(usersElements.getPatronymic(), user.getPatronymic()) // Отчество

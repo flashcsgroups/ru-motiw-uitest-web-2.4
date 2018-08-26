@@ -63,6 +63,7 @@ public class DocumentionTestSteps extends BaseSteps {
             elements.get(i).click();//Переходим по найденным ссылкам на pdf-мануалы.
             ensurePdfPageLoaded(); //Проверяем Загрузку pdf-страницы
             goToURLManuals();
+            sleep(5000);
         }
 
         return this;
@@ -82,6 +83,7 @@ public class DocumentionTestSteps extends BaseSteps {
 
         }
         for (int i = 0; i < elements.size(); i++) {
+            sleep(500);
             elements.get(i).click(); //Переходим по найденным ссылкам на html-мануалы.
             //проверяем наличие фрейма - он есть на всех страницах, за исключением страницы "Термины и определения"
             if (isElementPresent(By.xpath("//frame[@name='hmcontent']"))){
@@ -219,7 +221,7 @@ public class DocumentionTestSteps extends BaseSteps {
 // посмотри for в методах - что-то е так
         //ensureHtmlPageLoaded();
 
-       //checkPdfManuals();
+       checkPdfManuals();
        checkHtmlManuals();
         //eee();
         //diff();
