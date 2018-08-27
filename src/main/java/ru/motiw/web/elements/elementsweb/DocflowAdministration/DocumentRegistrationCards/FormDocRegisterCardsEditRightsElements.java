@@ -12,43 +12,43 @@ public class FormDocRegisterCardsEditRightsElements {
     @FindBy(xpath = "(//div[contains(@id,'tabbar')]/following-sibling::*)[1]//a[2]//span")
     private SelenideElement rightsTab;
 
-    @FindBy(xpath = "(//div[contains(@id,'radiofield-')]//span[@data-ref])[14]")
+    @FindBy(xpath = "(//div[contains(@id,'radio-')]//span[@data-ref])[14]")
     private SelenideElement personal;
 
-    @FindBy(xpath = "(//div[contains(@id,'radiofield-')]//span[@data-ref])[18]")
+    @FindBy(xpath = "(//div[contains(@id,'radio-')]//span[@data-ref])[18]")
     private SelenideElement accessAvailableToAll;
 
-    @FindBy(xpath = "(//div[contains(@id,'radiofield-')]//span[@data-ref])[22]")
+    @FindBy(xpath = "(//div[contains(@id,'radio-')]//span[@data-ref])[22]")
     private SelenideElement readOnly;
 
-    @FindBy(xpath = "(//fieldset)[7]//div[count(div)=3]/div[1]//input")
+    @FindBy(xpath = "(//fieldset)[6]//div[count(div)=3]/div[1]//input")
     private SelenideElement authorFinalVersionFiles;
 
-    @FindBy(xpath = "(//fieldset)[7]//div[count(div)=3]/div[2]//input")
+    @FindBy(xpath = "(//fieldset)[6]//div[count(div)=3]/div[2]//input")
     private SelenideElement userWithEditRightFinalVersionFiles;
 
-    @FindBy(xpath = "(//fieldset)[7]//div[count(div)=3]/div[3]//input")
+    @FindBy(xpath = "(//fieldset)[6]//div[count(div)=3]/div[3]//input")
     private SelenideElement docTypeControllerFinalVersionFiles;
 
-    @FindBy(xpath = "(//fieldset)[8]//div[count(div)=3]/div[1]//input")
+    @FindBy(xpath = "(//fieldset)[7]//div[count(div)=3]/div[1]//input")
     private SelenideElement editionOwnDocumentsOnReview;
 
-    @FindBy(xpath = "(//fieldset)[8]//div[count(div)=3]/div[2]//input")
+    @FindBy(xpath = "(//fieldset)[7]//div[count(div)=3]/div[2]//input")
     private SelenideElement editionOwnDocumentsOnExecution;
 
-    @FindBy(xpath = "(//fieldset)[8]//div[count(div)=3]/div[3]//input")
+    @FindBy(xpath = "(//fieldset)[7]//div[count(div)=3]/div[3]//input")
     private SelenideElement editionOwnDocumentsInArchive;
 
-    @FindBy(xpath = "((//fieldset)[9]//table//span[contains(@id,'checkbox')])[1]")
+    @FindBy(xpath = "((//fieldset)[8]//table//span[contains(@id,'checkbox')])[1]")
     private SelenideElement boxAccessToSectionsDocumentRoute;
 
-    @FindBy(xpath = "((//fieldset)[9]//table//span[contains(@id,'checkbox')])[2]")
+    @FindBy(xpath = "((//fieldset)[8]//table//span[contains(@id,'checkbox')])[2]")
     private SelenideElement boxAccessToSectionsDocumentFiles;
 
-    @FindBy(xpath = "((//fieldset)[9]//table//span[contains(@id,'checkbox')])[3]")
+    @FindBy(xpath = "((//fieldset)[8]//table//span[contains(@id,'checkbox')])[3]")
     private SelenideElement boxAccessToSectionsDocumentResolution;
 
-    @FindBy(xpath = "((//fieldset)[9]//table//span[contains(@id,'checkbox')])[4]")
+    @FindBy(xpath = "((//fieldset)[8]//table//span[contains(@id,'checkbox')])[4]")
     private SelenideElement boxAccessToSectionsDocumentLog;
 
     @FindBy(xpath = "(//div[count(fieldset)=4]/div)[5]//input")

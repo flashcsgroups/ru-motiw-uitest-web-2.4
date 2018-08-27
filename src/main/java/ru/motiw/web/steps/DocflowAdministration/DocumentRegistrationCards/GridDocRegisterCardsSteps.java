@@ -8,6 +8,7 @@ import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.page;
+import static com.codeborne.selenide.Selenide.sleep;
 import static ru.motiw.web.model.URLMenu.DOCUMENT_REGISTER_CARDS;
 
 /**
@@ -49,6 +50,7 @@ public class GridDocRegisterCardsSteps extends BaseSteps {
      * Добавить объект - Регистрационная карточка документа
      */
     public FormDocRegisterCardsEditGeneralSteps addDocRegisterCards() {
+        sleep(500);
         $(gridDocRegisterCardsElements.getAddOnRegCards()).shouldBe(visible).click();
         waitForTaskMaskDRC();
         return page(FormDocRegisterCardsEditGeneralSteps.class);
