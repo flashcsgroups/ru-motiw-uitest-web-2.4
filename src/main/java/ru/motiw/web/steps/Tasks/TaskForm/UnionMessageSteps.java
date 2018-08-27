@@ -4,8 +4,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.motiw.web.elements.elementsweb.Tasks.TaskForm.UnionMessageElements;
 import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
-import ru.motiw.web.model.Tasks.*;
 import ru.motiw.web.model.Administration.Users.Employee;
+import ru.motiw.web.model.Tasks.*;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.page;
@@ -153,9 +153,9 @@ public class UnionMessageSteps extends UnionMessageNewSteps {
                     By.xpath("//span[text()][ancestor::em[contains(@class,'x-tab')]][ancestor::li[not(@style='display: none;')]]"),
                     new String[]{"Действия", "Описание", "Изолированные рабочие группы", "Файлы", "Планирование", "События", "Контакты", "Журнал", "Связь", "Дополнительно"});
         } else {
-            checkDisplayedTabsInTheShapeOfAnObject(By.xpath("//span[text()][ancestor::em[contains(@class,'x-tab')]][ancestor::li[not(@style='display: none;')]]"), 9,
+            checkDisplayedTabsInTheShapeOfAnObject(By.xpath("//span[text()][ancestor::em[contains(@class,'x-tab')]][ancestor::li[not(@style='display: none;')]]"), 10,
                     By.xpath("//span[text()][ancestor::em[contains(@class,'x-tab')]][ancestor::li[not(@style='display: none;')]]"),
-                    new String[]{"Действия", "Описание", "Файлы", "Планирование", "События", "Контакты", "Журнал", "Связь", "Дополнительно"});
+                    new String[]{"\u00A0","Действия", "Описание", "Файлы", "Планирование", "События", "Контакты", "Журнал", "Связь", "\u00A0"});
         }
         return this;
     }

@@ -38,6 +38,7 @@ public class UnionTasksSteps extends BaseSteps {
      * Проверка загрузки страницы
      */
     private UnionTasksSteps ensurePageLoaded() {
+        sleep(500);
         $(By.xpath("//div[@id='ext-comp-1001-bodyWrap']")).shouldBe(visible); // Панель ПУГЗ
         $(By.xpath("//div[contains(@data-ref,'bodyWrap')]/child::div[contains(@id,'taskpagingtoolbar')]"))
                 .shouldBe(visible); // Панель Навигации по гриду
