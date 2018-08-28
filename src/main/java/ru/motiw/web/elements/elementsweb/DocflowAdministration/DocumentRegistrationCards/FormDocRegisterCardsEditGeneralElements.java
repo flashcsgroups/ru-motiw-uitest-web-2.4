@@ -33,9 +33,6 @@ public class FormDocRegisterCardsEditGeneralElements {
     @FindBy(xpath = "//input[contains(@id,'textfield') and contains(@name,'status_text')][ancestor::fieldset[contains(@id,'fieldset')]]")
     private SelenideElement setValueDocumentStates;
 
-    @FindBy(xpath = "(//input[contains(@id,'textfield')][ancestor::div[contains(@id,'container')]])[1]")
-    private SelenideElement setDisplayNameTemplate;
-
     @FindBy(xpath = "(//div[contains(@id,'radiofield-')]//span[@data-ref])[2]")
     private SelenideElement dateDoesNotMove;
 
@@ -47,7 +44,7 @@ public class FormDocRegisterCardsEditGeneralElements {
     private SelenideElement dateMovesBack;
     */
 
-    @FindBy(xpath = "(//div[contains(@id,'radiofield-')]//span[@data-ref])[10]")
+    @FindBy(xpath = "(//div[contains(@id,'radio-')]//span[@data-ref])[10]")
     private SelenideElement dateMovesBack;
 
 /*
@@ -136,12 +133,6 @@ public class FormDocRegisterCardsEditGeneralElements {
         return setValueDocumentStates;
     }
 
-    /**
-     * Шаблон отображения
-     */
-    public SelenideElement getDisplayNameTemplate() {
-        return setDisplayNameTemplate;
-    }
 
     /**
      * Направление смещения даты при попадании на нерабочее время:

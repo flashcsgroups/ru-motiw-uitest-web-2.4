@@ -1,14 +1,16 @@
 package ru.motiw.web.steps.Login;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
-import ru.motiw.web.steps.BaseSteps;
-import ru.motiw.web.steps.Home.LibrarySteps;
 import ru.motiw.web.elements.elementsweb.Login.LoginPageElements;
 import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.steps.Administration.Users.UsersSteps;
+import ru.motiw.web.steps.BaseSteps;
 import ru.motiw.web.steps.Home.InternalSteps;
+import ru.motiw.web.steps.Home.LibrarySteps;
 
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.page;
 import static ru.motiw.web.steps.Options.MyPropertiesSteps.goToURLPwd;
 
@@ -57,6 +59,12 @@ public class LoginStepsSteps extends BaseSteps {
         setLoginField(user.getLoginName());
         setPasswordField(user.getPassword());
         loginPageElements.getLogon().submit();
+        /*
+        *В некоторых случаях необходимо ожидание после авторизации. Учтены три разных случаев возможных после авторизации.
+        *Но для UserTest loginPageSteps.loginAs(editUser) не хватает ожидания.
+        *TODO вынести в отдельный метод см. как waitForMask
+        */
+        $(By.xpath("//div[@id='logo' or text()='Доступ запрещен' or  label[text()='Вам необходимо сменить пароль']]")).waitUntil(visible, 10000);
         return this;
     }
 

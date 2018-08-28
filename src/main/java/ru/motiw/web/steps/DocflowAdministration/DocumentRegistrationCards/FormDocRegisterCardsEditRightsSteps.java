@@ -1,13 +1,13 @@
 package ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards;
 
 import com.codeborne.selenide.SelenideElement;
-import ru.motiw.web.steps.BaseSteps;
 import ru.motiw.web.elements.elementsweb.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditRightsElements;
 import ru.motiw.web.model.AccessRights;
 import ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.CreationOfLinkedDocuments;
 import ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.DocRegisterCards;
 import ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.EditionOwnDocuments;
 import ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.SettingsFinalVersion;
+import ru.motiw.web.steps.BaseSteps;
 
 import static com.codeborne.selenide.Selenide.page;
 import static ru.motiw.utils.ElementUtil.offsetAndRangeOfValuesOnTheList;

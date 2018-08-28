@@ -5,15 +5,14 @@ import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
+import ru.motiw.web.elements.elementsweb.Tasks.TaskForm.*;
 import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
+import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Tasks.Checkpoint;
 import ru.motiw.web.model.Tasks.IWG;
-import ru.motiw.web.steps.BaseSteps;
-import ru.motiw.web.elements.elementsweb.Tasks.TaskForm.*;
 import ru.motiw.web.model.Tasks.Project;
-import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Tasks.Task;
+import ru.motiw.web.steps.BaseSteps;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -179,6 +178,7 @@ public class UnionMessageNewSteps extends BaseSteps {
             insetDescriptionTaskFormElements.getButtonNewProject().click();
             getFrameObject($(By.xpath("//iframe[@src='/user/project']")));
             // выбор поля Проект
+            sleep(500);
             projectFormElements.getProjectField().click();
             // заполняем поле Проект (Название проекта)
             projectFormElements.getEditorFieldProject().setValue(project.getNameProject());
@@ -237,6 +237,7 @@ public class UnionMessageNewSteps extends BaseSteps {
         if (end == null) {
             return this;
         } else {
+            sleep(1000);
             insetDescriptionTaskFormElements.getEndField().click();
             insetDescriptionTaskFormElements.getEditorField().setValue(end);
 
@@ -462,10 +463,11 @@ public class UnionMessageNewSteps extends BaseSteps {
         // выбор пользователя - Ответственные руководители - через searchlive
         choiceUsersThroughTheSearchLiveForSpace(task.getExecutiveManagers(), insetDescriptionTaskFormElements.getExecutiveManagersField(),
                 insetDescriptionTaskFormElements.getEditorField());
-        setTaskType(task.getTaskType()) // выбор - Тип задачи
+        /*setTaskType(task.getTaskType()) // выбор - Тип задачи
                 .setReport(task.getIsWithReport())
                 .setSecret(task.getIsSecret())
-                .setReview(task.getIsForReview());
+                .setReview(task.getIsForReview());*/ //TODO Не переходит на вкладку Дополнительно. Зачем нужно setTaskType  не понятно - все равно это создание по типу Обычный.
+
         return this;
     }
 
@@ -491,11 +493,11 @@ public class UnionMessageNewSteps extends BaseSteps {
         // выбор пользователя - Ответственные руководители - через searchlive
         choiceUsersThroughTheSearchLiveForSpace(task.getExecutiveManagers(), insetDescriptionTaskFormElements.getExecutiveManagersField(),
                 insetDescriptionTaskFormElements.getEditorField());
-        setTaskType(task.getTaskType())
+        /*setTaskType(task.getTaskType())
                 .addTasksIWG(task.getIWG())
                 .setReport(task.getIsWithReport())
                 .setSecret(task.getIsSecret())
-                .setReview(task.getIsForReview());
+                .setReview(task.getIsForReview());*/
         saveTask();
     }
 

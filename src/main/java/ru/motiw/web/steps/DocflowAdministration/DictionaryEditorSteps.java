@@ -11,6 +11,7 @@ import ru.motiw.web.model.DocflowAdministration.DictionaryEditor.DictionaryEdito
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.page;
+import static com.codeborne.selenide.Selenide.sleep;
 import static ru.motiw.web.model.URLMenu.DICTIONARY_EDITOR;
 
 /**
@@ -32,6 +33,7 @@ public class DictionaryEditorSteps extends BaseSteps {
      * Добавить объект - Редактор словарей
      */
     private DictionaryEditorSteps addDictionaryEditor() {
+        sleep(500);
         dictionaryEditorElements.getAddDictionaryEditor().click();
         $(dictionaryEditorElements.getNameDictionaryEditor()).shouldBe(visible);
         return this;

@@ -1,15 +1,13 @@
 package ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards;
 
 import com.codeborne.selenide.SelenideElement;
-import org.openqa.selenium.By;
-import ru.motiw.web.steps.BaseSteps;
-import ru.motiw.web.elements.elementsweb.DocflowAdministration.DocumentRegistrationCards.*;
+import ru.motiw.web.elements.elementsweb.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditGeneralElements;
 import ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.AutoCalculationOfNumeratorFields;
 import ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.DocRegisterCards;
 import ru.motiw.web.model.OpenFilesForEdit;
 import ru.motiw.web.model.ShiftDirection;
+import ru.motiw.web.steps.BaseSteps;
 
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.page;
 import static ru.motiw.utils.ElementUtil.offsetAndRangeOfValuesOnTheList;
 
@@ -45,19 +43,6 @@ public class FormDocRegisterCardsEditGeneralSteps extends BaseSteps {
         return this;
     }
 
-    /**
-     * Вводим - Шаблон отображения документа
-     */
-    private FormDocRegisterCardsEditGeneralSteps addDisplayNameTemplate(String nameTemplate) {
-        if (nameTemplate == null) {
-            return this;
-        } else {
-            $(By.xpath("(//div[contains(@id,'tabbar')]/following-sibling::*)[1]//a[10]//span")).click();  //TODO вынести отдельно
-            formEditRCDGeneralElement.getDisplayNameTemplate().clear();
-            formEditRCDGeneralElement.getDisplayNameTemplate().setValue(nameTemplate);
-        }
-        return this;
-    }
 
     /**
      * Направление смещения даты при попадании на нерабочее время
@@ -152,18 +137,6 @@ public class FormDocRegisterCardsEditGeneralSteps extends BaseSteps {
                         formEditRCDGeneralElement.getDocumentStatesOnExecution(), formEditRCDGeneralElement.getValueDocumentStates())  // - На исполнении
                 .enterTheNameOfTheStatusOfTheDocumentLifeCycle(registerCards.getDocumentStatesInArchive(), formEditRCDGeneralElement.getDocumentStatesInArchive(),
                         formEditRCDGeneralElement.getValueDocumentStates()); // - В архиве
-        return this;
-    }
-
-    /**
-     * Шаблон отображения (Название документа)
-     *
-     * @param registerCards передаваемый шаблон отображения документа
-     * @return FormDocRegisterCardsEditGeneralSteps
-     */
-    public FormDocRegisterCardsEditGeneralSteps displayNameTemplate(DocRegisterCards registerCards) {
-        generalTabRCD();
-        addDisplayNameTemplate(registerCards.getDisplayNameTemplate());
         return this;
     }
 

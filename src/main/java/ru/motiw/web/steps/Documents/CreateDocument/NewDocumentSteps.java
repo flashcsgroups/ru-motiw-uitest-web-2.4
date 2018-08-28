@@ -56,6 +56,7 @@ public class NewDocumentSteps extends BaseSteps {
         if (typeNameDoc == null) {
             return this;
         } else {
+            sleep(1000);
             $(newDocumentCartTabElements.getFieldDocumentType()).shouldBe(visible);
             newDocumentCartTabElements.getFieldDocumentType().click();
             $(By.xpath("//div[@id='treePanel']//li//a/*[text()]")).shouldBe(visible);
@@ -74,6 +75,7 @@ public class NewDocumentSteps extends BaseSteps {
             return this;
         } else {
             waitForFormNewDocumentMask();
+            sleep(1000);
             newDocumentCartTabElements.getFieldRegistrationDate().click();
             newDocumentCartTabElements.getInputField().setValue(dateRegistration);
         }
@@ -90,6 +92,7 @@ public class NewDocumentSteps extends BaseSteps {
             newDocumentCartTabElements.getNewProject().click();
             getFrameObject($(projectFormElements.getProjectFrame()));
             // выбор поля Проект
+            sleep(500);
             projectFormElements.getProjectField().click();
             // заполняем поле Проект (Название проекта)
             projectFormElements.getEditorFieldProject().setValue(project.getNameProject());

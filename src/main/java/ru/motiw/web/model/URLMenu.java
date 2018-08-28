@@ -20,6 +20,7 @@ public enum URLMenu {
     DOCUMENT_REGISTER_CARDS("/user/tab/user/DocRegisterCards/"),
     MY_PROPERTIES("/user/tab/user/pwd/"),
     EVENT_TEMPLATES("/user/tab/user/eventtemplates/"),
+    MANUALS("/user/tab/user/manuals/"),
 
 
     CREATE_DOCUMENT("/user/tab/documents/newdocument/");
