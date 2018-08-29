@@ -116,7 +116,10 @@ public class InternalSteps extends BaseSteps {
      */
     public boolean hasMenuUserComplete() {
         // TODO если в лого картинка НЕ работает
-        internalElements.getMenuElements().shouldHaveSize(8);
+        internalElements.getMenuElements().shouldHaveSize(7); //Проверка только элементов в которых содержится текст
+        //TODO добавить проверку остальных элементов в которых текст содержится в хинте.
+        // см. Инструменты,Справка, Выйти - caption hidden - //div[@id='left-panel'][ancestor::div[@id='menu']]//div[contains(@class,'menu-point') and not(@class='menu-point-hidden')]//div[@class='caption hidden']
+
         return !internalElements.getMenuElements().isEmpty();
     }
 

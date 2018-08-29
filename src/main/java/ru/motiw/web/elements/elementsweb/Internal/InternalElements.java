@@ -10,7 +10,7 @@ import org.openqa.selenium.support.FindBy;
  */
 public class InternalElements {
 
-    @FindBy(xpath = "//div[@id='left-panel'][ancestor::div[@id='menu']]//div[contains(@class,'menu-point') and not(@class='menu-point-hidden')]//div[@class='caption']")
+    @FindBy(xpath = "//div[@id='left-panel'][ancestor::div[@id='menu']]//div[contains(@class,'menu-point') and not(@class='menu-point-hidden')]//div[@class='caption m-h-caption-wrapper']")
     private ElementsCollection menuElements;
 
     @FindBy(xpath = "//img[@class='motiw-logo-icon' or @class='logo-icon' ]")
@@ -73,7 +73,7 @@ public class InternalElements {
     @FindBy(id = "L_GLOBAL_DICTIONARY_EDITOR-menupoint")
     private SelenideElement dictionaryEditorMenu;
 
-    @FindBy(css = "#btn_logout")
+    @FindBy(xpath = "//img[contains(@id,'logoutButtonImg')]")
     private SelenideElement logout;
 
     @FindBy(css = "#searchQueryEdit")
