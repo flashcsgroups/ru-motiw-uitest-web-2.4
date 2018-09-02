@@ -89,7 +89,7 @@ public class DocumentionTestSteps extends BaseSteps {
             link.click();
             ArrayList<String> tabs2 = new ArrayList<> (getWebDriver().getWindowHandles());
             switchTo().window(tabs2.get(1));
-            //getWebDriver().switchTo().window(new WebDriverWait(getWebDriver(), 10).until(newWindowForm(By.xpath("//embed[@type='application/pdf']"))));
+
             {
                 if (isElementPresent(By.xpath("//frame[@name='hmcontent']"))) {
                     getFrameObject($(documantionTestElements.getFrameHtml())); //  уходим во фрейм hmcontent
