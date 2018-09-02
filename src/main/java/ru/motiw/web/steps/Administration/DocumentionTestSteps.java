@@ -87,8 +87,8 @@ public class DocumentionTestSteps extends BaseSteps {
 
         for (SelenideElement link:elements) {
             link.click();
-            ArrayList<String> tabs2 = new ArrayList<> (getWebDriver().getWindowHandles());
-            switchTo().window(tabs2.get(1));
+            ArrayList<String> tabs = new ArrayList<> (getWebDriver().getWindowHandles());
+            switchTo().window(tabs.get(1));
 
             {
                 if (isElementPresent(By.xpath("//frame[@name='hmcontent']"))) {
