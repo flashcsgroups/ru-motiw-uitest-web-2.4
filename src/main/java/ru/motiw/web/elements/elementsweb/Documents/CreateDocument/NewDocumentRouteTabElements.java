@@ -23,7 +23,7 @@ public class NewDocumentRouteTabElements {
     @FindBy(xpath = "//table//td//span[contains(text(),'1.')]/../../..//img[@onclick]")
     private SelenideElement addAUserToBlockDiagram;
 
-    @FindBy(xpath = "//table//td//span[contains(text(),'1.')]/../../../../tr[1]/td[6]//div")
+    @FindBy(xpath = "//table//td//span[contains(text(),'1.')]/ancestor::tr/td[5]")
     private SelenideElement reviewDuration;
 
     @FindBy(xpath = "//tr[contains(@id,'numberfield')]//input")

@@ -197,7 +197,7 @@ public class NewDocumentSteps extends BaseSteps {
             for (Department departments : department) {
                 $(By.xpath("//table//tr/td[1]/div[contains(text(),'" + nameField + "')]/../../td[2]/div/../../td[3]//img")).click();
                 String parentWindowHandler = getWebDriver().getWindowHandle(); // Store your parent window
-                switchTo().window(new WebDriverWait(getWebDriver(), 10).until(newWindowForm(By.cssSelector("#searchField"))));
+                switchTo().window(new WebDriverWait(getWebDriver(), 10).until(newWindowForm(By.xpath("//div[@class=\"searchWrapper searchFieldWrapper\"]/input"))));
                 newDocumentCartTabElements.getSearchFieldDepartment().setValue(departments.getDepartmentName());
                 newDocumentCartTabElements.getSearchFieldDepartment().pressEnter();
                 newDocumentCartTabElements.getSelectedCheckBox().click();
@@ -301,8 +301,8 @@ public class NewDocumentSteps extends BaseSteps {
 
             $$(By.xpath("//div[contains(@id,'headercontainer')]//span")).shouldHave(size(8));
 
-            $$(By.xpath("//div[contains(@id,'headercontainer')]//span")).shouldHave(exactTexts("ФИО", "Действие", "Настройки", "Подразделение",
-                    "Должность", "Длительность рассмотрения", "Посылать напоминание за", "Обязательно рассматривают"));
+            $$(By.xpath("//div[contains(@id,'headercontainer')]//span")).shouldHave(exactTexts("ФИО", "Действие", "Подразделение",
+                    "Должность", "Длительность рассмотрения", "Посылать напоминание за", "Обязательно рассматривают", "")); // Раньше по умолчанию ещё была включена колонка "Настройки".
         }
         return this;
     }

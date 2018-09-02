@@ -41,7 +41,7 @@ public class NewDocumentCartTabElements {
     @FindBy(xpath = "//*[contains (@class,'window-noborder')][contains (@style,'visible')]//td[contains (@class,'cell')][1]")
     private SelenideElement buttonSaveDescription;
 
-    @FindBy(css = "#searchField")
+    @FindBy(xpath = "//div[@class=\"searchWrapper searchFieldWrapper\"]/input")
     private SelenideElement searchFieldDepartment;
 
     @FindBy(xpath = "//*[contains (@class, 'selected')][contains (@class, 'tree-node')]/*[@type='checkbox'] ")
