@@ -1,10 +1,14 @@
 package ru.motiw.web.steps.Administration;
 
 import com.codeborne.selenide.Condition;
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.motiw.web.elements.elementsweb.DocumantionTestElements;
 import ru.motiw.web.steps.BaseSteps;
 
 import static com.codeborne.selenide.Selenide.page;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static ru.motiw.utils.WindowsUtil.newWindowForm;
 import static ru.motiw.web.model.URLMenu.MANUALS;
 
 /**
@@ -26,31 +30,60 @@ public class DocumentionTestSteps extends BaseSteps {
     *  Открываем руководство, Проверяем Загрузку pdf-страницы, Переход в раздел "Руководства"
     *  Пока не все Руководства
     * */
-    private DocumentionTestSteps checkPdfManuals() {
 
+    private DocumentionTestSteps checkPdfManuals() {
+        String parentWindowHandler = getWebDriver().getWindowHandle();
         documantionTestElements.getManualGlossary().click();
-        ensurePageLoaded();
+        getWebDriver().switchTo().window(new WebDriverWait(getWebDriver(), 10).until(newWindowForm(By.xpath("//embed[@type='application/pdf']")))); //здесь сразу и проверяется
+        closeWindow();
+        getWebDriver().switchTo().window(parentWindowHandler);
+
+
         openSectionOnURL(MANUALS.getMenuURL());
         documantionTestElements.getManualTipsForBeginners().click();
-        ensurePageLoaded();
+        getWebDriver().switchTo().window(new WebDriverWait(getWebDriver(), 10).until(newWindowForm(By.xpath("//embed[@type='application/pdf']"))));
+        closeWindow();
+        getWebDriver().switchTo().window(parentWindowHandler);
+
+
         openSectionOnURL(MANUALS.getMenuURL());
         documantionTestElements.getAdminDoGuide().click();
-        ensurePageLoaded();
+        getWebDriver().switchTo().window(new WebDriverWait(getWebDriver(), 10).until(newWindowForm(By.xpath("//embed[@type='application/pdf']"))));
+        closeWindow();
+        getWebDriver().switchTo().window(parentWindowHandler);
+
         openSectionOnURL(MANUALS.getMenuURL());
         documantionTestElements.getAdminSecureAndSystemGuide().click();
-        ensurePageLoaded();
+        getWebDriver().switchTo().window(new WebDriverWait(getWebDriver(), 10).until(newWindowForm(By.xpath("//embed[@type='application/pdf']"))));
+        closeWindow();
+        getWebDriver().switchTo().window(parentWindowHandler);
+
         openSectionOnURL(MANUALS.getMenuURL());
         documantionTestElements.getInstallGuide().click();
-        ensurePageLoaded();
+        getWebDriver().switchTo().window(new WebDriverWait(getWebDriver(), 10).until(newWindowForm(By.xpath("//embed[@type='application/pdf']"))));
+        closeWindow();
+        getWebDriver().switchTo().window(parentWindowHandler);
+
+
         openSectionOnURL(MANUALS.getMenuURL());
         documantionTestElements.getApiManual().click();
-        ensurePageLoaded();
+        getWebDriver().switchTo().window(new WebDriverWait(getWebDriver(), 10).until(newWindowForm(By.xpath("//embed[@type='application/pdf']"))));
+        closeWindow();
+        getWebDriver().switchTo().window(parentWindowHandler);
+
+
         openSectionOnURL(MANUALS.getMenuURL());
         documantionTestElements.getUserGuide().click();
-        ensurePageLoaded();
+        getWebDriver().switchTo().window(new WebDriverWait(getWebDriver(), 10).until(newWindowForm(By.xpath("//embed[@type='application/pdf']"))));
+        closeWindow();
+        getWebDriver().switchTo().window(parentWindowHandler);
+
         openSectionOnURL(MANUALS.getMenuURL());
         documantionTestElements.getArmManual().click();
-        ensurePageLoaded();
+        getWebDriver().switchTo().window(new WebDriverWait(getWebDriver(), 10).until(newWindowForm(By.xpath("//embed[@type='application/pdf']"))));
+        closeWindow();
+        getWebDriver().switchTo().window(parentWindowHandler);
+
         return this;
     }
 

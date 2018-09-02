@@ -197,7 +197,7 @@ public class UsersSteps extends DepartmentSteps {
         $(usersElements.getFieldSearchDepForAlias()).shouldBe(visible);
         usersElements.getFieldSearchDepForAlias().click();
         usersElements.getFieldSearchDepForAlias().sendKeys(department.getDepartmentName());
-        usersElements.getButtonSearchDepForAlias().click();
+        usersElements.getButtonSearchDepForAlias().pressEnter();
         return this;
     }
 

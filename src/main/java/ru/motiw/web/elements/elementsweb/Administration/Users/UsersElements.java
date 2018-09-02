@@ -21,10 +21,10 @@ public class UsersElements {
     @FindBy(xpath = "(//*[contains (@class, 'footer')]//button)[1]")
     private SelenideElement buttonSaveAlias;
 
-    @FindBy(xpath = "//*[contains (@class, 'button_s')]")
+    @FindBy(xpath = "//input[contains(@id,'searchFieldDeps')]")
     private SelenideElement buttonSearchDepForAlias;
 
-    @FindBy(xpath = "//*[@id='searchField']")
+    @FindBy(xpath = "//div[@class=\"searchWrapper searchFieldWrapper\"]//input[@name=\"searchQueryEdit\"]")
     private SelenideElement fieldSearchDepForAlias;
 
     @FindBy(xpath = "//*[contains (@class, 'selected')][contains (@class, 'tree-node')]/*[@type='checkbox'] ")

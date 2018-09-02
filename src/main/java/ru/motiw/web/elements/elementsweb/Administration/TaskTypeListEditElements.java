@@ -8,7 +8,7 @@ import org.openqa.selenium.support.FindBy;
  */
 public class TaskTypeListEditElements {
 
-    @FindBy(xpath = "//a/span[contains(@id, 'button-10')]")
+    @FindBy(xpath = "//span[contains(@id, 'bAddField-btnIconEl')]")
     private SelenideElement addField;
 
     @FindBy(xpath = "//span[@id='button-1010-btnIconEl']")
