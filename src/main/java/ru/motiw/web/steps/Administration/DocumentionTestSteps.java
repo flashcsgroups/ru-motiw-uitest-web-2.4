@@ -87,8 +87,8 @@ public class DocumentionTestSteps extends BaseSteps {
 
         for (SelenideElement link:elements) {
             link.click();
-            ArrayList<String> tabs = new ArrayList<> (getWebDriver().getWindowHandles());
-            switchTo().window(tabs.get(1));
+            ArrayList<String> tabs = new ArrayList<> (getWebDriver().getWindowHandles()); //все открытые окна сохраняем в список
+            switchTo().window(tabs.get(1)); //переходим во второе окно\вкладку
 
             {
                 if (isElementPresent(By.xpath("//frame[@name='hmcontent']"))) {
