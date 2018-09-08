@@ -293,8 +293,9 @@ public class UnionMessageNewSteps extends BaseSteps {
      * Установка признака с докладом
      */
     private UnionMessageNewSteps setReport(boolean isWithReport) {
-        insetDetailsTaskFormElements.getAdditionalTab().click(); //Если это будет внутри if, то происходит клик в чебокс и признак снимается. т.к признак стоит по умолчанимю при создании новой задачи. Вроде бы так это работает.
+
         if (!isWithReport) {
+            insetDetailsTaskFormElements.getAdditionalTab().click();
             insetDetailsTaskFormElements.getCheckboxWithReport().click();
         }
         return this;
@@ -315,8 +316,8 @@ public class UnionMessageNewSteps extends BaseSteps {
      * Установка признака только для ознакомления
      */
     private UnionMessageNewSteps setReview(boolean isForReview) {
-        insetDetailsTaskFormElements.getAdditionalTab().click();
         if (isForReview) {
+            insetDetailsTaskFormElements.getAdditionalTab().click();
             insetDetailsTaskFormElements.getCheckboxOnlyForView().click();
         }
         return this;
