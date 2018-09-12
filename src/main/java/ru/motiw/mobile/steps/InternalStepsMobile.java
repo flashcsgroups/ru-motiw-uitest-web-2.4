@@ -193,8 +193,8 @@ public class InternalStepsMobile extends BaseSteps {
      * @return information about the number of the menu on the main page
      */
     public boolean hasMenuUserComplete() {
-        internalElementsMobile.getMenuElementsMobile().shouldHaveSize(4);
-        return !menuElements.isEmpty();
+        internalElementsMobile.getMenuElementsMobile().shouldHaveSize(9);
+        return !internalElementsMobile.getMenuElementsMobile().isEmpty();
     }
 
     /**

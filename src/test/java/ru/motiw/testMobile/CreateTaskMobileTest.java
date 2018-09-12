@@ -8,7 +8,9 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import ru.motiw.data.dataproviders.Tasks;
 import ru.motiw.data.listeners.ScreenShotOnFailListener;
+import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
 import ru.motiw.mobile.steps.BaseStepsMobile;
+import ru.motiw.mobile.steps.InternalStepsMobile;
 import ru.motiw.mobile.steps.LoginStepsMobile;
 import ru.motiw.web.elements.elementspda.InternalStepsPDA;
 import ru.motiw.web.elements.elementspda.LoginStepsPDA;
@@ -23,9 +25,7 @@ import ru.motiw.web.steps.Home.InternalSteps;
 import ru.motiw.web.steps.Login.LoginStepsSteps;
 import ru.motiw.web.steps.Tasks.UnionTasksSteps;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.Selenide.page;
+import static com.codeborne.selenide.Selenide.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testng.Assert.assertTrue;
 import static ru.motiw.web.steps.Administration.SystemOptionsSteps.goToURLSystemOptionsPage;
@@ -36,13 +36,13 @@ import static ru.motiw.web.steps.Tasks.UnionTasksSteps.goToUnionTasks;
 public class CreateTaskMobileTest extends Tasks {
 
     private LoginStepsSteps loginPageSteps;
-    private InternalSteps internalPageSteps;
+    private InternalStepsMobile internalPageSteps;
     private UnionTasksSteps unionTasksSteps;
 
     @BeforeClass
     public void beforeTest() {
         loginPageSteps = page(LoginStepsSteps.class);
-        internalPageSteps = page(InternalSteps.class);
+        internalPageSteps = page(InternalStepsMobile.class);
         unionTasksSteps = page(UnionTasksSteps.class);
     }
 
@@ -82,15 +82,18 @@ public class CreateTaskMobileTest extends Tasks {
     public void verifyCreateTaskMobile(Task task) throws Exception {
         //LoginStepsPDA loginPagePDA = open(BaseSteps.PDA_PAGE_URL, LoginStepsPDA.class);
         LoginStepsMobile loginStepsMobile = open(BaseStepsMobile.MOBILE_PAGE_URL, LoginStepsMobile.class);
-        $(By.xpath("//span[contains(text(),'Имя')]//ancestor::div[1]//input")).waitUntil(Condition.visible, 5000);
+        $(By.xpath("//span[contains(text(),'Имя')]//ancestor::div[1]//input")).waitUntil(Condition.visible, 10000);
         // Авторизация
-       /*
-        loginStepsMobile.loginAsAdmin(ADMIN);
-        InternalStepsPDA internalPagePDA = loginPagePDA.goToInternalMenu(); // Инициализируем внутренюю стр. системы и переходим на нее
-        assertThat("Check that the displayed menu item 4 (Tasks; Create Tasks; Today; Document)",
-                internalPagePDA.hasMenuUserComplete());
+        loginStepsMobile.loginAs(ADMIN);
+        $(By.xpath("//div[@class=\"x-loading-spinner-outer\"]")).waitUntil(Condition.visible, 10000);// маска загрузки
+        $(By.xpath("//div[@class=\"x-component x-button no-blue-alt x-has-icon x-icon-align-left x-arrow-align-right x-button-alt x-component-alt x-layout-box-item x-layout-hbox-item\"][1]")).waitUntil(Condition.visible, 10000);
+
+
+        loginStepsMobile.goToInternalMenu(); // Открываем главное меню
+        assertThat("Check that the displayed menu item 9 (User Info; Tasks And Documents; Create Tasks; Today; Search; Settings; Help; Exit; Go To Full Version)",
+               internalPageSteps.hasMenuUserComplete());
         // Инициализируем стр. формы создание задачи и переходим на нее
-        NewTaskStepsPDA newTaskPagePDA = internalPagePDA.goToCreateTask();*/
+        /*NewTaskStepsPDA newTaskPagePDA = internalPageMobile.goToCreateTask();*/
 
         //----------------------------------------------------------------ФОРМА - создания Задачи
         /*newTaskPagePDA.creatingTask(task);*/

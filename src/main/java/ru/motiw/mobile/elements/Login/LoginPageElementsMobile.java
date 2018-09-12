@@ -12,10 +12,10 @@ public class LoginPageElementsMobile {
     @FindBy(xpath = "//span[contains(text(),'Имя')]//ancestor::div[1]//input")
     private SelenideElement loginField;
     
-    @FindBy(css = "#pass")
+    @FindBy(xpath = "//span[contains(text(),'Пароль')]//ancestor::div[1]//input")
     private SelenideElement passwordField;
     
-    @FindBy(css = "#subm")
+    @FindBy(xpath = "//div[@class=\"x-body-el x-container-body-el x-component-body-el x-layout-box x-align-center x-pack-center x-layout-hbox x-horizontal\"]//.")
     private SelenideElement logon;
 
 

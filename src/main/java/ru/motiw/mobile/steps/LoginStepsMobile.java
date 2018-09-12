@@ -1,7 +1,9 @@
 package ru.motiw.mobile.steps;
 
 import com.codeborne.selenide.Condition;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
+import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
 import ru.motiw.mobile.elements.Login.LoginPageElementsMobile;
 import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.steps.BaseSteps;
@@ -14,6 +16,7 @@ import static com.codeborne.selenide.Selenide.page;
 public class LoginStepsMobile extends BaseSteps {
 
     private LoginPageElementsMobile loginPageElementsMobile = page(LoginPageElementsMobile.class);
+    private InternalElementsMobile internalElementsMobile = page(InternalElementsMobile.class);
 
 
     /**
@@ -27,7 +30,7 @@ public class LoginStepsMobile extends BaseSteps {
         loginPageElementsMobile.getLogin().setValue(login);
         loginPageElementsMobile.getLogin().clear();
         loginPageElementsMobile.getPassword().setValue(password);
-        loginPageElementsMobile.getLogon().click();
+        loginPageElementsMobile.getLogin().click();
     }
 
     /**
@@ -56,9 +59,10 @@ public class LoginStepsMobile extends BaseSteps {
      *
      * @param user pass and login users
      */
-    public LoginStepsMobile loginAsAdmin(Employee user) {
+    public LoginStepsMobile loginAs(Employee user) {
         setLoginField(user.getLoginName());
         setPasswordField(user.getPassword());
+        loginPageElementsMobile.getLogon().click();
         return this;
     }
 
@@ -68,7 +72,7 @@ public class LoginStepsMobile extends BaseSteps {
      * @return results internal page instance
      */
     public InternalStepsMobile goToInternalMenu() {
-        loginPageElementsMobile.getLogon().click();//TODO
+        internalElementsMobile.getButtonMainMenu().click();
         return page(InternalStepsMobile.class);
     }
 
