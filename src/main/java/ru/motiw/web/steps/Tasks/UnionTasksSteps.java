@@ -102,7 +102,7 @@ public class UnionTasksSteps extends BaseSteps {
     }
 
     /**
-     * Инициализируем внутренюю стр. (InternalElements)
+     * Инициализируем внутренюю стр. (InternalElementsMobile)
      */
     private InternalSteps initializationInternalPage() {
         return page(InternalSteps.class);

@@ -19,6 +19,7 @@ public abstract class BaseSteps {
 
     private static final String http = "http://";
     public static final String PDA_PAGE_URL = http + "pda.motiwtest4.test.lan";
+    public static final String MOBILE_PAGE_URL = baseUrl + "/m";
 
     @FindBy(xpath = "//ul[@class='x-list-plain']/../ancestor::div[not(contains(@style,'display: none'))]//li")
     private ElementsCollection collectionOfListItems;

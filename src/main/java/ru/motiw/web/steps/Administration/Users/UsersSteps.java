@@ -261,7 +261,7 @@ public class UsersSteps extends DepartmentSteps {
     /**
      * Проверяем, что текущий пользователь Docflow. Отсутствует п.м. Создать задачу
      *
-     * @return InternalElements
+     * @return InternalElementsMobile
      */
     public void checkUserDocflow() {
         switchTo().defaultContent();
@@ -273,7 +273,7 @@ public class UsersSteps extends DepartmentSteps {
     /**
      * Проверяем, что текущий пользователь Workflow. Отсутствует п.м. Поиск документов и Документы
      *
-     * @return InternalElements
+     * @return InternalElementsMobile
      */
     public void checkUserWorkflow(int countPanelGrouping) {
         switchTo().defaultContent();
