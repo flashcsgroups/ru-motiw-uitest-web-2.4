@@ -9,30 +9,97 @@ import ru.motiw.mobile.model.Document.OperationsOfDocument;
 import ru.motiw.mobile.model.Document.RoleOfUser;
 import ru.motiw.mobile.model.Document.TypeOperationsOfDocument;
 import ru.motiw.mobile.steps.Folders.GridOfFoldersSteps;
-import ru.motiw.mobile.steps.InternalStepsMobile;
-import ru.motiw.mobile.steps.LoginStepsMobile;
 import ru.motiw.mobile.steps.Tasks.TaskStepsMobile;
-import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Document.Document;
-import ru.motiw.web.model.Tasks.Folder;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.page;
 import static com.codeborne.selenide.Selenide.sleep;
 import static org.testng.AssertJUnit.fail;
-import static ru.motiw.mobile.model.Document.RoleOfUser.AUTHOR;
-import static ru.motiw.mobile.model.Document.RoleOfUser.CONSIDER_OF_DOCUMENT;
 
+/**
+ * Работа с документами
+ */
 public class DocumentStepsMobile {
-    private LoginStepsMobile loginStepsMobile = page(LoginStepsMobile.class);
-    private InternalStepsMobile internalPageStepsMobile = page(InternalStepsMobile.class);
-    private GridOfFoldersSteps gridOfFoldersSteps = page(GridOfFoldersSteps.class);
     private InternalElementsMobile internalElementsMobile = page(InternalElementsMobile.class);
     private TaskStepsMobile taskStepsMobile = page(TaskStepsMobile.class);
     private TaskElementsMobile taskElementsMobile = page(TaskElementsMobile.class);
     private DocumentElementsMobile documentElementsMobile = page(DocumentElementsMobile.class);
-    private GridOfFolderElementsMobile gridOfFolderElementsMobile = page(GridOfFolderElementsMobile.class);
+    GridOfFolderElementsMobile gridOfFolderElementsMobile = page(GridOfFolderElementsMobile.class);
+    private GridOfFoldersSteps gridOfFoldersSteps = page(GridOfFoldersSteps.class);
+
+
+    /**
+     * Проверка кнопок доступных операций в гриде или в карточке документа
+     * Набор кнопок зависит от роли пользователя и от того, на каком этапе находится документ ( на рассмотрении - false, на исполнении - true)
+     *
+     * @param onExecution на рассмотрении - false, на исполнении - true)
+     */
+    public void verifyAccessToOperations(Boolean onExecution, RoleOfUser role) {
+
+        verifyAccessToOperationsOnlyInDocumentForm(onExecution, OperationsOfDocument.LIST_OF_RESOLUTION.getNameOperation());
+
+        if (!onExecution) {
+            getElementOfOperation(OperationsOfDocument.MOVE_TO_EXECUTION.getNameOperation()).shouldBe(visible);
+            getElementOfOperation(OperationsOfDocument.MOVE_TO_ARCHIVE.getNameOperation()).shouldBe(visible);
+            getElementOfOperation(OperationsOfDocument.CLOSE_EXECUTION.getNameOperation()).shouldNotBe(visible);
+        }
+
+        if (onExecution) {
+            getElementOfOperation(OperationsOfDocument.CLOSE_EXECUTION.getNameOperation()).shouldBe(visible);
+            getElementOfOperation(OperationsOfDocument.MOVE_TO_EXECUTION.getNameOperation()).shouldNotBe(visible);
+            getElementOfOperation(OperationsOfDocument.MOVE_TO_ARCHIVE.getNameOperation()).shouldNotBe(visible);
+        }
+
+        switch (role) {
+            case AUTHOR:
+                getElementOfOperation(getNameOfOperation(TypeOperationsOfDocument.CREATE_RESOLUTION)).shouldBe(visible);
+                break;
+
+            case CONSIDER_OF_DOCUMENT:
+                getElementOfOperation(getNameOfOperation(TypeOperationsOfDocument.CREATE_RESOLUTION)).shouldNotBe(visible);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Неверное название роли:" + role);
+        }
+    }
+
+    /**
+     * Проверяем наличие доступных операций с документом из грида
+     *
+     * @param document
+     * @param roleOfUser
+     */
+    public void verifyOperationForDocumentInTheGrid(Document document, RoleOfUser roleOfUser) {
+        // Открываем меню операций
+        gridOfFoldersSteps.clickContextMenuForItemInGrid(document.getDocumentType().getDocRegisterCardsName());
+        // Проверяем наличие доступных операций с документом из грида
+        verifyAccessToOperations(document.isOnExecution(), roleOfUser);
+        // Закрываем меню операций
+        gridOfFoldersSteps.clickContextMenuForItemInGrid(document.getDocumentType().getDocRegisterCardsName());
+    }
+
+    /**
+     * Проверка кнопок операций, которые доступны только в карточке документа
+     * Набор кнопок зависит от роли пользователя и от того, на каком этапе находится документ ( на рассмотрении - false, на исполнении - true)
+     *
+     * @param onExecution на рассмотрении - false, на исполнении - true)
+     */
+    public void verifyAccessToOperationsOnlyInDocumentForm(Boolean onExecution, String nameOperation) {
+
+        if (taskElementsMobile.getToolbarOfMenu().is(visible)) // Если мы в карточке
+        {
+            if (!onExecution) {
+                documentElementsMobile.getButtonOfTab(nameOperation).shouldNotBe(visible);
+            }
+
+            if (onExecution) {
+                documentElementsMobile.getButtonOfTab(nameOperation).shouldBe(visible);
+            }
+        }
+    }
 
 
     /**
@@ -61,7 +128,7 @@ public class DocumentStepsMobile {
      * @param nameOfOperation
      * @return
      */
-    private SelenideElement getElementOfOperation(String nameOfOperation) {
+    SelenideElement getElementOfOperation(String nameOfOperation) {
 
         SelenideElement elementOfOperation = null;
 
@@ -87,7 +154,7 @@ public class DocumentStepsMobile {
      * @param operation тип операции
      * @return
      */
-    private String getNameOfOperation(TypeOperationsOfDocument operation) {
+    String getNameOfOperation(TypeOperationsOfDocument operation) {
 
         String nameOfOperationCreateResolution = null;
 
@@ -103,220 +170,26 @@ public class DocumentStepsMobile {
         }
 
         if (nameOfOperationCreateResolution == null) {
-            fail("Название операции отсутствует");
+            fail("Для операции " + operation.name() + " отсутствует Название");
         }
 
         return nameOfOperationCreateResolution;
     }
 
-
     /**
-     * Проверка кнопок доступных операций
-     * Набор кнопок зависит от роли пользователя
-     */
-    public void verifyAccessToOperations(RoleOfUser role) {
-
-        getElementOfOperation(OperationsOfDocument.MOVE_TO_EXECUTION.getNameOperation()).shouldBe(visible);
-        getElementOfOperation(OperationsOfDocument.MOVE_TO_ARCHIVE.getNameOperation()).shouldBe(visible);
-
-        switch (role) {
-            case AUTHOR:
-                getElementOfOperation(getNameOfOperation(TypeOperationsOfDocument.CREATE_RESOLUTION)).shouldBe(visible);
-                break;
-
-            case CONSIDER_OF_DOCUMENT:
-                getElementOfOperation(getNameOfOperation(TypeOperationsOfDocument.CREATE_RESOLUTION)).shouldNotBe(visible);
-                break;
-
-            default:
-                throw new IllegalArgumentException("Неверное название роли:" + role);
-        }
-    }
-
-
-    /**
-     * Проверяем наличие доступных операций с документом из грида
+     * Выполнение стандартной операции в форме докумена с вводом текста перед подтверждением операции
      *
-     * @param document
-     * @param roleOfUser
+     * @param nameOfOperation - название операции
+     * @param textForInput    - текст вводимый в инпут перед подтверждением операции
      */
-    public void verifyOperationForDocument(Document document, RoleOfUser roleOfUser) {
-        // Открываем меню операций
-        gridOfFoldersSteps.clickContextMenuForItemInGrid(document.getDocumentType().getDocRegisterCardsName());
-        // Проверяем наличие доступных операций с документом из грида
-        verifyAccessToOperations(roleOfUser);
-        // Закрываем меню операций
-        gridOfFoldersSteps.clickContextMenuForItemInGrid(document.getDocumentType().getDocRegisterCardsName());
-    }
-
-
-    /**
-     * Проверка созданного документа
-     *
-     * @param document атрибуты
-     * @return DocumentStepsMobile
-     */
-    private DocumentStepsMobile verifyPageOfDocument(Document document, RoleOfUser roleOfUser) throws Exception {
-        if (document == null) {
-            return null;
-        } else
-            internalElementsMobile.getMainTitle().shouldHave((text(document.getDocumentType().getDocRegisterCardsName()))); // Название документа в хедере
-
-        /**
-         * Ожидание и проверка кнопок тулбара
-         */
-        taskElementsMobile.getToolbarOfMenu().waitUntil(visible, 5000);
-        verifyAccessToOperations(roleOfUser);
-
-        /*
-         * Проверка Файлов
-         */
-        verifyFilesInDocument(document);
-
-        return this;
-    }
-
-    /**
-     * Шаги при проверке карточки документа
-     *
-     * @param document   документ
-     * @param employee   пользователь
-     * @param folders    папки с которыми будем работать
-     * @param roleOfUser Роль пользователя в документе
-     * @throws Exception
-     */
-    private void stepsOfVerifyDocument(Document document, Employee employee, Folder[] folders, RoleOfUser roleOfUser) throws Exception {
-        loginStepsMobile
-                .loginAs(employee) // Авторизация под участником рассмотрения документа
-                .waitLoadMainPage(); // Ожидание открытия главной страницы
-        //----------------------------------------------------------------ГРИД - Папка
-        sleep(500); //ожидание папок;
-        // Проверяем отображение созданного документа в гриде папки
-        gridOfFoldersSteps.checkDisplayDocumentInGrid(document, folders[0]);
-
-        // Проверяем отображение или отсутствие признака нового документа в гриде папки
-        gridOfFoldersSteps.verifyMarkOfNewDocument(document, roleOfUser);
-
-        // Проверяем доступные операции с документом из грида
-        verifyOperationForDocument(document, roleOfUser);
-
-        //Переход в документ из грида
-        gridOfFoldersSteps.openDocumentInGrid(document, folders[0]);
-        //----------------------------------------------------------------ФОРМА - Документ
-        verifyPageOfDocument(document, roleOfUser);
-
-        //----------------------------------------------------------------ГРИД - Папка
-        // Проверяем отсутствие признака нового документа после возвращения в грид папки
-        gridOfFoldersSteps.checkDisappearMarkOfNewDocument(document, folders[0]);
-
-        // Выход из системы
-        internalPageStepsMobile.logout();
-    }
-
-    /**
-     * Проверяем карточку под разными пользователями
-     *
-     * @param document документ
-     * @param folders  папки с которыми будем работать
-     * @return
-     * @throws Exception
-     */
-    public DocumentStepsMobile verifyDocumentOnDifferentUsers(Document document, Folder[] folders) throws Exception {
-        if (document == null || folders == null) {
-            return null;
-        }
-
-        //Проверки для Автора
-        if (document.getAuthorOfDocument() == null) {
-            return null;
-        } else
-            stepsOfVerifyDocument(document, document.getAuthorOfDocument(), folders, AUTHOR);
-
-        //Проверки для каждого рассматривающиего
-        if (document.getRouteSchemeForDocument().getUserRoute() == null) {
-            return null;
-        } else
-            for (Employee employee : document.getRouteSchemeForDocument().getUserRoute()) {
-                stepsOfVerifyDocument(document, employee, folders, CONSIDER_OF_DOCUMENT);
-            }
-
-        return this;
-    }
-
-
-    /**
-     * Шаги при проверке выполнения действий в карточке документа
-     *
-     * @param document
-     * @param employee
-     * @param folders
-     * @param roleOfUser
-     * @throws Exception
-     */
-    private void stepsOfExecutionDocument(Document document, Employee employee, Folder[] folders, RoleOfUser roleOfUser) throws Exception {
-        loginStepsMobile
-                .loginAs(employee) // Авторизация под участником рассмотрения документа
-                .waitLoadMainPage(); // Ожидание открытия главной страницы
-        //----------------------------------------------------------------ГРИД - Папка
-        sleep(500); //ожидание папок;
-
-        //Переход в документ из грида
-        gridOfFoldersSteps.openDocumentInGrid(document, folders[0]);
-        //----------------------------------------------------------------ФОРМА - Документ
-        //1.Выполнение операций
-        verifyExecutionInFormOFDocument(document, roleOfUser);
-
-        //----------------------------------------------------------------ГРИД - Папка
-        // Проверяем отсутствие признака нового документа после возвращения в грид папки
-        gridOfFoldersSteps.checkDisappearMarkOfNewDocument(document, folders[0]);
-
-        // Выход из системы
-        internalPageStepsMobile.logout();
-    }
-
-    /**
-     *  Выполнение различных действий в карточке
-     *
-     * @param document
-     * @param roleOfUser
-     */
-    private void verifyExecutionInFormOFDocument(Document document, RoleOfUser roleOfUser) {
-
-        // Выполнение операций
-        //verifyExecutionOperations(roleOfUser); // также как verifyAccessToOperations - локаторы кнопкок операций зависят от того, где мы находимся
-
-        // Работа с файлами
-
-    }
-
-    /**
-     * Проверяем выполнение действий под разными пользователями
-     *
-     * @param document документ
-     * @param folders  папки с которыми будем работать
-     * @return
-     * @throws Exception
-     */
-    public DocumentStepsMobile verifyExecutionOnDifferentUsers(Document document, Folder[] folders) throws Exception {
-        if (document == null || folders == null) {
-            return null;
-        }
-
-        //Проверки для Автора
-        if (document.getAuthorOfDocument() == null) {
-            return null;
-        } else
-            stepsOfExecutionDocument(document, document.getAuthorOfDocument(), folders, AUTHOR);
-
-        //Проверки для каждого рассматривающиего
-        if (document.getRouteSchemeForDocument().getUserRoute() == null) {
-            return null;
-        } else
-            for (Employee employee : document.getRouteSchemeForDocument().getUserRoute()) {
-                stepsOfExecutionDocument(document, employee, folders, CONSIDER_OF_DOCUMENT);
-            }
-
-        return this;
+    void executionOperationWithAdditionText(String nameOfOperation, String textForInput) {
+        // Находим локатор элемента кнопки операции
+        getElementOfOperation(nameOfOperation).click();
+        // Вводим текст в форму
+        sleep(500);
+        taskElementsMobile.getInputForAddComment().setValue(textForInput);
+        // Подтверждаем выполнение действия
+        internalElementsMobile.getButtonInFormOfExecutionOperations(nameOfOperation).click();
     }
 
 }

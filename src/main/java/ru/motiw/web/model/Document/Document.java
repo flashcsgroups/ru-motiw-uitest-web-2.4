@@ -12,7 +12,8 @@ import ru.motiw.web.model.Administration.Users.Employee;
  * Модель объекта - Документ (форма создания / редактирования документа)
  */
 public class Document {
-
+    public ExecutionOfDocument[] executionOfDocument;
+    private boolean onExecution = false;
     private DocRegisterCards documentType;
     private FieldDocument[] docFields;
     private Employee authorOfDocument;
@@ -25,7 +26,6 @@ public class Document {
     private DictionaryEditorField valueDictionaryEditor;
     private RouteSchemeEditor routeScheme;
     private Integer numberOfFiles;
-
 
     /**
      * Тип документа
@@ -191,4 +191,32 @@ public class Document {
         this.numberOfFiles = numberOfFile;
     }
 
+
+    /**
+     * Выполняемые операции в карточке документа
+     * @return
+     */
+    public ExecutionOfDocument[] getExecutionOfDocument() {
+        return executionOfDocument;
+    }
+
+    public Document setExecutionOfDocument (ExecutionOfDocument[] executionOfDocument) {
+        this.executionOfDocument = executionOfDocument;
+        return this;
+    }
+
+    /**
+     * Этап Документа
+     * на рассмотрении - false
+     * на исполнении - true
+     * @return
+     */
+    public boolean isOnExecution() {
+        return onExecution;
+    }
+
+    public Document setOnExecution(boolean onExecution) {
+        this.onExecution = onExecution;
+        return this;
+    }
 }

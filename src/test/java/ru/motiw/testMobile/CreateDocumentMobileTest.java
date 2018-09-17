@@ -8,8 +8,10 @@ import org.testng.annotations.Test;
 import ru.motiw.data.dataproviders.DocflowAdministrationMobile;
 import ru.motiw.data.listeners.ScreenShotOnFailListener;
 import ru.motiw.mobile.elements.Login.LoginPageElementsMobile;
+import ru.motiw.mobile.model.Document.TypeOfExecutionPlace;
 import ru.motiw.mobile.model.FilesForAttachment;
-import ru.motiw.mobile.steps.Document.DocumentStepsMobile;
+import ru.motiw.mobile.steps.Document.ExecutionDocumentStepsMobile;
+import ru.motiw.mobile.steps.Document.VerifyDocumentStepsMobile;
 import ru.motiw.mobile.steps.Folders.GridOfFoldersSteps;
 import ru.motiw.mobile.steps.InternalStepsMobile;
 import ru.motiw.mobile.steps.LoginStepsMobile;
@@ -22,6 +24,7 @@ import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.DocRegisterCards;
 import ru.motiw.web.model.DocflowAdministration.RouteSchemeEditor.RouteSchemeEditor;
 import ru.motiw.web.model.Document.Document;
+import ru.motiw.web.model.Document.ExecutionOfDocument;
 import ru.motiw.web.model.Tasks.Folder;
 import ru.motiw.web.steps.Administration.Users.UsersSteps;
 import ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditConnectedRoutesSteps;
@@ -36,6 +39,8 @@ import static com.codeborne.selenide.WebDriverRunner.clearBrowserCache;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testng.AssertJUnit.assertTrue;
 import static ru.motiw.data.dataproviders.Tasks.getRandomProject;
+import static ru.motiw.mobile.model.Document.TypeOperationsOfDocument.CREATE_RESOLUTION;
+import static ru.motiw.mobile.model.Document.TypeOperationsOfDocument.MOVE_TO_EXECUTION;
 import static ru.motiw.web.steps.Administration.Users.DepartmentSteps.goToURLDepartments;
 import static ru.motiw.web.steps.Documents.CreateDocument.NewDocumentSteps.goToURLNewDocument;
 import static ru.motiw.web.steps.Tasks.UnionTasksSteps.goToUnionTasks;
@@ -59,8 +64,8 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
     private UsersSteps userPageSteps;
     private FormDocRegisterCardsEditConnectedRoutesSteps formDocRegisterCardsEditConnectedRoutesSteps;
     private FormDocRegisterCardsEditGeneralSteps formDocRegisterCardsEditGeneralSteps;
-    private DocumentStepsMobile documentStepsMobile;
-
+    private VerifyDocumentStepsMobile verifyDocumentStepsMobile;
+    private ExecutionDocumentStepsMobile executionDocumentStepsMobile;
 
     @BeforeClass
     public void beforeTest() {
@@ -78,7 +83,8 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
         userPageSteps = page(UsersSteps.class);
         formDocRegisterCardsEditConnectedRoutesSteps = page(FormDocRegisterCardsEditConnectedRoutesSteps.class);
         formDocRegisterCardsEditGeneralSteps = page(FormDocRegisterCardsEditGeneralSteps.class);
-        documentStepsMobile = page(DocumentStepsMobile.class);
+        verifyDocumentStepsMobile = page(VerifyDocumentStepsMobile.class);
+        executionDocumentStepsMobile = page(ExecutionDocumentStepsMobile.class);
     }
 //
 //    предусловия
@@ -173,10 +179,10 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
 //        gridOfFoldersSteps.openDocumentInGrid(document);
 //
 //        //----------------------------------------------------------------ФОРМА - Документ
-//        documentStepsMobile.verifyPageOfDocument(document);
+//        documentStepsMobile0.verifyPageOfDocument(document);
 
         // Проверка карточки под разными пользователями
-        documentStepsMobile.verifyDocumentOnDifferentUsers(document, folders);
+        //documentStepsMobile0.verifyDocumentOnDifferentUsers(document, folders);
 
         //Выполнение действий с документом
 
@@ -190,9 +196,15 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
 
         Folder[] folder1 = new Folder[]{
                 new Folder()
-                        .setNameFolder("wD_Smart_Box ЬfТЮ") // Зн-ие НЕ изменять - используется в проверке - checkDisplayCreateAFolderInTheGrid()
+                        .setNameFolder("rrr") // Зн-ие НЕ изменять - используется в проверке - checkDisplayCreateAFolderInTheGrid()
         };
 
+        Employee[] qqq = new Employee[]{
+                new Employee()
+                        .setName("qqq")
+                        .setLoginName("qqq")
+                        .setLastName("qqq")
+                        .setPassword("qqq")};
 
         // Инициализация объекта - Названия Файлов задачи
         String[] file = new String[]{
@@ -205,7 +217,7 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
         //----------------------------------------------------------------------------------------------------------- Инициализация Документа
         Document document1 = new Document()
 
-                .setDocumentType(new DocRegisterCards("wD_Тестовая карточка ГvЪНsФНfFЖрYtЭЧЦ4TРм")) // Тип документа
+                .setDocumentType(new DocRegisterCards("Входящая корреспонденция")) // Тип документа
                 .setAuthorOfDocument(ADMIN)
                 .setDateRegistration(randomDateTime()) // Дата регистрации
                 .setProject(getRandomProject()) // Инициализируем проект документа
@@ -216,50 +228,32 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
                         .setUserRoute(new Employee[]{
                                 new Employee()
                                         .setName("qqq")
+                                        .setLastName("qqq")
                                         .setLoginName("qqq")
                                         .setPassword("qqq")}) // Добавляем в маршрут созданного пользователя
-                );
+                )
+                .setExecutionOfDocument(new ExecutionOfDocument[]
+                        {
+                                new ExecutionOfDocument()
+                                        .setExecutionOperation(2, ADMIN, CREATE_RESOLUTION),
+
+                                new ExecutionOfDocument()
+                                        .setExecutionOperation(1, qqq[0], MOVE_TO_EXECUTION),
+
+                        })
+                .setOnExecution(false); // Документ на рассмотрении
 
 
         // Проверка карточки под разными пользователями
-        documentStepsMobile.verifyDocumentOnDifferentUsers(document1, folder1);
-
+        //verifyDocumentStepsMobile.verifyDocumentOnDifferentUsers(document1, folder1);
         // Выполнение действий с документом под разными пользователями
         //1.Выполнение операций
         //2. Комментарии на файле
-        documentStepsMobile.verifyExecutionOnDifferentUsers(document1, folder1);
+        executionDocumentStepsMobile.executionOnDifferentUsers(document1, folder1[0], TypeOfExecutionPlace.CONTEXT_MENU_IN_THE_GRID_FOLDER);
 
+        // проверку на выполненую операцию нужно делать после каждой операциии. пример, одно из действий заврешение документа - документа не будет в гриде просто
+        // или проверять тоько последнюю совершенную операци?
     }
-
-
-    /*
-    * --
-сейчас самой простой вариант - это выполнение операций в документе будет контролироваться в методе на низком уровне
- (так мы проверим оперделенные критичные случаи, но множественные варинты проверок в будущем потребуют дописыванью новых низкоуровневых методов)
-прим. stepsOfExecutionDocument - в нем будет verifyExecutionInFormOFDocument - verifyExecutionOperations(TypeOperation, roleOfUser)
-передаем в verifyExecutionOperations TypeOperation тех операций которые мы выполним в нашем сценарии
-Например, для автора это: те операции, которые не повредят дальнейшей проверке отв.исп этапа МС
-прим. можно: создать резщолюцию. нельзя: завершать документ, не переводить на другой этап
-Но все это мы опередляем в сценарии - в методе verifyExecutionInFormOFDocument или stepsOfExecutionDocument
-
-как сделать выполнение операций в документе в зависимости от входных данных в dataProviderClass? возможно ли это, не слишком усложнено будет?
-
-например: в dataProviderClass должна быть модель объекта "выполнения документа" в которой пошагово расписано, кто и когда должен выполнить действие,
-при этом не навредя проверке под посследующем пользователем.
-
-можнов этой модели считать - выполнил участник действие или нет и в зависимости от этого гнать на следующий этап.
-
-такая модель позволит сделать универсальные методы выполнения операций в зависимотси от входных параметров, Но какие могут быть минусы?
-плюсы:
-при этом входные параметры мы можем переписывать под любые тестовые случаи не внося измений в низкоуровневые методы
-(в простой текуще реализации это будет сложно?
-- ведь мы должны будем добавлять инструкции прямо в новые методы verifyExecutionInFormOFDocument - т.е это получается одноразовый метод? ).
-Это похоже на реализацию заполнения полей разными данными в разные поля? можно сделать на каждый тест с разными типами полей разные методы.
-а можно в одном методе перебирать - тип поля и в зависимости от наличия его во входных параметрах  работаь с ним
-так?
-
-    * */
-
 
 
 }

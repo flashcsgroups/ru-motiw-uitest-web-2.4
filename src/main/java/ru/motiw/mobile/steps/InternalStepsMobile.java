@@ -4,6 +4,8 @@ import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
 import ru.motiw.web.steps.BaseSteps;
 
 import static com.codeborne.selenide.Selenide.page;
+import static com.codeborne.selenide.Selenide.refresh;
+import static com.codeborne.selenide.WebDriverRunner.clearBrowserCache;
 import static org.testng.Assert.assertTrue;
 
 /**
@@ -47,9 +49,11 @@ public class InternalStepsMobile extends BaseSteps {
      * Универсальный выход из системы (где бы ненаходился пользователь)
      */
     public void logout() {
-            goToHome(); // Переходим в папки
-            goToInternalMenu(); // Открываем главное меню
-            internalElementsMobile.getLogout().click(); // Выход
-            assertTrue(loginStepsMobile.isNotLoggedInMobile());// Проверяем то, что мы разлогинены
+        goToHome(); // Переходим в папки
+        goToInternalMenu(); // Открываем главное меню
+        internalElementsMobile.getLogout().click(); // Выход
+        assertTrue(loginStepsMobile.isNotLoggedInMobile());// Проверяем то, что мы разлогинены
+        clearBrowserCache();
+        refresh(); // т.к после логаута могут быть проблемы с повторной автворизацией.
     }
 }

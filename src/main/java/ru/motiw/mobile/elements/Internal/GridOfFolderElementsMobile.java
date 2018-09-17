@@ -4,6 +4,7 @@ package ru.motiw.mobile.elements.Internal;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.FindBy;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -12,6 +13,17 @@ import static com.codeborne.selenide.Selenide.$$;
  * Элементы на странице гридов папки
  */
 public class GridOfFolderElementsMobile {
+
+    @FindBy(xpath = "//div[contains(@id,\"ext-tasklist\") and not (contains(@class,\"x-hidden\"))]//div[contains(@class,\"x-list-outer-ct x-scroller\")]")
+    private SelenideElement listOfGridFolder;
+
+    /**
+     * Элемент в котором расположены объекты (задача или документа) в Гриде Папки
+     * @return
+     */
+    public SelenideElement getListOfGridFolder() {
+        return listOfGridFolder;
+    }
 
     /**
      * Элемент для открытия объекта (задача или документа) в гриде папки
@@ -85,7 +97,7 @@ public class GridOfFolderElementsMobile {
      * @return
      */
     public SelenideElement getOperationInContextMenu(String nameOfOperation) {
-        return $(By.xpath("//div[contains(@id,\"ext-dynamicmenu\") and contains(@class,\"x-menu\")]//div[text()='" + nameOfOperation + "']"));
+        return $(By.xpath("//div[contains(@id,\"ext-dynamicmenu\") and contains(@class,\"x-menu\")]//div[text()='" + nameOfOperation + "']/ancestor::div[contains(@class,\"x-button\")]"));
     }
 
     /**

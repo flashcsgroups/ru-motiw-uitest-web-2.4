@@ -5,14 +5,17 @@ import ru.motiw.data.BaseTest;
 import ru.motiw.mobile.model.FilesForAttachment;
 import ru.motiw.web.model.Administration.Users.Department;
 import ru.motiw.web.model.Administration.Users.Employee;
-import ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.*;
+import ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.DocRegisterCards;
 import ru.motiw.web.model.DocflowAdministration.RouteSchemeEditor.RouteSchemeEditor;
 import ru.motiw.web.model.Document.Document;
+import ru.motiw.web.model.Document.ExecutionOfDocument;
 import ru.motiw.web.model.Tasks.Folder;
 
 import static ru.motiw.data.dataproviders.Administration.getRandomDepartment;
 import static ru.motiw.data.dataproviders.Administration.getRandomEmployer;
 import static ru.motiw.data.dataproviders.Tasks.getRandomProject;
+import static ru.motiw.mobile.model.Document.TypeOperationsOfDocument.CREATE_RESOLUTION;
+import static ru.motiw.mobile.model.Document.TypeOperationsOfDocument.MOVE_TO_EXECUTION;
 
 
 /**
@@ -21,7 +24,7 @@ import static ru.motiw.data.dataproviders.Tasks.getRandomProject;
 public abstract class DocflowAdministrationMobile extends BaseTest {
 
     // Инициализация объекта - Названия Файлов задачи
-    String[] file = new String[] {
+    String[] file = new String[]{
             FilesForAttachment.FILE_1.getNameFile(),
             FilesForAttachment.FILE_2.getNameFile(),
             FilesForAttachment.FILE_3.getNameFile(),
@@ -45,14 +48,6 @@ public abstract class DocflowAdministrationMobile extends BaseTest {
             .setCheckBoxUseAllPossibleRoutes(true); // Использовать все возможные маршруты
 
 
-    /*
-        =========================Инициализация полей объекта - Документ
-        */
-        /*
-         1. Файл
-         */
-    FieldDocument fieldFile = new FieldTypeFileDocument();
-
     //----------------------------------------------------------------------------------------------------------- Инициализация Документа
     Document document = new Document()
 
@@ -60,14 +55,23 @@ public abstract class DocflowAdministrationMobile extends BaseTest {
             .setAuthorOfDocument(ADMIN)
             .setDateRegistration(randomDateTime()) // Дата регистрации
             .setProject(getRandomProject()) // Инициализируем проект документа
-            .setValueFiles(new String[] {file[0], file[1]})
+            .setValueFiles(new String[]{file[0], file[1]})
             .setRouteSchemeForDocument(new RouteSchemeEditor()
                     .setRouteScheme("Согласование входящей корреспонденции - Постановка задачи")
                     .setReviewDuration(randomInt(999))
                     .setUserRoute(new Employee[]{employee[0]}) // Добавляем в маршрут созданного пользователя
-            );
+            )
+            .setExecutionOfDocument(new ExecutionOfDocument[]
+                    {
+                            new ExecutionOfDocument()
+                                    .setExecutionOperation(1, ADMIN, CREATE_RESOLUTION),
 
+                            new ExecutionOfDocument()
+                                    .setExecutionOperation(2, employee[0], MOVE_TO_EXECUTION)
 
+                    }
+            )
+            .setOnExecution(false); // Документ на рассмотрении
 
 
     // ----------------------------------------------------------------------------------------------------------- Инициализация Папки
@@ -91,8 +95,6 @@ public abstract class DocflowAdministrationMobile extends BaseTest {
     }
 
 
-
-
     /**
      * Параметризация - Инициализируем модель - Регистрационная карточка документа (со всеми надстройками)
      *
@@ -100,11 +102,11 @@ public abstract class DocflowAdministrationMobile extends BaseTest {
      */
     @DataProvider
     public Object[][] objectDataDocument() {
-        
+
 
         return new Object[][]{
 
-            {
+                {
                         //переменная объекта - ПОДРАЗДЕЛЕНИЕ
                         department,
                         //переменная объекта - ПОЛЬЗОВАТЕЛЬ
@@ -116,7 +118,7 @@ public abstract class DocflowAdministrationMobile extends BaseTest {
                         //переменная объекта - Папка
                         folder
 
-            }
+                }
         };
     }
 

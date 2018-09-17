@@ -237,6 +237,7 @@ public class NewDocumentSteps extends BaseSteps {
 
     /**
      * Аттачминг файлов в форме
+     *
      * @param nameOfFiles названия файлов
      */
     public NewDocumentSteps addAttachFiles(String[] nameOfFiles) {
@@ -266,6 +267,7 @@ public class NewDocumentSteps extends BaseSteps {
     /**
      * Добавление файлов в форме
      * Возвращение с вкладки "Файлы" на Вкладку "Карточка документа"
+     *
      * @param nameOfFiles названия файлов
      */
     public NewDocumentSteps addFiles(String[] nameOfFiles) {
@@ -383,6 +385,7 @@ public class NewDocumentSteps extends BaseSteps {
 
     /**
      * Создать документ
+     *
      * @param document атрибуты (значения) документа для заполнения в форме Создания документа
      */
     public void createDocument(Document document) {

@@ -2,8 +2,11 @@ package ru.motiw.mobile.elements.Internal;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 import ru.motiw.web.steps.BaseSteps;
+
+import static com.codeborne.selenide.Selenide.$;
 
 
 /**
@@ -42,19 +45,21 @@ public class InternalElementsMobile extends BaseSteps {
     @FindBy(xpath = "//div[contains(@id,\"ext-title\")]//div")
     private SelenideElement mainTitle;
 
+    @FindBy(xpath = "//div[contains(@class,'x-toast x-sheet x-panel')]//div[@class=\"x-innerhtml\"]")
+    private SelenideElement toastWithText;
 
     /*
      * Выход из системы
      */
+
     @FindBy(xpath = "//div[contains(text(),'Выход')]/ancestor::div[contains(@class,\"x-component x-button\")]")
     private SelenideElement logout;
-
     /*
      * Создать задачу
      */
+
     @FindBy(xpath = "//div[contains(text(),'Создать задачу')]/ancestor::div[contains(@class,\"x-component x-button\")]")
     private SelenideElement createTask;
-
 
     public ElementsCollection getMenuElementsMobile() {
         return menuElements;
@@ -79,10 +84,10 @@ public class InternalElementsMobile extends BaseSteps {
     /*
      * Выход из системы
      */
+
     public SelenideElement getLogout() {
         return logout;
     }
-
     /**
      *  Title (общий на все формы)
      */
@@ -90,5 +95,21 @@ public class InternalElementsMobile extends BaseSteps {
         return mainTitle;
     }
 
+    /**
+     *  div с текстом во всплывающем Toast-е (общий на все формы)
+     */
+    public SelenideElement getToastWithText() {
+        return toastWithText;
+    }
+
+
+    /**
+     * Кнопки в Форме добавления текста при выполении операции (Добавление действия, операции с документом)
+     */
+    public SelenideElement getButtonInFormOfExecutionOperations (String nameOfOperation) {
+        return $(By.xpath("//div[contains(@class,'x-dialog x-panel x-container x-component') and not(contains(@class,\"hidden\"))]" +
+                "//div[text()='" + nameOfOperation + "']" +
+                "//ancestor::div[contains(@class,\"x-component x-button x-has-text x-icon-align-left x-arrow-align-right\")]  "));
+    }
 
 }

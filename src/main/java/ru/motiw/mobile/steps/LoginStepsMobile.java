@@ -56,7 +56,7 @@ public class LoginStepsMobile extends BaseSteps {
      */
     public void waitLoadMainPage() {
         // Ожидание появления маски загрузки
-        loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.appear, 2000);
+        loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.appear, 5000);
         // Ожидание скрытия маски загрузки
         loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.disappear, 10000);
         // Ожидание кнопки Главного Меню

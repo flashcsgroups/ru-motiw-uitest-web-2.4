@@ -37,7 +37,6 @@ import static ru.motiw.mobile.steps.BaseStepsMobile.openSectionOnURLMobile;
  */
 
 
-
 public class NewTaskStepsMobile extends BaseSteps {
 
     NewTaskFormElementsMobile newTaskFormElementsMobile = page(NewTaskFormElementsMobile.class);
@@ -61,7 +60,7 @@ public class NewTaskStepsMobile extends BaseSteps {
     }
 
 
-    public  NewTaskStepsMobile goToCreateOfNewTask() {
+    public NewTaskStepsMobile goToCreateOfNewTask() {
         //Если Меню не открыто - открываем его перед тем, как перейти в форму создания задачи
         if ($(internalElementsMobile.getCreateTaskMobile()).is(Condition.disappear)) {
             internalStepsMobile.goToInternalMenu();
@@ -83,14 +82,13 @@ public class NewTaskStepsMobile extends BaseSteps {
     }
 
 
-
     /**
      * Название задачи
      *
      * @param nameTasks name task for input
      * @return page NewTaskPag
      */
-    public NewTaskStepsMobile  setTaskName(String nameTasks) {
+    public NewTaskStepsMobile setTaskName(String nameTasks) {
         newTaskFormElementsMobile.getTaskName().click();
         newTaskFormElementsMobile.getTaskName().setValue(nameTasks);
         return this;
@@ -103,14 +101,13 @@ public class NewTaskStepsMobile extends BaseSteps {
      * @return page NewTaskPag
      */
     public NewTaskStepsMobile setTasksDescription(String descriptionTasks) {
-            if (descriptionTasks == null) {
-                return this;
-            }
-            else {
-                newTaskFormElementsMobile.getDescriptionTask().click();
-                newTaskFormElementsMobile.getDescriptionTask().clear();
-                newTaskFormElementsMobile.getDescriptionTask().setValue(descriptionTasks);
-            }
+        if (descriptionTasks == null) {
+            return this;
+        } else {
+            newTaskFormElementsMobile.getDescriptionTask().click();
+            newTaskFormElementsMobile.getDescriptionTask().clear();
+            newTaskFormElementsMobile.getDescriptionTask().setValue(descriptionTasks);
+        }
         return this;
     }
 
@@ -154,26 +151,28 @@ public class NewTaskStepsMobile extends BaseSteps {
 
     /**
      * Добавление/Удаление пользователей в роли задачи
+     *
      * @param employees       передаваемые пользователи
      * @param fieldCustomRole выбираемая роль в задаче (Исполнители, Авторы и ОР)
      */
 
-    void choiceUserOnTheRole(Employee[] employees, SelenideElement fieldCustomRole) {
+    public void choiceUserOnTheRole(Employee[] employees, SelenideElement fieldCustomRole) {
         openFormSelectUser(fieldCustomRole);
         if (employees != null) {
             for (Employee employee : employees) {
+                if (employee.getLastName() != null) {
+                    //Очищаем поле, если содержит ранее введенные значения
+                    if (newTaskFormElementsMobile.getClearTriggerInputForSearchUsers().isDisplayed()) {
+                        newTaskFormElementsMobile.getClearTriggerInputForSearchUsers().click();
+                    }
 
-                //Очищаем поле, если содержит ранее введенные значения
-                if (newTaskFormElementsMobile.getClearTriggerInputForSearchUsers().isDisplayed()) {
-                     newTaskFormElementsMobile.getClearTriggerInputForSearchUsers().click();
+                    newTaskFormElementsMobile.getInputForSearchUsers().setValue(employee.getLastName()); // вводим в поле ввода Фамилию пользователя
+                    newTaskFormElementsMobile.getListOfUsers().shouldBe(CollectionCondition.size(1), 10000); //ожидание когда будет найден один пользователь. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
+
+                    //Выбор пользователя в списке
+                    newTaskFormElementsMobile.getUserFromList(employee.getLastName()).shouldBe(visible).click();
+                    //newTaskFormElementsMobile.getListOfUsers().shouldBe(CollectionCondition.sizeGreaterThan(1), 5000); //ожидание когда загрузится список пользователей. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
                 }
-
-                newTaskFormElementsMobile.getInputForSearchUsers().setValue(employee.getLastName()); // вводим в поле ввода Фамилию пользователя
-                newTaskFormElementsMobile.getListOfUsers().shouldBe(CollectionCondition.size(1), 10000); //ожидание когда будет найден один пользователь. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
-
-                //Выбор пользователя в списке
-                newTaskFormElementsMobile.getUserFromList(employee.getLastName()).shouldBe(visible).click();
-                //newTaskFormElementsMobile.getListOfUsers().shouldBe(CollectionCondition.sizeGreaterThan(1), 5000); //ожидание когда загрузится список пользователей. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
             }
             newTaskFormElementsMobile.getButtonAppointUsers().click(); //кнопка "Назначить"
             newTaskFormElementsMobile.getInputForSearchUsers().waitUntil(not(visible), 2000); // Ожидание закрытия формы
@@ -182,6 +181,7 @@ public class NewTaskStepsMobile extends BaseSteps {
 
     /**
      * Проверка того, что текущий пользователь добавлен по умолчанию в роль задачи
+     *
      * @param currentUser     передаваемый пользователи
      * @param fieldCustomRole выбираемая роль в задаче (Исполнители, Авторы и ОР)
      */
@@ -190,9 +190,9 @@ public class NewTaskStepsMobile extends BaseSteps {
         openFormSelectUser(fieldCustomRole);
         if (currentUser != null) {
 //            for (Employee employee : employees) {
-                //проверка того, что элемент ПЕРВОГО пользователя в списке - выделен т.е выбран в роль
-                newTaskFormElementsMobile.getSelectedUserInTheList(currentUser.getLastName()).shouldBe(visible);
-                newTaskFormElementsMobile.getInputForSearchUsers().sendKeys(Keys.chord(Keys.ESCAPE)); //Закрыть форму
+            //проверка того, что элемент ПЕРВОГО пользователя в списке - выделен т.е выбран в роль
+            newTaskFormElementsMobile.getSelectedUserInTheList(currentUser.getLastName()).shouldBe(visible);
+            newTaskFormElementsMobile.getInputForSearchUsers().sendKeys(Keys.chord(Keys.ESCAPE)); //Закрыть форму
 //            }
         }
     }
@@ -225,11 +225,11 @@ public class NewTaskStepsMobile extends BaseSteps {
      * Например, признак "Важная задача", "Секретная задача", "С докладом"
      *
      * @param stateOfCheckbox состояние установленной настройки
-     * @param inputCheckbox    совершить действие (снять/установить настройку)
+     * @param inputCheckbox   совершить действие (снять/установить настройку)
      */
 
     public void rangeOfValuesFromTheCheckbox(boolean stateOfCheckbox, SelenideElement inputCheckbox) {
-        if (stateOfCheckbox){
+        if (stateOfCheckbox) {
             inputCheckbox.click();
         } else if ($(inputCheckbox).is(selected)) {
             inputCheckbox.click();
@@ -241,13 +241,13 @@ public class NewTaskStepsMobile extends BaseSteps {
      * Выбор булевой настройки в форме задачи в зависимости от состояния чекбокса.
      * Например, признак "Важная задача", "Секретная задача", "С докладом"
      *
-     * @param stateOfCheckbox состояние установленной настройки
-     * @param inputCheckbox    совершить действие (снять/установить настройку)
-     * @param stateInputOfCheckbox  элемент для проверки состояния чекбокса (снят/установлен)
+     * @param stateOfCheckbox      состояние установленной настройки
+     * @param inputCheckbox        совершить действие (снять/установить настройку)
+     * @param stateInputOfCheckbox элемент для проверки состояния чекбокса (снят/установлен)
      */
 
     public void rangeOfValuesFromTheCheckbox(boolean stateOfCheckbox, SelenideElement inputCheckbox, SelenideElement stateInputOfCheckbox) {
-        if (stateOfCheckbox){
+        if (stateOfCheckbox) {
             inputCheckbox.click();
         } else if ($(stateInputOfCheckbox).is(selected)) //если stateOfCheckbox не true, а чекбокс уже установлен, то снимаем.
         {
@@ -273,6 +273,7 @@ public class NewTaskStepsMobile extends BaseSteps {
 
     /**
      * Выбор значений из выпадающего списка типа задачи
+     *
      * @param taskType передаваемое имя типа задачи
      */
     private NewTaskStepsMobile setTaskType(TasksTypes taskType) {
@@ -342,7 +343,7 @@ public class NewTaskStepsMobile extends BaseSteps {
     /**
      * Общий метод заполнения пользовательских полей типа "Справочник" с выбором из списка
      *
-     * @param nameField имя поля документа для заполнения
+     * @param nameField         имя поля документа для заполнения
      * @param directoriesFields массив полей объекта, который содержит передаваемое значение для заполнения
      */
     private NewTaskStepsMobile choiceValueInFieldWithListDirectory(String nameField, DirectoriesField[] directoriesFields) {
@@ -388,72 +389,73 @@ public class NewTaskStepsMobile extends BaseSteps {
         if (fieldObjects == null) {
             return this;
         }
-            for (FieldObject fieldObject : fieldObjects) {
+        for (FieldObject fieldObject : fieldObjects) {
 
-                // СТРОКА
-                if (fieldObject.getFieldType() instanceof TypeListFieldsString) {
-                    enterValueInFieldInput(fieldObject.getFieldName(), fieldObject.getValueField());
-                }
-
-                // ТЕКСТ
-                if (fieldObject.getFieldType() instanceof TypeListFieldsText) {
-                    enterValueInFieldText(fieldObject.getFieldName(), fieldObject.getValueField());
-                }
-
-                // Целое
-                if (fieldObject.getFieldType() instanceof TypeListFieldsInteger) {
-                    enterValueInFieldInput(fieldObject.getFieldName(), fieldObject.getValueField());
-                }
-
-                // ВЕЩЕСТВЕННОЕ
-                if (fieldObject.getFieldType() instanceof TypeListFieldsDouble) {
-                    enterValueInFieldInput(fieldObject.getFieldName(), fieldObject.getValueField());
-                }
-
-                // ДАТА
-                if (fieldObject.getFieldType() instanceof TypeListFieldsDate) {
-                    enterValueInFieldInput(fieldObject.getFieldName(), fieldObject.getValueField());
-                }
-
-                // ЛОГИЧЕСКИЙ
-                if (fieldObject.getFieldType() instanceof TypeListFieldsBoolean) {
-                    rangeOfValuesFromTheCheckbox(fieldObject.getValueBooleanField(), newTaskFormElementsMobile.getCheckboxInUserField(fieldObject.getFieldName()));
-                }
-
-                // НУМЕРАТОР
-                if (fieldObject.getFieldType() instanceof TypeListFieldsNumerator) {
-                    enterValueInFieldInput(fieldObject.getFieldName(), fieldObject.getValueField());
-                }
-
-                // ПОДРАЗДЕЛЕНИЕ
-                if (fieldObject.getFieldType() instanceof TypeListFieldsDepartment) {
-                    choiceValueInFieldWithListDirectory(fieldObject.getFieldName(), fieldObject.getValueField());
-                }
-
-                // СОТРУДНИК
-                if (fieldObject.getFieldType() instanceof TypeListFieldsEmployee) {
-                    choiceUserOnTheRole(fieldObject.getValueEmployeeField(), newTaskFormElementsMobile.getInputInUserFieldTypeEmployee(fieldObject.getFieldName()));
-                }
-
-                //СПРАВОЧНИК
-                if (fieldObject.getFieldType() instanceof TypeListFieldsDirectory) {
-                   choiceValueInFieldWithListDirectory(fieldObject.getFieldName(), fieldObject.getValueDirectoriesField());
-                }
-
-                // МН.СПРАВОЧНИК
-                if (fieldObject.getFieldType() instanceof TypeListFieldsMultiDirectory) {
-                    choiceValueInFieldWithListDirectory(fieldObject.getFieldName(), fieldObject.getValueDirectoriesField());
-                }
+            // СТРОКА
+            if (fieldObject.getFieldType() instanceof TypeListFieldsString) {
+                enterValueInFieldInput(fieldObject.getFieldName(), fieldObject.getValueField());
             }
+
+            // ТЕКСТ
+            if (fieldObject.getFieldType() instanceof TypeListFieldsText) {
+                enterValueInFieldText(fieldObject.getFieldName(), fieldObject.getValueField());
+            }
+
+            // Целое
+            if (fieldObject.getFieldType() instanceof TypeListFieldsInteger) {
+                enterValueInFieldInput(fieldObject.getFieldName(), fieldObject.getValueField());
+            }
+
+            // ВЕЩЕСТВЕННОЕ
+            if (fieldObject.getFieldType() instanceof TypeListFieldsDouble) {
+                enterValueInFieldInput(fieldObject.getFieldName(), fieldObject.getValueField());
+            }
+
+            // ДАТА
+            if (fieldObject.getFieldType() instanceof TypeListFieldsDate) {
+                enterValueInFieldInput(fieldObject.getFieldName(), fieldObject.getValueField());
+            }
+
+            // ЛОГИЧЕСКИЙ
+            if (fieldObject.getFieldType() instanceof TypeListFieldsBoolean) {
+                rangeOfValuesFromTheCheckbox(fieldObject.getValueBooleanField(), newTaskFormElementsMobile.getCheckboxInUserField(fieldObject.getFieldName()));
+            }
+
+            // НУМЕРАТОР
+            if (fieldObject.getFieldType() instanceof TypeListFieldsNumerator) {
+                enterValueInFieldInput(fieldObject.getFieldName(), fieldObject.getValueField());
+            }
+
+            // ПОДРАЗДЕЛЕНИЕ
+            if (fieldObject.getFieldType() instanceof TypeListFieldsDepartment) {
+                choiceValueInFieldWithListDirectory(fieldObject.getFieldName(), fieldObject.getValueField());
+            }
+
+            // СОТРУДНИК
+            if (fieldObject.getFieldType() instanceof TypeListFieldsEmployee) {
+                choiceUserOnTheRole(fieldObject.getValueEmployeeField(), newTaskFormElementsMobile.getInputInUserFieldTypeEmployee(fieldObject.getFieldName()));
+            }
+
+            //СПРАВОЧНИК
+            if (fieldObject.getFieldType() instanceof TypeListFieldsDirectory) {
+                choiceValueInFieldWithListDirectory(fieldObject.getFieldName(), fieldObject.getValueDirectoriesField());
+            }
+
+            // МН.СПРАВОЧНИК
+            if (fieldObject.getFieldType() instanceof TypeListFieldsMultiDirectory) {
+                choiceValueInFieldWithListDirectory(fieldObject.getFieldName(), fieldObject.getValueDirectoriesField());
+            }
+        }
         return this;
     }
 
 
     /**
      * Проверка названий Файлов в списке прикрепленных файлов
+     *
      * @param nameOfFile названия файлов
-     *  false  если среди файлов в списке не находим название файла
-     *  true   если среди файлов в списке находим название файла
+     *                   false  если среди файлов в списке не находим название файла
+     *                   true   если среди файлов в списке находим название файла
      */
 
     public boolean verifyNameFileInTheListFiles(String nameOfFile) {
@@ -470,24 +472,23 @@ public class NewTaskStepsMobile extends BaseSteps {
 
 
     /*
-    * Открытие/Закрытие закладки группы полей на вкладке "Описание"
-    * */
-    public void selectGroupTab(InnerGroupTabs nameOfGroup){
+     * Открытие/Закрытие закладки группы полей на вкладке "Описание"
+     * */
+    public void selectGroupTab(InnerGroupTabs nameOfGroup) {
         $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//div[contains(text(),'" + nameOfGroup.getNameOfGroupTab() + "')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
     }
 
 
-
-
     /**
      * Создание обычной задачи
+     *
      * @param task передаваемые атрибуты задачи
      */
     public NewTaskStepsMobile creatingTask(Task task) {
         ensurePageLoaded();
 
         //--------------------------------- группа полей  "Название"
-       // Разворачиваем  группу полей "Название"
+        // Разворачиваем  группу полей "Название"
         selectGroupTab(NAME);
         //Заполняем Название задачи
         setTaskName(task.getTaskName())
@@ -579,29 +580,28 @@ public class NewTaskStepsMobile extends BaseSteps {
         loginPageElementsMobile.getTextOnToastOfNewTask().shouldHave(Condition.text("Создана задача №"));
         //Переходим по ссылке в появившемся toast в созданную задачу
         loginPageElementsMobile.getTextOnToastOfNewTask().click();
-        return page (NewTaskStepsMobile.class);
+        return page(NewTaskStepsMobile.class);
     }
-
 
 
     /**
      * Аттачминг файлов в форме задачи
-     * @param nameOfFiles  названия файлов
+     *
+     * @param nameOfFiles названия файлов
      */
-    public NewTaskStepsMobile addAttachFiles (String[] nameOfFiles) {
+    public NewTaskStepsMobile addAttachFiles(String[] nameOfFiles) {
         if (nameOfFiles != null)
-        for (String nameOfFile : nameOfFiles) {
-            String mainFilePath = "src" + File.separator + "main" + File.separator +
-                    "resources" + File.separator + "attachfiles" + File.separator;
-            File file = newTaskFormElementsMobile.getInputFiles()
-                    .uploadFile(new File(mainFilePath, nameOfFile));
-            assertTrue(file.exists()); // наверное, проверяет, что создан объект File.
-            assertTrue(file.getPath().replace(File.separatorChar, '/').endsWith("src/main/resources/attachfiles/" + nameOfFile + ""));
-            assertTrue(verifyNameFileInTheListFiles(nameOfFile), "Не пройдена проверка названий Файлов в списке прикрепленных файлов");
-        }
+            for (String nameOfFile : nameOfFiles) {
+                String mainFilePath = "src" + File.separator + "main" + File.separator +
+                        "resources" + File.separator + "attachfiles" + File.separator;
+                File file = newTaskFormElementsMobile.getInputFiles()
+                        .uploadFile(new File(mainFilePath, nameOfFile));
+                assertTrue(file.exists()); // наверное, проверяет, что создан объект File.
+                assertTrue(file.getPath().replace(File.separatorChar, '/').endsWith("src/main/resources/attachfiles/" + nameOfFile + ""));
+                assertTrue(verifyNameFileInTheListFiles(nameOfFile), "Не пройдена проверка названий Файлов в списке прикрепленных файлов");
+            }
         return this;
     }
 
 
-
-    }
+}
