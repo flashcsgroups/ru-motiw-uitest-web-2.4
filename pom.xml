@@ -13,7 +13,7 @@
 
     <properties>
         <!-- Selenide - http://ru.selenide.org/ -->
-        <selenide.version>4.12.3</selenide.version>
+        <selenide.version>4.14.0</selenide.version>
         <!-- https://mvnrepository.com/artifact/junit/junit -->
         <junit.version>4.12</junit.version>
 

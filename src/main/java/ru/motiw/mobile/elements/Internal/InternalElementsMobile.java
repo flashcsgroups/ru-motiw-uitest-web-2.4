@@ -40,7 +40,7 @@ public class InternalElementsMobile extends BaseSteps {
     /*
      * Создать задачу
      */
-    @FindBy(xpath = "//a[contains(@href, '/edittask/newtask')]")
+    @FindBy(xpath = "//div[contains(text(),'Создать задачу')]/ancestor::div[contains(@class,\"x-component x-button\")]")
     private SelenideElement createTask;
 
     /*
@@ -86,6 +86,8 @@ public class InternalElementsMobile extends BaseSteps {
     public SelenideElement getButtonMainMenu() {
         return buttonMainMenu;
     }
+
+    public SelenideElement getCreateTaskMobile() {return createTask;}
 
 
 

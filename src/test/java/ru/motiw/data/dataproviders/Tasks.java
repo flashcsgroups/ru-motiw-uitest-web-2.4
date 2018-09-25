@@ -41,8 +41,10 @@ public abstract class Tasks extends BaseTest {
         return new Object[][]{
 
                 {new Task().setTaskName(randomString(15) + " " + randomString(30))
-                        .setDescription(randomString(100) + "\n " + randomString(100) + "\n " + randomString(100))
-                        .setDateEnd(tomorrowDate())
+                        .setDescription(randomString(100)) // для Описания АРМа пока в одну строку
+                        /*.setDescription(randomString(100) + "\n " + randomString(100) + "\n " + randomString(100))*/
+                        //.setDateBegin(yesterdayDate()) //можно убрать, т.к проверка на автозаполнение даты начало м.б важнее
+                        .setDateEnd(tomorrowDateWithoutTime())
                         .setAuthors(new Employee[]{EMPLOYEE_ADMIN})
                         .setControllers(new Employee[]{EMPLOYEE_ADMIN})
                         .setExecutiveManagers(new Employee[]{EMPLOYEE_ADMIN})
