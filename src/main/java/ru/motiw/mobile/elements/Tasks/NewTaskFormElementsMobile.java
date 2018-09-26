@@ -98,6 +98,19 @@ public class NewTaskFormElementsMobile {
     @FindBy(xpath = "//div[@name=\"description\"]")
     private SelenideElement Description;
 
+
+    @FindBy(xpath = "//input[@name=\"iswithreport\"]")
+    private SelenideElement reportRequired;
+
+
+    @FindBy(xpath = "//input[@name=\"issecret\"]")
+    private SelenideElement isSecret;
+
+
+    @FindBy(xpath = "//input[@name=\"isforexamination\"]")
+    private SelenideElement isForExamination;
+
+
     @FindBy(xpath = "//span[text()][ancestor::em[contains(@class,'x-tab')]][ancestor::li[not(@style='display: none;')]]")
     private ElementsCollection collectionTabsForTasks;
 
@@ -308,6 +321,31 @@ public class NewTaskFormElementsMobile {
      */
     public SelenideElement getDescription() {
         return Description;
+    }
+
+
+    /**
+     * признак - С докладом
+     */
+
+    public SelenideElement getReportRequired() {
+        return reportRequired;
+    }
+
+    /**
+     * признак - Секретная
+     */
+
+    public SelenideElement getIsSecret() {
+        return isSecret;
+    }
+
+    /**
+     * признак - Для ознакомления
+     */
+
+    public SelenideElement getIsForExamination() {
+        return isForExamination;
     }
 
 }

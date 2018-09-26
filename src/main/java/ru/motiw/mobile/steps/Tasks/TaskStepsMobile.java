@@ -61,6 +61,31 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
     }
 
 
+    /**
+     * Проверка значений в чебоксах
+     * Сейчас задачу создаем всегда с установкой приоритета Важная задача - true
+     * Но можно проверять и с рандомным значением.
+     * т.к установка признака и его проверка завязаны на одно значение true/false в valueTask.getIsImportant()
+     */
+
+
+
+    /**
+     * Проверка значений в чебоксах true/false для последующего сравнения с передаваемым зеачением
+     */
+
+    private boolean verifyCheckboxIsSelected (boolean isTrue, SelenideElement inputCheckbox) {
+        if (isTrue) {
+            inputCheckbox.shouldBe(selected);
+            return true;
+        } else {
+            inputCheckbox.shouldNotBe(selected);
+            return false;
+        }
+
+    }
+
+
 
 
     /**
@@ -118,16 +143,40 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         $(By.xpath("//div[contains(@id,\"object\")]//input[@name=\"enddate\"]"))
                 .shouldHave(value(valueTask.getDateEnd()));
 
-        /*
-        $(By.xpath("//div[contains(@id,\"object\")]//input[@name=\"priority\"]"))
-                .shouldHave(value("Важная задача"));
-        */
-
-
-
-        //Assert.assertEquals(valueTask.getIsImportant(), verifyIsImportant());
-        //Assert.assertEquals(valueTask.getIsImportant(), verifyIsImportant2(valueTask.getIsImportant()));
         assertTrue(verifyIsImportant(valueTask.getIsImportant()));
+
+        $(By.xpath("//div[contains(text(),'Срок')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();  // Закрываем вкладку "Срок"
+        //TODO Проверка на то, что вкладка закрылась и все поля не отображаются. т.к значения считаывются через DOM сразу даже без отрытия вкладки.
+
+
+
+
+        /*
+         * Открываем вкладку "Ещё"
+         * Проверка признаков в чекбоксах
+         */
+
+
+        $(By.xpath("//div[contains(text(),'Еще')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();  // Открываем вкладку "Еще"
+        //TODO Проверка на то, что вкладка открылась и все поля отображаются. т.к значения считаывются через DOM сразу даже без отрытия вкладки.
+
+        newTaskFormElementsMobile.getReportRequired().shouldBe(selected); // Признак - С Докладом всегда по умолчанию должен быть выбран.
+        assertTrue(verifyCheckboxIsSelected(valueTask.getIsWithReport(), newTaskFormElementsMobile.getReportRequired()));
+        newTaskFormElementsMobile.getIsForExamination().shouldBe(disabled); // Признак -  "Для ознакомления" в созданной задаче должен быть задизейблен.
+
+
+
+
+
+        $(By.xpath("//div[contains(text(),'Еще')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();  // Открываем вкладку "Еще"
+        //TODO Проверка на то, что вкладка закрылась и все поля не отображаются. т.к значения считаывются через DOM сразу даже без отрытия вкладки.
+
+
+
+
+
+
+
 
 
         /*

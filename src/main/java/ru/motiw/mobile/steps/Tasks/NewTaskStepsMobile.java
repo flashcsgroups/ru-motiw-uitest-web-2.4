@@ -3,6 +3,9 @@ package ru.motiw.mobile.steps.Tasks;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
@@ -14,9 +17,11 @@ import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Tasks.Task;
 import ru.motiw.web.steps.BaseSteps;
 
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.page;
 import static com.codeborne.selenide.Selenide.sleep;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static ru.motiw.mobile.model.URLMenuMobile.CREATE_TASK;
 import static ru.motiw.mobile.steps.BaseStepsMobile.openSectionOnURLMobile;
 
@@ -224,19 +229,50 @@ public class NewTaskStepsMobile extends BaseSteps {
         }
     }
 
+
+    private boolean verifyThatCheckboxIsNotSelected (boolean q, SelenideElement element) {
+       if (q) {
+            element.shouldBe(selected);
+            return true; //если  надо высталять чекбокс, а он уже выставлен, то возвращаем true - т.к чекбокс уже выствален.
+       } else {
+            element.shouldNotBe(selected);
+            return false;
+       }
+
+    }
+
+
+
+
+
+
+
     /**
      * Выбор булевой настройки в форме задачи
      * <p>
      * Например, признак "Важная задача", "Секретная задача", "С докладом"
      *
      * @param stateOfCheckbox состояние установленной настройки
-     * @param inputChekbox    совершить действие (снять/установить настройку)
+     * @param inputCheckbox    совершить действие (снять/установить настройку)
      */
-    protected void rangeOfValuesF​romTheCheckbox(boolean stateOfCheckbox, SelenideElement inputChekbox) {
-        if (stateOfCheckbox) {
-            inputChekbox.click();
+
+    private void rangeOfValuesFromTheCheckbox(boolean stateOfCheckbox, SelenideElement inputCheckbox) {
+        if (stateOfCheckbox){
+            inputCheckbox.click();
         }
     }
+
+    //TODO не получается сделать методы выбор чекбоксов в зависимости того, выбран чекбокс по умолчанию или нет.
+    private void rangeOfValuesFromTheCheckbox2(boolean stateOfCheckbox, SelenideElement inputCheckbox) {
+        if (stateOfCheckbox && !verifyThatCheckboxIsNotSelected(stateOfCheckbox, inputCheckbox))
+            // выставляем чекбокс только в случае если  в передаваемом параметре true, а чекбокс в интерфейсе ещё не selected (напрмер, в случае если он не устанавливается по умолчанию)
+        {
+            inputCheckbox.click();
+        }
+    }
+
+
+
 
 
     /**
@@ -281,9 +317,9 @@ public class NewTaskStepsMobile extends BaseSteps {
         choiceUsersThroughTheSearchLiveSurname(task.getControllers(), inputFieldTaskSupervisors); // вводим - Контролеры задачи
         choiceUsersThroughTheSearchLiveSurname(task.getExecutiveManagers(), inputFieldExecutiveManagers); // вводим - Ответственные руковдители
         choiceUsersThroughTheSearchLiveSurname(task.getWorkers(), inputFieldPerformers); // вводим - Исполнители
-        rangeOfValuesF​romTheCheckbox(task.getIsImportant(), importantTask); // признак - Важная задача
-        rangeOfValuesF​romTheCheckbox(task.getIsWithReport(), reportRequired); // признак - С доклаом
-        rangeOfValuesF​romTheCheckbox(task.getIsSecret(), privateTask); // признак - Секретная задача
+        rangeOfValuesFromTheCheckbox(task.getIsImportant(), importantTask); // признак - Важная задача
+        rangeOfValuesFromTheCheckbox(task.getIsWithReport(), reportRequired); // признак - С доклаом
+        rangeOfValuesFromTheCheckbox(task.getIsSecret(), privateTask); // признак - Секретная задача
     }
 
 
@@ -295,7 +331,7 @@ public class NewTaskStepsMobile extends BaseSteps {
     public NewTaskStepsMobile creatingTask(Task task) {
        ensurePageLoaded();
 
-       // Разворачиваем  вкладку "Название"
+       // Разворачиваем  группу полей  "Название"
 
         $(By.xpath("//div[contains(text(),'Название')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
         //TODO Проверка на то, что вкладка открылась и все поля отображаются
@@ -304,13 +340,13 @@ public class NewTaskStepsMobile extends BaseSteps {
         setTaskName(task.getTaskName())
                 .setTasksDescription(task.getDescription());
 
-        // Закрываем вкладку "Название"
+        // Закрываем  группу полей  "Название"
 
         $(By.xpath("//div[contains(text(),'Название')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
-        //TODO Проверка на то, что вкладка закрлась и все поля не отображаются
+        //TODO Проверка на то, что вкладка закрылась и все поля не отображаются
 
 
-        // Открываем вкладку "Срок"
+        // Открываем  группу полей  "Срок"
         $(By.xpath("//div[contains(text(),'Срок')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
         //TODO Проверка на то, что вкладка открылась и все поля отображаются
 
@@ -323,6 +359,24 @@ public class NewTaskStepsMobile extends BaseSteps {
         //rangeOfValuesF​romTheCheckbox(task.getIsImportant(), importantTask); // признак - Важная задача
 
         setImportance(task.getIsImportant());
+
+        // Закрываем  группу полей  "Срок"
+        $(By.xpath("//div[contains(text(),'Срок')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
+        //TODO Проверка на то, что вкладка закрылась и все поля не отображаются
+
+        // Открываем группу полей "Ещё"
+
+        $(By.xpath("//div[contains(text(),'Еще')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
+        //TODO Проверка на то, что вкладка открылась и все поля отображаются
+
+        newTaskFormElementsMobile.getReportRequired().shouldBe(selected); // Признак - С Докладом всегда по умолчанию должен быть выбран.
+        //rangeOfValuesFromTheCheckbox(task.getIsSecret(), newTaskFormElementsMobile.getIsSecret()); // признак - Секретная  -- не находит  Element should be visible {By.xpath: //input[@name="issecret"]}
+        //newTaskFormElementsMobile.getIsForExamination().shouldBe(disabled); // Признак - "Для ознакомления" -  в метод  rangeOfValuesFromTheCheckbox нужно видмо , м.б все чекбоксы надо стараться выствлять?
+
+
+
+
+
 
 
        /*
