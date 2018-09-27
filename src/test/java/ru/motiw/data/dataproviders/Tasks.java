@@ -50,7 +50,8 @@ public abstract class Tasks extends BaseTest {
                         .setExecutiveManagers(new Employee[]{EMPLOYEE_ADMIN})
                         .setWorkers(new Employee[]{EMPLOYEE_ADMIN})
                         .setIsSecret(true) // Секретная задача
-                        .setIsWithReport(randomBoolean()) // C докладом
+                        .setIsWithReport(true) // C докладом
+                        .setIsForReview(true) // Только для озакомления
                         .setIsImportant(true)}, // Важная задача
         };
     }

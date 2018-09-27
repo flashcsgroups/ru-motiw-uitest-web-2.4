@@ -99,16 +99,28 @@ public class NewTaskFormElementsMobile {
     private SelenideElement Description;
 
 
+    @FindBy(xpath = "//input[@name=\"iswithreport\"]/ancestor::div[@class=\"x-font-icon x-icon-el\"]")
+    private SelenideElement checkboxReportRequired;
+
+
     @FindBy(xpath = "//input[@name=\"iswithreport\"]")
     private SelenideElement reportRequired;
 
 
+    @FindBy(xpath = "//input[@name=\"issecret\"]/ancestor::div[@class=\"x-font-icon x-icon-el\"]")
+    private SelenideElement checkboxIsSecret;
+
     @FindBy(xpath = "//input[@name=\"issecret\"]")
     private SelenideElement isSecret;
 
+    @FindBy(xpath = "//input[@name=\"issecret\"]")
+    private boolean w;
+
+    @FindBy(xpath = "//input[@name=\"isforexamination\"]/ancestor::div[@class=\"x-font-icon x-icon-el\"]")
+    private SelenideElement checkboxIsForReview;
 
     @FindBy(xpath = "//input[@name=\"isforexamination\"]")
-    private SelenideElement isForExamination;
+    private SelenideElement IsForReview;
 
 
     @FindBy(xpath = "//span[text()][ancestor::em[contains(@class,'x-tab')]][ancestor::li[not(@style='display: none;')]]")
@@ -325,27 +337,64 @@ public class NewTaskFormElementsMobile {
 
 
     /**
+     * чексбокс - С докладом
+     * Используется для установки состояния.
+     */
+
+    public SelenideElement getCheckboxReportRequired() {
+        return checkboxReportRequired;
+    }
+
+
+
+    /**
      * признак - С докладом
+     * Используется для проверки состояния.
      */
 
     public SelenideElement getReportRequired() {
         return reportRequired;
     }
 
+
     /**
      * признак - Секретная
+     * Используется для установки состояния.
+     */
+
+
+    public SelenideElement getCheckboxIsSecret() {
+        return checkboxIsSecret;
+    }
+
+
+    /**
+     * признак - Секретная
+     * Используется для проверки состояния.
      */
 
     public SelenideElement getIsSecret() {
         return isSecret;
     }
 
+
     /**
      * признак - Для ознакомления
+     * Используется для установки состояния.
      */
 
-    public SelenideElement getIsForExamination() {
-        return isForExamination;
+    public SelenideElement getCheckboxIsForReview() {
+        return checkboxIsForReview;
+    }
+
+
+    /**
+     * признак - Для ознакомления
+     * Используется для проверки состояния.
+     */
+
+    public SelenideElement getIsForReview() {
+        return IsForReview;
     }
 
 }

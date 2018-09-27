@@ -22,6 +22,9 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.page;
 import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.TestCase.assertSame;
+import static junit.framework.TestCase.assertTrue;
 import static ru.motiw.mobile.model.URLMenuMobile.CREATE_TASK;
 import static ru.motiw.mobile.steps.BaseStepsMobile.openSectionOnURLMobile;
 
@@ -230,23 +233,6 @@ public class NewTaskStepsMobile extends BaseSteps {
     }
 
 
-    private boolean verifyThatCheckboxIsNotSelected (boolean q, SelenideElement element) {
-       if (q) {
-            element.shouldBe(selected);
-            return true; //если  надо высталять чекбокс, а он уже выставлен, то возвращаем true - т.к чекбокс уже выствален.
-       } else {
-            element.shouldNotBe(selected);
-            return false;
-       }
-
-    }
-
-
-
-
-
-
-
     /**
      * Выбор булевой настройки в форме задачи
      * <p>
@@ -261,18 +247,6 @@ public class NewTaskStepsMobile extends BaseSteps {
             inputCheckbox.click();
         }
     }
-
-    //TODO не получается сделать методы выбор чекбоксов в зависимости того, выбран чекбокс по умолчанию или нет.
-    private void rangeOfValuesFromTheCheckbox2(boolean stateOfCheckbox, SelenideElement inputCheckbox) {
-        if (stateOfCheckbox && !verifyThatCheckboxIsNotSelected(stateOfCheckbox, inputCheckbox))
-            // выставляем чекбокс только в случае если  в передаваемом параметре true, а чекбокс в интерфейсе ещё не selected (напрмер, в случае если он не устанавливается по умолчанию)
-        {
-            inputCheckbox.click();
-        }
-    }
-
-
-
 
 
     /**
@@ -369,9 +343,11 @@ public class NewTaskStepsMobile extends BaseSteps {
         $(By.xpath("//div[contains(text(),'Еще')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
         //TODO Проверка на то, что вкладка открылась и все поля отображаются
 
+
         newTaskFormElementsMobile.getReportRequired().shouldBe(selected); // Признак - С Докладом всегда по умолчанию должен быть выбран.
-        //rangeOfValuesFromTheCheckbox(task.getIsSecret(), newTaskFormElementsMobile.getIsSecret()); // признак - Секретная  -- не находит  Element should be visible {By.xpath: //input[@name="issecret"]}
-        //newTaskFormElementsMobile.getIsForExamination().shouldBe(disabled); // Признак - "Для ознакомления" -  в метод  rangeOfValuesFromTheCheckbox нужно видмо , м.б все чекбоксы надо стараться выствлять?
+        rangeOfValuesFromTheCheckbox(task.getIsSecret(), newTaskFormElementsMobile.getCheckboxIsSecret()); // признак - Секретная
+        rangeOfValuesFromTheCheckbox(task.getIsForReview(), newTaskFormElementsMobile.getCheckboxIsForReview()); // Признак - "Для ознакомления"
+
 
 
 
