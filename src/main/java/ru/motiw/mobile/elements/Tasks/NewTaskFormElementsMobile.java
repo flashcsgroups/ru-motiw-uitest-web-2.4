@@ -71,7 +71,7 @@ public class NewTaskFormElementsMobile {
     @FindBy(xpath = "//input[@name=\"enddate\"]")
     private SelenideElement endField;
 
-    @FindBy(xpath = "//a[contains (@onclick, 'selectproject')]/../../../../../../following-sibling::div[13]//*[contains (@class, 'col-value')]")
+    @FindBy(xpath = "//input[@name=\"id_tasktype\"]/ancestor::div[@class=\"x-body-el\"]//div[@class=\"x-expandtrigger x-trigger x-interactive\"]")
     private SelenideElement fieldTaskType;
 
     @FindBy(xpath = "//*[contains (@onclick, 'author')]/../../../td[2]/div")

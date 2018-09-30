@@ -49,6 +49,7 @@ public abstract class Tasks extends BaseTest {
                         .setControllers(new Employee[]{EMPLOYEE_ADMIN})
                         .setExecutiveManagers(new Employee[]{EMPLOYEE_ADMIN})
                         .setWorkers(new Employee[]{EMPLOYEE_ADMIN})
+                        .setTaskType(new TasksTypes("Обычный"))
                         .setIsSecret(true) // Секретная задача
                         .setIsWithReport(true) // C докладом
                         .setIsForReview(true) // Только для озакомления

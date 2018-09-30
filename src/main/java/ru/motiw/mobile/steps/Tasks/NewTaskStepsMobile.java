@@ -13,6 +13,7 @@ import ru.motiw.mobile.elements.Tasks.NewTaskFormElementsMobile;
 import ru.motiw.mobile.steps.InternalStepsMobile;
 import ru.motiw.mobile.steps.LoginStepsMobile;
 import ru.motiw.web.elements.elementspda.Task.TaskDescriptionStepsPDA;
+import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
 import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Tasks.Task;
 import ru.motiw.web.steps.BaseSteps;
@@ -39,6 +40,7 @@ public class NewTaskStepsMobile extends BaseSteps {
     NewTaskFormElementsMobile newTaskFormElementsMobile = page(NewTaskFormElementsMobile.class);
     private InternalElementsMobile internalElementsMobile = page(InternalElementsMobile.class);
     private LoginStepsMobile loginStepsMobile = page(LoginStepsMobile.class);
+    //private TaskStepsMobile taskStepsMobile = page(TaskStepsMobile.class); //это потомок
 
 
     /*
@@ -161,7 +163,7 @@ public class NewTaskStepsMobile extends BaseSteps {
      * @param nameTasks name task for input
      * @return page NewTaskPag
      */
-    private NewTaskStepsMobile setTaskName(String nameTasks) {
+    private NewTaskStepsMobile  setTaskName(String nameTasks) {
         newTaskFormElementsMobile.getTaskName().click();
         newTaskFormElementsMobile.getTaskName().setValue(nameTasks);
         return this;
@@ -183,6 +185,47 @@ public class NewTaskStepsMobile extends BaseSteps {
             }
         return this;
     }
+
+
+
+
+    /**
+     * Проверка проекта по умолчанию
+     * Главное подразделение: Задачи вне проектов
+     * TODO это метод проверки, может его перенести в другой.  TaskStepsMobile  - не получится - он потомок
+     * Также бедет полезно иметь единый метод с xpath для элентов не имеющих name инпута
+     * это нужно будет для проверкизначений в полях после заполнения в форме создания и готовой задачи
+     *
+     */
+    private void verifyDefaultProject() {
+        $(By.xpath("//div[contains(@id,\"object\")]//input[@name='']")).shouldHave(value("Главное подразделение: Задачи вне проектов"));
+
+
+    }
+
+    /**
+     * Проверка значений в инпутах формы задачи
+     *TODO - аналог метода verifyValueInInput в  TaskStepsMobile - надо привести к одному методу. Можно разметить в NewTaskStepsMobile т.к он родитель или в другой класс
+     * @param valueInInput передаваемое значенние поля
+     * @param nameOfElement имя элемента для xpath
+     */
+    private NewTaskStepsMobile verifyValueInInput(String nameOfElement, String valueInInput) {
+        if (valueInInput == null) {
+            return this;
+        }
+        //Использую xpath с уникальным названием поля
+        // можно ещё использовать //div[contains(@id,\"object\")]//input[@name='" + nameOfElement + "'], но не каждый элемент имеет name инпута
+        //$(By.xpath("//span[text()=\"Название\"]/../..//input")).shouldHave(value(valueInInput));
+        $(By.xpath("//span[text()='" + nameOfElement + "']/../..//input")).shouldHave(exactValue(valueInInput));
+        return this;
+
+    }
+
+
+
+
+
+
 
     /**
      * Ввод даты начала
@@ -264,6 +307,25 @@ public class NewTaskStepsMobile extends BaseSteps {
     }
 
 
+    /**
+     * Установка типа задачи
+     * @param taskType передаваемое имя типа задачи
+     */
+    private NewTaskStepsMobile setTaskType(TasksTypes taskType) {
+        if (taskType == null) {
+            return this;
+        } else {
+            $(newTaskFormElementsMobile.getFieldTaskType()).shouldBe(Condition.visible);
+        }
+        newTaskFormElementsMobile.getFieldTaskType().click();
+        $(By.xpath("//div[contains(@class,\"x-list x-dataview x-container x-component x-floated\")]//span[text()='" + taskType.getObjectTypeName() + "']"))
+                .click();
+        return this;
+
+    }
+
+
+
 
     /**
      * Просмотр (предсоздание задачи)
@@ -306,13 +368,24 @@ public class NewTaskStepsMobile extends BaseSteps {
        ensurePageLoaded();
 
        // Разворачиваем  группу полей  "Название"
-
+        // TODO см. TaskStepsMobile verifyValueInInput  - тут xpath тоже повторяется для всех групп элемнтов. Нужно только подставлять текст названия группы полей
         $(By.xpath("//div[contains(text(),'Название')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
         //TODO Проверка на то, что вкладка открылась и все поля отображаются
 
        //Заполняем Название задачи
         setTaskName(task.getTaskName())
                 .setTasksDescription(task.getDescription());
+
+
+        verifyValueInInput("Название", task.getTaskName());
+
+        verifyValueInInput("Проект", "Главное подразделение: Задачи вне проектов");
+
+
+        //verifyDefaultProject(); //TODO Проект - элемент Без name . надо искать  xpath
+
+        // TODO см. TaskStepsMobile verifyValueInInput  - xpath input-ов многих полей повторяется
+        // в форме создания и готовой задачи одинакрвый но все-таки нужно отдельный метод для заполнения.. Нужно выбрать универсальный xpath
 
         // Закрываем  группу полей  "Название"
 
@@ -330,13 +403,44 @@ public class NewTaskStepsMobile extends BaseSteps {
         setDateBegin(task.getDateBegin())
                 .setDateEnd(task.getDateEnd());
 
+        verifyValueInInput("Окончание", task.getDateEnd())
+                .verifyValueInInput("Начало", task.getDateBegin());
+
+
         //rangeOfValuesF​romTheCheckbox(task.getIsImportant(), importantTask); // признак - Важная задача
 
-        setImportance(task.getIsImportant());
+        setImportance(task.getIsImportant()); // "Приоритет" - выбираем - Важная задача
+
+        /*
+        taskStepsMobile.verifyIsImportant(task.getIsImportant()); //Проверка выбранного значения в поле "Приоритет"
+        //verifyIsImportant метод в потомке - поэтому не вызовешь
+        */
 
         // Закрываем  группу полей  "Срок"
         $(By.xpath("//div[contains(text(),'Срок')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
         //TODO Проверка на то, что вкладка закрылась и все поля не отображаются
+
+
+
+        // Открываем  группу полей  "Тип задачи"
+        $(By.xpath("//div[contains(text(),'Тип задачи')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
+        //TODO Проверка на то, что вкладка открылась и все поля отображаются
+
+
+        setTaskType(task.getTaskType()); //Тип задачи
+
+
+        // TODO для проверки Тип задачи нужен метод подобно verifyTaskType(task.getTaskType()); , только расположить его в этом классе (или в другом  отдельном), т.к там он расположен в потомке
+
+
+        // Закрываем  группу полей  "Тип задачи"
+        $(By.xpath("//div[contains(text(),'Тип задачи')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
+        //TODO Проверка на то, что вкладка закрылась и все поля не отображаются
+
+
+
+
+
 
         // Открываем группу полей "Ещё"
 

@@ -11,6 +11,7 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import ru.motiw.mobile.elements.Tasks.TaskElementsMobile;
+import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
 import ru.motiw.web.model.Tasks.Task;
 
 import static com.codeborne.selenide.Condition.*;
@@ -50,7 +51,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
      */
 
 
-    private boolean verifyIsImportant (boolean isImportant){
+    public boolean verifyIsImportant (boolean isImportant){
         if (isImportant) {
             $(By.xpath("//div[contains(@id,\"object\")]//input[@name=\"priority\"]")).shouldHave(value("Важная задача"));
             return true;
@@ -59,6 +60,61 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
             return true;
         }
     }
+
+
+    /**
+     * Проверка установленного Типа задачи
+     *
+     * @param taskType передаваемое значенние поля Типа задачи
+     *
+     */
+
+    public TaskStepsMobile verifyTaskType(TasksTypes taskType) {
+        String nameOfTaskType = taskType.getObjectTypeName();
+        verifyValueInInput("Тип задачи", nameOfTaskType);
+        return this;
+    }
+
+
+    /**
+     * Проверка значений в инпутах формы задачи
+     *
+     * @param valueInInput передаваемое значенние поля
+     * @param nameOfElement имя элемента для xpath
+     *TODO при Проверке поля "название" до раскрытия группы полей "Название"  друой xpath поэтому нужен такой доп.метод с xpath отличным от verifyValueInInput
+     */
+    private TaskStepsMobile verifyValueInInput2(String valueInInput, String nameOfElement) {
+        if (valueInInput == null) {
+            return this;
+        }
+        $(By.xpath("//div[contains(@id,\"object\")]//input[@name='" + nameOfElement + "']")).shouldHave(value(valueInInput));
+        return this;
+
+    }
+
+
+
+
+    /**
+     * Проверка значений в инпутах формы задачи
+     * TODO - аналог метода verifyValueInInput в NewTaskStepsMobile - надо привести к одному методу. Можно разметить в NewTaskStepsMobile т.к он родитель или в другой класс
+     *
+     * @param valueInInput передаваемое значенние поля
+     * @param nameOfElement имя элемента для xpath
+     */
+    private TaskStepsMobile verifyValueInInput(String nameOfElement, String valueInInput) {
+        if (valueInInput == null) {
+            return this;
+        }
+        //Использую xpath с уникальным названием поля
+        // можно ещё использовать //div[contains(@id,\"object\")]//input[@name='" + nameOfElement + "'], но не каждый элемент имеет name инпута
+        //$(By.xpath("//span[text()=\"Название\"]/../..//input")).shouldHave(value(valueInInput));
+        $(By.xpath("//span[text()='" + nameOfElement + "']/../..//input")).shouldHave(exactValue(valueInInput));
+        return this;
+
+    }
+
+
 
 
     /**
@@ -77,8 +133,6 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
     }
 
 
-
-
     /**
      * Проверяем создание задачи
      *
@@ -92,33 +146,59 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
                 .shouldBe(visible); // Название задачи в хедере
 
 
-
         //Переходим на вкладку "Описание"
 
         $(By.xpath("//div[text()=\"Описание\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")).click();
         verifyElementsOnDescriptionPage();// Ожидание и проверка элементов на вкладке "Описание"
 
         //Проверка значений в полях
-        //TODO наверное ещё нужно проверять после раскрытия группы полей "Название"
+
+        /*
+
 
         $(By.xpath("//div[contains(@id,\"object\")]//input[@name=\"taskname\"]")).should(value(valueTask.getTaskName())); // input не содержит текста в DOM, но через value получилось.
-
-
+        */
+        verifyValueInInput2(valueTask.getTaskName(), "taskname"); //Проверка поля названия до раскрытия группы полей "Название"
 
         $(By.xpath("//div[contains(@id,\"object\")]//div[@name=\"description\"]"))
-                .shouldHave(value(valueTask.getDescription())); // Описание задачи
+                .shouldHave(exactValue(valueTask.getDescription())); // Проверка поля - Описание задачи - до раскрытия группы полей "Название". Через verifyValueInInput не проверишь т.к описание в div.
+        // Можно в отдельный схожий метод для проверки еслиесть ещё поля где значения в div
 
+        /*
+         * Открываем группу полей "Название"
+         * Проверка полей
+         * //TODO наверное ещё нужно проверять после раскрытия группы полей "Название"
+         */
+        $(By.xpath("//div[contains(text(),'Название')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();  // Открываем группу полей "Название"
+        //TODO Проверка на то, что вкладка открылась и все поля отображаются. т.к значения считаывются через DOM сразу даже без отрытия вкладки.
+
+
+        verifyValueInInput("Название", valueTask.getTaskName());
+
+        $(By.xpath("//div[contains(@id,\"object\")]//div[@name=\"description\"]"))
+                .shouldHave(exactValue(valueTask.getDescription())); // Описание задачи. Через verifyValueInInput не проверишь т.к описание в div.
+        // Можно в отдельный схожий метод для проверки еслиесть ещё поля где значения в div
+
+        verifyValueInInput("Проект", "Главное подразделение: Задачи вне проектов");
+
+        /*
+         * Закрываем группу полей "Название"
+         * TODO Проверка на то, что вкладка закрылась и все поля не отображаются. т.к значения считаывются через DOM сразу даже без отрытия вкладки.
+         */
+        $(By.xpath("//div[contains(text(),'Название')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
 
         /*
          * Проверка даты окончания задачи
          */
-
+/*
         $(By.xpath("//div[contains(@id,\"object\")]//input[@name=\"enddate\"]"))
                 .shouldHave(value(valueTask.getDateEnd()));
+*/
+        verifyValueInInput2(valueTask.getDateEnd(), "enddate"); // Проверка поля -  Дата окончания - до раскрытия группы полей  "Срок".
 
 
         /*
-         * Открываем вкладку "Срок"
+         * Открываем группы полей "Срок"
          * Проверка даты начала и окончания задачи и приоритета
          */
 
@@ -130,15 +210,35 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
                 .shouldHave(value(valueTask.getDateBegin())); //проверка даты, если заполнять её при создании задачи - см. в Tasks objectDataTaskPDA .setDateBegin(yesterdayDate())
                 */
         // TODO подумать над необходимостью добавления проверки того, что дата по умолчанию подставилась верная. Раньше в web не было
-
+        /*
         $(By.xpath("//div[contains(@id,\"object\")]//input[@name=\"enddate\"]"))
                 .shouldHave(value(valueTask.getDateEnd()));
+                */
+        verifyValueInInput("Окончание",valueTask.getDateEnd());;
 
-        assertTrue(verifyIsImportant(valueTask.getIsImportant()));
+        assertTrue(verifyIsImportant(valueTask.getIsImportant())); // Приоритет
+
 
         $(By.xpath("//div[contains(text(),'Срок')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();  // Закрываем вкладку "Срок"
         //TODO Проверка на то, что вкладка закрылась и все поля не отображаются. т.к значения считаывются через DOM сразу даже без отрытия вкладки.
 
+
+
+        // Открываем  группу полей  "Тип задачи"
+        $(By.xpath("//div[contains(text(),'Тип задачи')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
+        //TODO Проверка на то, что вкладка открылась и все поля отображаются
+
+
+
+        /*
+         * Проверка  Тип задачи
+         */
+        verifyTaskType(valueTask.getTaskType());
+
+
+        // Закрываем  группу полей  "Тип задачи"
+        $(By.xpath("//div[contains(text(),'Тип задачи')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
+        //TODO Проверка на то, что вкладка закрылась и все поля не отображаются
 
 
 
