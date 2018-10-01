@@ -62,35 +62,9 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
     }
 
 
-    /**
-     * Проверка установленного Типа задачи
-     *
-     * @param taskType передаваемое значенние поля Типа задачи
-     *
-     */
-
-    public TaskStepsMobile verifyTaskType(TasksTypes taskType) {
-        String nameOfTaskType = taskType.getObjectTypeName();
-        verifyValueInInput("Тип задачи", nameOfTaskType);
-        return this;
-    }
 
 
-    /**
-     * Проверка значений в инпутах формы задачи
-     *
-     * @param valueInInput передаваемое значенние поля
-     * @param nameOfElement имя элемента для xpath
-     *TODO при Проверке поля "название" до раскрытия группы полей "Название"  друой xpath поэтому нужен такой доп.метод с xpath отличным от verifyValueInInput
-     */
-    private TaskStepsMobile verifyValueInInput2(String valueInInput, String nameOfElement) {
-        if (valueInInput == null) {
-            return this;
-        }
-        $(By.xpath("//div[contains(@id,\"object\")]//input[@name='" + nameOfElement + "']")).shouldHave(value(valueInInput));
-        return this;
 
-    }
 
 
 
@@ -102,7 +76,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
      * @param valueInInput передаваемое значенние поля
      * @param nameOfElement имя элемента для xpath
      */
-    private TaskStepsMobile verifyValueInInput(String nameOfElement, String valueInInput) {
+    private TaskStepsMobile verifyValueInInput0(String nameOfElement, String valueInInput) {
         if (valueInInput == null) {
             return this;
         }
@@ -158,7 +132,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
 
         $(By.xpath("//div[contains(@id,\"object\")]//input[@name=\"taskname\"]")).should(value(valueTask.getTaskName())); // input не содержит текста в DOM, но через value получилось.
         */
-        verifyValueInInput2(valueTask.getTaskName(), "taskname"); //Проверка поля названия до раскрытия группы полей "Название"
+        verifyValueBeforeOpenGroupFields(valueTask.getTaskName(), "taskname"); //Проверка поля названия до раскрытия группы полей "Название"
 
         $(By.xpath("//div[contains(@id,\"object\")]//div[@name=\"description\"]"))
                 .shouldHave(exactValue(valueTask.getDescription())); // Проверка поля - Описание задачи - до раскрытия группы полей "Название". Через verifyValueInInput не проверишь т.к описание в div.
@@ -194,7 +168,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         $(By.xpath("//div[contains(@id,\"object\")]//input[@name=\"enddate\"]"))
                 .shouldHave(value(valueTask.getDateEnd()));
 */
-        verifyValueInInput2(valueTask.getDateEnd(), "enddate"); // Проверка поля -  Дата окончания - до раскрытия группы полей  "Срок".
+        verifyValueBeforeOpenGroupFields(valueTask.getDateEnd(), "enddate"); // Проверка поля -  Дата окончания - до раскрытия группы полей  "Срок".
 
 
         /*
@@ -223,7 +197,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         //TODO Проверка на то, что вкладка закрылась и все поля не отображаются. т.к значения считаывются через DOM сразу даже без отрытия вкладки.
 
 
-
+        verifyTaskTypeBeforeOpenGroupFields(valueTask.getTaskType()); // Проверка поля -  Тип задачи - при закрытой группе полей "Тип задачи".
         // Открываем  группу полей  "Тип задачи"
         $(By.xpath("//div[contains(text(),'Тип задачи')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
         //TODO Проверка на то, что вкладка открылась и все поля отображаются

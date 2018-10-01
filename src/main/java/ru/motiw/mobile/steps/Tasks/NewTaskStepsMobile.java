@@ -190,26 +190,37 @@ public class NewTaskStepsMobile extends BaseSteps {
 
 
     /**
-     * Проверка проекта по умолчанию
-     * Главное подразделение: Задачи вне проектов
-     * TODO это метод проверки, может его перенести в другой.  TaskStepsMobile  - не получится - он потомок
-     * Также бедет полезно иметь единый метод с xpath для элентов не имеющих name инпута
-     * это нужно будет для проверкизначений в полях после заполнения в форме создания и готовой задачи
-     *
+     * Проверка значений в инпутах формы задачи при закрытой группе полей
+     * @param valueInInput передаваемое значенние поля
+     * @param nameOfElement имя элемента для xpath
      */
-    private void verifyDefaultProject() {
-        $(By.xpath("//div[contains(@id,\"object\")]//input[@name='']")).shouldHave(value("Главное подразделение: Задачи вне проектов"));
-
+    NewTaskStepsMobile verifyValueBeforeOpenGroupFields(String valueInInput, String nameOfElement) {
+        if (valueInInput == null) {
+            return this;
+        }
+        $(By.xpath("//div[contains(@id,\"object\")]//input[@name='" + nameOfElement + "']")).shouldHave(exactValue(valueInInput));
+        return this;
 
     }
 
     /**
+     * Проверка установленного по умолчанию Типа задачи - при закрытой группе полей "Тип задачи".
+     * @param taskType передаваемое значенние поля Типа задачи
+     */
+
+    NewTaskStepsMobile verifyTaskTypeBeforeOpenGroupFields(TasksTypes taskType) {
+        String nameOfTaskType = taskType.getObjectTypeName();
+        verifyValueBeforeOpenGroupFields(nameOfTaskType, "id_tasktype");
+        return this;
+    }
+
+
+    /**
      * Проверка значений в инпутах формы задачи
-     *TODO - аналог метода verifyValueInInput в  TaskStepsMobile - надо привести к одному методу. Можно разметить в NewTaskStepsMobile т.к он родитель или в другой класс
      * @param valueInInput передаваемое значенние поля
      * @param nameOfElement имя элемента для xpath
      */
-    private NewTaskStepsMobile verifyValueInInput(String nameOfElement, String valueInInput) {
+    NewTaskStepsMobile verifyValueInInput(String nameOfElement, String valueInInput) {
         if (valueInInput == null) {
             return this;
         }
@@ -221,10 +232,14 @@ public class NewTaskStepsMobile extends BaseSteps {
 
     }
 
-
-
-
-
+    /**
+     * Проверка установленного Типа задачи
+     * @param taskType передаваемое значенние поля Типа задачи
+     */
+    void verifyTaskType(TasksTypes taskType) {
+        String nameOfTaskType = taskType.getObjectTypeName();
+        verifyValueInInput("Тип задачи", nameOfTaskType);
+    }
 
 
     /**
@@ -376,22 +391,14 @@ public class NewTaskStepsMobile extends BaseSteps {
         setTaskName(task.getTaskName())
                 .setTasksDescription(task.getDescription());
 
-
         verifyValueInInput("Название", task.getTaskName());
-
         verifyValueInInput("Проект", "Главное подразделение: Задачи вне проектов");
-
-
-        //verifyDefaultProject(); //TODO Проект - элемент Без name . надо искать  xpath
-
-        // TODO см. TaskStepsMobile verifyValueInInput  - xpath input-ов многих полей повторяется
-        // в форме создания и готовой задачи одинакрвый но все-таки нужно отдельный метод для заполнения.. Нужно выбрать универсальный xpath
 
         // Закрываем  группу полей  "Название"
 
         $(By.xpath("//div[contains(text(),'Название')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
         //TODO Проверка на то, что вкладка закрылась и все поля не отображаются
-
+        verifyValueBeforeOpenGroupFields(task.getTaskName(), "taskname"); //Проверка поля названия при закрытой группы полей "Название"
 
         // Открываем  группу полей  "Срок"
         $(By.xpath("//div[contains(text(),'Срок')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
@@ -419,9 +426,10 @@ public class NewTaskStepsMobile extends BaseSteps {
         // Закрываем  группу полей  "Срок"
         $(By.xpath("//div[contains(text(),'Срок')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
         //TODO Проверка на то, что вкладка закрылась и все поля не отображаются
+        verifyValueBeforeOpenGroupFields(task.getDateEnd(), "enddate"); // Проверка поля -  Дата окончания - при закрытой группе полей  "Срок".
 
 
-
+        verifyTaskTypeBeforeOpenGroupFields(task.getTaskType()); // Проверка поля -  Тип задачи - при закрытой группе полей "Тип задачи".
         // Открываем  группу полей  "Тип задачи"
         $(By.xpath("//div[contains(text(),'Тип задачи')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
         //TODO Проверка на то, что вкладка открылась и все поля отображаются
@@ -429,8 +437,10 @@ public class NewTaskStepsMobile extends BaseSteps {
 
         setTaskType(task.getTaskType()); //Тип задачи
 
-
-        // TODO для проверки Тип задачи нужен метод подобно verifyTaskType(task.getTaskType()); , только расположить его в этом классе (или в другом  отдельном), т.к там он расположен в потомке
+        /*
+         * Проверка  Тип задачи
+         */
+        verifyTaskType(task.getTaskType());
 
 
         // Закрываем  группу полей  "Тип задачи"
