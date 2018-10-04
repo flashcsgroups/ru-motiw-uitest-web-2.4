@@ -18,6 +18,35 @@ public class TaskElementsMobile {
     @FindBy(xpath = "//div[contains(@class,'x-body-el x-panel-body-el x-container-body-el x-component-body-el x-layout-auto x-scroller')]/div")
     private ElementsCollection allElementsOnDescriptionPage;
 
+    @FindBy(xpath = "//div[text()=\"Файлы\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")
+    private SelenideElement buttonOfFiles;
+
+    @FindBy(xpath = "//div[text()=\"Файлы\"]//ancestor::div[contains(@class,\"x-pressed\")]")
+    private SelenideElement pressedButtonOfFiles;
+
+    @FindBy(xpath = "//div[text()=\"Действия\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")
+    private SelenideElement buttonOfActions;
+
+    @FindBy(xpath = "//div[text()=\"Действия\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon x-has-text x-arrow-align-right x-button-horizontal-action x-component-horizontal-action x-button-icon-action x-component-icon-action x-layout-box-item x-layout-vbox-item x-pressed\")]")
+    private SelenideElement pressedButtonOfActions;
+
+    @FindBy(xpath = "//div[text()=\"Описание\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")
+    private SelenideElement buttonOfDescription;
+
+    @FindBy(xpath = "//div[text()=\"Описание\"]//ancestor::div[contains(@class,\"x-pressed\")]")
+    private SelenideElement pressedButtonOfDescription;
+
+    @FindBy(xpath = "//div[text()=\"Сохранить\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")
+    private SelenideElement buttonOfSave;
+
+    @FindBy(xpath = "//div[text()=\"Добавить действие\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")
+    private SelenideElement buttonOfAddAction;
+
+    @FindBy(xpath = "//div[text()=\"Завершить выполнение\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")
+    private SelenideElement buttonOfFinalizeExecution;
+
+    @FindBy(xpath = "//div[contains(@class,\"x-body-el x-toolbar-body-el x-container-body-el x-component-body-el x-layout-box x-align-center x-pack-start x-layout-vbox x-vertical x-size-monitored x-paint-monitored x-toolbar-side-toolbar-body-el\")]//hr[@class=\"hr-toolbar-class\"]")
+    private SelenideElement elementAmongButtonsOfMenu;
 
     /**
      * Все элементы меню
@@ -40,11 +69,80 @@ public class TaskElementsMobile {
     /**
      * Коллекция элементов в форме задачи на вкладке Описание
      */
-
     public ElementsCollection getElementsOnDescriptionPage() {
         return allElementsOnDescriptionPage;
     }
 
+    /**
+     * Кнопка перехода на вкладку "Файлы"
+     */
+    public SelenideElement getButtonOfFilesTab() {
+        return buttonOfFiles;
+    }
 
+    /**
+     * Кнопка перехода на вкладку "Файлы" - Нажатая (Выделенная)
+     */
+    public SelenideElement getPressedButtonOfFiles() {
+        return pressedButtonOfFiles;
+    }
+
+
+    /**
+     * Кнопка перехода на вкладку "Действия"
+     */
+    public SelenideElement getButtonOfActionsTab() {
+        return buttonOfActions;
+    }
+
+    /**
+     * Кнопка перехода на вкладку "Действия" - Нажатая (Выделенная)
+     */
+    public SelenideElement getPressedButtonOfActions() {
+        return pressedButtonOfActions;
+    }
+
+
+    /**
+     * Кнопка перехода на вкладку "Описание"
+     */
+    public SelenideElement getButtonOfDescriptionTab() {
+        return buttonOfDescription;
+    }
+
+    /**
+     * Кнопка перехода на вкладку "Описание" - Нажатая (Выделенная)
+     */
+    public SelenideElement getPressedButtonOfDescription() {
+        return pressedButtonOfDescription;
+    }
+
+    /**
+     * Кнопка перехода на вкладку "Сохранить"
+     */
+    public SelenideElement getButtonOfSave() {
+        return buttonOfSave;
+    }
+
+    /**
+     * Кнопка перехода на вкладку "Добавить действие"
+     */
+    public SelenideElement getButtonOfAddAction() {
+        return buttonOfAddAction;
+    }
+
+    /**
+     * Кнопка перехода на вкладку "Завершить выполнение"
+     */
+    public SelenideElement getButtonOfFinalizeExecution() {
+        return buttonOfFinalizeExecution;
+    }
+
+    /**
+     * Элемент визуально разграничивающий кнопки вкладок и кнопки действий меню
+     */
+    public SelenideElement getElementAmongButtonsOfMenu() {
+        return elementAmongButtonsOfMenu;
+    }
 
 }

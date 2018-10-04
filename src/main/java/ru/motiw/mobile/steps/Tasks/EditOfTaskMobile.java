@@ -1,6 +1,7 @@
 package ru.motiw.mobile.steps.Tasks;
 
 import org.openqa.selenium.By;
+import ru.motiw.mobile.elements.Tasks.TaskElementsMobile;
 import ru.motiw.web.model.Tasks.Task;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -11,6 +12,7 @@ public class EditOfTaskMobile extends NewTaskStepsMobile {
 
     //private NewTaskStepsMobile newTaskStepsMobile = page(NewTaskStepsMobile.class);
     private TaskStepsMobile taskStepsMobile = page(TaskStepsMobile.class);
+    private TaskElementsMobile taskElementsMobile = page(TaskElementsMobile.class);
 
 
 
@@ -24,7 +26,7 @@ public class EditOfTaskMobile extends NewTaskStepsMobile {
     public EditOfTaskMobile editOfTask(Task task, Task editTask) {
 
         //Переходим на вкладку "Описание"
-        $(By.xpath("//div[text()=\"Описание\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")).click();
+        taskStepsMobile.openTab("Описание");
         taskStepsMobile.verifyElementsOnDescriptionPage();// Ожидание и проверка элементов на вкладке "Описание"
 
         // Разворачиваем  группу полей  "Название"

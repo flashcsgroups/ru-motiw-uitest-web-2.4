@@ -21,11 +21,83 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
 
 
     /**
+     *  Переход между вкладками.
+     *  Проверка наличия кнопок на тулбаре меню после перехода на вкладку.
+     *  TODO  Проверка отображения подписей под кнопками и хинтов
+     * @param nameOfTabs Название вкладки на тулбаре
+     */
+    public TaskStepsMobile openTab(String nameOfTabs) {
+        // Ожидание и проверка элементов меню тулбара задачи
+        verifyMenuOfTask();
+
+        switch (nameOfTabs) {
+            case "Файлы":
+                //Переходим на вкладку "Файлы"
+                taskElementsMobile.getButtonOfFilesTab().waitUntil(visible, 10000).click();
+
+                //проверка на отображение
+                taskElementsMobile.getButtonOfFinalizeExecution().shouldBe(visible);
+                taskElementsMobile.getElementAmongButtonsOfMenu().shouldBe(visible);
+
+                taskElementsMobile.getPressedButtonOfFiles().shouldBe(visible);
+                taskElementsMobile.getButtonOfActionsTab().shouldBe(visible);
+                taskElementsMobile.getButtonOfDescriptionTab().shouldBe(visible);
+
+                //проверка на Неотображение
+                taskElementsMobile.getButtonOfAddAction().shouldNotBe(visible);
+                taskElementsMobile.getButtonOfSave().shouldNotBe(visible);
+
+
+                break;
+            case "Действия":
+                //Переходим на вкладку "Действия"
+
+                taskElementsMobile.getButtonOfActionsTab().waitUntil(visible, 10000).click();
+
+                //проверка на отображение
+                taskElementsMobile.getButtonOfAddAction().shouldBe(visible);
+                taskElementsMobile.getButtonOfFinalizeExecution().shouldBe(visible);
+                taskElementsMobile.getElementAmongButtonsOfMenu().shouldBe(visible);
+
+                taskElementsMobile.getPressedButtonOfActions().shouldBe(visible);
+                taskElementsMobile.getButtonOfFilesTab().shouldBe(visible);
+                taskElementsMobile.getButtonOfDescriptionTab().shouldBe(visible);
+
+                //проверка на Неотображение
+                taskElementsMobile.getButtonOfSave().shouldNotBe(visible);
+
+                break;
+            case "Описание":
+
+                //Переходим на вкладку "Описание"
+                taskElementsMobile.getButtonOfDescriptionTab().waitUntil(visible, 10000).click();
+
+                //проверка на отображение
+                taskElementsMobile.getButtonOfSave().shouldBe(visible);
+                taskElementsMobile.getButtonOfFinalizeExecution().shouldBe(visible);
+                taskElementsMobile.getElementAmongButtonsOfMenu().shouldBe(visible);
+
+                taskElementsMobile.getPressedButtonOfDescription().waitUntil(visible, 5000);
+                taskElementsMobile.getButtonOfFilesTab().shouldBe(visible);
+                taskElementsMobile.getButtonOfActionsTab().shouldBe(visible);
+
+
+                //проверка на Неотображение
+                taskElementsMobile.getButtonOfAddAction().shouldNotBe(visible);
+                break;
+
+        }
+        return this;
+    }
+
+
+
+    /**
      * Проверка значений в инпутах формы задачи при закрытой группе полей
      * @param valueInInput передаваемое значенние поля
      * @param nameOfElement имя элемента для xpath
      */
-    NewTaskStepsMobile verifyValueBeforeOpenGroupFields(String valueInInput, String nameOfElement) {
+    TaskStepsMobile verifyValueBeforeOpenGroupFields(String valueInInput, String nameOfElement) {
         if (valueInInput == null) {
             return this;
         }
@@ -39,7 +111,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
      * @param taskType передаваемое значенние поля Типа задачи
      */
 
-    NewTaskStepsMobile verifyTaskTypeBeforeOpenGroupFields(TasksTypes taskType) {
+    TaskStepsMobile verifyTaskTypeBeforeOpenGroupFields(TasksTypes taskType) {
         String nameOfTaskType = taskType.getObjectTypeName();
         verifyValueBeforeOpenGroupFields(nameOfTaskType, "id_tasktype");
         return this;
@@ -84,7 +156,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
      * @param valueInInput передаваемое значенние поля
      * @param nameOfElement имя элемента для xpath
      */
-    NewTaskStepsMobile verifyValueInInput(String nameOfElement, String valueInInput) {
+    TaskStepsMobile verifyValueInInput(String nameOfElement, String valueInInput) {
         if (valueInInput == null) {
             return this;
         }
@@ -153,7 +225,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
     /*
      * Проверка отбражения полей при закрытых группах полей
      */
-    public NewTaskStepsMobile fieldsWhenGroupsClosed() {
+    public TaskStepsMobile fieldsWhenGroupsClosed() {
 
         newTaskFormElementsMobile.getTaskName().shouldBe(visible); // "Название"
         newTaskFormElementsMobile.getDescriptionTask().shouldBe(visible); // Описание задачи - отображение и проверка значения поля после закрытия группы полей  "Название"
@@ -198,7 +270,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
     /*
      * Проверка отбражения полей при открытых группах полей
      */
-    public NewTaskStepsMobile fieldsWhenGroupsOpen() {
+    public TaskStepsMobile fieldsWhenGroupsOpen() {
 
         //Методы для Разворачивания всех групп полей
         selectGroupTab("Название");
@@ -254,7 +326,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
     /*
      * Проверка значений в полях при закрытых группах полей
      */
-    public NewTaskStepsMobile verifyValueWhenGroupsClosed(Task task) {
+    public TaskStepsMobile verifyValueWhenGroupsClosed(Task task) {
 
         verifyValueBeforeOpenGroupFields(task.getTaskName(), "taskname"); //Проверка поля названия при закрытой группы полей "Название"
 
@@ -271,7 +343,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
     /*
      * Проверка значений в полях при открытых группах полей
      */
-    public NewTaskStepsMobile verifyValueWhenGroupsOpen(Task task) {
+    public TaskStepsMobile verifyValueWhenGroupsOpen(Task task) {
 
         //Методы для Разворачивания всех групп полей
         selectGroupTab("Название");
@@ -343,15 +415,14 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
      */
     public TaskStepsMobile verifyCreateTask(Task valueTask) {
         refresh(); //делать, чтобы сбросить из кеша все элементы что остаются после работы в форме создания задачи
-        verifyMenuOfTask(); // Ожидание и проверка элементов меню
         if (valueTask == null) {
             return null;
         } else
         $(By.xpath("//div[@class=\"x-component x-title x-title-align-left x-layout-box-item x-layout-hbox-item x-flexed\"]/div[text()='" + valueTask.getTaskName() + "']"))
-                .shouldBe(visible); // Название задачи в хедере
+                .waitUntil(visible, 20000); // Название задачи в хедере
 
         //Переходим на вкладку "Описание"
-        $(By.xpath("//div[text()=\"Описание\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")).click();
+        openTab("Описание");
         verifyElementsOnDescriptionPage();// Ожидание и проверка элементов на вкладке "Описание"
         fieldsWhenGroupsClosed(); //проверка наличия полей при закрытых группах полей
         fieldsWhenGroupsOpen();//проверка наличия полей при открытых группах полей
@@ -425,11 +496,10 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
     }
 
 
-    // Ожидание и проверка элементов меню
-    public void verifyMenuOfTask() {
+    // Ожидание и проверка элементов меню тулбара задачи
+    private void verifyMenuOfTask() {
         $(taskElementsMobile.getToolbarOfMenu()).waitUntil(visible, 30000);
-        taskElementsMobile.getMenuOfTask().shouldHaveSize(9); // TODO 9 элементов - это вместе со скрытыми элементами. Надо проверять какие действительно отображаются при переходе между вкладками.
-        //см.CreateTaskPDATest assertTrue(taskForm.resultsDisplayButtons()); // Проверяем отображения кнопок в форме задачи
+        taskElementsMobile.getMenuOfTask().shouldHaveSize(9); // 9 элементов - это вместе со скрытыми элементами.
     }
 
 

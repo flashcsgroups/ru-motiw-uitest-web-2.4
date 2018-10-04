@@ -4,6 +4,7 @@ import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.FindBy;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
 import ru.motiw.mobile.elements.Tasks.NewTaskFormElementsMobile;
@@ -229,7 +230,7 @@ public class NewTaskStepsMobile extends BaseSteps {
         if (employees != null) {
             for (Employee employee : employees) {
                 newTaskFormElementsMobile.getInputForSearchUsers(componentId).setValue(employee.getLastName()); // вводим в поле ввода Фамилию пользователя
-                newTaskFormElementsMobile.getListOfUsers(componentId).shouldBe(CollectionCondition.size(1), 5000); //ожидание когда будет найден один пользователь. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
+                newTaskFormElementsMobile.getListOfUsers(componentId).shouldBe(CollectionCondition.size(1), 10000); //ожидание когда будет найден один пользователь. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
 
                 //выбор пользователя в списке
                 newTaskFormElementsMobile.getUserFromList(componentId, employee).shouldBe(visible).click();
@@ -253,7 +254,7 @@ public class NewTaskStepsMobile extends BaseSteps {
             for (Employee employee : employees) {
                 //проверка того, что элемент ПЕРВОГО пользователя в списке - выделен т.е выбран в роль
                 $(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(@class,\"x-selected\")]//div[contains(text(),'" + employee.getLastName() + "')]")).shouldBe(visible);
-                newTaskFormElementsMobile.getButtonAppointUsers(componentId).click(); //кнопка "Назначить", чтобы выйти из формы
+                newTaskFormElementsMobile.getInputForSearchUsers(componentId).sendKeys(Keys.chord(Keys.ESCAPE)); //Закрыть форму
             }
         }
     }
@@ -377,7 +378,6 @@ public class NewTaskStepsMobile extends BaseSteps {
 
         // Открываем  группу полей  "Кому"
         selectGroupTab("Кому");
-
 
         // выбор пользователя по ФИО - через searchlive
         currentUserSelectedInTheRole(task.getAuthors(), newTaskFormElementsMobile.getAuthorsField(), "ext-selectdialog-1"); // - по умолчанию Автор задачи текущий пользователь (admin)

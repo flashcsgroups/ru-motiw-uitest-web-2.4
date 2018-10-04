@@ -173,7 +173,7 @@ public class CreateTaskMobileTest extends Tasks {
         $(By.xpath("//a[@class=\"m_link\"]")).waitUntil(visible, 10000);
         $(By.xpath("//a[@class=\"m_link\"]")).click();
 
-        $(By.xpath("//span[contains(text(),'Имя')]//ancestor::div[1]//input")).waitUntil(Condition.visible, 10000);
+        $(By.xpath("//span[contains(text(),'Имя')]//ancestor::div[1]//input")).waitUntil(Condition.visible, 20000);
 
         ////
 
@@ -218,12 +218,11 @@ public class CreateTaskMobileTest extends Tasks {
         //taskStepsMobile.verifyCreateTask(task);
         refresh();
 
-        taskStepsMobile.verifyMenuOfTask(); // Ожидание и проверка элементов меню
+        //taskStepsMobile.verifyMenuOfTask(); // Ожидание и проверка элементов меню
 
         // добавляем пользовательский текст в задачу и проверяем его сохранение
         //Переходим на вкладку "Действия"
-        //TODO нужен метод перехода между вкладками. В нем при переходе сразу нужно проверять налиие кнопок на тулбаре, подписи к ним.
-        $(By.xpath("//div[text()=\"Действия\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")).waitUntil(visible, 10000).click();
+        taskStepsMobile.openTab("Действия");
         taskActionsStepsMobile.verifyAddActionsInTheTape(randomString(15));
 
         // редактируем атрибуты задачи
@@ -252,8 +251,6 @@ public class CreateTaskMobileTest extends Tasks {
         */
 
     }
-
-
 
 
 /*
