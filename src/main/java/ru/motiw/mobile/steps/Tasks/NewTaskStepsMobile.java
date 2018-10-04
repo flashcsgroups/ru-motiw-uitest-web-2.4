@@ -7,7 +7,6 @@ import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.FindBy;
-import org.testng.AssertJUnit;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
 import ru.motiw.mobile.elements.Login.LoginPageElementsMobile;
 import ru.motiw.mobile.elements.Tasks.NewTaskFormElementsMobile;
@@ -20,7 +19,6 @@ import ru.motiw.web.model.Tasks.Task;
 import ru.motiw.web.steps.BaseSteps;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -540,52 +538,6 @@ public class NewTaskStepsMobile extends BaseSteps {
             return false;
     }
 
-
-
-    /**
-     * Скачивание файла в просмотрщике файлов формы задачи
-     * @param nameFiles передаваемое Имя файла для скачивания
-     * @return TaskActionsStepsPDA форма задачи
-     * @throws FileNotFoundException  в том случае, если файл не будет загружен метод .download() выкинет FileNotFoundException
-     */
-    public NewTaskStepsMobile downloadsFilesInPreview(String[] nameFiles, int numbersOfFiles) throws FileNotFoundException {
-
-        for (int numberOfCurrentFile = 1; numberOfCurrentFile < numbersOfFiles+1; numberOfCurrentFile++) {
-            taskElementsMobile.getNumbersOnElementCounterFiles().waitUntil(Condition.text((numberOfCurrentFile) + " / " + numbersOfFiles), 2000); //изменение числа в счетчике после переключения между файлами в просмотрщике
-            //todo что если в методе перехода к следующему файлу в карусели - проверять сразу?
-            File downloadedFile =
-                    $(By.xpath("//div[contains(@class,\"x-container x-component x-titlebar-right x-size-monitored\")]//a[@href]")).download();
-
-            assertTrue(verifyNameOfDownloadedFile(downloadedFile.getName(), nameFiles), "Название скаченного файла не совпадает с набором названий файлов прикрепляемых к задаче!");
-            // TODO downloadedFile.getName() возвращает  - UTF-8''. assertEquals не проходит сравнение. Почему?
-            //assertEquals(nameFiles, downloadedFile.getName());
-            // assertEquals(nameFiles, readFileToString(downloadedFile, "UTF-8"));
-            AssertJUnit.assertTrue(downloadedFile.getAbsolutePath().startsWith(folder.getAbsolutePath()));
-            if (numbersOfFiles > 1) {
-                $(By.xpath("//div[@class=\"x-icon-el x-font-icon x-mi mi-chevron-right\"]/ancestor::div[contains(@id,\"ext-filesnavigationbtn\")]")).click(); //переходим к следующему файлу в карусели
-                sleep(500);
-            }
-
-        }
-        return this;
-    }
-
-    /**
-     * Сравнение имени скаченного файла с набором названий файлов прикрепляемых к задаче
-     * @param nameOfDownloadedFile имя скаченного файла
-     * @param nameFiles набор названий файлов прикрепляемых к документу
-     */
-
-    private boolean verifyNameOfDownloadedFile(String nameOfDownloadedFile, String[] nameFiles) {
-
-        for(String nameFile : nameFiles) {
-            if(nameOfDownloadedFile.equals(nameFile)){
-                return true;
-            }
-        }
-        return false;
-
-    }
 
     }
 

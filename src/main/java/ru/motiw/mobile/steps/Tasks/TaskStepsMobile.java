@@ -8,10 +8,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
+import org.testng.AssertJUnit;
 import ru.motiw.mobile.elements.Tasks.TaskElementsMobile;
 import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
 import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Tasks.Task;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
@@ -475,9 +479,9 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         /*
          * Открываем вкладку "Файлы"
          * Проверка того, чтобы кол-во файлов в элементе-переключателе файлов соответствовало числу файлов содержашихся в задаче
-         * проверка числа файлов в каруселе
+         * проверка скачивания файлов и текста в просмотрике файлов (каруселе)
          */
-         verifyNumbersOfFiles(valueTask);
+         verifyFiles(valueTask);
 
 
         /*
@@ -518,38 +522,96 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         return this;
     }
 
-    public TaskStepsMobile verifyNumbersOfFiles(Task task) throws Exception {
-
-        //TODO надо подумать как сделать этот метод более универсальным. Чтобы его можно было использовать в любом тесте
-
+    public TaskStepsMobile verifyFiles(Task task) throws Exception {
         if (task.getFileName() == null) {
             return this;
         } else {
-            //openTab("Описание");
-//            selectGroupTab("Файлы"); // Открываем вкладку "Файлы"
-//
-//            //считаем кол-во файлов - заносим в массив
-//            List<SelenideElement> nameFileInTheList = new ArrayList<>(newTaskFormElementsMobile.getListOfNameFiles());
-//            int numberOfFiles = nameFileInTheList.size();
-
             // сравниваем кол-во прикрепленных файлов с числом отображаемым в элементе-переключтеле файлов.
             taskElementsMobile.getNumbersOnElementCounterFiles().shouldHave(text("1 / " + task.getNumberOfFiles()));
-
-//            selectGroupTab("Файлы"); // Закрываем вкладку "Файлы"
-
-            //проверка числа файлов в каруселе
+            //Проверка файлов в каруселе
             openTab("Файлы");
-            //todo Здесь можно проверять при переключении между файлами одновреенно отображение.
-
-            //downloadsFilesInPreview(task.getFileName(), task.getNumberOfFiles());
-
-
-            verifyTextInFilesInPreview(task.getFileName(), task.getNumberOfFiles());
+            verifyFilesInPreview(task.getFileName(), task.getNumberOfFiles());
             }
 
         return this;
     }
 
+    /**
+     * Скачивание файла в просмотрщике файлов формы задачи
+     * Проверяем имя скаченного файла и наличие текста в просмотрщике файла.
+     * @param nameFiles передаваемое Имя файла для скачивания
+     * @return TaskActionsStepsPDA форма задачи
+     * @throws FileNotFoundException  в том случае, если файл не будет загружен метод .download() выкинет FileNotFoundException
+     */
+    public TaskStepsMobile verifyFilesInPreview(String[] nameFiles, int numbersOfFiles) throws FileNotFoundException {
+
+        for (int numberOfCurrentFile = 1; numberOfCurrentFile < numbersOfFiles+1; numberOfCurrentFile++) {
+            File downloadedFile =
+                    $(By.xpath("//div[contains(@class,\"x-container x-component x-titlebar-right x-size-monitored\")]//a[@href]")).download();
+
+            // Проверяем имя скаченного файла и текст в просмотрщике файла.
+            assertTrue(verifyNameAndTextOfFile(downloadedFile.getName(), nameFiles), "Название скаченного файла не совпадает с набором названий файлов прикрепляемых к задаче!");
+            AssertJUnit.assertTrue(downloadedFile.getAbsolutePath().startsWith(folder.getAbsolutePath()));
+            switchToNextFile(numberOfCurrentFile, numbersOfFiles); //Переход к следующему файлу через кнопку "Вперед" в просмотрщике файлов
+        }
+        return this;
+    }
+
+    /**
+     * Переход к следующему файлу через кнопку "Вперед" в просмотрщике файлов
+     * @param numberOfCurrentFile  Номер текущего файла открытого в предпросмотре
+     * @param numbersOfFiles Число всех прикрепленных файлов
+     */
+
+    public void switchToNextFile (int numberOfCurrentFile, int numbersOfFiles) {
+        taskElementsMobile.getNumbersOnElementCounterFiles().waitUntil(Condition.text((numberOfCurrentFile) + " / " + numbersOfFiles), 2000); //проверка числа файлов в счетчике
+
+        if (numbersOfFiles > 1) {
+            $(By.xpath("//div[@class=\"x-icon-el x-font-icon x-mi mi-chevron-right\"]/ancestor::div[contains(@id,\"ext-filesnavigationbtn\")]")).click(); //переходим к следующему файлу в карусели
+            sleep(500);
+        }
+
+        //Проверка изменения числа в счетчике после перехода к следующему файлу в просмотрщике
+        if (numberOfCurrentFile != numbersOfFiles) {
+            taskElementsMobile.getNumbersOnElementCounterFiles().waitUntil(Condition.text((numberOfCurrentFile + 1) + " / " + numbersOfFiles), 2000); //изменение числа в счетчике после переключения между файлами в просмотрщике
+        }
+
+        //В случае переключения "Вперед" с последнего файла, происходит переход к первому файлу, соответственно число в счетчике изменяется на 1
+        if (numberOfCurrentFile == numbersOfFiles) {
+            taskElementsMobile.getNumbersOnElementCounterFiles().waitUntil(Condition.text((1) + " / " + numbersOfFiles), 2000); //изменение числа в счетчике после переключения между файлами в просмотрщике
+        }
+
+    }
+
+    /**
+     * Сравнение имени скаченного файла с набором названий файлов прикрепляемых к задаче
+     * Проверяем наличие текста в просмотрщике файла.
+     * @param nameOfDownloadedFile имя скаченного файла
+     * @param nameFiles набор названий файлов прикрепляемых к документу
+     */
+
+    private boolean verifyNameAndTextOfFile(String nameOfDownloadedFile, String[] nameFiles) {
+
+        for(String nameFile : nameFiles) {
+            if(nameOfDownloadedFile.equals(nameFile)){
+                verifyTextInFilesInPreview(nameFile); // Проверяем наличие текста в просмотрщике файла.
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * Проверка наличия текста в просмотрщике файлов формы задачи
+     * @param textInFile передаваемое Имя файла для скачивания - текст с Именем файла находится в прикрепляемых для теста файлах
+     */
+    public TaskStepsMobile verifyTextInFilesInPreview(String textInFile)  {
+        switchTo().frame($(By.xpath("//iframe")));  //Переходим во фрейм просмотра файлов
+        $(By.xpath("//div[@id=\"viewerContainer\"]//div[@class=\"textLayer\"]/div[contains(text(),'" + textInFile + "')]")).shouldBe(visible);
+        switchTo().defaultContent();  //Уходим из фрейма просмотра файлов
+        return this;
+    }
 
         /**
          * Удаление файлов через ДнД (свайп влево по плашке с файлом )
@@ -576,60 +638,6 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
 
         }
 
-
-    /**
-     * Проверка наличия текста в файле в просмотрщике файлов формы задачи
-     * @param nameFiles передаваемое Имя файла для скачивания
-     * @return TaskActionsStepsPDA форма задачи
-     *
-     */
-    public NewTaskStepsMobile verifyTextInFilesInPreview(String[] nameFiles, int numbersOfFiles)  {
-
-
-
-        for (int numberOfCurrentFile = 1; numberOfCurrentFile < numbersOfFiles+1; numberOfCurrentFile++) {
-           taskElementsMobile.getNumbersOnElementCounterFiles().waitUntil(Condition.text((numberOfCurrentFile) + " / " + numbersOfFiles), 2000); //изменение числа в счетчике после переключения между файлами в просмотрщике
-
-            //Проверять можно "Тестовое название.pdf" и "Договор аренды.doc"; (прикрепляются при редактирвоании ) через единый xpath - только текст подставлять
-            //div[@id="viewerContainer"]//div[@class="textLayer"]/div[contains(text(),'Договор аренды')]
-
-
-            //todo переберать конечно надо по-другому
-            // for(String nameFile : nameFiles) {
-
-           //switchTo().frame($(By.xpath("//iframe")));  //Переходим во фрейм просмотра файлов
-
-            for(String nameFile : nameFiles) {
-                assertTrue(verifyNameOfDownloadedFile1(nameFile));
-            }
-
-            //$(By.xpath("//div[@id=\"viewerContainer\"]//div[@class=\"textLayer\"]/div[contains(text(),'" + nameFile + "')]")).shouldBe(visible);
-           switchTo().defaultContent();  //Уходим из фрейма просмотра файлов
-
-           //}
-            if (numbersOfFiles > 1) {
-                $(By.xpath("//div[@class=\"x-icon-el x-font-icon x-mi mi-chevron-right\"]/ancestor::div[contains(@id,\"ext-filesnavigationbtn\")]")).click(); //переходим к следующему файлу в карусели
-                sleep(500);
-            }
-
-        }
-        return this;
-    }
-
-
-    /**
-     * Сравнение имени скаченного файла с набором названий файлов прикрепляемых к задаче
-     * @param nameFile набор названий файлов прикрепляемых к документу
-     */
-
-    private boolean verifyNameOfDownloadedFile1 (String nameFile) {
-        if(!$(By.xpath("//div[@id=\"viewerContainer\"]//div[@class=\"textLayer\"]/div[contains(text(),'" + nameFile + "')]")).is(visible)) {
-            switchTo().frame($(By.xpath("//iframe")));  //Переходим во фрейм просмотра файлов
-            return true;
-        }
-        return false;
-
-    }
 
     // Ожидание и проверка элементов меню тулбара задачи
     private void verifyMenuOfTask() {
