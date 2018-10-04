@@ -26,8 +26,6 @@ public class NewTaskFormElementsMobile {
     @FindBy(xpath = "//a[contains (@href, 'newproject')]/img")
     private SelenideElement buttonNewProject;
 
-    @FindBy(xpath = "//div[@name=\"description\"]")
-    private SelenideElement descriptionTask;
 
     @FindBy(xpath = "//*[contains (@class,'window-noborder')][contains (@style,'visible')]//td[contains (@class,'cell')][1]")
     private SelenideElement buttonSaveDescription;
@@ -59,8 +57,12 @@ public class NewTaskFormElementsMobile {
     @FindBy(xpath = "//input[@name=\"taskname\"]")
     private SelenideElement TaskName;
 
-    @FindBy(xpath = "//a[contains (@onclick, 'selectproject')]/../../../../../../following-sibling::div[2]//*[contains (@class, 'col-value')]")
+    @FindBy(xpath = "//div[@name=\"description\"]")
+    private SelenideElement descriptionTask;
+
+    @FindBy(xpath = "//input[@name=\"numerator\"]")
     private SelenideElement taskNumber;
+
 
     @FindBy(xpath = "//input[@name=\"priority\"]/ancestor::div[@class=\"x-body-el\"]//div[@class=\"x-expandtrigger x-trigger x-interactive\"]")
     private SelenideElement priority;
@@ -73,6 +75,9 @@ public class NewTaskFormElementsMobile {
 
     @FindBy(xpath = "//input[@name=\"id_tasktype\"]/ancestor::div[@class=\"x-body-el\"]//div[@class=\"x-expandtrigger x-trigger x-interactive\"]")
     private SelenideElement fieldTaskType;
+
+    @FindBy(xpath = "//div[contains(text(),'Файлы')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel x-noborder-trbl x-header-position-top x-panel-grey-background x-container-grey-background \")]//input[@class=\"x-input-el\"]")
+    private SelenideElement fieldFiles;
 
     @FindBy(xpath = "//*[contains (@onclick, 'author')]/../../../td[2]/div")
     private SelenideElement authorsField;
@@ -94,9 +99,6 @@ public class NewTaskFormElementsMobile {
 
     @FindBy(xpath = "//span[text()=\"Важная задача\"]")
     private SelenideElement importantTask;
-
-    @FindBy(xpath = "//div[@name=\"description\"]")
-    private SelenideElement Description;
 
 
     @FindBy(xpath = "//input[@name=\"iswithreport\"]/ancestor::div[@class=\"x-font-icon x-icon-el\"]")
@@ -157,13 +159,6 @@ public class NewTaskFormElementsMobile {
      */
     public SelenideElement getButtonNewProject() {
         return buttonNewProject;
-    }
-
-    /**
-     * Кнопка - Описание задачи
-     */
-    public SelenideElement getDescriptionTask() {
-        return descriptionTask;
     }
 
     /**
@@ -238,6 +233,15 @@ public class NewTaskFormElementsMobile {
         return TaskName;
     }
 
+
+    /**
+     * Поле - Описание задачи
+     */
+    public SelenideElement getDescriptionTask() {
+        return descriptionTask;
+    }
+
+
     /**
      * Номер задачи
      */
@@ -277,6 +281,17 @@ public class NewTaskFormElementsMobile {
      */
     public SelenideElement getFieldTaskType() {
         return fieldTaskType;
+    }
+
+
+    /**
+     * поле - Файлы
+     *
+     * @return
+     */
+
+    public SelenideElement getFieldFiles() {
+        return fieldFiles;
     }
 
     /**
@@ -328,12 +343,6 @@ public class NewTaskFormElementsMobile {
         return simpleTask;
     }
 
-    /**
-     * Вкладка - Описание
-     */
-    public SelenideElement getDescription() {
-        return Description;
-    }
 
 
     /**

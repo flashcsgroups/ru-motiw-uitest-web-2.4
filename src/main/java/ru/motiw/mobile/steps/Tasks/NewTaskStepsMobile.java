@@ -3,14 +3,9 @@ package ru.motiw.mobile.steps.Tasks;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.support.FindBy;
-import org.testng.Assert;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
 import ru.motiw.mobile.elements.Tasks.NewTaskFormElementsMobile;
-import ru.motiw.mobile.steps.InternalStepsMobile;
 import ru.motiw.mobile.steps.LoginStepsMobile;
 import ru.motiw.web.elements.elementspda.Task.TaskDescriptionStepsPDA;
 import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
@@ -21,11 +16,6 @@ import ru.motiw.web.steps.BaseSteps;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.page;
-import static com.codeborne.selenide.Selenide.sleep;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.TestCase.assertSame;
-import static junit.framework.TestCase.assertTrue;
 import static ru.motiw.mobile.model.URLMenuMobile.CREATE_TASK;
 import static ru.motiw.mobile.steps.BaseStepsMobile.openSectionOnURLMobile;
 
@@ -355,8 +345,103 @@ public class NewTaskStepsMobile extends BaseSteps {
 
 
 
+    NewTaskStepsMobile selectGroupTab(String nameOfGroup){
+        $(By.xpath("//div[contains(text(),'" + nameOfGroup + "')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
+        return this;
+    }
 
 
+    // Единный метод в котром описаны все поля , которые отображаются/НЕ отображаются после закрытия всех групп полей
+    NewTaskStepsMobile fieldsWhenGroupsCloset() {
+
+        //поля, которые отображаются после закрытия всех групп полей
+
+        newTaskFormElementsMobile.getTaskName().shouldBe(visible); // "Название"
+        newTaskFormElementsMobile.getDescriptionTask().shouldBe(visible); // Описание задачи - отображение и проверка значения поля после закрытия группы полей  "Название"
+        // Кому
+        $(By.xpath("(//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel x-noborder-trbl x-header-position-top x-panel-grey-background x-container-grey-background \")]//div[@class=\"x-input-el\"])[1]")).shouldBe(visible);
+        // TODO  xpath другой м.б написать - этот ищет все 4ре поля - хотя для других полей ведь тоже xpath одинаковые для раскрытого и закрытого поля. //span[contains(text(),'Ответственные руководители')]/../..//div[@class="x-input-el\ - не находит
+
+        newTaskFormElementsMobile.getEndField().shouldBe(visible); // Окончание
+        $(By.xpath("//input[@name=\"id_tasktype\"]")).shouldBe(visible); // Тип задачи
+
+        if ($(newTaskFormElementsMobile.getButtonCreateTask()).is(Condition.visible)) {
+             $(By.xpath("//input[@name=\"id_task_template\"] ")).shouldBe(visible); // Шаблон задачи в созданной задаче отсутствует
+         }
+
+
+        //поля, которые НЕ отображаются после закрытия всех групп полей
+
+        newTaskFormElementsMobile.getTaskNumber().shouldNotBe(visible);  //поле №
+        $(By.xpath("//span[text()='Проект']/../..//input")).shouldNotBe(visible);// - проект не должен отображаться ДО раскрытия группы полей
+
+
+        $(By.xpath("//span[contains(text(),'Авторы')]/../..//div[@class=\"x-input-el\"]")).shouldNotBe(visible);
+        $(By.xpath("//span[contains(text(),'Контролеры')]/../..//div[@class=\"x-input-el\"]")).shouldNotBe(visible);
+        $(By.xpath("//span[contains(text(),'Ответственные руководители')]/../..//div[@class=\"x-input-el\"]")).shouldNotBe(visible);
+        $(By.xpath("//span[contains(text(),'Исполнители')]/../..//div[@class=\"x-input-el\"]")).shouldNotBe(visible);
+
+
+        newTaskFormElementsMobile.getBeginField().shouldNotBe(visible); // Начало
+        newTaskFormElementsMobile.getPriority().shouldNotBe(visible); // Приоритет
+        newTaskFormElementsMobile.getFieldFiles().shouldNotBe(visible); //  поле - Файлы
+
+
+        newTaskFormElementsMobile.getCheckboxReportRequired().shouldNotBe(visible); // Признак - С Докладом
+        newTaskFormElementsMobile.getCheckboxIsSecret().shouldNotBe(visible); // признак - Секретная
+        newTaskFormElementsMobile.getCheckboxIsForReview().shouldNotBe(visible); // Признак - "Для ознакомления"
+
+
+        return this;
+    }
+
+    // Единный метод в котром описаны все поля , которые отображаются/НЕ отображаются после раскрытия всех групп полей
+    // Проверка на то, что вкладки открылись и все поля отображаются
+
+    NewTaskStepsMobile fieldsWhenGroupsOpen() {
+
+        //Методы для Разворачивания всех групп полей
+        selectGroupTab("Название");
+        selectGroupTab("Кому");
+        selectGroupTab("Срок");
+        selectGroupTab("Тип задачи");
+        selectGroupTab("Файлы");
+        selectGroupTab("Еще");
+
+
+
+        //Проверка
+        //$(By.xpath("//input[@name=\"id_task_template\"] ")).shouldBe(visible); // Шаблон задачи
+        newTaskFormElementsMobile.getTaskName().shouldBe(visible); // "Название"
+        newTaskFormElementsMobile.getDescriptionTask().shouldBe(visible); // Описание задачи
+        newTaskFormElementsMobile.getTaskNumber().shouldBe(visible);  //поле №
+        $(By.xpath("//span[text()='Проект']/../..//input")).shouldBe(visible);// - проект не должен отображаться ДО раскрытия группы полей
+
+        // TODO В ЕД.МЕТОД с подстановкой. xpath подойдет для других полей где div ?
+        $(By.xpath("//span[contains(text(),'Авторы')]/../..//div[@class=\"x-input-el\"]")).shouldBe(visible);
+        $(By.xpath("//span[contains(text(),'Контролеры')]/../..//div[@class=\"x-input-el\"]")).shouldBe(visible);
+        $(By.xpath("//span[contains(text(),'Ответственные руководители')]/../..//div[@class=\"x-input-el\"]")).shouldBe(visible);
+        $(By.xpath("//span[contains(text(),'Исполнители')]/../..//div[@class=\"x-input-el\"]")).shouldBe(visible);
+
+
+        newTaskFormElementsMobile.getBeginField().shouldBe(visible); // Начало
+        newTaskFormElementsMobile.getEndField().shouldBe(visible); // Окончание
+        newTaskFormElementsMobile.getPriority().shouldBe(visible); // Приоритет
+        $(By.xpath("//input[@name=\"id_tasktype\"]")).shouldBe(visible); // Тип задачи
+        newTaskFormElementsMobile.getFieldFiles().shouldBe(visible); //  поле - Файлы
+
+
+        newTaskFormElementsMobile.getCheckboxReportRequired().shouldBe(visible); // Признак - С Докладом
+        newTaskFormElementsMobile.getCheckboxIsSecret().shouldBe(visible); // признак - Секретная
+        newTaskFormElementsMobile.getCheckboxIsForReview().shouldBe(visible); // Признак - "Для ознакомления"
+
+        if ($(newTaskFormElementsMobile.getButtonCreateTask()).is(Condition.visible)) {
+            $(By.xpath("//input[@name=\"id_task_template\"] ")).shouldBe(visible); // Шаблон задачи в созданной задаче отсутствует
+        }
+
+
+        return this;
+    }
 
 
     /**
@@ -376,16 +461,17 @@ public class NewTaskStepsMobile extends BaseSteps {
 
     /**
      * Создание обычной задачи КОПИЯ МЕТОДА ДЛЯ WEB
-     *
      * @param task передаваемые атрибуты задачи
      */
     public NewTaskStepsMobile creatingTask(Task task) {
        ensurePageLoaded();
 
+
+
        // Разворачиваем  группу полей  "Название"
-        // TODO см. TaskStepsMobile verifyValueInInput  - тут xpath тоже повторяется для всех групп элемнтов. Нужно только подставлять текст названия группы полей
-        $(By.xpath("//div[contains(text(),'Название')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
-        //TODO Проверка на то, что вкладка открылась и все поля отображаются
+        selectGroupTab("Название");
+
+
 
        //Заполняем Название задачи
         setTaskName(task.getTaskName())
@@ -395,26 +481,21 @@ public class NewTaskStepsMobile extends BaseSteps {
         verifyValueInInput("Проект", "Главное подразделение: Задачи вне проектов");
 
         // Закрываем  группу полей  "Название"
+        selectGroupTab("Название");
 
-        $(By.xpath("//div[contains(text(),'Название')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
-        //TODO Проверка на то, что вкладка закрылась и все поля не отображаются
+
         verifyValueBeforeOpenGroupFields(task.getTaskName(), "taskname"); //Проверка поля названия при закрытой группы полей "Название"
 
         // Открываем  группу полей  "Срок"
-        $(By.xpath("//div[contains(text(),'Срок')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
-        //TODO Проверка на то, что вкладка открылась и все поля отображаются
+        selectGroupTab("Срок");
 
 
         //Заполняем Даты
-
         setDateBegin(task.getDateBegin())
                 .setDateEnd(task.getDateEnd());
 
         verifyValueInInput("Окончание", task.getDateEnd())
                 .verifyValueInInput("Начало", task.getDateBegin());
-
-
-        //rangeOfValuesF​romTheCheckbox(task.getIsImportant(), importantTask); // признак - Важная задача
 
         setImportance(task.getIsImportant()); // "Приоритет" - выбираем - Важная задача
 
@@ -424,16 +505,13 @@ public class NewTaskStepsMobile extends BaseSteps {
         */
 
         // Закрываем  группу полей  "Срок"
-        $(By.xpath("//div[contains(text(),'Срок')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
-        //TODO Проверка на то, что вкладка закрылась и все поля не отображаются
+        selectGroupTab("Срок");
         verifyValueBeforeOpenGroupFields(task.getDateEnd(), "enddate"); // Проверка поля -  Дата окончания - при закрытой группе полей  "Срок".
 
 
         verifyTaskTypeBeforeOpenGroupFields(task.getTaskType()); // Проверка поля -  Тип задачи - при закрытой группе полей "Тип задачи".
         // Открываем  группу полей  "Тип задачи"
-        $(By.xpath("//div[contains(text(),'Тип задачи')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
-        //TODO Проверка на то, что вкладка открылась и все поля отображаются
-
+        selectGroupTab("Тип задачи");
 
         setTaskType(task.getTaskType()); //Тип задачи
 
@@ -444,29 +522,24 @@ public class NewTaskStepsMobile extends BaseSteps {
 
 
         // Закрываем  группу полей  "Тип задачи"
-        $(By.xpath("//div[contains(text(),'Тип задачи')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
-        //TODO Проверка на то, что вкладка закрылась и все поля не отображаются
-
-
-
-
+        selectGroupTab("Тип задачи");
 
 
         // Открываем группу полей "Ещё"
-
-        $(By.xpath("//div[contains(text(),'Еще')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
-        //TODO Проверка на то, что вкладка открылась и все поля отображаются
-
-
+        selectGroupTab("Еще");
         newTaskFormElementsMobile.getReportRequired().shouldBe(selected); // Признак - С Докладом всегда по умолчанию должен быть выбран.
         rangeOfValuesFromTheCheckbox(task.getIsSecret(), newTaskFormElementsMobile.getCheckboxIsSecret()); // признак - Секретная
         rangeOfValuesFromTheCheckbox(task.getIsForReview(), newTaskFormElementsMobile.getCheckboxIsForReview()); // Признак - "Для ознакомления"
 
 
+        // Закрываем  группу полей "Ещё"
+        selectGroupTab("Еще");
 
 
-
-
+        // тест отображения полей при закрытых групп полей TODO Единный метод в котром описаны все поля , которые отображаются/НЕ отображаются после закрытия всех групп полей
+        fieldsWhenGroupsCloset();
+        fieldsWhenGroupsOpen();
+        //TODO  можно  verifyValueInInput в эти метода. Сами метода можно вынест в CreateTaskMobileTes после создания перед сохранением
 
 
        /*

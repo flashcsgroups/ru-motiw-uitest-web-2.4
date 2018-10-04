@@ -1,24 +1,14 @@
 package ru.motiw.mobile.steps.Tasks;
 
 import com.codeborne.selenide.CollectionCondition;
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
 import ru.motiw.mobile.elements.Tasks.TaskElementsMobile;
-import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
 import ru.motiw.web.model.Tasks.Task;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static junit.framework.TestCase.assertTrue;
-import static ru.motiw.utils.WindowsUtil.newWindowForm;
 
 public class TaskStepsMobile extends NewTaskStepsMobile {
 
@@ -143,7 +133,8 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
          * Проверка полей
          * //TODO наверное ещё нужно проверять после раскрытия группы полей "Название"
          */
-        $(By.xpath("//div[contains(text(),'Название')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();  // Открываем группу полей "Название"
+        //$(By.xpath("//div[contains(text(),'Название')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
+        selectGroupTab("Название"); //Открываем группу полей "Название"
         //TODO Проверка на то, что вкладка открылась и все поля отображаются. т.к значения считаывются через DOM сразу даже без отрытия вкладки.
 
 
@@ -159,7 +150,8 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
          * Закрываем группу полей "Название"
          * TODO Проверка на то, что вкладка закрылась и все поля не отображаются. т.к значения считаывются через DOM сразу даже без отрытия вкладки.
          */
-        $(By.xpath("//div[contains(text(),'Название')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
+        //$(By.xpath("//div[contains(text(),'Название')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
+        selectGroupTab("Название"); // Закрываем группу полей "Название"
 
         /*
          * Проверка даты окончания задачи
@@ -176,7 +168,8 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
          * Проверка даты начала и окончания задачи и приоритета
          */
 
-        $(By.xpath("//div[contains(text(),'Срок')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();  // Открываем вкладку "Срок"
+       // $(By.xpath("//div[contains(text(),'Срок')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
+        selectGroupTab("Срок"); // Открываем вкладку "Срок"
         //TODO Проверка на то, что вкладка открылась и все поля отображаются. т.к значения считаывются через DOM сразу даже без отрытия вкладки.
 
         /*
@@ -193,13 +186,14 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         assertTrue(verifyIsImportant(valueTask.getIsImportant())); // Приоритет
 
 
-        $(By.xpath("//div[contains(text(),'Срок')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();  // Закрываем вкладку "Срок"
+        //$(By.xpath("//div[contains(text(),'Срок')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
+        selectGroupTab("Срок"); // Закрываем вкладку "Срок"
         //TODO Проверка на то, что вкладка закрылась и все поля не отображаются. т.к значения считаывются через DOM сразу даже без отрытия вкладки.
 
 
         verifyTaskTypeBeforeOpenGroupFields(valueTask.getTaskType()); // Проверка поля -  Тип задачи - при закрытой группе полей "Тип задачи".
-        // Открываем  группу полей  "Тип задачи"
-        $(By.xpath("//div[contains(text(),'Тип задачи')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
+        selectGroupTab("Тип задачи"); // Открываем  группу полей  "Тип задачи"
+        //$(By.xpath("//div[contains(text(),'Тип задачи')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
         //TODO Проверка на то, что вкладка открылась и все поля отображаются
 
 
@@ -210,8 +204,8 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         verifyTaskType(valueTask.getTaskType());
 
 
-        // Закрываем  группу полей  "Тип задачи"
-        $(By.xpath("//div[contains(text(),'Тип задачи')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
+        selectGroupTab("Тип задачи"); // Закрываем  группу полей  "Тип задачи"
+        //$(By.xpath("//div[contains(text(),'Тип задачи')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
         //TODO Проверка на то, что вкладка закрылась и все поля не отображаются
 
 
@@ -222,7 +216,8 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
          */
 
 
-        $(By.xpath("//div[contains(text(),'Еще')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();  // Открываем вкладку "Еще"
+        //$(By.xpath("//div[contains(text(),'Еще')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
+        selectGroupTab("Еще"); // Открываем вкладку "Еще"
         //TODO Проверка на то, что вкладка открылась и все поля отображаются. т.к значения считаывются через DOM сразу даже без отрытия вкладки.
 
 
@@ -234,8 +229,12 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
 
 
 
-        $(By.xpath("//div[contains(text(),'Еще')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();  // Закрываем вкладку "Еще"
+        //$(By.xpath("//div[contains(text(),'Еще')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
+        selectGroupTab("Еще"); // Закрываем вкладку "Еще"
         //TODO Проверка на то, что вкладка закрылась и все поля не отображаются. т.к значения считаывются через DOM сразу даже без отрытия вкладки.
+
+        fieldsWhenGroupsCloset();
+        fieldsWhenGroupsOpen();
 
 
 

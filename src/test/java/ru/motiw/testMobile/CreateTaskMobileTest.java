@@ -8,31 +8,19 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import ru.motiw.data.dataproviders.Tasks;
 import ru.motiw.data.listeners.ScreenShotOnFailListener;
-import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
-import ru.motiw.mobile.steps.BaseStepsMobile;
 import ru.motiw.mobile.steps.InternalStepsMobile;
 import ru.motiw.mobile.steps.LoginStepsMobile;
 import ru.motiw.mobile.steps.Tasks.NewTaskStepsMobile;
 import ru.motiw.mobile.steps.Tasks.TaskStepsMobile;
-import ru.motiw.web.elements.elementspda.InternalStepsPDA;
-import ru.motiw.web.elements.elementspda.LoginStepsPDA;
-import ru.motiw.web.elements.elementspda.Task.NewTaskStepsPDA;
-import ru.motiw.web.elements.elementspda.Task.TaskActionsStepsPDA;
-import ru.motiw.web.elements.elementspda.Task.TaskDescriptionStepsPDA;
-import ru.motiw.web.elements.elementspda.Task.TasksReportsStepsPDA;
 import ru.motiw.web.model.Tasks.Folder;
 import ru.motiw.web.model.Tasks.Task;
-import ru.motiw.web.steps.BaseSteps;
-import ru.motiw.web.steps.Home.InternalSteps;
 import ru.motiw.web.steps.Login.LoginStepsSteps;
 import ru.motiw.web.steps.Tasks.UnionTasksSteps;
 
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.page;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.testng.Assert.assertTrue;
-import static ru.motiw.web.steps.Administration.SystemOptionsSteps.goToURLSystemOptionsPage;
-import static ru.motiw.web.steps.Tasks.UnionTasksSteps.goToUnionTasks;
 
 @Listeners({ScreenShotOnFailListener.class, TextReport.class})
 
@@ -124,6 +112,7 @@ public class CreateTaskMobileTest extends Tasks {
 
 
         newTaskStepsMobile.goToCreateOfNewTask().creatingTask(task).saveTask();
+
         //goToURLNewTask().creatingTask(task).saveTask();
         /*
         goToURLNewTask().creatingTask(task); //заполняем поле название
