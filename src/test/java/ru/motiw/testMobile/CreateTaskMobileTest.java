@@ -156,7 +156,7 @@ public class CreateTaskMobileTest extends Tasks {
     }
 
 
-    @Test(priority = 1, dataProvider = "objectDataTaskPDA",  dataProviderClass = Tasks.class)
+    @Test(priority = 2, dataProvider = "objectDataTaskPDA",  dataProviderClass = Tasks.class)
     public void checkEditingTaskPDA(Task task) throws Exception {
         refresh(); //чистим кеш, т.к остаются элементы
 
@@ -191,7 +191,7 @@ public class CreateTaskMobileTest extends Tasks {
         taskStepsMobile.verifyValueWhenGroupsOpen(task); //проверка введенных значений в полях при открытых группах полей
         */
         newTaskStepsMobile.saveTask()
-                .goToNewTaskViaToast();//Сохраняем задачу и переходим в созданную задачу через всплывающие уведомление - Toast
+                .goToNewTaskViaToast();//СоЛхраняем задачу и переходим в созданную задачу через всплывающие уведомление - Toast
 
 
         //----------------------------------------------------------------ФОРМА - Задачи
@@ -228,6 +228,36 @@ public class CreateTaskMobileTest extends Tasks {
         internalPagePDA.logout(); // Выход из системы
         assertTrue(loginPagePDA.isNotLoggedInPDA());
         */
+
+    }
+
+    @Test(priority = 1, dataProvider = "objectDataTaskPDA",  dataProviderClass = Tasks.class)
+    public void checkEditingTaskPDA1(Task task) throws Exception {
+
+        //ЭТО для теста
+        //Переход в мобильную версию по ссылке в форме авторизации
+        $(By.xpath("//a[@class=\"m_link\"]")).waitUntil(visible, 10000);
+        $(By.xpath("//a[@class=\"m_link\"]")).click();
+
+        loginPageElementsMobile.getLogin().waitUntil(Condition.visible, 20000);
+
+        ////
+
+
+
+        // Авторизация
+        loginStepsMobile.loginAs(ADMIN);
+        // Ожидание скрытия маски загрузки
+        loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.disappear, 10000);
+        // Ожидание кнопки Главного Меню
+        $(By.xpath("//div[@class=\"x-component x-button no-blue-alt x-has-icon x-icon-align-left x-arrow-align-right x-button-alt x-component-alt x-layout-box-item x-layout-hbox-item\"][1]")).waitUntil(Condition.visible, 10000);
+
+        open("/m/#task/74");
+
+        sleep(5000);
+        taskStepsMobile.verifyNumbersOfFiles(task);
+
+
 
     }
 

@@ -2,10 +2,12 @@ package ru.motiw.mobile.steps.Tasks;
 
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.FindBy;
+import org.testng.AssertJUnit;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
 import ru.motiw.mobile.elements.Login.LoginPageElementsMobile;
 import ru.motiw.mobile.elements.Tasks.NewTaskFormElementsMobile;
@@ -17,11 +19,13 @@ import ru.motiw.web.model.Tasks.Task;
 import ru.motiw.web.steps.BaseSteps;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 import static ru.motiw.mobile.model.URLMenuMobile.CREATE_TASK;
 import static ru.motiw.mobile.steps.BaseStepsMobile.openSectionOnURLMobile;
@@ -40,6 +44,7 @@ public class NewTaskStepsMobile extends BaseSteps {
     private InternalStepsMobile internalStepsMobile = page(InternalStepsMobile.class);
     private LoginPageElementsMobile loginPageElementsMobile = page(LoginPageElementsMobile.class);
 
+    File folder = new File(Configuration.reportsFolder);
 
 
     /*
@@ -532,6 +537,50 @@ public class NewTaskStepsMobile extends BaseSteps {
             }
         }
             return false;
+    }
+
+
+    /**
+     *
+     * @param nameFiles передаваемое Имя файла для удаления
+     */
+
+    public NewTaskStepsMobile deleteFiles(String nameFiles) {
+
+        // открывает панель кнопок для взаимодействия с файлами через drag and drop
+
+        return this;
+    }
+
+
+    /**
+     * Скачивание файла в форме ленты действий задачи
+     *
+     * @param nameFiles передаваемое Имя файла для скачивания
+     * @return TaskActionsStepsPDA форма задачи
+     * @throws IOException
+     */
+    public NewTaskStepsMobile downloadsFiles(String nameFiles) throws IOException {
+//        List<SelenideElement> elementsIndexing = new ArrayList<>();
+//        for (SelenideElement selenideElement : $$(By.xpath("ElementsCollection"))) {
+//            elementsIndexing.add(selenideElement);
+//        }
+//        for (int i = 0; i < elementsIndexing.size(); i++) {
+//            elementsIndexing.get(i).isImage();
+//        }
+
+//        File downloadedFile = $(By.xpath("//div[@class='message-files']//a[text()='"
+//                + nameFiles + "']/../a[1]")).download();
+
+        sleep(2000);
+        File downloadedFile =
+                $(By.xpath("//div[contains(@class,\"x-container x-component x-titlebar-right x-size-monitored\")]//a[@href]")).download();
+
+        // TODO downloadedFile.getName() возвращает  - UTF-8''. assertEquals не проходит сравнение. Почему?
+        assertEquals(nameFiles, downloadedFile.getName());
+        // assertEquals(nameFiles, readFileToString(downloadedFile, "UTF-8"));
+        AssertJUnit.assertTrue(downloadedFile.getAbsolutePath().startsWith(folder.getAbsolutePath()));
+        return this;
     }
 
     }

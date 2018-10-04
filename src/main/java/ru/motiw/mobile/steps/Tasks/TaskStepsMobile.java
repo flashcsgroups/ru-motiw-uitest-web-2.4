@@ -11,6 +11,7 @@ import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
 import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Tasks.Task;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -226,16 +227,14 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
     }
 
 
-    private void verifyNameOfAttachFiles(String[] nameOfFiles) {
+    private void verifyNameOfAttachedFiles(String[] nameOfFiles) {
 
         if (nameOfFiles != null)
             for (String nameOfFile : nameOfFiles) {
                 assertTrue(verifyNameFileInTheListFiles(nameOfFile));
 
             }
-        //todo  сейчас через этот xpath проверяется только первый файл в списке. Их добаляется 2-3. надо каждый проверять.
-        // вариант: в поле задачи файлы указать объект масиив Имен Файлов, а потом переберать из массива и в зависимости от кол-ва объектов в массиве кейсами проверять. в каждом кейсе указания xpath-ов
-       // $(By.xpath("//div[contains(@id,\"ext-simplelistitem\")]//div[@class=\"x-innerhtml\"]")).shouldHave(text(nameOfFiles)); //проверяем название файла
+
     }
 
 
@@ -408,7 +407,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         Assert.assertTrue(verifyIsImportant(task.getIsImportant())); // Приоритет
 
 
-        verifyNameOfAttachFiles(task.getFileName()); // Названия файлов в списке поля "Файлы"
+        verifyNameOfAttachedFiles(task.getFileName()); // Названия файлов в списке поля "Файлы"
 
         Assert.assertTrue(verifyCheckboxIsSelected(task.getIsWithReport(), newTaskFormElementsMobile.getReportRequired())); // Признак - С Докладом - по умолчанию выбран при создании задачи.
         Assert.assertTrue(verifyCheckboxIsSelected(task.getIsSecret(), newTaskFormElementsMobile.getIsSecret())); // Признак Секретная
@@ -528,12 +527,14 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
 
         if (task.getFileName() == null) {
             return this;
-        } else  {
+        } else {
+            openTab("Описание");
             selectGroupTab("Файлы"); // Открываем вкладку "Файлы"
 
             //считаем кол-во файлов - заносим в массив
             List<SelenideElement> nameFileInTheList = new ArrayList<>(newTaskFormElementsMobile.getListOfNameFiles());
             int numberOfFiles = nameFileInTheList.size();
+
 
             // сравниваем кол-во файлов с числом отображаемым в элементе-переключтеле файлов.
 
@@ -545,15 +546,40 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
             selectGroupTab("Файлы"); // Закрываем вкладку "Файлы"
 
             //проверка числа файлов в каруселе
+            openTab("Файлы");
             //Здесь можно добавлять файлы, напрмер, rtf -и сверять переключение и одновреенно отображение.
-            // Скачивание отдельным методом черезх кнопку в парвом углу.
-            // И счетчик чтобы изменялся в каруселе
 
-        }
+            // Скачивание отдельным методом через кнопку в парвом углу.
+
+            //надо передавать в цикле имена файлов из констанст,
+            // но как это сделать, если  эта проверка будет после редактирвоания задачи, а значит будет добавлен новый файл? итого = 3, а может 2 с учетом удаления.
+            // Как узнать конкретное кол-во файлов и их емен?
+            // самое простое gettext из каждого элемента массива  nameFileInTheList не получилось - возвращает пустое. м.б как-то иначе это сделать. все-таки тода полностю универльный метод получился бы проверки файлов.
+            //нужно где-то с передаваемым объектом task и edittask передавать итогое кол-во после редактирования.
+
+
+                try {
+                    downloadsFiles("");
+
+                } catch (IOException e) {
+                    return this;
+                }
+
+
+
+                // И счетчик чтобы изменялся в каруселе
+
+            }
+
 
 
 
         return this;
+    }
+
+    public void saveFile () {
+
+
     }
 
 

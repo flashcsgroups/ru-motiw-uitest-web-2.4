@@ -75,7 +75,7 @@ public class NewTaskFormElementsMobile {
     @FindBy(xpath = "//input[@type=\"file\"]")
     private SelenideElement inputFiles;
 
-    @FindBy(xpath = "//i[contains(@class,'file')]/ancestor::div[@class=\"x-list-outer-ct x-scroller\"]//div[@class=\"x-innerhtml\"]")
+    @FindBy(xpath = "//i[contains(@class,'file')]/ancestor::div[contains(@class,\"x-body-wrap-el x-panel-body-wrap-el x-container-body-wrap-el x-component-body-wrap-el \")]//div[@class=\"x-innerhtml\"]")
     private ElementsCollection listOfNameFiles;
 
     @FindBy(xpath = "(//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel\")]//div[@class=\"x-input-el\"])[1]")
