@@ -3,7 +3,11 @@ package ru.motiw.mobile.elements.Tasks;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
+
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 
 /**
  * Элементы формы создания задачи
@@ -252,6 +256,15 @@ public class NewTaskFormElementsMobile {
 
     public SelenideElement getFieldFiles() {
         return fieldFiles;
+    }
+
+
+    /**
+     * Набор элементов = кол-во пользователей в списке формы добавления пользователей
+     */
+
+    public ElementsCollection getListOfUsers(String componentId ) {
+        return $$(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(@data-componentid,\"ext-gridcell\")]"));
     }
 
     /**

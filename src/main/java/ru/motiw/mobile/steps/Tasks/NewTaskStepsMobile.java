@@ -1,7 +1,10 @@
 package ru.motiw.mobile.steps.Tasks;
 
+import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.sun.org.apache.xpath.internal.XPath;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
@@ -14,9 +17,7 @@ import ru.motiw.web.model.Tasks.Task;
 import ru.motiw.web.steps.BaseSteps;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.page;
-import static com.codeborne.selenide.Selenide.sleep;
+import static com.codeborne.selenide.Selenide.*;
 import static org.junit.Assert.assertTrue;
 import static ru.motiw.mobile.model.URLMenuMobile.CREATE_TASK;
 import static ru.motiw.mobile.steps.BaseStepsMobile.openSectionOnURLMobile;
@@ -105,8 +106,6 @@ public class NewTaskStepsMobile extends BaseSteps {
      */
     @FindBy(xpath = "//a [ancestor::span[@name='autor']]")
     private SelenideElement directorOfTheTask;
-
-
 
 
 
@@ -229,18 +228,16 @@ public class NewTaskStepsMobile extends BaseSteps {
             for (Employee employee : employees) {
                 $(By.xpath("//div[@data-componentid='" + componentId + "']//input")).setValue(employee.getLastName()); // вводим в поле ввода Фамилию пользователя
 
-                sleep(2000);//ожидание - нужно завязаться на что-то при обновлении списка, т.к список изменяется
-                //например, должна быть проверка на кол-во //div[contains(@data-componentid,\"ext-gridcell\")]")) size = 1 т.к точное совпадение
+                newTaskFormElementsMobile.getListOfUsers(componentId).shouldBe(CollectionCondition.size(1), 2000); //ожидание когда будет найден один пользователь
 
                 //выбор в списке
                 $(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(text(),'" + employee.getLastName() + "')]"))
                         .shouldBe(Condition.visible);
                 $(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(text(),'" + employee.getLastName() + "')]")).click();
-                sleep(2000);//ожидание - нужно завязаться на что-то при обновлении списка, т.к список изменяется
-                //например, должна быть проверка на кол-во //div[contains(@data-componentid,\"ext-gridcell\")]")) size > 1 т.к поиск по точному совпадению
+
+                newTaskFormElementsMobile.getListOfUsers(componentId).shouldBe(CollectionCondition.sizeGreaterThan(1), 2000); //ожидание когда загрузится список пользователй
 
                 $(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(@class,\"x-component x-button\")]")).click(); //кнопка "Назначить"
-                sleep(2000);
             }
         }
     }
