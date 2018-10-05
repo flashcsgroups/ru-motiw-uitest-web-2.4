@@ -153,7 +153,7 @@ public class NewTaskStepsMobile extends BaseSteps {
      * @param nameTasks name task for input
      * @return page NewTaskPag
      */
-    private NewTaskStepsMobile  setTaskName(String nameTasks) {
+    public NewTaskStepsMobile  setTaskName(String nameTasks) {
         newTaskFormElementsMobile.getTaskName().click();
         newTaskFormElementsMobile.getTaskName().setValue(nameTasks);
         return this;
@@ -165,7 +165,7 @@ public class NewTaskStepsMobile extends BaseSteps {
      * @param descriptionTasks description task for input
      * @return page NewTaskPag
      */
-    private NewTaskStepsMobile setTasksDescription(String descriptionTasks) {
+    public NewTaskStepsMobile setTasksDescription(String descriptionTasks) {
         //сейчас пишет, что return не используется нигде
             if (descriptionTasks == null) {
                 return this;
@@ -327,17 +327,6 @@ public class NewTaskStepsMobile extends BaseSteps {
     }
 
 
-    /**
-     * Просмотр (предсоздание задачи)
-     *
-     * @return
-     */
-    public TaskDescriptionStepsPDA goToPreview() {
-        view.click();
-        $(By.cssSelector("input[name='next3']")).waitUntil(Condition.appear, 4);
-        return page(TaskDescriptionStepsPDA.class);
-    }
-
     /*
     * Открытие группы полей на вкладке "Описание"
     * */
@@ -347,28 +336,11 @@ public class NewTaskStepsMobile extends BaseSteps {
 
 
     /**
-     * Создание новой задачи - КОПИЯ МЕТОДА ДЛЯ PDA
-     */
-    public void creatingTask2(Task task) {
-        setTaskName(task.getTaskName()) // Название задачи
-                .setTasksDescription(task.getDescription()); // Описание задачи
-        choiceUsersThroughTheSearchLiveSurname(task.getControllers(), inputFieldTaskSupervisors); // вводим - Контролеры задачи
-        choiceUsersThroughTheSearchLiveSurname(task.getExecutiveManagers(), inputFieldExecutiveManagers); // вводим - Ответственные руковдители
-        choiceUsersThroughTheSearchLiveSurname(task.getWorkers(), inputFieldPerformers); // вводим - Исполнители
-        rangeOfValuesFromTheCheckbox(task.getIsImportant(), importantTask); // признак - Важная задача
-        rangeOfValuesFromTheCheckbox(task.getIsWithReport(), reportRequired); // признак - С доклаом
-        rangeOfValuesFromTheCheckbox(task.getIsSecret(), privateTask); // признак - Секретная задача
-    }
-
-
-    /**
      * Создание обычной задачи КОПИЯ МЕТОДА ДЛЯ WEB
      * @param task передаваемые атрибуты задачи
      */
     public NewTaskStepsMobile creatingTask(Task task) {
        ensurePageLoaded();
-
-
 
        // Разворачиваем  группу полей  "Название"
         selectGroupTab("Название");

@@ -12,6 +12,7 @@ import ru.motiw.data.listeners.ScreenShotOnFailListener;
 import ru.motiw.mobile.steps.Folders.GridOfFoldersSteps;
 import ru.motiw.mobile.steps.InternalStepsMobile;
 import ru.motiw.mobile.steps.LoginStepsMobile;
+import ru.motiw.mobile.steps.Tasks.EditOfTaskMobile;
 import ru.motiw.mobile.steps.Tasks.NewTaskStepsMobile;
 import ru.motiw.mobile.steps.Tasks.TaskActionsStepsMobile;
 import ru.motiw.mobile.steps.Tasks.TaskStepsMobile;
@@ -44,6 +45,7 @@ public class CreateTaskMobileTest extends Tasks {
     private NewTaskStepsMobile newTaskStepsMobile;
     private GridOfFoldersSteps gridOfFoldersSteps;
     private TaskActionsStepsMobile taskActionsStepsMobile;
+    private EditOfTaskMobile editOfTaskMobile;
 
     @BeforeClass
     public void beforeTest() {
@@ -56,6 +58,7 @@ public class CreateTaskMobileTest extends Tasks {
         newTaskStepsMobile = page(NewTaskStepsMobile.class);
         gridOfFoldersSteps = page(GridOfFoldersSteps.class);
         taskActionsStepsMobile = page(TaskActionsStepsMobile.class);
+        editOfTaskMobile = page(EditOfTaskMobile.class);
     }
 
 
@@ -66,7 +69,7 @@ public class CreateTaskMobileTest extends Tasks {
     Folder[] folder = getRandomArrayFolders();
 
 
-    @Test(priority = 1, dataProvider = "objectDataTask", dataProviderClass = Tasks.class)
+    @Test(priority = 5, dataProvider = "objectDataTask", dataProviderClass = Tasks.class)
     public void aPreconditionForFurtherVerification(Department department, Employee[] author, Employee[] resppers, Employee[] controller, Employee[] worker,
                                                     Employee[] IWGWorker, Employee[] IWGResppers, Employee[] IWGСontroller, Task task) {
         loginPageSteps.loginAs(ADMIN);
@@ -101,7 +104,7 @@ public class CreateTaskMobileTest extends Tasks {
     }
 
 
-    @Test(priority = 2, dataProvider = "objectDataTaskPDA", dataProviderClass = Tasks.class)
+    @Test(priority = 4, dataProvider = "objectDataTaskPDA", dataProviderClass = Tasks.class)
     public void verifyCreateTaskMobile(Task task) throws Exception {
 
 
@@ -165,6 +168,17 @@ public class CreateTaskMobileTest extends Tasks {
     public void checkEditingTaskPDA(Task task) throws Exception {
         refresh(); //чистим кеш, т.к остаются элементы
 
+        //для теста
+        //Переход в мобильную версию по ссылке в форме авторизации
+        $(By.xpath("//a[@class=\"m_link\"]")).waitUntil(visible, 10000);
+        $(By.xpath("//a[@class=\"m_link\"]")).click();
+
+        $(By.xpath("//span[contains(text(),'Имя')]//ancestor::div[1]//input")).waitUntil(Condition.visible, 10000);
+
+        ////
+
+
+
         // Авторизация
         loginStepsMobile.loginAs(ADMIN);
         // Ожидание скрытия маски загрузки
@@ -178,10 +192,12 @@ public class CreateTaskMobileTest extends Tasks {
 
 //----------------------------------------------------------------ФОРМА - создания Задачи
         newTaskStepsMobile.goToCreateOfNewTask().creatingTask(task);
+       /* Проверялось в предыдущем тесте
         taskStepsMobile.fieldsWhenGroupsClosed(); //проверка наличия полей при закрытых группах полей
         taskStepsMobile.fieldsWhenGroupsOpen();//проверка наличия полей при открытых группах полей
         taskStepsMobile.verifyValueWhenGroupsClosed(task); //проверка введенных значений в полях при закрытых группах полей
         taskStepsMobile.verifyValueWhenGroupsOpen(task); //проверка введенных значений в полях при открытых группах полей
+        */
         newTaskStepsMobile.saveTask();
 
         //Ждем пока исчезнит маска загрузки
@@ -199,14 +215,20 @@ public class CreateTaskMobileTest extends Tasks {
 
         //----------------------------------------------------------------ФОРМА - Задачи
         // Проверяем отображение значений в форме созданой задачи
-        taskStepsMobile.verifyCreateTask(task);
+        //taskStepsMobile.verifyCreateTask(task);
+        refresh();
 
+        taskStepsMobile.verifyMenuOfTask(); // Ожидание и проверка элементов меню
 
         // добавляем пользовательский текст в задачу и проверяем его сохранение
         //Переходим на вкладку "Действия"
-        $(By.xpath("//div[text()=\"Действия\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")).click();
-        taskActionsStepsMobile.saveActionsInTheTape(randomString(15));
+        $(By.xpath("//div[text()=\"Действия\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")).waitUntil(visible, 10000).click();
+        taskActionsStepsMobile.verifyAddActionsInTheTape(randomString(15));
+        // редактируем атрибуты задачи
+        editOfTaskMobile.editOfTask(task); //todo надо посмотреть происходит заполение значениями нового объекта task? и при проверке verifyCreateTask(task) что происходит
 
+        //Проверка всех отредактированных полей, добавленных действий после перезагрузки страницы
+        taskStepsMobile.verifyCreateTask(task);
 
         /*
 

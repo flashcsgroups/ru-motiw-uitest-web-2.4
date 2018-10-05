@@ -1,6 +1,7 @@
 package ru.motiw.mobile.steps.Tasks;
 
 
+import com.codeborne.selenide.Condition;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -17,22 +18,19 @@ public class TaskActionsStepsMobile {
      *
      * @param textAction input text for feed action tasks
      */
-    public TaskActionsStepsMobile saveActionsInTheTape(String textAction) {
+    public TaskActionsStepsMobile verifyAddActionsInTheTape(String textAction) {
 
-        $(By.xpath("//div[text()=\"Добавить действие\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")).click();
-        sleep(500);
-        $(By.xpath("//textarea")).setValue(textAction);
-        $(By.xpath("//div[text()=\"Сохранить\"]//ancestor::div[contains(@class,\"x-component x-button x-has-text\")]")).click();
-        sleep(5000);
-        /*
-        //несколько действий ?
-        int n = 5;
+
+        int n = 2;
         while (n > 0) {
-            action.setValue(textAction);
-            save.click();
-            $(By.xpath("//ul[@class='ui-listview']//div/span[text()='" + textAction + "']")).shouldBe(Condition.visible);
+            $(By.xpath("//div[text()=\"Добавить действие\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")).click();
+            sleep(500);
+            $(By.xpath("//textarea")).setValue(textAction);//todo текст сйечас одинаковый, нужны разные..
+            $(By.xpath("//div[text()=\"Сохранить\"]//ancestor::div[contains(@class,\"x-component x-button x-has-text\")]")).click();
+            $(By.xpath("//div[contains(@id,\"ext-actionlist-item\")]//div[text()='" + textAction + "']")).waitUntil(Condition.visible, 5000);
             n--;
-        }*/
+        }
+
         return this;
     }
 }
