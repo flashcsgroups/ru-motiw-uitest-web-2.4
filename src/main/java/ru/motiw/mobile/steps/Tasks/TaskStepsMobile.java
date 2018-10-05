@@ -112,8 +112,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
      * @param fieldCustomRole выбираемая роль в задаче (Исполнители, Контролеры, Авторы и ОР)
      */
 
-    private void verifyUserOnTheRole(Employee[] employees, SelenideElement fieldCustomRole) {
-
+    private void verifyUserInFieldOfRole(Employee[] employees, SelenideElement fieldCustomRole) {
 
         if (employees != null) {
             for (Employee employee : employees) {
@@ -123,7 +122,27 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
 
     }
 
+    /**
+     * Проверка пользователей в формах добавления
+     * @param employees       передаваемые пользователи
+     * @param componentId т.к после каждого открытия формы выбора пользователей она остается в DOM, то приходится передавать componentId
+     * componentId = ext-selectdialog-{порядковый номер открытой формы}
+     */
 
+    private void verifyUserInFormOfRole(Employee[] employees, String componentId) {
+        if (employees != null) {
+            for (Employee employee : employees) {
+                //проверка того, что элемент ПЕРВОГО пользователя в списке - выделен т.е выбран в роль
+                $(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(@class,\"x-first x-selected\")]//div[contains(text(),'" + employee.getLastName() + "')]")).shouldBe(visible);
+                newTaskFormElementsMobile.getButtonAppointUsers(componentId).click(); //кнопка "Назначить"
+
+                //проверка того, что элемент ВТОРОГО пользователя в списке - выделен т.е выбран в роль.
+                //Для выделенных элементов ВТОРОГО и след. пользователей в списке class в div-е отличается от ПЕРВОГО пользователя в списке
+
+            }
+        }
+
+    }
 
 
     /*
@@ -267,23 +286,28 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
 
         verifyValueInInput("Проект", "Главное подразделение: Задачи вне проектов");
 
-        /*
-        todo Кому
-        Проверка в форме выбора пользователей?  Нужно проверять выделенные объекты в гриде пользователй. Возможно ли?
-        примерно так: используем openFormSelectUser, а затем по подобию метода авбора пользователй из грида choiceUserOnTheRole делаем проверку
-        */
-
-        //openFormSelectUser(fieldCustomRole, componentId);
-        //$(By.xpath("//div[@data-componentid='ext-selectdialog-1']//div[contains(text(),'admin')]//ancestor::div[contains(@class,\"x-listitem x-gridrow x-component x-listitem-multi-select\")]//div[contains(@class,'x-body-el x-checkcell-body-el')]")).shouldBe(visible);
-        // не получаеся. м.б придется просто в поле проверять значения
-
         //Проверка пользователей в полях раб.группы
-        verifyUserOnTheRole(task.getAuthors(), newTaskFormElementsMobile.getAuthorsField()); // - Авторы задачи
-        verifyUserOnTheRole(task.getControllers(), newTaskFormElementsMobile.getСontrollersField()); //- Контролеры задачи
-        verifyUserOnTheRole(task.getExecutiveManagers(), newTaskFormElementsMobile.getResponsiblesField()); // - Ответственные руковдители
-        verifyUserOnTheRole(task.getWorkers(), newTaskFormElementsMobile.getWorkersField()); // - Исполнители задачи
+        verifyUserInFieldOfRole(task.getAuthors(), newTaskFormElementsMobile.getAuthorsField()); // - Авторы задачи
+        verifyUserInFieldOfRole(task.getControllers(), newTaskFormElementsMobile.getСontrollersField()); //- Контролеры задачи
+        verifyUserInFieldOfRole(task.getExecutiveManagers(), newTaskFormElementsMobile.getResponsiblesField()); // - Ответственные руковдители
+        verifyUserInFieldOfRole(task.getWorkers(), newTaskFormElementsMobile.getWorkersField()); // - Исполнители задачи
 
 
+        //Проверка выбранных пользователей в форме выбора "Контролеры задачи"
+        openFormSelectUser(newTaskFormElementsMobile.getAuthorsField(), "ext-selectdialog-1");
+        verifyUserInFormOfRole(task.getAuthors(),"ext-selectdialog-1");
+
+        //Проверка выбранных пользователей в форме выбора "Контролеры задачи"
+        openFormSelectUser(newTaskFormElementsMobile.getСontrollersField(), "ext-selectdialog-2");
+        verifyUserInFormOfRole(task.getControllers(),"ext-selectdialog-2");
+
+        //Проверка выбранных пользователей в форме выбора "Ответственные руководители"
+        openFormSelectUser(newTaskFormElementsMobile.getResponsiblesField(), "ext-selectdialog-3");
+        verifyUserInFormOfRole(task.getExecutiveManagers(), "ext-selectdialog-3");
+
+        //Проверка выбранных пользователей в форме выбора "Исполнители задачи"
+        openFormSelectUser(newTaskFormElementsMobile.getWorkersField(),"ext-selectdialog-4");
+        verifyUserInFormOfRole(task.getWorkers(), "ext-selectdialog-4");
 
 
         verifyValueInInput("Окончание", task.getDateEnd());

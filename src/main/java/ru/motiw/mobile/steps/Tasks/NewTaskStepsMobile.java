@@ -236,6 +236,24 @@ public class NewTaskStepsMobile extends BaseSteps {
         }
     }
 
+    /**
+     * Текущий пользователь должен быть добавлен по умолчанию в роль "Автор" задачи
+     * @param employees       передаваемые пользователи
+     * @param fieldCustomRole выбираемая роль в задаче (Исполнители, Авторы и ОР)
+     * @param componentId т.к после каждого открытия формы выбора пользователей она остается в DOM, то приходится передавать componentId
+     * componentId = ext-selectdialog-{порядковый номер открытой формы}
+     */
+
+    void currentUserSelectedInTheRoleAuthor(Employee[] employees, SelenideElement fieldCustomRole, String componentId) {
+        openFormSelectUser(fieldCustomRole, componentId);
+        if (employees != null) {
+            for (Employee employee : employees) {
+                //проверка того, что элемент ПЕРВОГО пользователя в списке - выделен т.е выбран в роль
+                $(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(@class,\"x-first x-selected\")]//div[contains(text(),'" + employee.getLastName() + "')]")).shouldBe(visible);
+                newTaskFormElementsMobile.getButtonAppointUsers(componentId).click(); //кнопка "Назначить", чтобы выйти из формы
+            }
+        }
+    }
 
 
     /**
@@ -365,10 +383,10 @@ public class NewTaskStepsMobile extends BaseSteps {
 
 
         // выбор пользователя по ФИО - через searchlive
-
-        choiceUserOnTheRole(task.getControllers(), newTaskFormElementsMobile.getСontrollersField(), "ext-selectdialog-1"); // вводим - Контролеры задачи
-        choiceUserOnTheRole(task.getExecutiveManagers(), newTaskFormElementsMobile.getResponsiblesField(), "ext-selectdialog-2"); // вводим - Ответственные руковдители
-        choiceUserOnTheRole(task.getWorkers(), newTaskFormElementsMobile.getWorkersField(),"ext-selectdialog-3"); // вводим - Исполнители задачи
+        currentUserSelectedInTheRoleAuthor(task.getAuthors(), newTaskFormElementsMobile.getAuthorsField(), "ext-selectdialog-1"); // - по умолчанию Автор задачи текущий пользователь (admin)
+        choiceUserOnTheRole(task.getControllers(), newTaskFormElementsMobile.getСontrollersField(), "ext-selectdialog-2"); // вводим - Контролеры задачи
+        choiceUserOnTheRole(task.getExecutiveManagers(), newTaskFormElementsMobile.getResponsiblesField(), "ext-selectdialog-3"); // вводим - Ответственные руководители
+        choiceUserOnTheRole(task.getWorkers(), newTaskFormElementsMobile.getWorkersField(),"ext-selectdialog-4"); // вводим - Исполнители задачи
 
 
         // Закрываем  группу полей  "Кому"
