@@ -398,7 +398,7 @@ public class NewTaskStepsMobile extends BaseSteps {
     // Единный метод в котром описаны все поля , которые отображаются/НЕ отображаются после раскрытия всех групп полей
     // Проверка на то, что вкладки открылись и все поля отображаются
 
-    NewTaskStepsMobile fieldsWhenGroupsOpen() {
+    NewTaskStepsMobile fieldsWhenGroupsOpen(Task task) {
 
         //Методы для Разворачивания всех групп полей
         selectGroupTab("Название");
@@ -440,6 +440,23 @@ public class NewTaskStepsMobile extends BaseSteps {
         }
 
 
+        //Все проверки из verifyValueInInput
+
+
+
+        verifyTaskType(task.getTaskType()); // Проверка установленного Типа задачи
+
+
+
+
+
+        //Закрываем все групп полей
+        selectGroupTab("Название");
+        selectGroupTab("Кому");
+        selectGroupTab("Срок");
+        selectGroupTab("Тип задачи");
+        selectGroupTab("Файлы");
+        selectGroupTab("Еще");
         return this;
     }
 
@@ -509,7 +526,7 @@ public class NewTaskStepsMobile extends BaseSteps {
         verifyValueBeforeOpenGroupFields(task.getDateEnd(), "enddate"); // Проверка поля -  Дата окончания - при закрытой группе полей  "Срок".
 
 
-        verifyTaskTypeBeforeOpenGroupFields(task.getTaskType()); // Проверка поля -  Тип задачи - при закрытой группе полей "Тип задачи".
+        $(By.xpath("//div[contains(@id,\"object\")]//input[@name='taskname']")).shouldNotBe(empty);//Проверка поля названия при закрытой группы полей "Название" - проверяет что, поле не пустое, т.к должно быть значение по умолчанию.
         // Открываем  группу полей  "Тип задачи"
         selectGroupTab("Тип задачи");
 
@@ -538,7 +555,7 @@ public class NewTaskStepsMobile extends BaseSteps {
 
         // тест отображения полей при закрытых групп полей TODO Единный метод в котром описаны все поля , которые отображаются/НЕ отображаются после закрытия всех групп полей
         fieldsWhenGroupsCloset();
-        fieldsWhenGroupsOpen();
+        fieldsWhenGroupsOpen(task);
         //TODO  можно  verifyValueInInput в эти метода. Сами метода можно вынест в CreateTaskMobileTes после создания перед сохранением
 
 

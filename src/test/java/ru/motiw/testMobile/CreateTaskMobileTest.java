@@ -113,6 +113,7 @@ public class CreateTaskMobileTest extends Tasks {
 
         newTaskStepsMobile.goToCreateOfNewTask().creatingTask(task).saveTask();
 
+
         //goToURLNewTask().creatingTask(task).saveTask();
         /*
         goToURLNewTask().creatingTask(task); //заполняем поле название
@@ -130,8 +131,6 @@ public class CreateTaskMobileTest extends Tasks {
         //Переходим по ссылке в появившемся toast
         $(By.xpath("//div[contains(@class,'x-toast x-sheet x-panel')]//a")).click();
 
-        //$(By.xpath("//div[@class=\"x-component x-title x-title-align-left x-layout-box-item x-layout-hbox-item x-flexed\"]/div[contains(text(),'123')]")).shouldBe(visible); // проверка заголовка с названием задачи
-        //$(By.xpath("//div[text()='123']")).shouldBe(visible); // ok passed too
 
         taskStepsMobile.verifyCreateTask(task);
 
