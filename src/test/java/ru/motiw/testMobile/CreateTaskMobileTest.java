@@ -255,7 +255,7 @@ public class CreateTaskMobileTest extends Tasks {
         open("/m/#task/74");
 
         sleep(5000);
-        taskStepsMobile.verifyNumbersOfFiles(task);
+        taskStepsMobile.verifyNumbersOfFiles(editTask);
 
 
 

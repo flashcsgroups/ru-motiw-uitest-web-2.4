@@ -25,7 +25,6 @@ import java.util.List;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
-import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 import static ru.motiw.mobile.model.URLMenuMobile.CREATE_TASK;
 import static ru.motiw.mobile.steps.BaseStepsMobile.openSectionOnURLMobile;
@@ -560,27 +559,39 @@ public class NewTaskStepsMobile extends BaseSteps {
      * @return TaskActionsStepsPDA форма задачи
      * @throws IOException
      */
-    public NewTaskStepsMobile downloadsFiles(String nameFiles) throws IOException {
-//        List<SelenideElement> elementsIndexing = new ArrayList<>();
-//        for (SelenideElement selenideElement : $$(By.xpath("ElementsCollection"))) {
-//            elementsIndexing.add(selenideElement);
-//        }
-//        for (int i = 0; i < elementsIndexing.size(); i++) {
-//            elementsIndexing.get(i).isImage();
-//        }
-
-//        File downloadedFile = $(By.xpath("//div[@class='message-files']//a[text()='"
-//                + nameFiles + "']/../a[1]")).download();
+    public NewTaskStepsMobile downloadsFiles(String[] nameFiles, int numberOfFiles) throws IOException {
 
         sleep(2000);
-        File downloadedFile =
-                $(By.xpath("//div[contains(@class,\"x-container x-component x-titlebar-right x-size-monitored\")]//a[@href]")).download();
 
-        // TODO downloadedFile.getName() возвращает  - UTF-8''. assertEquals не проходит сравнение. Почему?
-        assertEquals(nameFiles, downloadedFile.getName());
-        // assertEquals(nameFiles, readFileToString(downloadedFile, "UTF-8"));
-        AssertJUnit.assertTrue(downloadedFile.getAbsolutePath().startsWith(folder.getAbsolutePath()));
+        for (int i = 0; i < numberOfFiles; i++) {
+            File downloadedFile =
+                    $(By.xpath("//div[contains(@class,\"x-container x-component x-titlebar-right x-size-monitored\")]//a[@href]")).download();
+
+            assertTrue(verifyNameOfDownloadedFile(downloadedFile.getName(), nameFiles));
+            // TODO downloadedFile.getName() возвращает  - UTF-8''. assertEquals не проходит сравнение. Почему?
+            //assertEquals(nameFiles, downloadedFile.getName());
+            // assertEquals(nameFiles, readFileToString(downloadedFile, "UTF-8"));
+            AssertJUnit.assertTrue(downloadedFile.getAbsolutePath().startsWith(folder.getAbsolutePath()));
+            $(By.xpath("//div[@class=\"x-icon-el x-font-icon x-mi mi-chevron-right\"]/ancestor::div[contains(@id,\"ext-filesnavigationbtn\")]")).click(); //переходим к следующему файлу в карусели
+        }
         return this;
+    }
+
+    /**
+     * Сравнение имени скаченного файла с набором названий файлов прикрепляемых к документу
+     * @param nameOfDownloadedFile имя скаченного файла
+     * @param nameFiles набор названий файлов прикрепляемых к документу
+     */
+
+    private boolean verifyNameOfDownloadedFile(String nameOfDownloadedFile, String[] nameFiles) {
+
+        for(String nameFile : nameFiles) {
+            if(nameOfDownloadedFile.equals(nameFile)){
+                return true;
+            }
+        }
+        return false;
+
     }
 
     }

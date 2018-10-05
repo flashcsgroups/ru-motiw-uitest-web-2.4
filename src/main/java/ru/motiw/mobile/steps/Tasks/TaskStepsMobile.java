@@ -559,7 +559,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
 
 
                 try {
-                    downloadsFiles("");
+                    downloadsFiles(task.getFileName(), numberOfFiles);
 
                 } catch (IOException e) {
                     return this;
