@@ -29,6 +29,7 @@ import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.clearBrowserCache;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testng.AssertJUnit.assertTrue;
+import static ru.motiw.web.steps.BaseSteps.openSectionOnURL;
 import static ru.motiw.web.steps.Tasks.UnionTasksSteps.goToUnionTasks;
 
 @Listeners({ScreenShotOnFailListener.class, TextReport.class})
@@ -164,7 +165,7 @@ public class CreateTaskMobileTest extends Tasks {
     }
 
 
-    @Test(priority = 3, dataProvider = "objectDataTaskPDA", dataProviderClass = Tasks.class)
+    @Test(priority = 3, dataProvider = "objectDataTaskPDA",  dataProviderClass = Tasks.class)
     public void checkEditingTaskPDA(Task task) throws Exception {
         refresh(); //чистим кеш, т.к остаются элементы
 
@@ -225,7 +226,7 @@ public class CreateTaskMobileTest extends Tasks {
         $(By.xpath("//div[text()=\"Действия\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")).waitUntil(visible, 10000).click();
         taskActionsStepsMobile.verifyAddActionsInTheTape(randomString(15));
         // редактируем атрибуты задачи
-        editOfTaskMobile.editOfTask(editTask); //происходит заполение значениями нового объекта editTask, но при verifyCreateTask проверка описания не проходит.
+        editOfTaskMobile.editOfTask(editTask);
 
         //Проверка всех отредактированных полей, добавленных действий после перезагрузки страницы
         taskStepsMobile.verifyCreateTask(editTask);
@@ -250,6 +251,8 @@ public class CreateTaskMobileTest extends Tasks {
         */
 
     }
+
+
 
 
 /*

@@ -22,15 +22,17 @@ public abstract class Tasks extends BaseTest {
     public Task getRandomObjectTask() {
         return new Task()
                 .setTaskName(randomString(15) + " " + randomString(30))
-                .setDescription(randomString(10));  // для Описания АРМа пока в одну строку
-          /*      .setDateEnd(tomorrowDate())
-                // Важная задача
-                .setIsImportant(randomBoolean())
-                // Секретная задача
-                .setIsSecret(randomBoolean())
-                // C докладом
-                .setIsWithReport(randomBoolean());
-        */
+                .setDescription(randomString(100))  // для Описания АРМа пока в одну строку
+                .setDateEnd(tomorrowDateWithoutTime())
+                .setIsImportant(true) // Важная задача
+                .setAuthors(new Employee[]{EMPLOYEE_ADMIN})
+                .setControllers(new Employee[]{EMPLOYEE_ADMIN})
+                .setExecutiveManagers(new Employee[]{EMPLOYEE_ADMIN})
+                .setWorkers(new Employee[]{EMPLOYEE_ADMIN})
+                .setTaskType(new TasksTypes("Обычный"))
+                .setIsSecret(true) // Секретная задача
+                .setIsWithReport(false) // C докладом
+                .setIsForReview(true); // Только для озакомления
     }
 
 

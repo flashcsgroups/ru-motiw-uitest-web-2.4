@@ -18,6 +18,7 @@ import ru.motiw.web.steps.BaseSteps;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.page;
+import static com.codeborne.selenide.Selenide.sleep;
 import static ru.motiw.mobile.model.URLMenuMobile.CREATE_TASK;
 import static ru.motiw.mobile.steps.BaseStepsMobile.openSectionOnURLMobile;
 
@@ -169,8 +170,10 @@ public class NewTaskStepsMobile extends BaseSteps {
         //сейчас пишет, что return не используется нигде
             if (descriptionTasks == null) {
                 return this;
-            } else {
+            }
+            else {
                 newTaskFormElementsMobile.getDescriptionTask().click();
+                newTaskFormElementsMobile.getDescriptionTask().clear();
                 newTaskFormElementsMobile.getDescriptionTask().setValue(descriptionTasks);
             }
         return this;
@@ -180,7 +183,7 @@ public class NewTaskStepsMobile extends BaseSteps {
     /**
      * Ввод даты начала
      */
-    private NewTaskStepsMobile setDateBegin(String begin) {
+    public NewTaskStepsMobile setDateBegin(String begin) {
         if (begin == null) {
             return this;
         } else {
@@ -193,7 +196,7 @@ public class NewTaskStepsMobile extends BaseSteps {
     /**
      * Ввод даты окончания задачи
      */
-    private NewTaskStepsMobile setDateEnd(String end) {
+    public NewTaskStepsMobile setDateEnd(String end) {
         if (end == null) {
             return this;
         } else {
@@ -287,8 +290,30 @@ public class NewTaskStepsMobile extends BaseSteps {
      * @param inputCheckbox    совершить действие (снять/установить настройку)
      */
 
-    private void rangeOfValuesFromTheCheckbox(boolean stateOfCheckbox, SelenideElement inputCheckbox) {
+    public void rangeOfValuesFromTheCheckbox(boolean stateOfCheckbox, SelenideElement inputCheckbox) {
         if (stateOfCheckbox){
+            inputCheckbox.click();
+        } else if ($(inputCheckbox).is(selected)) {
+            inputCheckbox.click();
+        }
+    }
+
+
+
+    /**
+     * Выбор булевой настройки в форме задачи в зависимости от состояния чекбокса.
+     * Например, признак "Важная задача", "Секретная задача", "С докладом"
+     *
+     * @param stateOfCheckbox состояние установленной настройки
+     * @param inputCheckbox    совершить действие (снять/установить настройку)
+     * @param stateInputOfCheckbox  элемент для проверки состояния чекбокса (снят/установлен)
+     */
+
+    public void rangeOfValuesFromTheCheckbox(boolean stateOfCheckbox, SelenideElement inputCheckbox, SelenideElement stateInputOfCheckbox) {
+        if (stateOfCheckbox){
+            inputCheckbox.click();
+        } else if ($(stateInputOfCheckbox).is(selected)) //если stateOfCheckbox не true, а чекбокс уже установлен, то снимаем.
+        {
             inputCheckbox.click();
         }
     }
