@@ -34,7 +34,7 @@ public abstract class BaseTest {
         setDriverByName("chrome");
         /*VideoRecorder.conf()
                 .withVideoFolder("build/reports/video");*/
-        Configuration.baseUrl = http + "172.22.244.49";
+        Configuration.baseUrl = http + "192.168.1.5";
         Configuration.timeout = 8000;
         TextReport.onSucceededTest = true;
         TextReport.onFailedTest = true;
@@ -319,9 +319,11 @@ public abstract class BaseTest {
     // GET DATE & TIME IN ANY FORMAT
 
     public static final String DATE_FORMAT_NOW = "dd.MM.yyyy HH:mm:ss";
+    public static final String TIME_FORMAT_HOUR_NOW = "HH";
     public static final String DATE_FORMAT_WITHOUT_TIME = "dd.MM.yyyy";
     public static final Calendar cal = Calendar.getInstance();
     public static final SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
+    public static final SimpleDateFormat timeFormatWithoutDate = new SimpleDateFormat(TIME_FORMAT_HOUR_NOW);
     public static final SimpleDateFormat dateFormatWithoutTime = new SimpleDateFormat(DATE_FORMAT_WITHOUT_TIME);
 
     /**
@@ -330,6 +332,14 @@ public abstract class BaseTest {
     public static String nowDate() {
         return sdf.format(cal.getTime());
     }
+
+    /**
+     * Метод создания даты равной сейчас (Текущее время в формате HH)
+     */
+    public static String nowHourTime() {
+        return timeFormatWithoutDate.format(cal.getTime());
+    }
+
 
     /**
      * Метод создания даты равной завтра

@@ -39,14 +39,13 @@ public abstract class Tasks extends BaseTest {
 
 
     /**
-     * Метод создания полностью случайного объекта - "Действие"
+     * Метод создания полностью случайного массива объектов - "Действие"
      */
     public static Action[] getRandomArrayAction() {
         return new Action[]{
                 new Action(),
                 getRandomAction(),
                 getRandomAction(),
-
         };
     }
 
@@ -56,7 +55,7 @@ public abstract class Tasks extends BaseTest {
      */
     public static Action getRandomAction() {
         return new Action()
-                        .setActionText(randomString(10));
+                        .setActionText(randomString(10) + "" + nowDate());
     }
 
 

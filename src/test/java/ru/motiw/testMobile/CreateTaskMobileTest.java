@@ -228,8 +228,11 @@ public class CreateTaskMobileTest extends Tasks {
         //Переходим на вкладку "Действия"
         //taskStepsMobile.openTab("Действия");
         taskActionsStepsMobile.postAction(new Action[] {
-                actions[0].setActionText(randomString(12)),
-                actions[1].setActionText(randomString(12)),
+                actions[0]
+                        .setActionText(randomString(12))
+                        .setTimeOfAddAction(nowHourTime()),
+                actions[1].setActionText(randomString(12))
+                          .setTimeOfAddAction(nowHourTime()),
 
         });
         //анонимный класс, вместо этого можно наверное и в клсс с методом можно вынести. Только   Action[] actions = getRandomArrayAction(); не получилось в TaskActionsStepsMobile иницилизировать
@@ -242,8 +245,8 @@ public class CreateTaskMobileTest extends Tasks {
         //Проверка всех отредактированных полей, добавленных действий после перезагрузки страницы
         taskStepsMobile.verifyCreateTask(editTask);
 
-        taskActionsStepsMobile.checkNewActions(actions[0]);
-        taskActionsStepsMobile.checkNewActions(actions[1]);
+        taskActionsStepsMobile.checkNewActions(actions[0], EMPLOYEE_ADMIN);
+        taskActionsStepsMobile.checkNewActions(actions[1], EMPLOYEE_ADMIN);
 
         /*
 

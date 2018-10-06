@@ -3,11 +3,15 @@ package ru.motiw.mobile.steps.Tasks;
 
 import com.codeborne.selenide.Condition;
 import org.openqa.selenium.By;
+import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Tasks.Action;
 import ru.motiw.web.model.Tasks.Task;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.sleep;
+
+
+
 
 
 
@@ -32,6 +36,7 @@ public class TaskActionsStepsMobile extends TaskStepsMobile {
                 $(By.xpath("//textarea")).setValue(action.getActionText());//
                 $(By.xpath("//div[text()=\"Сохранить\"]//ancestor::div[contains(@class,\"x-component x-button x-has-text\")]")).click();
                 verifyDisplayAddedActions(action.getActionText()); //  Проверяем отображение добавлого текста в ленту действий
+
             }
         }
     }
@@ -40,9 +45,9 @@ public class TaskActionsStepsMobile extends TaskStepsMobile {
     /**
      * Проверяем отображение созданного Действия
      */
-    public void checkNewActions(Action actions) {
+    public void checkNewActions(Action actions, Employee user) {
         openTab("Действия"); //Переходим на вкладку "Действия"
-        verifyDisplayAddedActions(actions.getActionText()); // Проверяем созданные Действия
+        verifyDisplayAddedActions(actions.getActionText(), user, actions.getTimeOfAddAction()); // Проверяем созданные Действия
     }
 
 
@@ -62,8 +67,32 @@ public class TaskActionsStepsMobile extends TaskStepsMobile {
      */
     public TaskActionsStepsMobile verifyDisplayAddedActions (String action){
 
-        $(By.xpath("//div[contains(@id,\"ext-actionlist-item\")]//div[text()='" + action  + "']")).waitUntil(Condition.visible, 5000);
+        $(By.xpath("//div[contains(@id,\"ext-actionlist-item\")]//div[text()='" + action  + "']")).waitUntil(Condition.visible, 10000);
+        //Проверка что в действии есть имя пользователя
 
+        //Дата добавления действия
+
+        //Фото
+
+        return this;
+    }
+
+    /**
+     * Проверяем отображение добавлого текста в ленту действий
+     * @param user пользователь добавивший действие
+     */
+    public TaskActionsStepsMobile verifyDisplayAddedActions (String action, Employee user, String timeOfAddAction){
+
+        $(By.xpath("//div[contains(@id,\"ext-actionlist-item\")]div[@class=\"action-list-item-text\"]")).waitUntil(Condition.visible, 10000).shouldHave(Condition.exactText(action));
+
+        //Проверка что в действии есть имя пользователя
+        $(By.xpath("//div[contains(@id,\"ext-actionlist-item\")]//div[text()='" + action  + "']//ancestor::div[@class=\"action-list-item  \"]//div[@class=\"action-list-item-name\"]")).shouldHave(Condition.exactText(user.getLastName()));
+
+        //Дата добавления действия
+        $(By.xpath("//div[contains(@id,\"ext-actionlist-item\")]//div[text()='" + action  + "']//ancestor::div[@class=\"action-list-item  \"]//div[@class=\"small-text\"]")).shouldHave(Condition.text("Сегодня" + " " + timeOfAddAction));
+
+        //Фото
+        $(By.xpath("//div[contains(@id,\"ext-actionlist-item\")]//div[text()='" + action  + "']//ancestor::div[@class=\"action-list-item  \"]//div[@class=\"action-list-item-photo\"]")).shouldBe(Condition.visible);
         return this;
     }
     }
