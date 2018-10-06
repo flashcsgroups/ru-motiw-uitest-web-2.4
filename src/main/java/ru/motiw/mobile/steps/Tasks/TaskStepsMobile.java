@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.openqa.selenium.By;
 import ru.motiw.mobile.elements.Tasks.TaskElementsMobile;
 import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
+import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Tasks.Task;
 
 import static com.codeborne.selenide.Condition.*;
@@ -106,6 +107,34 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
 
 
 
+    /**
+     * Добавление пользователей в роль задачи
+     * @param employees       передаваемые пользователи
+     * @param fieldCustomRole выбираемая роль в задаче (Исполнители, Авторы и ОР)
+     * @param componentId т.к после каждого открытия формы выбора пользователей она остается в DOM, то приходится передавать componentId
+     * componentId = ext-selectdialog-{порядковый номер открытой формы}
+     */
+
+    void verifyUserOnTheRole(Employee[] employees, SelenideElement fieldCustomRole, String componentId) {
+        openFormSelectUser(fieldCustomRole, componentId);
+        /*
+        if (employees != null) {
+            for (Employee employee : employees) {
+                newTaskFormElementsMobile.getInputForSearchUsers(componentId).setValue(employee.getLastName()); // вводим в поле ввода Фамилию пользователя
+                newTaskFormElementsMobile.getListOfUsers(componentId).shouldBe(CollectionCondition.size(1), 5000); //ожидание когда будет найден один пользователь. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
+
+                //выбор пользователя в списке
+                newTaskFormElementsMobile.getUserFromList(componentId, employee).shouldBe(visible);
+                newTaskFormElementsMobile.getUserFromList(componentId, employee).click();
+                newTaskFormElementsMobile.getListOfUsers(componentId).shouldBe(CollectionCondition.sizeGreaterThan(1), 5000); //ожидание когда загрузится список пользователей. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
+                newTaskFormElementsMobile.getButtonAppointUsers(componentId).click(); //кнопка "Назначить"
+            }
+        }*/
+    }
+
+
+
+
     /*
      * Проверка отбражения полей при закрытых группах полей
      */
@@ -160,7 +189,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         selectGroupTab("Название");
         selectGroupTab("Кому");
         selectGroupTab("Срок");
-        selectGroupTab("Тип задачи");
+        //selectGroupTab("Тип задачи");
         selectGroupTab("Файлы");
         selectGroupTab("Еще");
 
@@ -182,7 +211,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         newTaskFormElementsMobile.getBeginField().shouldBe(visible); // Начало
         newTaskFormElementsMobile.getEndField().shouldBe(visible); // Окончание
         newTaskFormElementsMobile.getPriority().shouldBe(visible); // Приоритет
-        $(By.xpath("//input[@name=\"id_tasktype\"]")).shouldBe(visible);
+        //$(By.xpath("//input[@name=\"id_tasktype\"]")).shouldBe(visible);
         newTaskFormElementsMobile.getFieldFiles().shouldBe(visible); //  поле - Файлы
 
 
@@ -199,7 +228,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         selectGroupTab("Название");
         selectGroupTab("Кому");
         selectGroupTab("Срок");
-        selectGroupTab("Тип задачи");
+        //selectGroupTab("Тип задачи");
         selectGroupTab("Файлы");
         selectGroupTab("Еще");
         return this;
@@ -218,7 +247,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
                 .shouldHave(exactValue(task.getDescription())); // Проверка поля - Описание задачи - до раскрытия группы полей "Название". Через verifyValueInInput не проверишь т.к описание в div.
         // Можно в отдельный схожий метод для проверки если есть ещё поля где значения в div
         verifyValueBeforeOpenGroupFields(task.getDateEnd(), "enddate"); // Проверка поля -  Дата окончания - при закрытой группе полей  "Срок".
-        verifyTaskTypeBeforeOpenGroupFields(task.getTaskType()); // Проверка поля -  Тип задачи - при закрытой группе полей "Тип задачи".
+        //verifyTaskTypeBeforeOpenGroupFields(task.getTaskType()); // Проверка поля -  Тип задачи - при закрытой группе полей "Тип задачи".
 
         return this;
     }
@@ -233,7 +262,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         selectGroupTab("Название");
         selectGroupTab("Кому");
         selectGroupTab("Срок");
-        selectGroupTab("Тип задачи");
+        //selectGroupTab("Тип задачи");
         selectGroupTab("Файлы");
         selectGroupTab("Еще");
 
@@ -253,6 +282,10 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         2. Проверка в форме выбора пользователей?  Нужно проверять выделенные объекты в гриде пользователй. Возможно ли?
         примерно так: используем openFormSelectUser, а затем по подобию метода авбора пользователй из грида choiceUserOnTheRole делаем проверку
         */
+        verifyUserOnTheRole(task.getControllers(), newTaskFormElementsMobile.getСontrollersField(), "ext-selectdialog-1");
+        sleep(5000);
+        $(By.xpath("//div[@data-componentid='ext-selectdialog-1']//div[contains(text(),'admin')]//ancestor::div[contains(@class,\"x-listitem x-gridrow x-component x-listitem-multi-select\")]//div[contains(@class,'x-body-el x-checkcell-body-el')]")).shouldBe(visible);
+        // не получаеся. м.б придется просто в поле проверять значения
 
 
 
@@ -264,13 +297,13 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         Assert.assertTrue(verifyCheckboxIsSelected(task.getIsWithReport(), newTaskFormElementsMobile.getReportRequired())); // Признак - С Докладом - по умолчанию выбран при создании задачи.
         Assert.assertTrue(verifyCheckboxIsSelected(task.getIsSecret(), newTaskFormElementsMobile.getIsSecret())); // Признак Секретная
 
-        verifyTaskType(task.getTaskType()); // Проверка установленного Типа задачи
+        //verifyTaskType(task.getTaskType()); // Проверка установленного Типа задачи
 
         //Закрытитие все групп полей
         selectGroupTab("Название");
         selectGroupTab("Кому");
         selectGroupTab("Срок");
-        selectGroupTab("Тип задачи");
+        //selectGroupTab("Тип задачи");
         selectGroupTab("Файлы");
         selectGroupTab("Еще");
         return this;

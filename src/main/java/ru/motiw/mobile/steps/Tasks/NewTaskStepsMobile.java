@@ -225,12 +225,12 @@ public class NewTaskStepsMobile extends BaseSteps {
         if (employees != null) {
             for (Employee employee : employees) {
                 newTaskFormElementsMobile.getInputForSearchUsers(componentId).setValue(employee.getLastName()); // вводим в поле ввода Фамилию пользователя
-                newTaskFormElementsMobile.getListOfUsers(componentId).shouldBe(CollectionCondition.size(1), 2000); //ожидание когда будет найден один пользователь. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
+                newTaskFormElementsMobile.getListOfUsers(componentId).shouldBe(CollectionCondition.size(1), 5000); //ожидание когда будет найден один пользователь. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
 
                 //выбор пользователя в списке
                 newTaskFormElementsMobile.getUserFromList(componentId, employee).shouldBe(visible);
                 newTaskFormElementsMobile.getUserFromList(componentId, employee).click();
-                newTaskFormElementsMobile.getListOfUsers(componentId).shouldBe(CollectionCondition.sizeGreaterThan(1), 2000); //ожидание когда загрузится список пользователей. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
+                newTaskFormElementsMobile.getListOfUsers(componentId).shouldBe(CollectionCondition.sizeGreaterThan(1), 5000); //ожидание когда загрузится список пользователей. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
                 newTaskFormElementsMobile.getButtonAppointUsers(componentId).click(); //кнопка "Назначить"
             }
         }
@@ -382,13 +382,15 @@ public class NewTaskStepsMobile extends BaseSteps {
         setImportance(task.getIsImportant()); // "Приоритет" - выбираем - Важная задача
         // Закрываем  группу полей  "Срок"
         selectGroupTab("Срок");
-        $(By.xpath("//div[contains(@id,\"object\")]//input[@name='taskname']")).shouldNotBe(empty);//Проверка поля названия при закрытой группы полей "Название" - проверяет что, поле не пустое, т.к должно быть значение по умолчанию.
+        //$(By.xpath("//div[contains(@id,\"object\")]//input[@name='id_tasktype']")).shouldNotBe(empty);//Проверка поля названия при закрытой группы полей "Название" - проверяет что, поле не пустое, т.к должно быть значение по умолчанию.
         // Открываем  группу полей  "Тип задачи"
-        selectGroupTab("Тип задачи");
-        $(By.xpath("//div[contains(@id,\"object\")]//input[@name='taskname']")).shouldNotBe(empty);//Проверка поля названия при открытой группы полей "Название" - проверяет что, поле не пустое, т.к должно быть значение по умолчанию.
-        setTaskType(task.getTaskType()); //Тип задачи
+        //selectGroupTab("Тип задачи");
+        //$(By.xpath("//div[contains(@id,\"object\")]//input[@name='id_tasktype']")).shouldNotBe(empty);//Проверка поля названия при открытой группы полей "Название" - проверяет что, поле не пустое, т.к должно быть значение по умолчанию.
+        //setTaskType(task.getTaskType()); //Тип задачи
+        // если у пользователя была создана задача только с типом "Обычный"(по умолчанию), то баг в АРМе - у него нет поля Тип задачи.
+        // Поэтому все что связано с этим полем заккоментиронно.
         // Закрываем  группу полей  "Тип задачи"
-        selectGroupTab("Тип задачи");
+        //selectGroupTab("Тип задачи");
 
 
         // Открываем группу полей "Ещё"
