@@ -48,6 +48,9 @@ public class TaskElementsMobile {
     @FindBy(xpath = "//div[contains(@class,\"x-body-el x-toolbar-body-el x-container-body-el x-component-body-el x-layout-box x-align-center x-pack-start x-layout-vbox x-vertical x-size-monitored x-paint-monitored x-toolbar-side-toolbar-body-el\")]//hr[@class=\"hr-toolbar-class\"]")
     private SelenideElement elementAmongButtonsOfMenu;
 
+    @FindBy(xpath = "//div[@class=\"x-component x-label x-layout-box-item x-layout-vbox-item counter-label\"]/div[@class=\"x-innerhtml\"]")
+    private SelenideElement numbersOnElementCounterFiles;
+
     /**
      * Все элементы меню
      * @return элементы меню форме задачи
@@ -143,6 +146,13 @@ public class TaskElementsMobile {
      */
     public SelenideElement getElementAmongButtonsOfMenu() {
         return elementAmongButtonsOfMenu;
+    }
+
+    /**
+     * Цифры на Элементе-счетчике кол-ва файлов в задаче
+     */
+    public SelenideElement getNumbersOnElementCounterFiles() {
+        return numbersOnElementCounterFiles;
     }
 
 }

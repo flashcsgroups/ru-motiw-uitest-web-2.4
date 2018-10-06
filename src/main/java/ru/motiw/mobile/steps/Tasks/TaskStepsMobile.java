@@ -11,6 +11,9 @@ import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
 import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Tasks.Task;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static org.testng.Assert.assertTrue;
@@ -471,7 +474,12 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         selectGroupTab("Еще"); // Закрываем вкладку "Еще"
 
 
-
+        /*
+         * Открываем вкладку "Файлы"
+         * Проверка того, чтобы кол-во файлов в элементе с-переключателе файлов соответствовало числу файлов содержашихся в задаче
+         * проверка числа файлов в каруселе
+         */
+         verifyNumbersOfFiles(valueTask);
 
 
 
@@ -508,6 +516,40 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         closeWindow();
         getWebDriver().switchTo().window(parentWindowHandler);  // Switch back to parent window
         */
+
+
+
+        return this;
+    }
+
+    public TaskStepsMobile verifyNumbersOfFiles(Task task) {
+
+        //TODO надо подумать как сделать этот метод более универсальным. Чтобы его можно было использовать в любом тесте
+
+        if (task.getFileName() == null) {
+            return this;
+        } else  {
+            selectGroupTab("Файлы"); // Открываем вкладку "Файлы"
+
+            //считаем кол-во файлов - заносим в массив
+            List<SelenideElement> nameFileInTheList = new ArrayList<>(newTaskFormElementsMobile.getListOfNameFiles());
+            int numberOfFiles = nameFileInTheList.size();
+
+            // сравниваем кол-во файлов с числом отображаемым в элементе-переключтеле файлов.
+
+            //это можно наверное, в отдельный метод. На вход передавать только numberOfFiles.
+            // Можно использовать для какого-нибудь теста, где прсто будут добавляться и удаляться файлы,
+            // и парралельно сверяться этим методо кол-во в счетчике.
+            taskElementsMobile.getNumbersOnElementCounterFiles().shouldHave(text("1 / " + numberOfFiles));
+
+            selectGroupTab("Файлы"); // Закрываем вкладку "Файлы"
+
+            //проверка числа файлов в каруселе
+            //Здесь можно добавлять файлы, напрмер, rtf -и сверять переключение и одновреенно отображение.
+            // Скачивание отдельным методом черезх кнопку в парвом углу.
+            // И счетчик чтобы изменялся в каруселе
+
+        }
 
 
 
