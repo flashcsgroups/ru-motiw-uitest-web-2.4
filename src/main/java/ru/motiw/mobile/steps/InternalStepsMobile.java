@@ -18,6 +18,7 @@ import static com.codeborne.selenide.Condition.appears;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static org.testng.Assert.assertTrue;
 
 /*
  * Импорт для использования методов самого Selenium, в т.ч. объект WebDriver.
@@ -31,6 +32,17 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 public class InternalStepsMobile extends BaseSteps {
 
     private InternalElementsMobile internalElementsMobile = page(InternalElementsMobile.class);
+    private LoginStepsMobile loginStepsMobile = page(LoginStepsMobile.class);
+
+    /**
+     * Открываем главное меню
+     *
+     * @return results internal page instance
+     */
+    public InternalStepsMobile goToInternalMenu() {
+        internalElementsMobile.getButtonMainMenu().click();
+        return page(InternalStepsMobile.class);
+    }
 
     /*
      * Ссылки на все пункты меню
@@ -103,7 +115,7 @@ public class InternalStepsMobile extends BaseSteps {
      * Домой (возврат на основную стр-цу)
      */
     public BaseSteps goToHome() {
-        home.click();
+        internalElementsMobile.getButtonGoHome().click();
         return this;
     }
 
@@ -201,18 +213,9 @@ public class InternalStepsMobile extends BaseSteps {
      * Универсальный выход из системы (где бы ненаходился пользователь)
      */
     public void logout() {
-        try {
-            (new WebDriverWait(getWebDriver(), 0, 50))
-                    .until(ExpectedConditions.presenceOfElementLocated(By
-                            .xpath("//a[contains(@href, '/logout/')]"))).click();
-        } catch (WebDriverException e) {
-            goToHome();
-            logout.waitUntil(appears, 4);
-            logout.click();
-        }
-        $("#center>form>div>img").shouldBe(visible);
-        $(By.cssSelector("#login")).shouldHave(appears);
-        $(By.cssSelector("#pass")).shouldHave(appears);
-        $(By.cssSelector("input[name='logon']")).getCssValue("Вход");
+            goToHome(); // Переходим в папки
+            goToInternalMenu(); // Открываем главное меню
+            internalElementsMobile.getLogout().click(); // Выход
+            assertTrue(loginStepsMobile.isNotLoggedInMobile());// Проверяем то, что мы разлогинены
     }
 }

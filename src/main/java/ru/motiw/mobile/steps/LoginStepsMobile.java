@@ -66,15 +66,6 @@ public class LoginStepsMobile extends BaseSteps {
         return this;
     }
 
-    /**
-     * Проверяем отображение меню на внутренней странице
-     *
-     * @return results internal page instance
-     */
-    public InternalStepsMobile goToInternalMenu() {
-        internalElementsMobile.getButtonMainMenu().click();
-        return page(InternalStepsMobile.class);
-    }
 
     /**
      * Проверяем то, что мы разлогинены - ПДА-интерфейс

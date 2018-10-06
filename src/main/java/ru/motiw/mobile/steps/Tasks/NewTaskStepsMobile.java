@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
 import ru.motiw.mobile.elements.Tasks.NewTaskFormElementsMobile;
+import ru.motiw.mobile.steps.InternalStepsMobile;
 import ru.motiw.mobile.steps.LoginStepsMobile;
 import ru.motiw.web.elements.elementspda.Task.TaskDescriptionStepsPDA;
 import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
@@ -31,6 +32,7 @@ public class NewTaskStepsMobile extends BaseSteps {
     NewTaskFormElementsMobile newTaskFormElementsMobile = page(NewTaskFormElementsMobile.class);
     private InternalElementsMobile internalElementsMobile = page(InternalElementsMobile.class);
     private LoginStepsMobile loginStepsMobile = page(LoginStepsMobile.class);
+    private InternalStepsMobile internalStepsMobile = page(InternalStepsMobile.class);
 
 
     /*
@@ -126,7 +128,7 @@ public class NewTaskStepsMobile extends BaseSteps {
     public  NewTaskStepsMobile goToCreateOfNewTask() {
         //Если Меню не открыто - открываем его перед тем, как перейти в форму создания задачи
         if ($(internalElementsMobile.getCreateTaskMobile()).is(Condition.disappear)) {
-            loginStepsMobile.goToInternalMenu();
+            internalStepsMobile.goToInternalMenu();
             internalElementsMobile.getCreateTaskMobile().click();
         } else {
             internalElementsMobile.getCreateTaskMobile().click();
@@ -228,8 +230,7 @@ public class NewTaskStepsMobile extends BaseSteps {
                 newTaskFormElementsMobile.getListOfUsers(componentId).shouldBe(CollectionCondition.size(1), 5000); //ожидание когда будет найден один пользователь. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
 
                 //выбор пользователя в списке
-                newTaskFormElementsMobile.getUserFromList(componentId, employee).shouldBe(visible);
-                newTaskFormElementsMobile.getUserFromList(componentId, employee).click();
+                newTaskFormElementsMobile.getUserFromList(componentId, employee).shouldBe(visible).click();
                 newTaskFormElementsMobile.getListOfUsers(componentId).shouldBe(CollectionCondition.sizeGreaterThan(1), 5000); //ожидание когда загрузится список пользователей. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
                 newTaskFormElementsMobile.getButtonAppointUsers(componentId).click(); //кнопка "Назначить"
             }
@@ -237,14 +238,14 @@ public class NewTaskStepsMobile extends BaseSteps {
     }
 
     /**
-     * Текущий пользователь должен быть добавлен по умолчанию в роль "Автор" задачи
+     * Проверка того, что текущий пользователь добавлен по умолчанию в роль задачи
      * @param employees       передаваемые пользователи
      * @param fieldCustomRole выбираемая роль в задаче (Исполнители, Авторы и ОР)
      * @param componentId т.к после каждого открытия формы выбора пользователей она остается в DOM, то приходится передавать componentId
      * componentId = ext-selectdialog-{порядковый номер открытой формы}
      */
 
-    void currentUserSelectedInTheRoleAuthor(Employee[] employees, SelenideElement fieldCustomRole, String componentId) {
+    void currentUserSelectedInTheRole(Employee[] employees, SelenideElement fieldCustomRole, String componentId) {
         openFormSelectUser(fieldCustomRole, componentId);
         if (employees != null) {
             for (Employee employee : employees) {
@@ -383,7 +384,7 @@ public class NewTaskStepsMobile extends BaseSteps {
 
 
         // выбор пользователя по ФИО - через searchlive
-        currentUserSelectedInTheRoleAuthor(task.getAuthors(), newTaskFormElementsMobile.getAuthorsField(), "ext-selectdialog-1"); // - по умолчанию Автор задачи текущий пользователь (admin)
+        currentUserSelectedInTheRole(task.getAuthors(), newTaskFormElementsMobile.getAuthorsField(), "ext-selectdialog-1"); // - по умолчанию Автор задачи текущий пользователь (admin)
         choiceUserOnTheRole(task.getControllers(), newTaskFormElementsMobile.getСontrollersField(), "ext-selectdialog-2"); // вводим - Контролеры задачи
         choiceUserOnTheRole(task.getExecutiveManagers(), newTaskFormElementsMobile.getResponsiblesField(), "ext-selectdialog-3"); // вводим - Ответственные руководители
         choiceUserOnTheRole(task.getWorkers(), newTaskFormElementsMobile.getWorkersField(),"ext-selectdialog-4"); // вводим - Исполнители задачи

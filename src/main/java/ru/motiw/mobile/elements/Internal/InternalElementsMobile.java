@@ -26,9 +26,22 @@ public class InternalElementsMobile extends BaseSteps {
     private ElementsCollection menuElements;
 
     /*
+     * Кнопка "Домой"
+     */
+    @FindBy(xpath = "(//div[@class=\"x-component x-button noselect x-has-icon x-icon-align-left x-arrow-align-right x-button-raised x-component-raised x-button-alt x-component-alt x-button-round x-component-round x-layout-box-item x-layout-hbox-item\"])[2]")
+    private SelenideElement buttonGoHome;
+
+    /*
+     * Кнопка "Назад"
+     */
+    @FindBy(xpath = "(//div[@class=\"x-component x-button noselect x-has-icon x-icon-align-left x-arrow-align-right x-button-raised x-component-raised x-button-alt x-component-alt x-button-round x-component-round x-layout-box-item x-layout-hbox-item\"])[1]")
+    private SelenideElement buttonGoBack;
+
+
+    /*
      * Выход из системы
      */
-    @FindBy(xpath = "//a[contains(@href, '/logout/')]")
+    @FindBy(xpath = "//div[contains(text(),'Выход')]/ancestor::div[contains(@class,\"x-component x-button\")]")
     private SelenideElement logout;
 
     /*
@@ -87,9 +100,24 @@ public class InternalElementsMobile extends BaseSteps {
         return buttonMainMenu;
     }
 
+
+    public SelenideElement getButtonGoHome() {
+        return buttonGoHome;
+    }
+
+    public SelenideElement getButtonGoBack() {
+        return buttonGoBack;
+    }
+
+
     public SelenideElement getCreateTaskMobile() {return createTask;}
 
-
+    /*
+     * Выход из системы
+     */
+    public SelenideElement getLogout() {
+        return logout;
+    }
 
 
 
