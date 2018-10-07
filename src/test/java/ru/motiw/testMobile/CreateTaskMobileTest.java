@@ -2,6 +2,7 @@ package ru.motiw.testMobile;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.testng.TextReport;
+import com.codeborne.selenide.testng.annotations.Report;
 import org.openqa.selenium.By;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
@@ -23,7 +24,7 @@ import static com.codeborne.selenide.Selenide.page;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @Listeners({ScreenShotOnFailListener.class, TextReport.class})
-
+@Report
 public class CreateTaskMobileTest extends Tasks {
 
 
@@ -111,7 +112,12 @@ public class CreateTaskMobileTest extends Tasks {
         /*NewTaskStepsPDA newTaskPagePDA = internalPageMobile.goToCreateTask();*/
 
 
-        newTaskStepsMobile.goToCreateOfNewTask().creatingTask(task).saveTask();
+        newTaskStepsMobile.goToCreateOfNewTask().creatingTask(task);
+        taskStepsMobile.fieldsWhenGroupsClosed(); //проверка наличия полей при закрытых группах полей
+        taskStepsMobile.fieldsWhenGroupsOpen();//проверка наличия полей при открытых группах полей
+        taskStepsMobile.verifyValueWhenGroupsClosed(task); //проверка введенных значений в полях при закрытых группах полей
+        taskStepsMobile.verifyValueWhenGroupsOpen(task); //проверка введенных значений в полях при открытых группах полей
+        newTaskStepsMobile.saveTask();
 
 
         //goToURLNewTask().creatingTask(task).saveTask();
@@ -133,10 +139,6 @@ public class CreateTaskMobileTest extends Tasks {
 
 
         taskStepsMobile.verifyCreateTask(task);
-
-
-
-
 
 
         //----------------------------------------------------------------ФОРМА - создания Задачи

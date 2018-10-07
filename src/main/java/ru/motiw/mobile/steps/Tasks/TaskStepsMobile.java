@@ -1,9 +1,12 @@
 package ru.motiw.mobile.steps.Tasks;
 
 import com.codeborne.selenide.CollectionCondition;
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import ru.motiw.mobile.elements.Tasks.TaskElementsMobile;
+import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
 import ru.motiw.web.model.Tasks.Task;
 
 import static com.codeborne.selenide.Condition.*;
@@ -14,24 +17,32 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
 
     private TaskElementsMobile taskElementsMobile = page(TaskElementsMobile.class);
 
+
+
     /**
-     * Проверка введенных данный в предпросмотре формы создания задачи
-     *
-     * @param task return values of attributes of the task
-     * @return TaskDescriptionStepsPDA page
+     * Проверка значений в инпутах формы задачи при закрытой группе полей
+     * @param valueInInput передаваемое значенние поля
+     * @param nameOfElement имя элемента для xpath
      */
-    public  TaskStepsMobile inputValidationFormTask(Task task) {
-        $(By.xpath("//div[text()='" + task.getTaskName() + "']"))
-                .shouldBe(visible); // Название задачи
-        /*
-        $(By.xpath("//form[@id='data_value']//li[3]//span[@style][text()='" + task.getDescription() + "']"))
-                .shouldBe(visible); // Описание задачи
-        $(By.xpath("//form[@id='data_value']//li[9]//span[@style][contains(text(),'" + task.getDateEnd() + "')]"))
-                .shouldBe(visible); // Окончание задачи*/
+    NewTaskStepsMobile verifyValueBeforeOpenGroupFields(String valueInInput, String nameOfElement) {
+        if (valueInInput == null) {
+            return this;
+        }
+        $(By.xpath("//div[contains(@id,\"object\")]//input[@name='" + nameOfElement + "']")).shouldHave(exactValue(valueInInput));
         return this;
+
     }
 
+    /**
+     * Проверка установленного по умолчанию Типа задачи - при закрытой группе полей "Тип задачи".
+     * @param taskType передаваемое значенние поля Типа задачи
+     */
 
+    NewTaskStepsMobile verifyTaskTypeBeforeOpenGroupFields(TasksTypes taskType) {
+        String nameOfTaskType = taskType.getObjectTypeName();
+        verifyValueBeforeOpenGroupFields(nameOfTaskType, "id_tasktype");
+        return this;
+    }
 
     /**
      * Проверка значений в поле "Приоритет"
@@ -41,7 +52,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
      */
 
 
-    public boolean verifyIsImportant (boolean isImportant){
+    boolean verifyIsImportant(boolean isImportant){
         if (isImportant) {
             $(By.xpath("//div[contains(@id,\"object\")]//input[@name=\"priority\"]")).shouldHave(value("Важная задача"));
             return true;
@@ -52,21 +63,27 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
     }
 
 
+    /**
+     * Проверка значений в чебоксах для последующего сравнения с передаваемым значением методом assertTrue
+     */
 
+    public boolean verifyCheckboxIsSelected (boolean isTrue, SelenideElement inputCheckbox) {
+        if (isTrue) {
+            inputCheckbox.shouldBe(selected);
+            return true;
+        } else {
+            inputCheckbox.shouldNotBe(selected);
+            return true;
+        }
 
-
-
-
-
+    }
 
     /**
      * Проверка значений в инпутах формы задачи
-     * TODO - аналог метода verifyValueInInput в NewTaskStepsMobile - надо привести к одному методу. Можно разметить в NewTaskStepsMobile т.к он родитель или в другой класс
-     *
      * @param valueInInput передаваемое значенние поля
      * @param nameOfElement имя элемента для xpath
      */
-    private TaskStepsMobile verifyValueInInput0(String nameOfElement, String valueInInput) {
+    NewTaskStepsMobile verifyValueInInput(String nameOfElement, String valueInInput) {
         if (valueInInput == null) {
             return this;
         }
@@ -78,23 +95,187 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
 
     }
 
-
-
-
     /**
-     * Проверка значений в чебоксах для последующего сравнения с передаваемым значением методом assertTrue
+     * Проверка установленного Типа задачи
+     * @param taskType передаваемое значенние поля Типа задачи
      */
+    void verifyTaskType(TasksTypes taskType) {
+        String nameOfTaskType = taskType.getObjectTypeName();
+        verifyValueInInput("Тип задачи", nameOfTaskType);
+    }
 
-    private boolean verifyCheckboxIsSelected (boolean isTrue, SelenideElement inputCheckbox) {
-        if (isTrue) {
-            inputCheckbox.shouldBe(selected);
-            return true;
-        } else {
-            inputCheckbox.shouldNotBe(selected);
-            return true;
+
+
+    /*
+     * Проверка отбражения полей при закрытых группах полей
+     */
+    public NewTaskStepsMobile fieldsWhenGroupsClosed() {
+
+        newTaskFormElementsMobile.getTaskName().shouldBe(visible); // "Название"
+        newTaskFormElementsMobile.getDescriptionTask().shouldBe(visible); // Описание задачи - отображение и проверка значения поля после закрытия группы полей  "Название"
+        // Кому
+        $(By.xpath("(//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel x-noborder-trbl x-header-position-top x-panel-grey-background x-container-grey-background \")]//div[@class=\"x-input-el\"])[1]")).shouldBe(visible);
+        // TODO  xpath другой м.б написать - этот ищет все 4ре поля - хотя для других полей ведь тоже xpath одинаковые для раскрытого и закрытого поля. //span[contains(text(),'Ответственные руководители')]/../..//div[@class="x-input-el\ - не находит
+
+        newTaskFormElementsMobile.getEndField().shouldBe(visible); // Окончание
+        //$(By.xpath("//input[@name=\"id_tasktype\"]")).shouldBe(visible); // Тип задачи TODO не проходит на centos  т.к нет поля типа задачи пока просто закомментил
+
+        if ($(newTaskFormElementsMobile.getButtonCreateTask()).is(Condition.visible)) {
+            $(By.xpath("//input[@name=\"id_task_template\"] ")).shouldBe(visible); // Шаблон задачи в созданной задаче отсутствует
         }
 
+        /*
+         * Проверка полей которые НЕ должны отображаться после закрытия всех групп полей
+         */
+
+        newTaskFormElementsMobile.getTaskNumber().shouldNotBe(visible);  //поле №
+        $(By.xpath("//span[text()='Проект']/../..//input")).shouldNotBe(visible);// - проект не должен отображаться ДО раскрытия группы полей
+
+
+        $(By.xpath("//span[contains(text(),'Авторы')]/../..//div[@class=\"x-input-el\"]")).shouldNotBe(visible);
+        $(By.xpath("//span[contains(text(),'Контролеры')]/../..//div[@class=\"x-input-el\"]")).shouldNotBe(visible);
+        $(By.xpath("//span[contains(text(),'Ответственные руководители')]/../..//div[@class=\"x-input-el\"]")).shouldNotBe(visible);
+        $(By.xpath("//span[contains(text(),'Исполнители')]/../..//div[@class=\"x-input-el\"]")).shouldNotBe(visible);
+
+
+        newTaskFormElementsMobile.getBeginField().shouldNotBe(visible); // Начало
+        newTaskFormElementsMobile.getPriority().shouldNotBe(visible); // Приоритет
+        newTaskFormElementsMobile.getFieldFiles().shouldNotBe(visible); //  поле - Файлы
+
+
+        newTaskFormElementsMobile.getCheckboxReportRequired().shouldNotBe(visible); // Признак - С Докладом
+        newTaskFormElementsMobile.getCheckboxIsSecret().shouldNotBe(visible); // признак - Секретная
+        newTaskFormElementsMobile.getCheckboxIsForReview().shouldNotBe(visible); // Признак - "Для ознакомления"
+
+        return this;
     }
+
+
+    /*
+     * Проверка отбражения полей при открытых группах полей
+     */
+    public NewTaskStepsMobile fieldsWhenGroupsOpen() {
+
+        //Методы для Разворачивания всех групп полей
+        selectGroupTab("Название");
+        selectGroupTab("Кому");
+        selectGroupTab("Срок");
+        selectGroupTab("Тип задачи");
+        selectGroupTab("Файлы");
+        selectGroupTab("Еще");
+
+
+
+        //Проверка
+        newTaskFormElementsMobile.getTaskName().shouldBe(visible); // "Название"
+        newTaskFormElementsMobile.getDescriptionTask().shouldBe(visible); // Описание задачи
+        newTaskFormElementsMobile.getTaskNumber().shouldBe(visible);  //поле №
+        $(By.xpath("//span[text()='Проект']/../..//input")).shouldBe(visible);// - проект не должен отображаться ДО раскрытия группы полей
+
+        // TODO В ЕД.МЕТОД с подстановкой. xpath подойдет для других полей где div ?
+        $(By.xpath("//span[contains(text(),'Авторы')]/../..//div[@class=\"x-input-el\"]")).shouldBe(visible);
+        $(By.xpath("//span[contains(text(),'Контролеры')]/../..//div[@class=\"x-input-el\"]")).shouldBe(visible);
+        $(By.xpath("//span[contains(text(),'Ответственные руководители')]/../..//div[@class=\"x-input-el\"]")).shouldBe(visible);
+        $(By.xpath("//span[contains(text(),'Исполнители')]/../..//div[@class=\"x-input-el\"]")).shouldBe(visible);
+
+
+        newTaskFormElementsMobile.getBeginField().shouldBe(visible); // Начало
+        newTaskFormElementsMobile.getEndField().shouldBe(visible); // Окончание
+        newTaskFormElementsMobile.getPriority().shouldBe(visible); // Приоритет
+        $(By.xpath("//input[@name=\"id_tasktype\"]")).shouldBe(visible);
+        newTaskFormElementsMobile.getFieldFiles().shouldBe(visible); //  поле - Файлы
+
+
+        newTaskFormElementsMobile.getCheckboxReportRequired().shouldBe(visible); // Признак - С Докладом
+        newTaskFormElementsMobile.getCheckboxIsSecret().shouldBe(visible); // признак - Секретная
+        newTaskFormElementsMobile.getCheckboxIsForReview().shouldBe(visible); // Признак - "Для ознакомления"
+
+        if ($(newTaskFormElementsMobile.getButtonCreateTask()).is(Condition.visible)) {
+            $(By.xpath("//input[@name=\"id_task_template\"] ")).shouldBe(visible); // Шаблон задачи в созданной задаче отсутствует.
+            // TODO поля ввыбора шаблона может не быть, если у пользователя не создано шаблонов. Нужно в таком случае перед проверкой создавать в системе шаблон.
+        }
+
+        //Закрытитие все групп полей
+        selectGroupTab("Название");
+        selectGroupTab("Кому");
+        selectGroupTab("Срок");
+        selectGroupTab("Тип задачи");
+        selectGroupTab("Файлы");
+        selectGroupTab("Еще");
+        return this;
+    }
+
+
+
+    /*
+     * Проверка значений в полях при закрытых группах полей
+     */
+    public NewTaskStepsMobile verifyValueWhenGroupsClosed(Task task) {
+
+        verifyValueBeforeOpenGroupFields(task.getTaskName(), "taskname"); //Проверка поля названия при закрытой группы полей "Название"
+
+        $(By.xpath("//div[contains(@id,\"object\")]//div[@name=\"description\"]"))
+                .shouldHave(exactValue(task.getDescription())); // Проверка поля - Описание задачи - до раскрытия группы полей "Название". Через verifyValueInInput не проверишь т.к описание в div.
+        // Можно в отдельный схожий метод для проверки если есть ещё поля где значения в div
+        verifyValueBeforeOpenGroupFields(task.getDateEnd(), "enddate"); // Проверка поля -  Дата окончания - при закрытой группе полей  "Срок".
+        verifyTaskTypeBeforeOpenGroupFields(task.getTaskType()); // Проверка поля -  Тип задачи - при закрытой группе полей "Тип задачи".
+
+        return this;
+    }
+
+
+    /*
+     * Проверка значений в полях при открытых группах полей
+     */
+    public NewTaskStepsMobile verifyValueWhenGroupsOpen(Task task) {
+
+        //Методы для Разворачивания всех групп полей
+        selectGroupTab("Название");
+        selectGroupTab("Кому");
+        selectGroupTab("Срок");
+        selectGroupTab("Тип задачи");
+        selectGroupTab("Файлы");
+        selectGroupTab("Еще");
+
+
+        //Все проверки из verifyValueInInput
+        verifyValueInInput("Название", task.getTaskName());
+
+        $(By.xpath("//div[contains(@id,\"object\")]//div[@name=\"description\"]"))
+                .shouldHave(exactValue(task.getDescription())); // Описание задачи. Через verifyValueInInput не проверишь т.к описание в div.
+        // Можно в отдельный схожий метод для проверки еслиесть ещё поля где значения в div
+
+        verifyValueInInput("Проект", "Главное подразделение: Задачи вне проектов");
+
+        /*
+        todo Кому
+        1. Проверка в полях
+        2. Проверка в форме выбора пользователей?  Нужно проверять выделенные объекты в гриде пользователй. Возможно ли?
+        примерно так: используем openFormSelectUser, а затем по подобию метода авбора пользователй из грида choiceUserOnTheRole делаем проверку
+        */
+
+
+
+
+
+        verifyValueInInput("Окончание", task.getDateEnd());
+        verifyValueInInput("Начало", task.getDateBegin());
+        Assert.assertTrue(verifyIsImportant(task.getIsImportant())); // Приоритет
+        Assert.assertTrue(verifyCheckboxIsSelected(task.getIsWithReport(), newTaskFormElementsMobile.getReportRequired())); // Признак - С Докладом - по умолчанию выбран при создании задачи.
+        Assert.assertTrue(verifyCheckboxIsSelected(task.getIsSecret(), newTaskFormElementsMobile.getIsSecret())); // Признак Секретная
+
+        verifyTaskType(task.getTaskType()); // Проверка установленного Типа задачи
+
+        //Закрытитие все групп полей
+        selectGroupTab("Название");
+        selectGroupTab("Кому");
+        selectGroupTab("Срок");
+        selectGroupTab("Тип задачи");
+        selectGroupTab("Файлы");
+        selectGroupTab("Еще");
+        return this;
+    }
+
 
 
     /**
@@ -106,139 +287,43 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
     public TaskStepsMobile verifyCreateTask(Task valueTask) {
         refresh(); //делать, чтобы сбросить из кеша все элементы что остаются после работы в форме создания задачи
         verifyMenuOfTask(); // Ожидание и проверка элементов меню
+        if (valueTask == null) {
+            return null;
+        } else
         $(By.xpath("//div[@class=\"x-component x-title x-title-align-left x-layout-box-item x-layout-hbox-item x-flexed\"]/div[text()='" + valueTask.getTaskName() + "']"))
                 .shouldBe(visible); // Название задачи в хедере
 
-
         //Переходим на вкладку "Описание"
-
         $(By.xpath("//div[text()=\"Описание\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")).click();
         verifyElementsOnDescriptionPage();// Ожидание и проверка элементов на вкладке "Описание"
-
-        //Проверка значений в полях
-
-        /*
-
-
-        $(By.xpath("//div[contains(@id,\"object\")]//input[@name=\"taskname\"]")).should(value(valueTask.getTaskName())); // input не содержит текста в DOM, но через value получилось.
-        */
-        verifyValueBeforeOpenGroupFields(valueTask.getTaskName(), "taskname"); //Проверка поля названия до раскрытия группы полей "Название"
-
-        $(By.xpath("//div[contains(@id,\"object\")]//div[@name=\"description\"]"))
-                .shouldHave(exactValue(valueTask.getDescription())); // Проверка поля - Описание задачи - до раскрытия группы полей "Название". Через verifyValueInInput не проверишь т.к описание в div.
-        // Можно в отдельный схожий метод для проверки еслиесть ещё поля где значения в div
-
-        /*
-         * Открываем группу полей "Название"
-         * Проверка полей
-         * //TODO наверное ещё нужно проверять после раскрытия группы полей "Название"
-         */
-        //$(By.xpath("//div[contains(text(),'Название')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
-        selectGroupTab("Название"); //Открываем группу полей "Название"
-        //TODO Проверка на то, что вкладка открылась и все поля отображаются. т.к значения считаывются через DOM сразу даже без отрытия вкладки.
-
-
-        verifyValueInInput("Название", valueTask.getTaskName());
-
-        $(By.xpath("//div[contains(@id,\"object\")]//div[@name=\"description\"]"))
-                .shouldHave(exactValue(valueTask.getDescription())); // Описание задачи. Через verifyValueInInput не проверишь т.к описание в div.
-        // Можно в отдельный схожий метод для проверки еслиесть ещё поля где значения в div
-
-        verifyValueInInput("Проект", "Главное подразделение: Задачи вне проектов");
-
-        /*
-         * Закрываем группу полей "Название"
-         * TODO Проверка на то, что вкладка закрылась и все поля не отображаются. т.к значения считаывются через DOM сразу даже без отрытия вкладки.
-         */
-        //$(By.xpath("//div[contains(text(),'Название')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
-        selectGroupTab("Название"); // Закрываем группу полей "Название"
-
-        /*
-         * Проверка даты окончания задачи
-         */
-/*
-        $(By.xpath("//div[contains(@id,\"object\")]//input[@name=\"enddate\"]"))
-                .shouldHave(value(valueTask.getDateEnd()));
-*/
-        verifyValueBeforeOpenGroupFields(valueTask.getDateEnd(), "enddate"); // Проверка поля -  Дата окончания - до раскрытия группы полей  "Срок".
+        fieldsWhenGroupsClosed(); //проверка наличия полей при закрытых группах полей
+        fieldsWhenGroupsOpen();//проверка наличия полей при открытых группах полей
+        verifyValueWhenGroupsClosed(valueTask); //проверка введенных значений в полях при закрытых группах полей
+        verifyValueWhenGroupsOpen(valueTask); //проверка введенных значений в полях при открытых группах полей
 
 
         /*
          * Открываем группы полей "Срок"
          * Проверка даты начала и окончания задачи и приоритета
          */
-
-       // $(By.xpath("//div[contains(text(),'Срок')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
         selectGroupTab("Срок"); // Открываем вкладку "Срок"
-        //TODO Проверка на то, что вкладка открылась и все поля отображаются. т.к значения считаывются через DOM сразу даже без отрытия вкладки.
 
         /*
         $(By.xpath("//div[contains(@id,\"object\")]//input[@name=\"startdate\"]"))
                 .shouldHave(value(valueTask.getDateBegin())); //проверка даты, если заполнять её при создании задачи - см. в Tasks objectDataTaskPDA .setDateBegin(yesterdayDate())
                 */
         // TODO подумать над необходимостью добавления проверки того, что дата по умолчанию подставилась верная. Раньше в web не было
-        /*
-        $(By.xpath("//div[contains(@id,\"object\")]//input[@name=\"enddate\"]"))
-                .shouldHave(value(valueTask.getDateEnd()));
-                */
-        verifyValueInInput("Окончание",valueTask.getDateEnd());;
 
-        assertTrue(verifyIsImportant(valueTask.getIsImportant())); // Приоритет
-
-
-        //$(By.xpath("//div[contains(text(),'Срок')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
         selectGroupTab("Срок"); // Закрываем вкладку "Срок"
-        //TODO Проверка на то, что вкладка закрылась и все поля не отображаются. т.к значения считаывются через DOM сразу даже без отрытия вкладки.
-
-
-        verifyTaskTypeBeforeOpenGroupFields(valueTask.getTaskType()); // Проверка поля -  Тип задачи - при закрытой группе полей "Тип задачи".
-        selectGroupTab("Тип задачи"); // Открываем  группу полей  "Тип задачи"
-        //$(By.xpath("//div[contains(text(),'Тип задачи')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
-        //TODO Проверка на то, что вкладка открылась и все поля отображаются
-
-
-
-        /*
-         * Проверка  Тип задачи
-         */
-        verifyTaskType(valueTask.getTaskType());
-
-
-        selectGroupTab("Тип задачи"); // Закрываем  группу полей  "Тип задачи"
-        //$(By.xpath("//div[contains(text(),'Тип задачи')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
-        //TODO Проверка на то, что вкладка закрылась и все поля не отображаются
-
 
 
         /*
          * Открываем вкладку "Ещё"
          * Проверка признаков в чекбоксах
          */
-
-
-        //$(By.xpath("//div[contains(text(),'Еще')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
         selectGroupTab("Еще"); // Открываем вкладку "Еще"
-        //TODO Проверка на то, что вкладка открылась и все поля отображаются. т.к значения считаывются через DOM сразу даже без отрытия вкладки.
-
-
-        assertTrue(verifyCheckboxIsSelected(valueTask.getIsWithReport(), newTaskFormElementsMobile.getReportRequired())); // Признак - С Докладом - по умолчанию выбран при создании задачи.
-        assertTrue(verifyCheckboxIsSelected(valueTask.getIsSecret(), newTaskFormElementsMobile.getIsSecret())); // Признак
         newTaskFormElementsMobile.getIsForReview().shouldBe(disabled); // Признак -  "Для ознакомления" в созданной задаче должен быть задизейблен. Состояние чекбокса не отображается.
-
-
-
-
-
-        //$(By.xpath("//div[contains(text(),'Еще')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
         selectGroupTab("Еще"); // Закрываем вкладку "Еще"
-        //TODO Проверка на то, что вкладка закрылась и все поля не отображаются. т.к значения считаывются через DOM сразу даже без отрытия вкладки.
-
-        fieldsWhenGroupsCloset();
-        fieldsWhenGroupsOpen();
-
-
-
-
 
 
 

@@ -36,18 +36,6 @@ public class NewTaskFormElementsMobile {
     @FindBy(css = "body")
     private SelenideElement ckeBody;
 
-    @FindBy(xpath = "//*[contains (@onclick, 'author')]")
-    private SelenideElement authors;
-
-    @FindBy(xpath = "//*[contains (@onclick, 'controller')]")
-    private SelenideElement controllers;
-
-    @FindBy(xpath = "//*[contains (@onclick, 'respperson')]")
-    private SelenideElement resppersons;
-
-    @FindBy(xpath = "//*[contains (@onclick, 'worker')]")
-    private SelenideElement workers;
-
     @FindBy(xpath = "(//*[contains (@type, 'button')])[1]")
     private SelenideElement buttonSaveCreateTask;
 
@@ -79,16 +67,16 @@ public class NewTaskFormElementsMobile {
     @FindBy(xpath = "//div[contains(text(),'Файлы')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel x-noborder-trbl x-header-position-top x-panel-grey-background x-container-grey-background \")]//input[@class=\"x-input-el\"]")
     private SelenideElement fieldFiles;
 
-    @FindBy(xpath = "//*[contains (@onclick, 'author')]/../../../td[2]/div")
+    @FindBy(xpath = "(//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel\")]//div[@class=\"x-input-el\"])[1]")
     private SelenideElement authorsField;
 
-    @FindBy(xpath = "//*[contains (@onclick, 'controller')]/../../../td[2]/div")
+    @FindBy(xpath = "(//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel\")]//div[@class=\"x-input-el\"])[2]")
     private SelenideElement сontrollersField;
 
-    @FindBy(xpath = "//*[contains (@onclick, 'respperson')]/../../../td[2]/div")
-    private SelenideElement executiveManagersField;
+    @FindBy(xpath = "(//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel\")]//div[@class=\"x-input-el\"])[3]")
+    private SelenideElement responsiblesManagersField;
 
-    @FindBy(xpath = "//*[contains (@onclick, 'worker')]/../../../td[2]/div")
+    @FindBy(xpath = "(//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel\")]//div[@class=\"x-input-el\"])[4]")
     private SelenideElement workersField;
 
     @FindBy(xpath = "//*[contains (@class, 'x-editor')][contains (@style, 'visible')]//input")
@@ -180,34 +168,6 @@ public class NewTaskFormElementsMobile {
      */
     public SelenideElement getCkeBody() {
         return ckeBody;
-    }
-
-    /**
-     * Кнопка редактирования авторов
-     */
-    public SelenideElement getAuthors() {
-        return authors;
-    }
-
-    /**
-     * Кнопка редактирования контролеров
-     */
-    public SelenideElement getControllers() {
-        return controllers;
-    }
-
-    /**
-     * Кнопка редактирования ответственных руководителей
-     */
-    public SelenideElement getResppersons() {
-        return resppersons;
-    }
-
-    /**
-     * Кнопка редактирования исполнителей
-     */
-    public SelenideElement getWorkers() {
-        return workers;
     }
 
     /**
@@ -311,8 +271,8 @@ public class NewTaskFormElementsMobile {
     /**
      * поле - Ответственные руководители
      */
-    public SelenideElement getExecutiveManagersField() {
-        return executiveManagersField;
+    public SelenideElement getResponsiblesField() {
+        return responsiblesManagersField;
     }
 
     /**
