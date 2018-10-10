@@ -2,9 +2,7 @@ package ru.motiw.mobile.steps.Tasks;
 
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import com.sun.org.apache.xpath.internal.XPath;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
@@ -17,8 +15,8 @@ import ru.motiw.web.model.Tasks.Task;
 import ru.motiw.web.steps.BaseSteps;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.*;
-import static org.junit.Assert.assertTrue;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.page;
 import static ru.motiw.mobile.model.URLMenuMobile.CREATE_TASK;
 import static ru.motiw.mobile.steps.BaseStepsMobile.openSectionOnURLMobile;
 
@@ -226,18 +224,14 @@ public class NewTaskStepsMobile extends BaseSteps {
         openFormSelectUser(fieldCustomRole, componentId);
         if (employees != null) {
             for (Employee employee : employees) {
-                $(By.xpath("//div[@data-componentid='" + componentId + "']//input")).setValue(employee.getLastName()); // вводим в поле ввода Фамилию пользователя
+                newTaskFormElementsMobile.getInputForSearchUsers(componentId).setValue(employee.getLastName()); // вводим в поле ввода Фамилию пользователя
+                newTaskFormElementsMobile.getListOfUsers(componentId).shouldBe(CollectionCondition.size(1), 2000); //ожидание когда будет найден один пользователь. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
 
-                newTaskFormElementsMobile.getListOfUsers(componentId).shouldBe(CollectionCondition.size(1), 2000); //ожидание когда будет найден один пользователь
-
-                //выбор в списке
-                $(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(text(),'" + employee.getLastName() + "')]"))
-                        .shouldBe(Condition.visible);
-                $(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(text(),'" + employee.getLastName() + "')]")).click();
-
-                newTaskFormElementsMobile.getListOfUsers(componentId).shouldBe(CollectionCondition.sizeGreaterThan(1), 2000); //ожидание когда загрузится список пользователй
-
-                $(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(@class,\"x-component x-button\")]")).click(); //кнопка "Назначить"
+                //выбор пользователя в списке
+                newTaskFormElementsMobile.getUserFromList(componentId, employee).shouldBe(visible);
+                newTaskFormElementsMobile.getUserFromList(componentId, employee).click();
+                newTaskFormElementsMobile.getListOfUsers(componentId).shouldBe(CollectionCondition.sizeGreaterThan(1), 2000); //ожидание когда загрузится список пользователей. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
+                newTaskFormElementsMobile.getButtonAppointUsers(componentId).click(); //кнопка "Назначить"
             }
         }
     }

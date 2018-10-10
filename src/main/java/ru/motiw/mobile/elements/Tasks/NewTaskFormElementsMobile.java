@@ -5,6 +5,7 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
+import ru.motiw.web.model.Administration.Users.Employee;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -258,14 +259,28 @@ public class NewTaskFormElementsMobile {
         return fieldFiles;
     }
 
+    /**
+     * Поле ввода в списке формы добавления пользователей
+     */
+    public SelenideElement getInputForSearchUsers (String componentId) {
+        return $(By.xpath("//div[@data-componentid='" + componentId + "']//input"));
+    }
+
 
     /**
      * Набор элементов = кол-во пользователей в списке формы добавления пользователей
      */
-
     public ElementsCollection getListOfUsers(String componentId ) {
         return $$(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(@data-componentid,\"ext-gridcell\")]"));
     }
+
+    /**
+     * выбор пользователей в списке формы добавления пользователей
+     */
+    public SelenideElement getUserFromList (String componentId, Employee employee) {
+        return $(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(text(),'" + employee.getLastName() + "')]"));
+    }
+
 
     /**
      * поле - Авторы
@@ -293,6 +308,14 @@ public class NewTaskFormElementsMobile {
      */
     public SelenideElement getWorkersField() {
         return workersField;
+    }
+
+
+    /**
+     * кнопка "Назначить"
+     */
+    public SelenideElement getButtonAppointUsers(String componentId) {
+        return $(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(@class,\"x-component x-button\")]"));
     }
 
     /**
