@@ -12,7 +12,6 @@ import ru.motiw.web.model.Tasks.Task;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
-import static junit.framework.TestCase.assertTrue;
 
 public class TaskStepsMobile extends NewTaskStepsMobile {
 
@@ -108,28 +107,20 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
 
 
     /**
-     * Добавление пользователей в роль задачи
+     * Проверка добавленых пользователей в полях ролей задачи
      * @param employees       передаваемые пользователи
-     * @param fieldCustomRole выбираемая роль в задаче (Исполнители, Авторы и ОР)
-     * @param componentId т.к после каждого открытия формы выбора пользователей она остается в DOM, то приходится передавать componentId
-     * componentId = ext-selectdialog-{порядковый номер открытой формы}
+     * @param fieldCustomRole выбираемая роль в задаче (Исполнители, Контролеры, Авторы и ОР)
      */
 
-    void verifyUserOnTheRole(Employee[] employees, SelenideElement fieldCustomRole, String componentId) {
-        openFormSelectUser(fieldCustomRole, componentId);
-        /*
+    private void verifyUserOnTheRole(Employee[] employees, SelenideElement fieldCustomRole) {
+
+
         if (employees != null) {
             for (Employee employee : employees) {
-                newTaskFormElementsMobile.getInputForSearchUsers(componentId).setValue(employee.getLastName()); // вводим в поле ввода Фамилию пользователя
-                newTaskFormElementsMobile.getListOfUsers(componentId).shouldBe(CollectionCondition.size(1), 5000); //ожидание когда будет найден один пользователь. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
-
-                //выбор пользователя в списке
-                newTaskFormElementsMobile.getUserFromList(componentId, employee).shouldBe(visible);
-                newTaskFormElementsMobile.getUserFromList(componentId, employee).click();
-                newTaskFormElementsMobile.getListOfUsers(componentId).shouldBe(CollectionCondition.sizeGreaterThan(1), 5000); //ожидание когда загрузится список пользователей. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
-                newTaskFormElementsMobile.getButtonAppointUsers(componentId).click(); //кнопка "Назначить"
+                fieldCustomRole.shouldHave(exactText(employee.getLastName()));
             }
-        }*/
+            }
+
     }
 
 
@@ -278,15 +269,19 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
 
         /*
         todo Кому
-        1. Проверка в полях
-        2. Проверка в форме выбора пользователей?  Нужно проверять выделенные объекты в гриде пользователй. Возможно ли?
+        Проверка в форме выбора пользователей?  Нужно проверять выделенные объекты в гриде пользователй. Возможно ли?
         примерно так: используем openFormSelectUser, а затем по подобию метода авбора пользователй из грида choiceUserOnTheRole делаем проверку
         */
-        verifyUserOnTheRole(task.getControllers(), newTaskFormElementsMobile.getСontrollersField(), "ext-selectdialog-1");
-        sleep(5000);
-        $(By.xpath("//div[@data-componentid='ext-selectdialog-1']//div[contains(text(),'admin')]//ancestor::div[contains(@class,\"x-listitem x-gridrow x-component x-listitem-multi-select\")]//div[contains(@class,'x-body-el x-checkcell-body-el')]")).shouldBe(visible);
+
+        //openFormSelectUser(fieldCustomRole, componentId);
+        //$(By.xpath("//div[@data-componentid='ext-selectdialog-1']//div[contains(text(),'admin')]//ancestor::div[contains(@class,\"x-listitem x-gridrow x-component x-listitem-multi-select\")]//div[contains(@class,'x-body-el x-checkcell-body-el')]")).shouldBe(visible);
         // не получаеся. м.б придется просто в поле проверять значения
 
+        //Проверка пользователей в полях раб.группы
+        verifyUserOnTheRole(task.getAuthors(), newTaskFormElementsMobile.getAuthorsField()); // - Авторы задачи
+        verifyUserOnTheRole(task.getControllers(), newTaskFormElementsMobile.getСontrollersField()); //- Контролеры задачи
+        verifyUserOnTheRole(task.getExecutiveManagers(), newTaskFormElementsMobile.getResponsiblesField()); // - Ответственные руковдители
+        verifyUserOnTheRole(task.getWorkers(), newTaskFormElementsMobile.getWorkersField()); // - Исполнители задачи
 
 
 
