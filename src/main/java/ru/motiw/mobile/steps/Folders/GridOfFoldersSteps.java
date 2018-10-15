@@ -26,7 +26,7 @@ public class GridOfFoldersSteps {
     public GridOfFoldersSteps checkDisplayTaskGrid(Task task, Folder folderTask) {
         // входим в созданную папку
         $(By.xpath("//div[@class=\"m-folder\"]//div[text()='" + folderTask.getNameFolder() + "']")).click();
-        sleep(5000);//ожидание грида
+        sleep(2000);//ожидание грида
         $(By.xpath("//div[contains(@id,\"ext-tasklist-item\")]//div[text()='" + task.getTaskName() + "']"))
                 .shouldHave(exactText(task.getTaskName())); // проверяем отображение созданной задачи в гриде (отображается наименование задачи)
         return this;

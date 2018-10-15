@@ -231,7 +231,7 @@ public class NewTaskStepsMobile extends BaseSteps {
 
                 //выбор пользователя в списке
                 newTaskFormElementsMobile.getUserFromList(componentId, employee).shouldBe(visible).click();
-                newTaskFormElementsMobile.getListOfUsers(componentId).shouldBe(CollectionCondition.sizeGreaterThan(1), 5000); //ожидание когда загрузится список пользователей. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
+                //newTaskFormElementsMobile.getListOfUsers(componentId).shouldBe(CollectionCondition.sizeGreaterThan(1), 5000); //ожидание когда загрузится список пользователей. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
                 newTaskFormElementsMobile.getButtonAppointUsers(componentId).click(); //кнопка "Назначить"
             }
         }
@@ -250,7 +250,7 @@ public class NewTaskStepsMobile extends BaseSteps {
         if (employees != null) {
             for (Employee employee : employees) {
                 //проверка того, что элемент ПЕРВОГО пользователя в списке - выделен т.е выбран в роль
-                $(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(@class,\"x-first x-selected\")]//div[contains(text(),'" + employee.getLastName() + "')]")).shouldBe(visible);
+                $(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(@class,\"x-selected\")]//div[contains(text(),'" + employee.getLastName() + "')]")).shouldBe(visible);
                 newTaskFormElementsMobile.getButtonAppointUsers(componentId).click(); //кнопка "Назначить", чтобы выйти из формы
             }
         }

@@ -133,7 +133,8 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         if (employees != null) {
             for (Employee employee : employees) {
                 //проверка того, что элемент ПЕРВОГО пользователя в списке - выделен т.е выбран в роль
-                $(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(@class,\"x-first x-selected\")]//div[contains(text(),'" + employee.getLastName() + "')]")).shouldBe(visible);
+                //contains(@class,"x-selected" - вроде бы всех выделенных будет находить. todo проверить это
+                $(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(@class,\"x-selected\")]//div[contains(text(),'" + employee.getLastName() + "')]")).shouldBe(visible);
                 newTaskFormElementsMobile.getButtonAppointUsers(componentId).click(); //кнопка "Назначить"
 
                 //проверка того, что элемент ВТОРОГО пользователя в списке - выделен т.е выбран в роль.
