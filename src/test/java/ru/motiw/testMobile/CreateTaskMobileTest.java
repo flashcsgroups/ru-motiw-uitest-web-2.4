@@ -225,10 +225,10 @@ public class CreateTaskMobileTest extends Tasks {
         $(By.xpath("//div[text()=\"Действия\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")).waitUntil(visible, 10000).click();
         taskActionsStepsMobile.verifyAddActionsInTheTape(randomString(15));
         // редактируем атрибуты задачи
-        editOfTaskMobile.editOfTask(task); //todo надо посмотреть происходит заполение значениями нового объекта task? и при проверке verifyCreateTask(task) что происходит
+        editOfTaskMobile.editOfTask(editTask); //происходит заполение значениями нового объекта editTask, но при verifyCreateTask проверка описания не проходит.
 
         //Проверка всех отредактированных полей, добавленных действий после перезагрузки страницы
-        taskStepsMobile.verifyCreateTask(task);
+        taskStepsMobile.verifyCreateTask(editTask);
 
         /*
 

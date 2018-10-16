@@ -8,7 +8,6 @@ import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Period;
 import ru.motiw.web.model.Tasks.*;
 
-import static ru.motiw.data.BaseTest.*;
 import static ru.motiw.data.dataproviders.Administration.getRandomDepartment;
 import static ru.motiw.data.dataproviders.Administration.getRandomEmployer;
 
@@ -23,15 +22,18 @@ public abstract class Tasks extends BaseTest {
     public Task getRandomObjectTask() {
         return new Task()
                 .setTaskName(randomString(15) + " " + randomString(30))
-                .setDescription(randomString(100) + "\n " + randomString(100) + "\n " + randomString(100))
-                .setDateEnd(tomorrowDate())
+                .setDescription(randomString(10));  // для Описания АРМа пока в одну строку
+          /*      .setDateEnd(tomorrowDate())
                 // Важная задача
                 .setIsImportant(randomBoolean())
                 // Секретная задача
                 .setIsSecret(randomBoolean())
                 // C докладом
                 .setIsWithReport(randomBoolean());
+        */
     }
+
+
 
     /**
      * Параметризация - Инициализируем модель - Задача for PDA
