@@ -26,9 +26,9 @@ public abstract class Tasks extends BaseTest {
                 .setDateEnd(tomorrowDateWithoutTime())
                 .setIsImportant(true) // Важная задача
                 .setAuthors(new Employee[]{EMPLOYEE_ADMIN})
-                .setControllers(new Employee[]{EMPLOYEE_ADMIN})
-                .setExecutiveManagers(new Employee[]{EMPLOYEE_ADMIN})
-                .setWorkers(new Employee[]{EMPLOYEE_ADMIN})
+                .setControllers(null) //null т.к при редактировании удаляем пользователей добавленных при создании, а потом проверяем поле на null
+                .setExecutiveManagers(null) //null т.к при редактировании удаляем пользователей добавленных при создании, а потом проверяем поле на null
+                .setWorkers(null) //null т.к при редактировании удаляем пользователей добавленных при создании, а потом проверяем поле на null
                 .setTaskType(new TasksTypes("Обычный"))
                 .setIsSecret(true) // Секретная задача
                 .setIsWithReport(false) // C докладом

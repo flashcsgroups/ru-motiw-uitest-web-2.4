@@ -5,6 +5,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import ru.motiw.mobile.elements.Tasks.TaskElementsMobile;
 import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
 import ru.motiw.web.model.Administration.Users.Employee;
@@ -92,7 +93,6 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         //$(By.xpath("//span[text()=\"Название\"]/../..//input")).shouldHave(value(valueInInput));
         $(By.xpath("//span[text()='" + nameOfElement + "']/../..//input")).shouldHave(exactValue(valueInInput));
         return this;
-
     }
 
     /**
@@ -135,13 +135,17 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
                 //проверка того, что элемент ПЕРВОГО пользователя в списке - выделен т.е выбран в роль
                 //contains(@class,"x-selected" - вроде бы всех выделенных будет находить. todo проверить это
                 $(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(@class,\"x-selected\")]//div[contains(text(),'" + employee.getLastName() + "')]")).shouldBe(visible);
-                newTaskFormElementsMobile.getButtonAppointUsers(componentId).click(); //кнопка "Назначить"
+                newTaskFormElementsMobile.getInputForSearchUsers(componentId).sendKeys(Keys.chord(Keys.ESCAPE)); //Закрыть форму
 
                 //проверка того, что элемент ВТОРОГО пользователя в списке - выделен т.е выбран в роль.
                 //Для выделенных элементов ВТОРОГО и след. пользователей в списке class в div-е отличается от ПЕРВОГО пользователя в списке
-
+                return;
             }
         }
+
+        //В случае, если employees == null - Проверяем, что элемент в списке не выделен. Нужно для проверки после удаления пользователя из поля раб.группы.
+        $(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(@class,\"x-selected\")]")).shouldNotBe(visible);
+        newTaskFormElementsMobile.getInputForSearchUsers(componentId).sendKeys(Keys.chord(Keys.ESCAPE)); //Закрыть форму
 
     }
 
@@ -294,7 +298,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         verifyUserInFieldOfRole(task.getWorkers(), newTaskFormElementsMobile.getWorkersField()); // - Исполнители задачи
 
 
-        //Проверка выбранных пользователей в форме выбора "Контролеры задачи"
+        //Проверка выбранных пользователей в форме выбора "Авторы задачи"
         openFormSelectUser(newTaskFormElementsMobile.getAuthorsField(), "ext-selectdialog-1");
         verifyUserInFormOfRole(task.getAuthors(),"ext-selectdialog-1");
 

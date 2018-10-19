@@ -9,16 +9,15 @@ import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
 import ru.motiw.mobile.elements.Tasks.NewTaskFormElementsMobile;
 import ru.motiw.mobile.steps.InternalStepsMobile;
 import ru.motiw.mobile.steps.LoginStepsMobile;
-import ru.motiw.web.elements.elementspda.Task.TaskDescriptionStepsPDA;
 import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
 import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Tasks.Task;
 import ru.motiw.web.steps.BaseSteps;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.selected;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.page;
-import static com.codeborne.selenide.Selenide.sleep;
 import static ru.motiw.mobile.model.URLMenuMobile.CREATE_TASK;
 import static ru.motiw.mobile.steps.BaseStepsMobile.openSectionOnURLMobile;
 
@@ -218,7 +217,7 @@ public class NewTaskStepsMobile extends BaseSteps {
 
 
     /**
-     * Добавление пользователей в роль задачи
+     * Добавление/Удаление пользователей в роль задачи
      * @param employees       передаваемые пользователи
      * @param fieldCustomRole выбираемая роль в задаче (Исполнители, Авторы и ОР)
      * @param componentId т.к после каждого открытия формы выбора пользователей она остается в DOM, то приходится передавать componentId

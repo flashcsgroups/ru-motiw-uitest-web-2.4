@@ -29,7 +29,6 @@ import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.clearBrowserCache;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testng.AssertJUnit.assertTrue;
-import static ru.motiw.web.steps.BaseSteps.openSectionOnURL;
 import static ru.motiw.web.steps.Tasks.UnionTasksSteps.goToUnionTasks;
 
 @Listeners({ScreenShotOnFailListener.class, TextReport.class})
@@ -223,10 +222,12 @@ public class CreateTaskMobileTest extends Tasks {
 
         // добавляем пользовательский текст в задачу и проверяем его сохранение
         //Переходим на вкладку "Действия"
+        //TODO нужен метод перехода между вкладками. В нем при переходе сразу нужно проверять налиие кнопок на тулбаре, подписи к ним.
         $(By.xpath("//div[text()=\"Действия\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")).waitUntil(visible, 10000).click();
         taskActionsStepsMobile.verifyAddActionsInTheTape(randomString(15));
+
         // редактируем атрибуты задачи
-        editOfTaskMobile.editOfTask(editTask);
+        editOfTaskMobile.editOfTask(task, editTask);
 
         //Проверка всех отредактированных полей, добавленных действий после перезагрузки страницы
         taskStepsMobile.verifyCreateTask(editTask);
