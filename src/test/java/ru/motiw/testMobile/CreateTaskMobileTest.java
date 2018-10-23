@@ -18,6 +18,7 @@ import ru.motiw.mobile.steps.Tasks.TaskActionsStepsMobile;
 import ru.motiw.mobile.steps.Tasks.TaskStepsMobile;
 import ru.motiw.web.model.Administration.Users.Department;
 import ru.motiw.web.model.Administration.Users.Employee;
+import ru.motiw.web.model.Tasks.Action;
 import ru.motiw.web.model.Tasks.Folder;
 import ru.motiw.web.model.Tasks.Task;
 import ru.motiw.web.steps.Home.InternalSteps;
@@ -67,6 +68,9 @@ public class CreateTaskMobileTest extends Tasks {
 
     // Папка
     Folder[] folder = getRandomArrayFolders();
+
+    //Действия
+    Action[] actions = getRandomArrayAction();
 
 
     @Test(priority = 5, dataProvider = "objectDataTask", dataProviderClass = Tasks.class)
@@ -222,14 +226,24 @@ public class CreateTaskMobileTest extends Tasks {
 
         // добавляем пользовательский текст в задачу и проверяем его сохранение
         //Переходим на вкладку "Действия"
-        taskStepsMobile.openTab("Действия");
-        taskActionsStepsMobile.verifyAddActionsInTheTape(randomString(15));
+        //taskStepsMobile.openTab("Действия");
+        taskActionsStepsMobile.postAction(new Action[] {
+                actions[0].setActionText(randomString(12)),
+                actions[1].setActionText(randomString(12)),
+
+        });
+        //анонимный класс, вместо этого можно наверное и в клсс с методом можно вынести. Только   Action[] actions = getRandomArrayAction(); не получилось в TaskActionsStepsMobile иницилизировать
+
+
 
         // редактируем атрибуты задачи
         editOfTaskMobile.editOfTask(task, editTask);
 
         //Проверка всех отредактированных полей, добавленных действий после перезагрузки страницы
         taskStepsMobile.verifyCreateTask(editTask);
+
+        taskActionsStepsMobile.checkNewActions(actions[0]);
+        taskActionsStepsMobile.checkNewActions(actions[1]);
 
         /*
 

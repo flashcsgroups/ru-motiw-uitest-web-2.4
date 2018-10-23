@@ -27,7 +27,7 @@ public class TaskElementsMobile {
     @FindBy(xpath = "//div[text()=\"Действия\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")
     private SelenideElement buttonOfActions;
 
-    @FindBy(xpath = "//div[text()=\"Действия\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon x-has-text x-arrow-align-right x-button-horizontal-action x-component-horizontal-action x-button-icon-action x-component-icon-action x-layout-box-item x-layout-vbox-item x-pressed\")]")
+    @FindBy(xpath = "//div[text()=\"Действия\"]//ancestor::div[contains(@class,\"x-pressed\")]")
     private SelenideElement pressedButtonOfActions;
 
     @FindBy(xpath = "//div[text()=\"Описание\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")

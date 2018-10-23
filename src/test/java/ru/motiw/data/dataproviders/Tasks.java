@@ -21,6 +21,7 @@ public abstract class Tasks extends BaseTest {
      */
     public Task getRandomObjectTask() {
         return new Task()
+                //.setActions(new Action[] {getRandomAction()})
                 .setTaskName(randomString(15) + " " + randomString(30))
                 .setDescription(randomString(100))  // для Описания АРМа пока в одну строку
                 .setDateEnd(tomorrowDateWithoutTime())
@@ -34,6 +35,30 @@ public abstract class Tasks extends BaseTest {
                 .setIsWithReport(false) // C докладом
                 .setIsForReview(true); // Только для озакомления
     }
+
+
+
+    /**
+     * Метод создания полностью случайного объекта - "Действие"
+     */
+    public static Action[] getRandomArrayAction() {
+        return new Action[]{
+                new Action(),
+                getRandomAction(),
+                getRandomAction(),
+
+        };
+    }
+
+
+    /**
+     * Метод создания полностью случайного объекта - "Действие"
+     */
+    public static Action getRandomAction() {
+        return new Action()
+                        .setActionText(randomString(10));
+    }
+
 
 
 
