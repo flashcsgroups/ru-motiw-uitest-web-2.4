@@ -1,5 +1,7 @@
 package ru.motiw.web.model.Tasks;
 
+import ru.motiw.web.model.Administration.Users.Employee;
+
 /**
  * Модель объекта системы - Действие
  */
@@ -7,6 +9,7 @@ public class Action {
 
     private String actionText;
     private String timeOfAddAction;
+    private Employee authorAction;
 
     /**
      * Текст действия
@@ -30,4 +33,18 @@ public class Action {
         this.timeOfAddAction = timeOfAddAction;
         return this;
     }
+
+    /**
+     * Пользователь добавивший действие
+     */
+    public Employee  getAuthorAction() {
+        return authorAction;
+    }
+
+    public Action setAuthorAction(Employee authorAction) {
+        this.authorAction = authorAction;
+        return this;
+    }
+
+
 }

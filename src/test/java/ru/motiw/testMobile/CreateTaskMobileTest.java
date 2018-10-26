@@ -18,7 +18,6 @@ import ru.motiw.mobile.steps.Tasks.TaskActionsStepsMobile;
 import ru.motiw.mobile.steps.Tasks.TaskStepsMobile;
 import ru.motiw.web.model.Administration.Users.Department;
 import ru.motiw.web.model.Administration.Users.Employee;
-import ru.motiw.web.model.Tasks.Action;
 import ru.motiw.web.model.Tasks.Folder;
 import ru.motiw.web.model.Tasks.Task;
 import ru.motiw.web.steps.Home.InternalSteps;
@@ -68,9 +67,6 @@ public class CreateTaskMobileTest extends Tasks {
 
     // Папка
     Folder[] folder = getRandomArrayFolders();
-
-    //Действия
-    Action[] actions = getRandomArrayAction();
 
 
     @Test(priority = 5, dataProvider = "objectDataTask", dataProviderClass = Tasks.class)
@@ -205,7 +201,7 @@ public class CreateTaskMobileTest extends Tasks {
         newTaskStepsMobile.saveTask();
 
         //Ждем пока исчезнит маска загрузки
-        $(By.xpath("(//div[@class=\"x-loading-spinner-outer\"])[2]")).waitUntil(Condition.disappear, 10000);// маска загрузки в форме задачи
+        $(By.xpath("(//div[@class=\"x-loading-spinner-outer\"])[2]")).waitUntil(Condition.disappear, 20000);// маска загрузки в форме задачи
         // маска загрузки (//div[@class="x-loading-spinner-outer"])[2] в форме задачи - динамический элемент.
         // сколько октроется загрузок - столько будет этих элементов - лучше особо не привязываться к нему. Можно будет прибегать refresh
 
@@ -224,29 +220,16 @@ public class CreateTaskMobileTest extends Tasks {
 
         //taskStepsMobile.verifyMenuOfTask(); // Ожидание и проверка элементов меню
 
-        // добавляем пользовательский текст в задачу и проверяем его сохранение
-        //Переходим на вкладку "Действия"
-        //taskStepsMobile.openTab("Действия");
-        taskActionsStepsMobile.postAction(new Action[] {
-                actions[0]
-                        .setActionText(randomString(12))
-                        .setTimeOfAddAction(nowHourTime()),
-                actions[1].setActionText(randomString(12))
-                          .setTimeOfAddAction(nowHourTime()),
-
-        });
-        //анонимный класс, вместо этого можно наверное и в клсс с методом можно вынести. Только   Action[] actions = getRandomArrayAction(); не получилось в TaskActionsStepsMobile иницилизировать
-
-
+        //Добавление действия и проверяем его сохранение
+        taskActionsStepsMobile.postAction(editTask.getActions());
 
         // редактируем атрибуты задачи
         editOfTaskMobile.editOfTask(task, editTask);
-
-        //Проверка всех отредактированных полей, добавленных действий после перезагрузки страницы
+        //Проверка всех отредактированных полей после перезагрузки страницы
         taskStepsMobile.verifyCreateTask(editTask);
+        //Проверка добавленных действий после перезагрузки страницы
+        taskActionsStepsMobile.checkNewActions(editTask.getActions());
 
-        taskActionsStepsMobile.checkNewActions(actions[0], EMPLOYEE_ADMIN);
-        taskActionsStepsMobile.checkNewActions(actions[1], EMPLOYEE_ADMIN);
 
         /*
 

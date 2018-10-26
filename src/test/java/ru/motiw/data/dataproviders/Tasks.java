@@ -20,8 +20,19 @@ public abstract class Tasks extends BaseTest {
      * Метод создания полностью случайного объекта - "Задача" for PDA
      */
     public Task getRandomObjectTask() {
+        // Инициализация объекта - Действия
+        Action[] actions = new Action[]{
+                getRandomAction(),
+                getRandomAction()
+        };
         return new Task()
-                //.setActions(new Action[] {getRandomAction()})
+
+                .setActions(new Action[] {
+                        actions[0]
+                                .setActionText("Действие №1" + " " + randomString(10) ),
+                        actions[1]
+                                .setActionText("Действие №2" + " " + randomString(10) )
+                })
                 .setTaskName(randomString(15) + " " + randomString(30))
                 .setDescription(randomString(100))  // для Описания АРМа пока в одну строку
                 .setDateEnd(tomorrowDateWithoutTime())
@@ -55,7 +66,9 @@ public abstract class Tasks extends BaseTest {
      */
     public static Action getRandomAction() {
         return new Action()
-                        .setActionText(randomString(10) + "" + nowDate());
+                        .setActionText(randomString(10) )
+                        .setAuthorAction(EMPLOYEE_ADMIN)
+                        .setTimeOfAddAction(nowHourTime());
     }
 
 
