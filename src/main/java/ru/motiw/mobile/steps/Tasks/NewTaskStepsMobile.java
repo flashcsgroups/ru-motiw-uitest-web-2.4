@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.support.FindBy;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
+import ru.motiw.mobile.elements.Login.LoginPageElementsMobile;
 import ru.motiw.mobile.elements.Tasks.NewTaskFormElementsMobile;
 import ru.motiw.mobile.steps.InternalStepsMobile;
 import ru.motiw.mobile.steps.LoginStepsMobile;
@@ -19,6 +20,7 @@ import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.page;
+import static com.codeborne.selenide.Selenide.refresh;
 import static ru.motiw.mobile.model.URLMenuMobile.CREATE_TASK;
 import static ru.motiw.mobile.steps.BaseStepsMobile.openSectionOnURLMobile;
 
@@ -34,6 +36,7 @@ public class NewTaskStepsMobile extends BaseSteps {
     private InternalElementsMobile internalElementsMobile = page(InternalElementsMobile.class);
     private LoginStepsMobile loginStepsMobile = page(LoginStepsMobile.class);
     private InternalStepsMobile internalStepsMobile = page(InternalStepsMobile.class);
+    private LoginPageElementsMobile loginPageElementsMobile = page(LoginPageElementsMobile.class);
 
 
     /*
@@ -143,6 +146,7 @@ public class NewTaskStepsMobile extends BaseSteps {
      */
     private NewTaskStepsMobile ensurePageLoaded() {
         newTaskFormElementsMobile.getCollectionNewTaskformElements().shouldHaveSize(9);
+        newTaskFormElementsMobile.getButtonCreateTask().shouldBe(visible);
         return this;
     }
 
@@ -365,8 +369,8 @@ public class NewTaskStepsMobile extends BaseSteps {
      * @param task передаваемые атрибуты задачи
      */
     public NewTaskStepsMobile creatingTask(Task task) {
-       ensurePageLoaded();
-
+        ensurePageLoaded();
+        refresh(); //чтобы сбросить из кеша все элементы что остаются после работы в других формах
        // Разворачиваем  группу полей  "Название"
         selectGroupTab("Название");
        //Заполняем Название задачи
@@ -447,15 +451,37 @@ public class NewTaskStepsMobile extends BaseSteps {
 
     /**
      * Сохранить задачу
-     *
+     * Ждем появление маски загрузки
+     * Ждем пока исчезнит маска загрузки
      * @return UnionMessageSteps страница UnionMessageSteps (Задачи / Задачи) - убрал т.к пишет, что ничего не возвращает. Зачем это было в ориг. методе для web?
      */
-    public void saveTask() {
-        newTaskFormElementsMobile.getButtonCreateTask().click();
+    public NewTaskStepsMobile saveTask() {
 
-        /*clickSaveTask()
-                .assertWindowTaskCreated();*/
-        ;
+        newTaskFormElementsMobile.getButtonCreateTask().click();
+        //Ждем появление маски загрузки
+        loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.visible, 1000);
+        //Ждем пока исчезнит маска загрузки
+        loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.disappear, 5000);
+        return page(NewTaskStepsMobile.class);
+
     }
+
+
+    /**
+     * Переходим по ссылке в появившемся toast в созданную задачу
+     */
+
+    public NewTaskStepsMobile goToNewTaskViaToast() {
+        //Проверяем появление toast "Создана задача"
+        loginPageElementsMobile.getToastOfNewTask().waitUntil(Condition.visible, 10000);
+        loginPageElementsMobile.getTextOnToastOfNewTask().shouldHave(Condition.text("Создана задача №"));
+        //Переходим по ссылке в появившемся toast в созданную задачу
+        loginPageElementsMobile.getTextOnToastOfNewTask().click();
+        return page (NewTaskStepsMobile.class);
+    }
+
+
+
+
 
 }

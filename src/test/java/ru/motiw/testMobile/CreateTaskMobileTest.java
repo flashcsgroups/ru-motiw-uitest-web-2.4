@@ -9,6 +9,7 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import ru.motiw.data.dataproviders.Tasks;
 import ru.motiw.data.listeners.ScreenShotOnFailListener;
+import ru.motiw.mobile.elements.Login.LoginPageElementsMobile;
 import ru.motiw.mobile.steps.Folders.GridOfFoldersSteps;
 import ru.motiw.mobile.steps.InternalStepsMobile;
 import ru.motiw.mobile.steps.LoginStepsMobile;
@@ -46,6 +47,7 @@ public class CreateTaskMobileTest extends Tasks {
     private GridOfFoldersSteps gridOfFoldersSteps;
     private TaskActionsStepsMobile taskActionsStepsMobile;
     private EditOfTaskMobile editOfTaskMobile;
+    private LoginPageElementsMobile loginPageElementsMobile;
 
     @BeforeClass
     public void beforeTest() {
@@ -59,6 +61,7 @@ public class CreateTaskMobileTest extends Tasks {
         gridOfFoldersSteps = page(GridOfFoldersSteps.class);
         taskActionsStepsMobile = page(TaskActionsStepsMobile.class);
         editOfTaskMobile = page(EditOfTaskMobile.class);
+        loginPageElementsMobile = page(LoginPageElementsMobile.class);
     }
 
 
@@ -69,7 +72,7 @@ public class CreateTaskMobileTest extends Tasks {
     Folder[] folder = getRandomArrayFolders();
 
 
-    @Test(priority = 5, dataProvider = "objectDataTask", dataProviderClass = Tasks.class)
+    @Test(priority = 2, dataProvider = "objectDataTask", dataProviderClass = Tasks.class)
     public void aPreconditionForFurtherVerification(Department department, Employee[] author, Employee[] resppers, Employee[] controller, Employee[] worker,
                                                     Employee[] IWGWorker, Employee[] IWGResppers, Employee[] IWGСontroller, Task task) {
         loginPageSteps.loginAs(ADMIN);
@@ -117,11 +120,11 @@ public class CreateTaskMobileTest extends Tasks {
         $(By.xpath("//a[@class=\"m_link\"]")).waitUntil(visible, 10000);
         $(By.xpath("//a[@class=\"m_link\"]")).click();
 
-        $(By.xpath("//span[contains(text(),'Имя')]//ancestor::div[1]//input")).waitUntil(Condition.visible, 10000);
+        loginPageElementsMobile.getLogin().waitUntil(Condition.visible, 20000);
         // Авторизация
         loginStepsMobile.loginAs(ADMIN);
         // Ожидание скрытия маски загрузки
-        $(By.xpath("//div[@class=\"x-loading-spinner-outer\"]")).waitUntil(Condition.disappear, 10000);
+        loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.disappear, 10000);
         // Ожидание кнопки Главного Меню
         $(By.xpath("//div[@class=\"x-component x-button no-blue-alt x-has-icon x-icon-align-left x-arrow-align-right x-button-alt x-component-alt x-layout-box-item x-layout-hbox-item\"][1]")).waitUntil(Condition.visible, 10000);
 
@@ -135,19 +138,8 @@ public class CreateTaskMobileTest extends Tasks {
         taskStepsMobile.fieldsWhenGroupsOpen();//проверка наличия полей при открытых группах полей
         taskStepsMobile.verifyValueWhenGroupsClosed(task); //проверка введенных значений в полях при закрытых группах полей
         taskStepsMobile.verifyValueWhenGroupsOpen(task); //проверка введенных значений в полях при открытых группах полей
-        newTaskStepsMobile.saveTask();
-
-        //Ждем пока исчезнит маска загрузки
-        $(By.xpath("(//div[@class=\"x-loading-spinner-outer\"])[2]")).waitUntil(Condition.disappear, 10000);// маска загрузки в форме задачи
-        // маска загрузки (//div[@class="x-loading-spinner-outer"])[2] в форме задачи - динамический элемент.
-        // сколько октроется загрузок - столько будет этих элементов - лучше особо не привязываться к нему. Можно будет прибегать refresh
-
-        //Проверяем появление toast "Создана задача"
-        $(By.xpath("//div[contains(@class,'x-toast x-sheet x-panel')]")).waitUntil(Condition.visible, 10000);
-        $(By.xpath("//div[contains(@class,'x-toast x-sheet x-panel')]//a")).shouldHave(Condition.text("Создана задача №"));
-
-        //Переходим по ссылке в появившемся toast в созданную задачу
-        $(By.xpath("//div[contains(@class,'x-toast x-sheet x-panel')]//a")).click();
+        newTaskStepsMobile.saveTask()
+                .goToNewTaskViaToast(); //Сохраняем задачу и переходим в созданную задачу через вспылвающие уведомление - Toast
 
         //----------------------------------------------------------------ФОРМА - Задачи
         // Проверяем отображение значений в форме созданой задачи
@@ -164,16 +156,16 @@ public class CreateTaskMobileTest extends Tasks {
     }
 
 
-    @Test(priority = 3, dataProvider = "objectDataTaskPDA",  dataProviderClass = Tasks.class)
+    @Test(priority = 1, dataProvider = "objectDataTaskPDA",  dataProviderClass = Tasks.class)
     public void checkEditingTaskPDA(Task task) throws Exception {
         refresh(); //чистим кеш, т.к остаются элементы
 
-        //для теста
+        //ЭТО для теста
         //Переход в мобильную версию по ссылке в форме авторизации
         $(By.xpath("//a[@class=\"m_link\"]")).waitUntil(visible, 10000);
         $(By.xpath("//a[@class=\"m_link\"]")).click();
 
-        $(By.xpath("//span[contains(text(),'Имя')]//ancestor::div[1]//input")).waitUntil(Condition.visible, 20000);
+        loginPageElementsMobile.getLogin().waitUntil(Condition.visible, 20000);
 
         ////
 
@@ -182,7 +174,7 @@ public class CreateTaskMobileTest extends Tasks {
         // Авторизация
         loginStepsMobile.loginAs(ADMIN);
         // Ожидание скрытия маски загрузки
-        $(By.xpath("//div[@class=\"x-loading-spinner-outer\"]")).waitUntil(Condition.disappear, 10000);
+        loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.disappear, 10000);
         // Ожидание кнопки Главного Меню
         $(By.xpath("//div[@class=\"x-component x-button no-blue-alt x-has-icon x-icon-align-left x-arrow-align-right x-button-alt x-component-alt x-layout-box-item x-layout-hbox-item\"][1]")).waitUntil(Condition.visible, 10000);
 
@@ -198,28 +190,13 @@ public class CreateTaskMobileTest extends Tasks {
         taskStepsMobile.verifyValueWhenGroupsClosed(task); //проверка введенных значений в полях при закрытых группах полей
         taskStepsMobile.verifyValueWhenGroupsOpen(task); //проверка введенных значений в полях при открытых группах полей
         */
-        newTaskStepsMobile.saveTask();
-
-        //Ждем пока исчезнит маска загрузки
-        $(By.xpath("(//div[@class=\"x-loading-spinner-outer\"])[2]")).waitUntil(Condition.disappear, 20000);// маска загрузки в форме задачи
-        // маска загрузки (//div[@class="x-loading-spinner-outer"])[2] в форме задачи - динамический элемент.
-        // сколько октроется загрузок - столько будет этих элементов - лучше особо не привязываться к нему. Можно будет прибегать refresh
-
-        //Проверяем появление toast "Создана задача"
-        $(By.xpath("//div[contains(@class,'x-toast x-sheet x-panel')]")).waitUntil(Condition.visible, 10000);
-        $(By.xpath("//div[contains(@class,'x-toast x-sheet x-panel')]//a")).shouldHave(Condition.text("Создана задача №"));
-
-        //Переходим по ссылке в появившемся toast в созданную задачу
-        $(By.xpath("//div[contains(@class,'x-toast x-sheet x-panel')]//a")).click();
+        newTaskStepsMobile.saveTask()
+                .goToNewTaskViaToast();//Сохраняем задачу и переходим в созданную задачу через вспылвающие уведомление - Toast
 
 
         //----------------------------------------------------------------ФОРМА - Задачи
         // Проверяем отображение значений в форме созданой задачи
-        //taskStepsMobile.verifyCreateTask(task);
-        refresh();
-
-        //taskStepsMobile.verifyMenuOfTask(); // Ожидание и проверка элементов меню
-
+        refresh(); //чтобы сбросить из кеша все элементы что остаются после работы в других формах
         //Добавление действия и проверяем его сохранение
         taskActionsStepsMobile.postAction(editTask.getActions());
 

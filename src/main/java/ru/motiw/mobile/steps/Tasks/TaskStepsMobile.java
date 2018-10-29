@@ -414,7 +414,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
      * @return UnionMessageSteps
      */
     public TaskStepsMobile verifyCreateTask(Task valueTask) {
-        refresh(); //делать, чтобы сбросить из кеша все элементы что остаются после работы в форме создания задачи
+        refresh(); // чтобы сбросить из кеша все элементы что остаются после работы в форме создания задачи
         if (valueTask == null) {
             return null;
         } else
