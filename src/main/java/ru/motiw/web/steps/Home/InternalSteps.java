@@ -13,7 +13,7 @@ import java.util.List;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Selenide.*;
-import static ru.motiw.web.model.URLMenu.*;
+import static ru.motiw.web.model.URLMenu.INTERNAL_MENU;
 
 /**
  * Внутренняя страница
@@ -94,6 +94,7 @@ public class InternalSteps extends BaseSteps {
         open(baseUrl + INTERNAL_MENU.getMenuURL());
         switchTo().defaultContent();
         $(internalElements.getLogout()).shouldBe(Condition.visible).click();
+        $(By.cssSelector("#login")).waitUntil(visible, 10000);
         $(By.cssSelector("#login")).shouldBe(Condition.visible);
         $(By.cssSelector("#pass")).shouldBe(Condition.visible);
     }

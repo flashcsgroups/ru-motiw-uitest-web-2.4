@@ -65,6 +65,12 @@ public class EditOfTaskMobile extends NewTaskStepsMobile {
         // Закрываем  группу полей  "Срок"
         selectGroupTab("Срок");
 
+        // Открываем группу полей "Файлы"
+        selectGroupTab("Файлы");
+        addAttachFiles(task.getFileName(), 1); //todo сейчас просто добавляем новый файл. Их становится всего три. Можно удалять файлы.
+        // Закрываем  группу полей "Файлы"
+        selectGroupTab("Файлы");
+
         // Открываем группу полей "Ещё"
         selectGroupTab("Еще");
         // выключаем Признак - С Докладом

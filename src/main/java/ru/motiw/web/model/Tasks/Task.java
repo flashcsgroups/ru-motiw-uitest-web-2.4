@@ -29,6 +29,7 @@ public class Task {
     private Event[] events;
     private Employee[] contacts;
     private Action[] actions;
+    private String fileName;
 
 
     /**
@@ -272,6 +273,18 @@ public class Task {
 
     public Task setActions(Action[] actions) {
         this.actions = actions;
+        return this;
+    }
+
+    /**
+     * Файлы задачи
+     */
+    public String getFileName() {
+        return fileName;
+    }
+
+    public Task setFileName(String fileName) {
+        this.fileName = fileName;
         return this;
     }
 

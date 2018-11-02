@@ -16,6 +16,8 @@ import static ru.motiw.data.dataproviders.Administration.getRandomEmployer;
  */
 public abstract class Tasks extends BaseTest {
 
+    private final String fileAttach = "hello_world.txt"; //todo вынести куда-нибудь
+
     /**
      * Метод создания полностью случайного объекта - "Задача" for PDA
      */
@@ -42,6 +44,7 @@ public abstract class Tasks extends BaseTest {
                 .setExecutiveManagers(null) //null т.к при редактировании удаляем пользователей добавленных при создании, а потом проверяем поле на null
                 .setWorkers(null) //null т.к при редактировании удаляем пользователей добавленных при создании, а потом проверяем поле на null
                 .setTaskType(new TasksTypes("Обычный"))
+                .setFileName(fileAttach) // Файл
                 .setIsSecret(true) // Секретная задача
                 .setIsWithReport(false) // C докладом
                 .setIsForReview(true); // Только для озакомления
@@ -94,6 +97,7 @@ public abstract class Tasks extends BaseTest {
                         .setIsSecret(true) // Секретная задача
                         .setIsWithReport(true) // C докладом
                         .setIsForReview(true) // Только для озакомления
+                        .setFileName(fileAttach) // Файл
                         .setIsImportant(true)}, // Важная задача
         };
     }

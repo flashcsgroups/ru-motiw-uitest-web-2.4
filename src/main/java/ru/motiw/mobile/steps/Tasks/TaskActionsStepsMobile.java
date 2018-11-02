@@ -25,7 +25,7 @@ public class TaskActionsStepsMobile extends TaskStepsMobile {
             for (Action action : actions) {
                 $(By.xpath("//div[text()=\"Добавить действие\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")).click();
                 sleep(500);
-                $(By.xpath("//textarea")).setValue(action.getActionText());//
+                $(By.xpath("//textarea")).setValue(action.getActionText());//todo здесь возникает проблема при создании типа задачи отличного от Обычный
                 $(By.xpath("//div[text()=\"Сохранить\"]//ancestor::div[contains(@class,\"x-component x-button x-has-text\")]")).click();
                 verifyDisplayAddedActions(action.getActionText(), action.getAuthorAction(),action.getTimeOfAddAction()); //  Проверяем отображение добавлого текста в ленту действий
             }

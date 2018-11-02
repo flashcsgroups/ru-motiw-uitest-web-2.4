@@ -37,7 +37,7 @@ public class Action {
     /**
      * Пользователь добавивший действие
      */
-    public Employee  getAuthorAction() {
+    public Employee getAuthorAction() {
         return authorAction;
     }
 

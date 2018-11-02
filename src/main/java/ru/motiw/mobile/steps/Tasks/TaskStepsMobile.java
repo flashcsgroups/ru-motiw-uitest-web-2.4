@@ -222,6 +222,13 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
     }
 
 
+    private void verifyNameOfAttachFiles(String nameOfFiles) {
+        //todo  сейчас через этот xpath проверяется только первый файл в списке. Их добаляется 2-3. надо каждый проверять.
+        // вариант: в поле задачи файлы указать объект масиив Имен Файлов, а потом переберать из массива и в зависимости от кол-ва объектов в массиве кейсами проверять. в каждом кейсе указания xpath-ов
+        $(By.xpath("//div[contains(@id,\"ext-simplelistitem\")]//div[@class=\"x-innerhtml\"]")).shouldHave(text(nameOfFiles)); //проверяем название файла
+    }
+
+
     /*
      * Проверка отбражения полей при закрытых группах полей
      */
@@ -390,6 +397,12 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         verifyValueInInput("Окончание", task.getDateEnd());
         verifyValueInInput("Начало", task.getDateBegin());
         Assert.assertTrue(verifyIsImportant(task.getIsImportant())); // Приоритет
+
+
+        // Значения в поле "Файлы"
+        verifyNameOfAttachFiles(task.getFileName());
+
+
         Assert.assertTrue(verifyCheckboxIsSelected(task.getIsWithReport(), newTaskFormElementsMobile.getReportRequired())); // Признак - С Докладом - по умолчанию выбран при создании задачи.
         Assert.assertTrue(verifyCheckboxIsSelected(task.getIsSecret(), newTaskFormElementsMobile.getIsSecret())); // Признак Секретная
 
@@ -419,7 +432,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
             return null;
         } else
         $(By.xpath("//div[@class=\"x-component x-title x-title-align-left x-layout-box-item x-layout-hbox-item x-flexed\"]/div[text()='" + valueTask.getTaskName() + "']"))
-                .waitUntil(visible, 20000); // Название задачи в хедере
+                .waitUntil(visible, 20000); // Название задачи в хедере todo почемуто валится на площадке http://motiwtest4.motiw.ru в версии 2.3
 
         //Переходим на вкладку "Описание"
         openTab("Описание");
@@ -452,6 +465,8 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         selectGroupTab("Еще"); // Открываем вкладку "Еще"
         newTaskFormElementsMobile.getIsForReview().shouldBe(disabled); // Признак -  "Для ознакомления" в созданной задаче должен быть задизейблен. Состояние чекбокса не отображается.
         selectGroupTab("Еще"); // Закрываем вкладку "Еще"
+
+
 
 
 

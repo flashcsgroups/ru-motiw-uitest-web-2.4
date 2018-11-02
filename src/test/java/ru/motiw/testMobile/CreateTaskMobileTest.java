@@ -107,7 +107,7 @@ public class CreateTaskMobileTest extends Tasks {
     }
 
 
-    @Test(priority = 4, dataProvider = "objectDataTaskPDA", dataProviderClass = Tasks.class)
+    @Test(priority = 3, dataProvider = "objectDataTaskPDA", dataProviderClass = Tasks.class)
     public void verifyCreateTaskMobile(Task task) throws Exception {
 
 
@@ -199,6 +199,8 @@ public class CreateTaskMobileTest extends Tasks {
         refresh(); //чтобы сбросить из кеша все элементы что остаются после работы в других формах
         //Добавление действия и проверяем его сохранение
         taskActionsStepsMobile.postAction(editTask.getActions());
+
+
 
         // редактируем атрибуты задачи
         editOfTaskMobile.editOfTask(task, editTask);

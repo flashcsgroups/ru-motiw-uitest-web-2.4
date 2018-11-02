@@ -16,11 +16,13 @@ import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Tasks.Task;
 import ru.motiw.web.steps.BaseSteps;
 
+import java.io.File;
+
 import static com.codeborne.selenide.Condition.selected;
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.page;
-import static com.codeborne.selenide.Selenide.refresh;
+import static com.codeborne.selenide.Selenide.*;
+import static org.testng.Assert.assertTrue;
 import static ru.motiw.mobile.model.URLMenuMobile.CREATE_TASK;
 import static ru.motiw.mobile.steps.BaseStepsMobile.openSectionOnURLMobile;
 
@@ -37,6 +39,7 @@ public class NewTaskStepsMobile extends BaseSteps {
     private LoginStepsMobile loginStepsMobile = page(LoginStepsMobile.class);
     private InternalStepsMobile internalStepsMobile = page(InternalStepsMobile.class);
     private LoginPageElementsMobile loginPageElementsMobile = page(LoginPageElementsMobile.class);
+
 
 
     /*
@@ -371,6 +374,7 @@ public class NewTaskStepsMobile extends BaseSteps {
     public NewTaskStepsMobile creatingTask(Task task) {
         ensurePageLoaded();
         refresh(); //чтобы сбросить из кеша все элементы что остаются после работы в других формах
+
        // Разворачиваем  группу полей  "Название"
         selectGroupTab("Название");
        //Заполняем Название задачи
@@ -412,6 +416,14 @@ public class NewTaskStepsMobile extends BaseSteps {
         //selectGroupTab("Тип задачи");
 
 
+
+        // Открываем группу полей "Файлы"
+        selectGroupTab("Файлы");
+        addAttachFiles(task.getFileName(), 2);
+        // Закрываем  группу полей "Файлы"
+        selectGroupTab("Файлы");
+
+
         // Открываем группу полей "Ещё"
         selectGroupTab("Еще");
         newTaskFormElementsMobile.getReportRequired().shouldBe(selected); // Признак - С Докладом всегда по умолчанию должен быть выбран.
@@ -419,6 +431,8 @@ public class NewTaskStepsMobile extends BaseSteps {
         rangeOfValuesFromTheCheckbox(task.getIsForReview(), newTaskFormElementsMobile.getCheckboxIsForReview()); // Признак - "Для ознакомления"
         // Закрываем  группу полей "Ещё"
         selectGroupTab("Еще");
+
+
 
        /*
        setEnd(task.getDateEnd());
@@ -457,6 +471,7 @@ public class NewTaskStepsMobile extends BaseSteps {
      */
     public NewTaskStepsMobile saveTask() {
 
+        sleep(1000);
         newTaskFormElementsMobile.getButtonCreateTask().click();
         //Ждем появление маски загрузки
         loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.visible, 1000);
@@ -481,6 +496,25 @@ public class NewTaskStepsMobile extends BaseSteps {
     }
 
 
+
+    /**
+     * Аттачминг файлов в форме задачи
+     * @param files      name files
+     * @param sum        количество передаваемых файлов
+     */
+    public NewTaskStepsMobile addAttachFiles (String files, int sum) {
+        for (int i = 0; i < sum; i++) {
+            String mainFilePath = "src" + File.separator + "main" + File.separator +
+                    "resources" + File.separator + "attachfiles" + File.separator;
+            File file = $(By.xpath("//input[@type=\"file\"]"))
+                    .uploadFile(new File(mainFilePath, files));
+            assertTrue(file.exists()); // наверное, проверяет, что создан объект file.
+            assertTrue(file.getPath().replace(File.separatorChar, '/').endsWith("src/main/resources/attachfiles/" + files + ""));
+            $(By.xpath("//div[contains(@id,\"ext-simplelistitem\")]//div[@class=\"x-innerhtml\"]")).shouldHave(text(files)); //проверяем название файла
+
+        }
+        return this;
+    }
 
 
 

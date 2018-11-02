@@ -6,9 +6,9 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
+import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Tasks.Folder;
 import ru.motiw.web.model.Tasks.Task;
-import ru.motiw.web.model.Administration.Users.Employee;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,8 +18,6 @@ import java.util.List;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.page;
-import static org.apache.commons.io.FileUtils.readFileToString;
-import static org.testng.Assert.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
 /**
