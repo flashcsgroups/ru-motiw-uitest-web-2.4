@@ -191,7 +191,7 @@ public class CreateTaskMobileTest extends Tasks {
         taskStepsMobile.verifyValueWhenGroupsOpen(task); //проверка введенных значений в полях при открытых группах полей
         */
         newTaskStepsMobile.saveTask()
-                .goToNewTaskViaToast();//Сохраняем задачу и переходим в созданную задачу через вспылвающие уведомление - Toast
+                .goToNewTaskViaToast();//Сохраняем задачу и переходим в созданную задачу через всплывающие уведомление - Toast
 
 
         //----------------------------------------------------------------ФОРМА - Задачи

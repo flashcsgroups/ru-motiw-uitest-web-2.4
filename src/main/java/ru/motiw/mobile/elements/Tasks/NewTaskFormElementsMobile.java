@@ -72,6 +72,12 @@ public class NewTaskFormElementsMobile {
     @FindBy(xpath = "//div[contains(text(),'Файлы')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel x-noborder-trbl x-header-position-top x-panel-grey-background x-container-grey-background \")]//input[@class=\"x-input-el\"]")
     private SelenideElement fieldFiles;
 
+    @FindBy(xpath = "//input[@type=\"file\"]")
+    private SelenideElement inputFiles;
+
+    @FindBy(xpath = "//i[contains(@class,'file')]/ancestor::div[@class=\"x-list-outer-ct x-scroller\"]//div[@class=\"x-innerhtml\"]")
+    private ElementsCollection listOfNameFiles;
+
     @FindBy(xpath = "(//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel\")]//div[@class=\"x-input-el\"])[1]")
     private SelenideElement authorsField;
 
@@ -260,6 +266,22 @@ public class NewTaskFormElementsMobile {
     }
 
     /**
+     * input добавление Файла
+     */
+
+    public SelenideElement getInputFiles() {
+        return inputFiles;
+    }
+
+    /**
+     *коллекция элементов из списка добавленных файлов
+     */
+
+    public ElementsCollection getListOfNameFiles() {
+        return listOfNameFiles;
+    }
+
+    /**
      * Поле ввода в списке формы добавления пользователей
      */
     public SelenideElement getInputForSearchUsers (String componentId) {
@@ -280,6 +302,8 @@ public class NewTaskFormElementsMobile {
     public SelenideElement getUserFromList (String componentId, Employee employee) {
         return $(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(text(),'" + employee.getLastName() + "')]"));
     }
+
+
 
 
     /**

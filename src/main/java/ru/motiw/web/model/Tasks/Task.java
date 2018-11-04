@@ -29,7 +29,7 @@ public class Task {
     private Event[] events;
     private Employee[] contacts;
     private Action[] actions;
-    private String fileName;
+    private String[] fileName;
 
 
     /**
@@ -279,11 +279,11 @@ public class Task {
     /**
      * Файлы задачи
      */
-    public String getFileName() {
+    public String[] getFileName() {
         return fileName;
     }
 
-    public Task setFileName(String fileName) {
+    public Task setFileName(String[] fileName) {
         this.fileName = fileName;
         return this;
     }

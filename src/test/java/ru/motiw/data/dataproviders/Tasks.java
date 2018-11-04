@@ -17,18 +17,31 @@ import static ru.motiw.data.dataproviders.Administration.getRandomEmployer;
 public abstract class Tasks extends BaseTest {
 
     private final String fileAttach = "hello_world.txt"; //todo вынести куда-нибудь
+    private final String fileAttachTwo = "Договор аренды.doc";
+    private final String fileAttachThree = "lease_contract.doc";
 
     /**
      * Метод создания полностью случайного объекта - "Задача" for PDA
      */
     public Task getRandomObjectTask() {
+
         // Инициализация объекта - Действия
         Action[] actions = new Action[]{
                 getRandomAction(),
                 getRandomAction()
         };
-        return new Task()
 
+        // Инициализация объекта - Названия Файлов задачи
+        String[] strings = new String[] {
+                fileAttach,
+                fileAttachTwo,
+                fileAttachThree
+        };
+
+
+
+        return new Task()
+                //Добавляем текстовые действия задачи
                 .setActions(new Action[] {
                         actions[0]
                                 .setActionText("Действие №1" + " " + randomString(10) ),
@@ -44,7 +57,7 @@ public abstract class Tasks extends BaseTest {
                 .setExecutiveManagers(null) //null т.к при редактировании удаляем пользователей добавленных при создании, а потом проверяем поле на null
                 .setWorkers(null) //null т.к при редактировании удаляем пользователей добавленных при создании, а потом проверяем поле на null
                 .setTaskType(new TasksTypes("Обычный"))
-                .setFileName(fileAttach) // Файл
+                .setFileName(new String[ ]{strings[2]}) // Файлы - взаимодействуем только с названиями файлов
                 .setIsSecret(true) // Секретная задача
                 .setIsWithReport(false) // C докладом
                 .setIsForReview(true); // Только для озакомления
@@ -82,6 +95,16 @@ public abstract class Tasks extends BaseTest {
      */
     @DataProvider
     public Object[][] objectDataTaskPDA() {
+
+        // Инициализация объекта - Названия Файлов задачи
+        String[] strings = new String[] {
+                fileAttach,
+                fileAttachTwo,
+                fileAttachThree
+        };
+
+
+
         return new Object[][]{
 
                 {new Task().setTaskName(randomString(15) + " " + randomString(30))
@@ -97,7 +120,7 @@ public abstract class Tasks extends BaseTest {
                         .setIsSecret(true) // Секретная задача
                         .setIsWithReport(true) // C докладом
                         .setIsForReview(true) // Только для озакомления
-                        .setFileName(fileAttach) // Файл
+                        .setFileName(new String[] {strings[0],strings[1]}) // Файл
                         .setIsImportant(true)}, // Важная задача
         };
     }

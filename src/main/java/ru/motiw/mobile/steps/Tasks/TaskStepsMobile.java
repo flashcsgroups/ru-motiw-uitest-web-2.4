@@ -13,6 +13,7 @@ import ru.motiw.web.model.Tasks.Task;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
+import static org.testng.Assert.assertTrue;
 
 public class TaskStepsMobile extends NewTaskStepsMobile {
 
@@ -222,10 +223,16 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
     }
 
 
-    private void verifyNameOfAttachFiles(String nameOfFiles) {
+    private void verifyNameOfAttachFiles(String[] nameOfFiles) {
+
+        if (nameOfFiles != null)
+            for (String nameOfFile : nameOfFiles) {
+                assertTrue(verifyNameFileInTheListFiles(nameOfFile));
+
+            }
         //todo  сейчас через этот xpath проверяется только первый файл в списке. Их добаляется 2-3. надо каждый проверять.
         // вариант: в поле задачи файлы указать объект масиив Имен Файлов, а потом переберать из массива и в зависимости от кол-ва объектов в массиве кейсами проверять. в каждом кейсе указания xpath-ов
-        $(By.xpath("//div[contains(@id,\"ext-simplelistitem\")]//div[@class=\"x-innerhtml\"]")).shouldHave(text(nameOfFiles)); //проверяем название файла
+       // $(By.xpath("//div[contains(@id,\"ext-simplelistitem\")]//div[@class=\"x-innerhtml\"]")).shouldHave(text(nameOfFiles)); //проверяем название файла
     }
 
 
@@ -360,7 +367,6 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         selectGroupTab("Файлы");
         selectGroupTab("Еще");
 
-
         //Все проверки из verifyValueInInput
         verifyValueInInput("Название", task.getTaskName());
 
@@ -399,9 +405,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         Assert.assertTrue(verifyIsImportant(task.getIsImportant())); // Приоритет
 
 
-        // Значения в поле "Файлы"
-        verifyNameOfAttachFiles(task.getFileName());
-
+        verifyNameOfAttachFiles(task.getFileName()); // Названия файлов в списке поля "Файлы"
 
         Assert.assertTrue(verifyCheckboxIsSelected(task.getIsWithReport(), newTaskFormElementsMobile.getReportRequired())); // Признак - С Докладом - по умолчанию выбран при создании задачи.
         Assert.assertTrue(verifyCheckboxIsSelected(task.getIsSecret(), newTaskFormElementsMobile.getIsSecret())); // Признак Секретная

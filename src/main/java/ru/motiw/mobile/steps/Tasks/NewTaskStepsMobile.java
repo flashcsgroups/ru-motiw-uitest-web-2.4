@@ -17,10 +17,10 @@ import ru.motiw.web.model.Tasks.Task;
 import ru.motiw.web.steps.BaseSteps;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
-import static com.codeborne.selenide.Condition.selected;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static org.testng.Assert.assertTrue;
 import static ru.motiw.mobile.model.URLMenuMobile.CREATE_TASK;
@@ -174,7 +174,6 @@ public class NewTaskStepsMobile extends BaseSteps {
      * @return page NewTaskPag
      */
     public NewTaskStepsMobile setTasksDescription(String descriptionTasks) {
-        //сейчас пишет, что return не используется нигде
             if (descriptionTasks == null) {
                 return this;
             }
@@ -419,7 +418,7 @@ public class NewTaskStepsMobile extends BaseSteps {
 
         // Открываем группу полей "Файлы"
         selectGroupTab("Файлы");
-        addAttachFiles(task.getFileName(), 2);
+        addAttachFiles(task.getFileName());
         // Закрываем  группу полей "Файлы"
         selectGroupTab("Файлы");
 
@@ -499,23 +498,42 @@ public class NewTaskStepsMobile extends BaseSteps {
 
     /**
      * Аттачминг файлов в форме задачи
-     * @param files      name files
-     * @param sum        количество передаваемых файлов
+     * @param nameOfFiles  названия файлов
      */
-    public NewTaskStepsMobile addAttachFiles (String files, int sum) {
-        for (int i = 0; i < sum; i++) {
+    public NewTaskStepsMobile addAttachFiles (String[] nameOfFiles) {
+        if (nameOfFiles != null)
+        for (String nameOfFile : nameOfFiles) {
             String mainFilePath = "src" + File.separator + "main" + File.separator +
                     "resources" + File.separator + "attachfiles" + File.separator;
-            File file = $(By.xpath("//input[@type=\"file\"]"))
-                    .uploadFile(new File(mainFilePath, files));
-            assertTrue(file.exists()); // наверное, проверяет, что создан объект file.
-            assertTrue(file.getPath().replace(File.separatorChar, '/').endsWith("src/main/resources/attachfiles/" + files + ""));
-            $(By.xpath("//div[contains(@id,\"ext-simplelistitem\")]//div[@class=\"x-innerhtml\"]")).shouldHave(text(files)); //проверяем название файла
-
+            File file = newTaskFormElementsMobile.getInputFiles()
+                    .uploadFile(new File(mainFilePath, nameOfFile));
+            assertTrue(file.exists()); // наверное, проверяет, что создан объект File.
+            assertTrue(file.getPath().replace(File.separatorChar, '/').endsWith("src/main/resources/attachfiles/" + nameOfFile + ""));
+            assertTrue(verifyNameFileInTheListFiles(nameOfFile));
         }
         return this;
     }
 
 
+    /**
+     * Проверка названий Файлов в списке прикрепленных файлов
+     * @param nameOfFile названия файлов
+     *  false  если среди файлов в списке не находим название файла
+     *  true   если среди файлов в списке находим название файла
+     */
 
-}
+    public boolean verifyNameFileInTheListFiles(String nameOfFile) {
+
+            List<SelenideElement> nameFileInTheList = new ArrayList<>(newTaskFormElementsMobile.getListOfNameFiles());
+
+        for (SelenideElement nameFile : nameFileInTheList) {
+            if ($(nameFile).is((text(nameOfFile)))) {
+                return true;
+            }
+        }
+            return false;
+    }
+
+    }
+
+
