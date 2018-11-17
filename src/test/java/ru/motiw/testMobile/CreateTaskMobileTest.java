@@ -252,9 +252,9 @@ public class CreateTaskMobileTest extends Tasks {
         // Ожидание кнопки Главного Меню
         $(By.xpath("//div[@class=\"x-component x-button no-blue-alt x-has-icon x-icon-align-left x-arrow-align-right x-button-alt x-component-alt x-layout-box-item x-layout-hbox-item\"][1]")).waitUntil(Condition.visible, 10000);
 
-        open("/m/#task/74");
+        open("/m/#task/356");
 
-        sleep(5000);
+        sleep(500);
         taskStepsMobile.verifyNumbersOfFiles(editTask);
 
 

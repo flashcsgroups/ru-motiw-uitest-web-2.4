@@ -11,6 +11,7 @@ import org.testng.AssertJUnit;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
 import ru.motiw.mobile.elements.Login.LoginPageElementsMobile;
 import ru.motiw.mobile.elements.Tasks.NewTaskFormElementsMobile;
+import ru.motiw.mobile.elements.Tasks.TaskElementsMobile;
 import ru.motiw.mobile.steps.InternalStepsMobile;
 import ru.motiw.mobile.steps.LoginStepsMobile;
 import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
@@ -42,6 +43,7 @@ public class NewTaskStepsMobile extends BaseSteps {
     private LoginStepsMobile loginStepsMobile = page(LoginStepsMobile.class);
     private InternalStepsMobile internalStepsMobile = page(InternalStepsMobile.class);
     private LoginPageElementsMobile loginPageElementsMobile = page(LoginPageElementsMobile.class);
+    private TaskElementsMobile taskElementsMobile = page(TaskElementsMobile.class);
 
     File folder = new File(Configuration.reportsFolder);
 
@@ -513,7 +515,7 @@ public class NewTaskStepsMobile extends BaseSteps {
                     .uploadFile(new File(mainFilePath, nameOfFile));
             assertTrue(file.exists()); // наверное, проверяет, что создан объект File.
             assertTrue(file.getPath().replace(File.separatorChar, '/').endsWith("src/main/resources/attachfiles/" + nameOfFile + ""));
-            assertTrue(verifyNameFileInTheListFiles(nameOfFile));
+            assertTrue(verifyNameFileInTheListFiles(nameOfFile), "Не пройдена проверка названий Файлов в списке прикрепленных файлов");
         }
         return this;
     }
@@ -553,32 +555,36 @@ public class NewTaskStepsMobile extends BaseSteps {
 
 
     /**
-     * Скачивание файла в форме ленты действий задачи
+     * Скачивание файла в просмотрщике файлов формы задачи
      *
      * @param nameFiles передаваемое Имя файла для скачивания
      * @return TaskActionsStepsPDA форма задачи
      * @throws IOException
      */
-    public NewTaskStepsMobile downloadsFiles(String[] nameFiles, int numberOfFiles) throws IOException {
+    public NewTaskStepsMobile downloadsFilesInPreview(String[] nameFiles, int numberOfFiles) throws IOException {
 
-        sleep(2000);
+//        sleep(2000);
 
-        for (int i = 0; i < numberOfFiles; i++) {
+
+        for (int i = 1; i < numberOfFiles+1; i++) {
+            taskElementsMobile.getNumbersOnElementCounterFiles().waitUntil(Condition.text((i) + " / " + numberOfFiles), 2000);
             File downloadedFile =
                     $(By.xpath("//div[contains(@class,\"x-container x-component x-titlebar-right x-size-monitored\")]//a[@href]")).download();
 
-            assertTrue(verifyNameOfDownloadedFile(downloadedFile.getName(), nameFiles));
+            assertTrue(verifyNameOfDownloadedFile(downloadedFile.getName(), nameFiles), "Название скаченного файла не совподает с набором названий файлов прикрепляемых к задаче!");
             // TODO downloadedFile.getName() возвращает  - UTF-8''. assertEquals не проходит сравнение. Почему?
             //assertEquals(nameFiles, downloadedFile.getName());
             // assertEquals(nameFiles, readFileToString(downloadedFile, "UTF-8"));
             AssertJUnit.assertTrue(downloadedFile.getAbsolutePath().startsWith(folder.getAbsolutePath()));
             $(By.xpath("//div[@class=\"x-icon-el x-font-icon x-mi mi-chevron-right\"]/ancestor::div[contains(@id,\"ext-filesnavigationbtn\")]")).click(); //переходим к следующему файлу в карусели
+            sleep(500);
+
         }
         return this;
     }
 
     /**
-     * Сравнение имени скаченного файла с набором названий файлов прикрепляемых к документу
+     * Сравнение имени скаченного файла с набором названий файлов прикрепляемых к задаче
      * @param nameOfDownloadedFile имя скаченного файла
      * @param nameFiles набор названий файлов прикрепляемых к документу
      */

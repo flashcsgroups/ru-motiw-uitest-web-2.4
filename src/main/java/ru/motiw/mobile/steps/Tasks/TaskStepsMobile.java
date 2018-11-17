@@ -231,7 +231,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
 
         if (nameOfFiles != null)
             for (String nameOfFile : nameOfFiles) {
-                assertTrue(verifyNameFileInTheListFiles(nameOfFile));
+                assertTrue(verifyNameFileInTheListFiles(nameOfFile), "Не пройдена проверка названий Файлов в списке прикрепленных файлов");
 
             }
 
@@ -437,8 +437,8 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         if (valueTask == null) {
             return null;
         } else
-        $(By.xpath("//div[@class=\"x-component x-title x-title-align-left x-layout-box-item x-layout-hbox-item x-flexed\"]/div[text()='" + valueTask.getTaskName() + "']"))
-                .waitUntil(visible, 20000); // Название задачи в хедере todo почемуто валится на площадке http://motiwtest4.motiw.ru в версии 2.3
+//        $(By.xpath("//div[@class=\"x-component x-title x-title-align-left x-layout-box-item x-layout-hbox-item x-flexed\"]/div[text()='" + valueTask.getTaskName() + "']"))
+//                .waitUntil(visible, 20000); // Название задачи в хедере todo почемуто валится на площадке http://motiwtest4.motiw.ru в версии 2.3
 
         //Переходим на вкладку "Описание"
         openTab("Описание");
@@ -557,11 +557,18 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
             // самое простое gettext из каждого элемента массива  nameFileInTheList не получилось - возвращает пустое. м.б как-то иначе это сделать. все-таки тода полностю универльный метод получился бы проверки файлов.
             //нужно где-то с передаваемым объектом task и edittask передавать итогое кол-во после редактирования.
 
+            for (SelenideElement string: $$(newTaskFormElementsMobile.getListOfNameFiles())) {
+                String text = string.getText(); //переводим в строку
+                System.out.println(text);
+                if (text.isEmpty()){ System.out.println("123");}
+
+            }
 
                 try {
-                    downloadsFiles(task.getFileName(), numberOfFiles);
+                    downloadsFilesInPreview(task.getFileName(), numberOfFiles);
 
                 } catch (IOException e) {
+                    System.out.println("Файл не скачен");
                     return this;
                 }
 
