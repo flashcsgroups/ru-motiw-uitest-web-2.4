@@ -20,7 +20,7 @@ import ru.motiw.web.model.Tasks.Task;
 import ru.motiw.web.steps.BaseSteps;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -367,7 +367,7 @@ public class NewTaskStepsMobile extends BaseSteps {
     /*
     * Открытие группы полей на вкладке "Описание"
     * */
-    void selectGroupTab(String nameOfGroup){
+    public void selectGroupTab(String nameOfGroup){
         $(By.xpath("//div[contains(text(),'" + nameOfGroup + "')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
     }
 
@@ -556,22 +556,18 @@ public class NewTaskStepsMobile extends BaseSteps {
 
     /**
      * Скачивание файла в просмотрщике файлов формы задачи
-     *
      * @param nameFiles передаваемое Имя файла для скачивания
      * @return TaskActionsStepsPDA форма задачи
-     * @throws IOException
+     * @throws FileNotFoundException  в том случае, если файл не будет загружен метод .download() выкинет FileNotFoundException
      */
-    public NewTaskStepsMobile downloadsFilesInPreview(String[] nameFiles, int numberOfFiles) throws IOException {
+    public NewTaskStepsMobile downloadsFilesInPreview(String[] nameFiles, int numbersOfFiles) throws FileNotFoundException {
 
-//        sleep(2000);
-
-
-        for (int i = 1; i < numberOfFiles+1; i++) {
-            taskElementsMobile.getNumbersOnElementCounterFiles().waitUntil(Condition.text((i) + " / " + numberOfFiles), 2000);
+        for (int numberOfCurrentFile = 1; numberOfCurrentFile < numbersOfFiles+1; numberOfCurrentFile++) {
+            taskElementsMobile.getNumbersOnElementCounterFiles().waitUntil(Condition.text((numberOfCurrentFile) + " / " + numbersOfFiles), 2000); //изменение числа в счетчике после переключения между файлами в просмотрщике
             File downloadedFile =
                     $(By.xpath("//div[contains(@class,\"x-container x-component x-titlebar-right x-size-monitored\")]//a[@href]")).download();
 
-            assertTrue(verifyNameOfDownloadedFile(downloadedFile.getName(), nameFiles), "Название скаченного файла не совподает с набором названий файлов прикрепляемых к задаче!");
+            assertTrue(verifyNameOfDownloadedFile(downloadedFile.getName(), nameFiles), "Название скаченного файла не совпадает с набором названий файлов прикрепляемых к задаче!");
             // TODO downloadedFile.getName() возвращает  - UTF-8''. assertEquals не проходит сравнение. Почему?
             //assertEquals(nameFiles, downloadedFile.getName());
             // assertEquals(nameFiles, readFileToString(downloadedFile, "UTF-8"));

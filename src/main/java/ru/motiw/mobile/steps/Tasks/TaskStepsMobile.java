@@ -6,17 +6,19 @@ import com.codeborne.selenide.SelenideElement;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
 import ru.motiw.mobile.elements.Tasks.TaskElementsMobile;
 import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
 import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Tasks.Task;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.testng.Assert.assertTrue;
 
 public class TaskStepsMobile extends NewTaskStepsMobile {
@@ -432,7 +434,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
      * @param valueTask атрибуты задачи
      * @return UnionMessageSteps
      */
-    public TaskStepsMobile verifyCreateTask(Task valueTask) {
+    public TaskStepsMobile verifyCreateTask(Task valueTask) throws Exception {
         refresh(); // чтобы сбросить из кеша все элементы что остаются после работы в форме создания задачи
         if (valueTask == null) {
             return null;
@@ -475,12 +477,10 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
 
         /*
          * Открываем вкладку "Файлы"
-         * Проверка того, чтобы кол-во файлов в элементе с-переключателе файлов соответствовало числу файлов содержашихся в задаче
+         * Проверка того, чтобы кол-во файлов в элементе-переключателе файлов соответствовало числу файлов содержашихся в задаче
          * проверка числа файлов в каруселе
          */
          verifyNumbersOfFiles(valueTask);
-
-
 
 
         /*
@@ -521,7 +521,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         return this;
     }
 
-    public TaskStepsMobile verifyNumbersOfFiles(Task task) {
+    public TaskStepsMobile verifyNumbersOfFiles(Task task) throws Exception {
 
         //TODO надо подумать как сделать этот метод более универсальным. Чтобы его можно было использовать в любом тесте
 
@@ -535,64 +535,49 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
             List<SelenideElement> nameFileInTheList = new ArrayList<>(newTaskFormElementsMobile.getListOfNameFiles());
             int numberOfFiles = nameFileInTheList.size();
 
-
             // сравниваем кол-во файлов с числом отображаемым в элементе-переключтеле файлов.
-
-            //это можно наверное, в отдельный метод. На вход передавать только numberOfFiles.
-            // Можно использовать для какого-нибудь теста, где прсто будут добавляться и удаляться файлы,
-            // и парралельно сверяться этим методо кол-во в счетчике.
             taskElementsMobile.getNumbersOnElementCounterFiles().shouldHave(text("1 / " + numberOfFiles));
 
             selectGroupTab("Файлы"); // Закрываем вкладку "Файлы"
 
             //проверка числа файлов в каруселе
             openTab("Файлы");
-            //Здесь можно добавлять файлы, напрмер, rtf -и сверять переключение и одновреенно отображение.
+            //todo Здесь можно проверять при переключении между файлами одновреенно отображение.
 
-            // Скачивание отдельным методом через кнопку в парвом углу.
-
-            //надо передавать в цикле имена файлов из констанст,
-            // но как это сделать, если  эта проверка будет после редактирвоания задачи, а значит будет добавлен новый файл? итого = 3, а может 2 с учетом удаления.
-            // Как узнать конкретное кол-во файлов и их емен?
-            // самое простое gettext из каждого элемента массива  nameFileInTheList не получилось - возвращает пустое. м.б как-то иначе это сделать. все-таки тода полностю универльный метод получился бы проверки файлов.
-            //нужно где-то с передаваемым объектом task и edittask передавать итогое кол-во после редактирования.
-
-            for (SelenideElement string: $$(newTaskFormElementsMobile.getListOfNameFiles())) {
-                String text = string.getText(); //переводим в строку
-                System.out.println(text);
-                if (text.isEmpty()){ System.out.println("123");}
-
+            downloadsFilesInPreview(task.getFileName(), numberOfFiles);
             }
-
-                try {
-                    downloadsFilesInPreview(task.getFileName(), numberOfFiles);
-
-                } catch (IOException e) {
-                    System.out.println("Файл не скачен");
-                    return this;
-                }
-
-
-
-                // И счетчик чтобы изменялся в каруселе
-
-            }
-
-
-
 
         return this;
     }
 
-    public void saveFile () {
+
+        /**
+         * Удаление файлов через ДнД (свайп влево по плашке с файлом )
+         * @param nameOfFiles названия прикрепляемых файлов в объекте task
+         */
+        public void deleteFile (String[] nameOfFiles) {
+
+            for (String nameOfFile : nameOfFiles) {
+                SelenideElement sourceElement = $(By
+                        .xpath("//div[contains(text(), '" + nameOfFile + "')]/ancestor::div[contains(@class,\"x-listitem x-component\")]"));
+                SelenideElement targetElement = $(taskElementsMobile.getElementAmongButtonsOfMenu());
+
+                sleep(200);
+                Actions builder = new Actions(getWebDriver());
+                Action drag = builder.clickAndHold(sourceElement).build();
+                Action drop = builder.moveToElement(targetElement)
+                        .release(targetElement).build();
+                drag.perform();
+                drop.perform();
+            }
 
 
-    }
+        }
 
 
     // Ожидание и проверка элементов меню тулбара задачи
     private void verifyMenuOfTask() {
-        $(taskElementsMobile.getToolbarOfMenu()).waitUntil(visible, 30000);
+        $(taskElementsMobile.getToolbarOfMenu()).waitUntil(visible, 50000);
         taskElementsMobile.getMenuOfTask().shouldHaveSize(9); // 9 элементов - это вместе со скрытыми элементами.
     }
 

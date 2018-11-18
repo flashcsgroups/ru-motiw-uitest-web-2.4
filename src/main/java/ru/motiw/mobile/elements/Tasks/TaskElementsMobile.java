@@ -121,7 +121,7 @@ public class TaskElementsMobile {
     }
 
     /**
-     * Кнопка перехода на вкладку "Сохранить"
+     * Кнопка "Сохранить"
      */
     public SelenideElement getButtonOfSave() {
         return buttonOfSave;
