@@ -77,7 +77,6 @@ public class EditOfTaskMobile extends NewTaskStepsMobile {
         rangeOfValuesFromTheCheckbox(editTask.getIsWithReport(), newTaskFormElementsMobile.getCheckboxReportRequired(), newTaskFormElementsMobile.getReportRequired());
         // Закрываем  группу полей "Ещё"
         selectGroupTab("Еще");
-
         sleep(1000);
         //Сохранить
         taskElementsMobile.getButtonOfSave().click();

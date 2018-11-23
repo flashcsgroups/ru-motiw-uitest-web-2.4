@@ -541,18 +541,6 @@ public class NewTaskStepsMobile extends BaseSteps {
     }
 
 
-    /**
-     *
-     * @param nameFiles передаваемое Имя файла для удаления
-     */
-
-    public NewTaskStepsMobile deleteFiles(String nameFiles) {
-
-        // открывает панель кнопок для взаимодействия с файлами через drag and drop
-
-        return this;
-    }
-
 
     /**
      * Скачивание файла в просмотрщике файлов формы задачи
@@ -564,6 +552,7 @@ public class NewTaskStepsMobile extends BaseSteps {
 
         for (int numberOfCurrentFile = 1; numberOfCurrentFile < numbersOfFiles+1; numberOfCurrentFile++) {
             taskElementsMobile.getNumbersOnElementCounterFiles().waitUntil(Condition.text((numberOfCurrentFile) + " / " + numbersOfFiles), 2000); //изменение числа в счетчике после переключения между файлами в просмотрщике
+            //todo что если в методе перехода к следующему файлу в карусели - проверять сразу?
             File downloadedFile =
                     $(By.xpath("//div[contains(@class,\"x-container x-component x-titlebar-right x-size-monitored\")]//a[@href]")).download();
 
@@ -572,8 +561,10 @@ public class NewTaskStepsMobile extends BaseSteps {
             //assertEquals(nameFiles, downloadedFile.getName());
             // assertEquals(nameFiles, readFileToString(downloadedFile, "UTF-8"));
             AssertJUnit.assertTrue(downloadedFile.getAbsolutePath().startsWith(folder.getAbsolutePath()));
-            $(By.xpath("//div[@class=\"x-icon-el x-font-icon x-mi mi-chevron-right\"]/ancestor::div[contains(@id,\"ext-filesnavigationbtn\")]")).click(); //переходим к следующему файлу в карусели
-            sleep(500);
+            if (numbersOfFiles > 1) {
+                $(By.xpath("//div[@class=\"x-icon-el x-font-icon x-mi mi-chevron-right\"]/ancestor::div[contains(@id,\"ext-filesnavigationbtn\")]")).click(); //переходим к следующему файлу в карусели
+                sleep(500);
+            }
 
         }
         return this;

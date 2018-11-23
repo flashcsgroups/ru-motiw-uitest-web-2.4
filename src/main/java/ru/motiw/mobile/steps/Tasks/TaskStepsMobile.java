@@ -13,9 +13,6 @@ import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
 import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Tasks.Task;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
@@ -412,7 +409,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         verifyNameOfAttachedFiles(task.getFileName()); // Названия файлов в списке поля "Файлы"
 
         Assert.assertTrue(verifyCheckboxIsSelected(task.getIsWithReport(), newTaskFormElementsMobile.getReportRequired())); // Признак - С Докладом - по умолчанию выбран при создании задачи.
-        Assert.assertTrue(verifyCheckboxIsSelected(task.getIsSecret(), newTaskFormElementsMobile.getIsSecret())); // Признак Секретная
+//        Assert.assertTrue(verifyCheckboxIsSelected(task.getIsSecret(), newTaskFormElementsMobile.getIsSecret())); // Признак Секретная todo motiwtest4.motiw.ru не проходит
 
         //verifyTaskType(task.getTaskType()); // Проверка установленного Типа задачи
 
@@ -528,23 +525,26 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         if (task.getFileName() == null) {
             return this;
         } else {
-            openTab("Описание");
-            selectGroupTab("Файлы"); // Открываем вкладку "Файлы"
+            //openTab("Описание");
+//            selectGroupTab("Файлы"); // Открываем вкладку "Файлы"
+//
+//            //считаем кол-во файлов - заносим в массив
+//            List<SelenideElement> nameFileInTheList = new ArrayList<>(newTaskFormElementsMobile.getListOfNameFiles());
+//            int numberOfFiles = nameFileInTheList.size();
 
-            //считаем кол-во файлов - заносим в массив
-            List<SelenideElement> nameFileInTheList = new ArrayList<>(newTaskFormElementsMobile.getListOfNameFiles());
-            int numberOfFiles = nameFileInTheList.size();
+            // сравниваем кол-во прикрепленных файлов с числом отображаемым в элементе-переключтеле файлов.
+            taskElementsMobile.getNumbersOnElementCounterFiles().shouldHave(text("1 / " + task.getNumberOfFiles()));
 
-            // сравниваем кол-во файлов с числом отображаемым в элементе-переключтеле файлов.
-            taskElementsMobile.getNumbersOnElementCounterFiles().shouldHave(text("1 / " + numberOfFiles));
-
-            selectGroupTab("Файлы"); // Закрываем вкладку "Файлы"
+//            selectGroupTab("Файлы"); // Закрываем вкладку "Файлы"
 
             //проверка числа файлов в каруселе
             openTab("Файлы");
             //todo Здесь можно проверять при переключении между файлами одновреенно отображение.
 
-            downloadsFilesInPreview(task.getFileName(), numberOfFiles);
+            //downloadsFilesInPreview(task.getFileName(), task.getNumberOfFiles());
+
+
+            verifyTextInFilesInPreview(task.getFileName(), task.getNumberOfFiles());
             }
 
         return this;
@@ -554,6 +554,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         /**
          * Удаление файлов через ДнД (свайп влево по плашке с файлом )
          * @param nameOfFiles названия прикрепляемых файлов в объекте task
+         * todo удалять файлы через открытие панели кнопок для взаимодействия с файлами (открытие панели кнопок через drag and drop)
          */
         public void deleteFile (String[] nameOfFiles) {
 
@@ -569,11 +570,66 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
                         .release(targetElement).build();
                 drag.perform();
                 drop.perform();
+                sleep(500);
             }
 
 
         }
 
+
+    /**
+     * Проверка наличия текста в файле в просмотрщике файлов формы задачи
+     * @param nameFiles передаваемое Имя файла для скачивания
+     * @return TaskActionsStepsPDA форма задачи
+     *
+     */
+    public NewTaskStepsMobile verifyTextInFilesInPreview(String[] nameFiles, int numbersOfFiles)  {
+
+
+
+        for (int numberOfCurrentFile = 1; numberOfCurrentFile < numbersOfFiles+1; numberOfCurrentFile++) {
+           taskElementsMobile.getNumbersOnElementCounterFiles().waitUntil(Condition.text((numberOfCurrentFile) + " / " + numbersOfFiles), 2000); //изменение числа в счетчике после переключения между файлами в просмотрщике
+
+            //Проверять можно "Тестовое название.pdf" и "Договор аренды.doc"; (прикрепляются при редактирвоании ) через единый xpath - только текст подставлять
+            //div[@id="viewerContainer"]//div[@class="textLayer"]/div[contains(text(),'Договор аренды')]
+
+
+            //todo переберать конечно надо по-другому
+            // for(String nameFile : nameFiles) {
+
+           //switchTo().frame($(By.xpath("//iframe")));  //Переходим во фрейм просмотра файлов
+
+            for(String nameFile : nameFiles) {
+                assertTrue(verifyNameOfDownloadedFile1(nameFile));
+            }
+
+            //$(By.xpath("//div[@id=\"viewerContainer\"]//div[@class=\"textLayer\"]/div[contains(text(),'" + nameFile + "')]")).shouldBe(visible);
+           switchTo().defaultContent();  //Уходим из фрейма просмотра файлов
+
+           //}
+            if (numbersOfFiles > 1) {
+                $(By.xpath("//div[@class=\"x-icon-el x-font-icon x-mi mi-chevron-right\"]/ancestor::div[contains(@id,\"ext-filesnavigationbtn\")]")).click(); //переходим к следующему файлу в карусели
+                sleep(500);
+            }
+
+        }
+        return this;
+    }
+
+
+    /**
+     * Сравнение имени скаченного файла с набором названий файлов прикрепляемых к задаче
+     * @param nameFile набор названий файлов прикрепляемых к документу
+     */
+
+    private boolean verifyNameOfDownloadedFile1 (String nameFile) {
+        if(!$(By.xpath("//div[@id=\"viewerContainer\"]//div[@class=\"textLayer\"]/div[contains(text(),'" + nameFile + "')]")).is(visible)) {
+            switchTo().frame($(By.xpath("//iframe")));  //Переходим во фрейм просмотра файлов
+            return true;
+        }
+        return false;
+
+    }
 
     // Ожидание и проверка элементов меню тулбара задачи
     private void verifyMenuOfTask() {

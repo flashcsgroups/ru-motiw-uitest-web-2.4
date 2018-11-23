@@ -107,7 +107,7 @@ public class CreateTaskMobileTest extends Tasks {
     }
 
 
-    @Test(priority = 3, dataProvider = "objectDataTaskPDA", dataProviderClass = Tasks.class)
+    @Test(priority = 2, dataProvider = "objectDataTaskPDA", dataProviderClass = Tasks.class)
     public void verifyCreateTaskMobile(Task task) throws Exception {
 
 
@@ -156,16 +156,16 @@ public class CreateTaskMobileTest extends Tasks {
     }
 
 
-    @Test(priority = 1, dataProvider = "objectDataTaskPDA",  dataProviderClass = Tasks.class)
+    @Test(priority = 3, dataProvider = "objectDataTaskPDA",  dataProviderClass = Tasks.class)
     public void checkEditingTaskPDA(Task task) throws Exception {
         refresh(); //чистим кеш, т.к остаются элементы
 
         //ЭТО для теста
         //Переход в мобильную версию по ссылке в форме авторизации
-        $(By.xpath("//a[@class=\"m_link\"]")).waitUntil(visible, 10000);
-        $(By.xpath("//a[@class=\"m_link\"]")).click();
-
-        loginPageElementsMobile.getLogin().waitUntil(Condition.visible, 20000);
+//        $(By.xpath("//a[@class=\"m_link\"]")).waitUntil(visible, 10000);
+//        $(By.xpath("//a[@class=\"m_link\"]")).click();
+//
+//        loginPageElementsMobile.getLogin().waitUntil(Condition.visible, 20000);
 
         ////
 
@@ -231,7 +231,7 @@ public class CreateTaskMobileTest extends Tasks {
 
     }
 
-    @Test(priority = 10, dataProvider = "objectDataTaskPDA",  dataProviderClass = Tasks.class)
+    @Test(priority = 1, dataProvider = "objectDataTaskPDA",  dataProviderClass = Tasks.class)
     public void checkEditingTaskPDA1(Task task) throws Exception {
 
         //ЭТО для теста
@@ -252,16 +252,13 @@ public class CreateTaskMobileTest extends Tasks {
         // Ожидание кнопки Главного Меню
         $(By.xpath("//div[@class=\"x-component x-button no-blue-alt x-has-icon x-icon-align-left x-arrow-align-right x-button-alt x-component-alt x-layout-box-item x-layout-hbox-item\"][1]")).waitUntil(Condition.visible, 30000);
 
-        open("/m/#task/74");
+        open("/m/#task/1");
 
         sleep(5000);
 
         taskStepsMobile.openTab("Описание");
         newTaskStepsMobile.selectGroupTab("Файлы"); // Открываем вкладку "Файлы"
 
-
-
-        taskStepsMobile.deleteFile(task.getFileName());
 
         taskStepsMobile.verifyNumbersOfFiles(editTask);
 

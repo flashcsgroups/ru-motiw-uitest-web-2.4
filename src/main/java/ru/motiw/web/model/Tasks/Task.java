@@ -30,6 +30,7 @@ public class Task {
     private Employee[] contacts;
     private Action[] actions;
     private String[] fileName;
+    private Integer numberOfFiles;
 
 
     /**
@@ -287,5 +288,30 @@ public class Task {
         this.fileName = fileName;
         return this;
     }
+
+    /**
+     * Кол-во прикрепленных файлов
+     * При каждом обращении к методу будет считаться кол-во прикрепляемых файлов
+     */
+
+    public int  getNumberOfFiles() {
+        if(numberOfFiles == null) {
+            setNumberOfFiles();
+        }
+        return numberOfFiles;
+    }
+
+    private void setNumberOfFiles() {
+
+        int numberOfFile = 0;
+        for (String s : getFileName()) {
+            numberOfFile++;
+        }
+
+        this.numberOfFiles = numberOfFile;
+    }
+
+
+
 
 }

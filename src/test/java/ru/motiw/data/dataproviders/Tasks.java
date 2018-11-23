@@ -16,9 +16,12 @@ import static ru.motiw.data.dataproviders.Administration.getRandomEmployer;
  */
 public abstract class Tasks extends BaseTest {
 
-    private final String fileAttach = "hello_world.txt"; //todo вынести куда-нибудь
+    private final String fileAttach = "Тестовое название.pdf"; //todo вынести куда-нибудь
+    //private final String fileAttach = "hello_world.txt";
     private final String fileAttachTwo = "Договор аренды.doc";
     private final String fileAttachThree = "lease_contract.doc";
+
+
 
     /**
      * Метод создания полностью случайного объекта - "Задача" for PDA
