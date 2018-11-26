@@ -237,7 +237,6 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
                 assertTrue(verifyNameFileInTheListFiles(nameOfFile), "Не пройдена проверка названий Файлов в списке прикрепленных файлов");
 
             }
-
     }
 
 
@@ -409,8 +408,14 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         verifyValueInInput("Начало", task.getDateBegin());
         Assert.assertTrue(verifyIsImportant(task.getIsImportant())); // Приоритет
 
+        /*
+         * Проверка в списке файлов
+         * в форме создания задачи
+         * на вкладке "Описание" в форме созданной задачи
+         * проверка текста в просмотрике файлов в форме созданной задачи
+         */
+        verifyFilesInTheList(task);
 
-        verifyNameOfAttachedFiles(task.getFileName()); // Названия файлов в списке поля "Файлы"
 
         Assert.assertTrue(verifyCheckboxIsSelected(task.getIsWithReport(), newTaskFormElementsMobile.getReportRequired())); // Признак - С Докладом - по умолчанию выбран при создании задачи.
 //        Assert.assertTrue(verifyCheckboxIsSelected(task.getIsSecret(), newTaskFormElementsMobile.getIsSecret())); // Признак Секретная todo motiwtest4.motiw.ru не проходит
@@ -613,7 +618,55 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         return this;
     }
 
-        /**
+
+    /**
+     * Проверка названий в списке прикрепленных файлов  в форме создания задачи и в форме созданной задачи
+     * Проверка открытия файла в предпросмотре (по клику) на вкладке "Описание" в форме созданной задачи
+     * проверка текста в просмотрике файлов в форме созданной задачи
+     * todo и скачивание
+     * @param task объект Задача
+     * @return
+     */
+    public TaskStepsMobile verifyFilesInTheList(Task task) {
+
+        verifyNameOfAttachedFiles(task.getFileName()); // Названия файлов в списке поля "Файлы"
+
+        //Выполняем проверку файлов в предпросмотре только в форме созданной задачи
+        if (taskElementsMobile.getButtonOfDescriptionTab().is(visible)) {
+            if (task.getFileName() == null) {
+                return this;
+            } else {
+
+                for (String fileName : task.getFileName()) {
+                    $(By.xpath("//i[contains(@class,'file')]/ancestor::div[contains(@class,\"x-body-wrap-el x-panel-body-wrap-el x-container-body-wrap-el x-component-body-wrap-el \")]//div[contains(text(),'" + fileName + "')]"))
+                            .click(); //открытие файла в предпросмотре
+                    sleep(500);
+                    verifyTextInFilesInPreviewOnDescriptionPage(fileName); //Проверка наличия текста в просмотрщике файлов
+                    $(By.xpath("//div[@class=\"x-component x-button x-round-button-floated x-has-icon x-icon-align-left x-arrow-align-right x-button-alt x-component-alt x-button-round x-component-round x-floating\"]"))
+                            .click();  //закрытие предпросмотра
+                    sleep(500);
+
+                }
+            }
+        }
+
+        return this;
+    }
+
+
+    /**
+     * Проверка наличия текста в просмотрщике файлов на вкладке "Описнаие" задачи
+     * @param textInFile передаваемое Имя файла для скачивания - текст с Именем файла находится в прикрепляемых для теста файлах
+     */
+    public TaskStepsMobile verifyTextInFilesInPreviewOnDescriptionPage(String textInFile)  {
+        switchTo().frame($(By.xpath("(//iframe)[2]")));  //Переходим во фрейм просмотра файлов
+        $(By.xpath("//div[@id=\"viewerContainer\"]//div[@class=\"textLayer\"]/div[contains(text(),'" + textInFile + "')]")).shouldBe(visible);
+        switchTo().defaultContent();  //Уходим из фрейма просмотра файлов
+        return this;
+    }
+
+
+    /**
          * Удаление файлов через ДнД (свайп влево по плашке с файлом )
          * @param nameOfFiles названия прикрепляемых файлов в объекте task
          * todo удалять файлы через открытие панели кнопок для взаимодействия с файлами (открытие панели кнопок через drag and drop)

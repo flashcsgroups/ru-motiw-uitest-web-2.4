@@ -252,7 +252,7 @@ public class CreateTaskMobileTest extends Tasks {
         // Ожидание кнопки Главного Меню
         $(By.xpath("//div[@class=\"x-component x-button no-blue-alt x-has-icon x-icon-align-left x-arrow-align-right x-button-alt x-component-alt x-layout-box-item x-layout-hbox-item\"][1]")).waitUntil(Condition.visible, 30000);
 
-        open("/m/#task/74");
+        open("/m/#task/345");
 
         sleep(5000);
 
@@ -260,12 +260,10 @@ public class CreateTaskMobileTest extends Tasks {
         newTaskStepsMobile.selectGroupTab("Файлы"); // Открываем вкладку "Файлы"
 
 
-        taskStepsMobile.verifyFiles(editTask);
-
+        taskStepsMobile.verifyFilesInTheList(editTask);
 
 
     }
-
 
 /*
     @Test(priority = 4, dataProvider = "objectDataTaskPDA", dataProviderClass = Tasks.class)
