@@ -258,7 +258,7 @@ public class NewTaskStepsMobile extends BaseSteps {
      * componentId = ext-selectdialog-{порядковый номер открытой формы}
      */
 
-    void currentUserSelectedInTheRole(Employee[] employees, SelenideElement fieldCustomRole, String componentId) {
+    public void currentUserSelectedInTheRole(Employee[] employees, SelenideElement fieldCustomRole, String componentId) {
         openFormSelectUser(fieldCustomRole, componentId);
         if (employees != null) {
             for (Employee employee : employees) {

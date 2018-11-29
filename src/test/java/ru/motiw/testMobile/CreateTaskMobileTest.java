@@ -1,6 +1,7 @@
 package ru.motiw.testMobile;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.testng.TextReport;
 import com.codeborne.selenide.testng.annotations.Report;
 import org.openqa.selenium.By;
@@ -24,6 +25,9 @@ import ru.motiw.web.model.Tasks.Task;
 import ru.motiw.web.steps.Home.InternalSteps;
 import ru.motiw.web.steps.Login.LoginStepsSteps;
 import ru.motiw.web.steps.Tasks.UnionTasksSteps;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
@@ -231,7 +235,7 @@ public class CreateTaskMobileTest extends Tasks {
 
     }
 
-    @Test(priority = 11, dataProvider = "objectDataTaskPDA",  dataProviderClass = Tasks.class)
+    @Test(priority = 1, dataProvider = "objectDataTaskPDA",  dataProviderClass = Tasks.class)
     public void checkEditingTaskPDA1(Task task) throws Exception {
 
         //ЭТО для теста
@@ -252,17 +256,31 @@ public class CreateTaskMobileTest extends Tasks {
         // Ожидание кнопки Главного Меню
         $(By.xpath("//div[@class=\"x-component x-button no-blue-alt x-has-icon x-icon-align-left x-arrow-align-right x-button-alt x-component-alt x-layout-box-item x-layout-hbox-item\"][1]")).waitUntil(Condition.visible, 30000);
 
-        open("/m/#task/345");
+        open("/m/#task/74");
 
         sleep(5000);
 
         taskStepsMobile.openTab("Описание");
-        newTaskStepsMobile.selectGroupTab("Файлы"); // Открываем вкладку "Файлы"
+        newTaskStepsMobile.selectGroupTab("Кому"); // Открываем вкладку "Файлы"
 
+        $(By.xpath("(//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel\")]//div[@class=\"x-input-el\"])[1]")).click();
 
-        taskStepsMobile.verifyFilesInTheList(editTask);
+        //Ищем на странице все элементы с componentId;
+        List<SelenideElement> elements = new ArrayList<>($$(By.xpath("//div[contains(@id,\"ext-selectdialog\") and contains(@id,\"floatWrap\")]")));
 
+        for(SelenideElement e: elements) {
 
+            String q = e.toString();
+            int i = q.indexOf("ext-selectdialog-");
+            System.out.print(q);
+            System.out.print("indexOf" + i);
+            System.out.print("lastIndexOf" + q);
+
+            String c = q.substring(i+17);
+            System.out.print("charAt  " + c + " qqq");
+
+            //см. parseNameFolder
+        }
     }
 
 /*
