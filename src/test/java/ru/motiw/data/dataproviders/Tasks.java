@@ -2,6 +2,7 @@ package ru.motiw.data.dataproviders;
 
 import org.testng.annotations.DataProvider;
 import ru.motiw.data.BaseTest;
+import ru.motiw.mobile.model.FilesForAttachment;
 import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
 import ru.motiw.web.model.Administration.Users.Department;
 import ru.motiw.web.model.Administration.Users.Employee;
@@ -16,12 +17,6 @@ import static ru.motiw.data.dataproviders.Administration.getRandomEmployer;
  */
 public abstract class Tasks extends BaseTest {
 
-    private final String fileAttach = "Тестовое название.pdf"; //todo вынести куда-нибудь
-    //private final String fileAttach = "hello_world.txt";
-    private final String fileAttachTwo = "Договор аренды.doc";
-    private final String fileAttachThree = "lease_contract.doc";
-
-
 
     /**
      * Метод создания полностью случайного объекта - "Задача" for PDA
@@ -34,11 +29,13 @@ public abstract class Tasks extends BaseTest {
                 getRandomAction()
         };
 
+
+
         // Инициализация объекта - Названия Файлов задачи
         String[] strings = new String[] {
-                fileAttach,
-                fileAttachTwo,
-                fileAttachThree
+                FilesForAttachment.FILE_1.getNameFile(),
+                FilesForAttachment.FILE_2.getNameFile(),
+                FilesForAttachment.FILE_3.getNameFile(),
         };
 
 
@@ -101,9 +98,9 @@ public abstract class Tasks extends BaseTest {
 
         // Инициализация объекта - Названия Файлов задачи
         String[] strings = new String[] {
-                fileAttach,
-                fileAttachTwo,
-                fileAttachThree
+                FilesForAttachment.FILE_1.getNameFile(),
+                FilesForAttachment.FILE_2.getNameFile(),
+                FilesForAttachment.FILE_3.getNameFile(),
         };
 
 

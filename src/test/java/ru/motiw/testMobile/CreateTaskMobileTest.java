@@ -72,7 +72,7 @@ public class CreateTaskMobileTest extends Tasks {
     Folder[] folder = getRandomArrayFolders();
 
 
-    @Test(priority = 1, dataProvider = "objectDataTask", dataProviderClass = Tasks.class)
+    @Test(priority = 11, dataProvider = "objectDataTask", dataProviderClass = Tasks.class)
     public void aPreconditionForFurtherVerification(Department department, Employee[] author, Employee[] resppers, Employee[] controller, Employee[] worker,
                                                     Employee[] IWGWorker, Employee[] IWGResppers, Employee[] IWGСontroller, Task task) {
         loginPageSteps.loginAs(ADMIN);
@@ -107,7 +107,7 @@ public class CreateTaskMobileTest extends Tasks {
     }
 
 
-    @Test(priority = 2, dataProvider = "objectDataTaskPDA", dataProviderClass = Tasks.class)
+    @Test(priority = 1, dataProvider = "objectDataTaskPDA", dataProviderClass = Tasks.class)
     public void verifyCreateTaskMobile(Task task) throws Exception {
 
 
