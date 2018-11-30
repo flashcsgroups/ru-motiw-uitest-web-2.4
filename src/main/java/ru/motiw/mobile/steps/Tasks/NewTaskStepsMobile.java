@@ -539,6 +539,34 @@ public class NewTaskStepsMobile extends BaseSteps {
     }
 
 
+    /**
+     * тут разместил для теста
+     * @param all
+     * @return
+     */
+    public int getIdVisibleComponent(List<Integer> all) {
+        sleep(2000);
+
+        int idVisibleComponent = 0;
+        for (Integer i : all) {
+
+            if ($(By.xpath("//div[@data-componentid=\"ext-selectdialog-" + i + "\"]//input")).is(Condition.disappear)) {
+                System.out.print(i + ",qqqqq ");
+            continue;
+            }
+
+
+            if ($(By.xpath("//div[@data-componentid=\"ext-selectdialog-" + i + "\"]//input")).is(Condition.visible)) {
+                idVisibleComponent = i;
+            }
+
+        }
+
+
+        return idVisibleComponent;
+    }
+
+
     }
 
 

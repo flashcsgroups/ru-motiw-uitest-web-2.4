@@ -27,12 +27,14 @@ import ru.motiw.web.steps.Login.LoginStepsSteps;
 import ru.motiw.web.steps.Tasks.UnionTasksSteps;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.clearBrowserCache;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.testng.Assert.fail;
 import static org.testng.AssertJUnit.assertTrue;
 import static ru.motiw.web.steps.Tasks.UnionTasksSteps.goToUnionTasks;
 
@@ -256,31 +258,51 @@ public class CreateTaskMobileTest extends Tasks {
         // Ожидание кнопки Главного Меню
         $(By.xpath("//div[@class=\"x-component x-button no-blue-alt x-has-icon x-icon-align-left x-arrow-align-right x-button-alt x-component-alt x-layout-box-item x-layout-hbox-item\"][1]")).waitUntil(Condition.visible, 30000);
 
-        open("/m/#task/74");
+        open("/m/#task/345");
 
-        sleep(5000);
+        sleep(500);
 
         taskStepsMobile.openTab("Описание");
         newTaskStepsMobile.selectGroupTab("Кому"); // Открываем вкладку "Файлы"
 
         $(By.xpath("(//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel\")]//div[@class=\"x-input-el\"])[1]")).click();
+        $(By.xpath("//div[@data-componentid=\"ext-selectdialog-1\"]//div[contains(@class,\"x-component x-button\")]")).click();
+
+        $(By.xpath("(//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel\")]//div[@class=\"x-input-el\"])[2]")).click();
 
         //Ищем на странице все элементы с componentId;
         List<SelenideElement> elements = new ArrayList<>($$(By.xpath("//div[contains(@id,\"ext-selectdialog\") and contains(@id,\"floatWrap\")]")));
 
+        List<Integer> all = new ArrayList<>();
+
         for(SelenideElement e: elements) {
 
             String q = e.toString();
-            int i = q.indexOf("ext-selectdialog-");
-            System.out.print(q);
-            System.out.print("indexOf" + i);
-            System.out.print("lastIndexOf" + q);
+            String stringAfterClean = q.replaceAll("( id=\"ext-selectdialog)[^&]*",""); //удаляем все лишние символы из строки - все что после id="ext-selectdialog может содержать цифры, а значит затруднить парсинг.
+            String getNumberOfComponentId = stringAfterClean.replaceAll("\\D+",""); //удаляем все символы, которые не являются числами
 
-            String c = q.substring(i+17);
-            System.out.print("charAt  " + c + " qqq");
+            //System.out.print("charAt  " + getNumberOfComponentId + " qqq");
 
-            //см. parseNameFolder
+            all.add(Integer.parseInt(getNumberOfComponentId));
+
+            //Теперь не понятно, что нам дает максимальный id, когда все id уже сформированны при входе на страницу.
+            // сформированны при входе на страницу поля раб.группы
+            //поля ввода в форме выбора пользователя - при открытии формируются  - для них и пробрасываем ComponentId
         }
+
+        int w = Collections.max(all);
+
+        //System.out.print("charAt  " + w + " qqq");
+
+        if ((newTaskStepsMobile.getIdVisibleComponent(all)) == 0) {
+            fail("Failed Test! Нет Открытой Формы добавления пользвоателя");
+         } else {
+            //выдаем Id != 0
+            System.out.print(newTaskStepsMobile.getIdVisibleComponent(all)+ ",1111 ");
+        }
+
+
+
     }
 
 /*
