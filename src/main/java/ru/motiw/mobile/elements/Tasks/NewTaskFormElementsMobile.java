@@ -5,10 +5,9 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
-import ru.motiw.web.model.Administration.Users.Employee;
+import ru.motiw.mobile.utilsMobile.ElementUtilMobile;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.*;
 
 /**
  * Элементы формы создания задачи
@@ -16,33 +15,12 @@ import static com.codeborne.selenide.Selenide.$$;
 
 public class NewTaskFormElementsMobile {
 
+    private ElementUtilMobile elementUtilMobile = page(ElementUtilMobile.class);
     /*
      * Все элементы формы содания задачи
      */
     @FindBy(xpath = "//div[contains(@class,'x-body-el x-panel-body-el x-container-body-el x-component-body-el x-layout-auto')]/div")
     private ElementsCollection newTaskFormElements;
-
-    @FindBy(xpath = "//a[contains (@onclick, 'selectproject')]")
-    private SelenideElement selectProject;
-
-    @FindBy(xpath = "//*[contains (@class, 'x-window-plain')]//button")
-    private SelenideElement OKButtonInConfirmationFormTaskCreation;
-
-    @FindBy(xpath = "//a[contains (@href, 'newproject')]/img")
-    private SelenideElement buttonNewProject;
-
-
-    @FindBy(xpath = "//*[contains (@class,'window-noborder')][contains (@style,'visible')]//td[contains (@class,'cell')][1]")
-    private SelenideElement buttonSaveDescription;
-
-    @FindBy(xpath = "//*[@id='btnAddIWG']//button")
-    private SelenideElement buttonAddIWG;
-
-    @FindBy(css = "body")
-    private SelenideElement ckeBody;
-
-    @FindBy(xpath = "(//*[contains (@type, 'button')])[1]")
-    private SelenideElement buttonSaveCreateTask;
 
     @FindBy(xpath = "//div[contains(@class,'x-component x-button x-widthed x-heighted x-has-text x-icon-align-left')]")
     private SelenideElement buttonCreateTask;
@@ -55,7 +33,6 @@ public class NewTaskFormElementsMobile {
 
     @FindBy(xpath = "//input[@name=\"numerator\"]")
     private SelenideElement taskNumber;
-
 
     @FindBy(xpath = "//input[@name=\"priority\"]/ancestor::div[@class=\"x-body-el\"]//div[@class=\"x-expandtrigger x-trigger x-interactive\"]")
     private SelenideElement priority;
@@ -90,8 +67,6 @@ public class NewTaskFormElementsMobile {
     @FindBy(xpath = "(//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel\")]//div[@class=\"x-input-el\"])[4]")
     private SelenideElement workersField;
 
-    @FindBy(xpath = "//*[contains (@class, 'x-editor')][contains (@style, 'visible')]//input")
-    private SelenideElement editorField;
 
     @FindBy(xpath = "//span[text()=\"Обычная задача\"]")
     private SelenideElement simpleTask;
@@ -114,8 +89,6 @@ public class NewTaskFormElementsMobile {
     @FindBy(xpath = "//input[@name=\"issecret\"]")
     private SelenideElement isSecret;
 
-    @FindBy(xpath = "//input[@name=\"issecret\"]")
-    private boolean w;
 
     @FindBy(xpath = "//input[@name=\"isforexamination\"]/ancestor::div[@class=\"x-font-icon x-icon-el\"]")
     private SelenideElement checkboxIsForReview;
@@ -135,57 +108,6 @@ public class NewTaskFormElementsMobile {
      */
     public ElementsCollection getCollectionNewTaskformElements() {
         return newTaskFormElements;
-    }
-
-    /**
-     * Кнопка выбора проекта
-     *
-     * @return элемент кнопка - Выбрать проект
-     */
-    public SelenideElement getSelectProject() {
-        return selectProject;
-    }
-
-    /**
-     * Кнопка Ок - в форме оповещение о созданной задаче
-     */
-    public SelenideElement getOKButtonInConfirmationFormTaskCreation() {
-        return OKButtonInConfirmationFormTaskCreation;
-    }
-
-    /**
-     * Кнопка - Создать новый проект
-     */
-    public SelenideElement getButtonNewProject() {
-        return buttonNewProject;
-    }
-
-    /**
-     * Кнопка сохранения описания
-     */
-    public SelenideElement getButtonSaveDescription() {
-        return buttonSaveDescription;
-    }
-
-    /**
-     * Кнопка добавления ИРГ
-     */
-    public SelenideElement getButtonAddIWG() {
-        return buttonAddIWG;
-    }
-
-    /**
-     * Область редактирования описания
-     */
-    public SelenideElement getCkeBody() {
-        return ckeBody;
-    }
-
-    /**
-     * Кнопка Сохранить и создать новую задачу
-     */
-    public SelenideElement getButtonSaveCreateTask() {
-        return buttonSaveCreateTask;
     }
 
     /**
@@ -268,7 +190,6 @@ public class NewTaskFormElementsMobile {
     /**
      * input добавление Файла
      */
-
     public SelenideElement getInputFiles() {
         return inputFiles;
     }
@@ -276,7 +197,6 @@ public class NewTaskFormElementsMobile {
     /**
      *коллекция элементов из списка добавленных файлов
      */
-
     public ElementsCollection getListOfNameFiles() {
         return listOfNameFiles;
     }
@@ -284,8 +204,26 @@ public class NewTaskFormElementsMobile {
     /**
      * Поле ввода в списке формы добавления пользователей
      */
-    public SelenideElement getInputForSearchUsers (String componentId) {
-        return $(By.xpath("//div[@data-componentid='" + componentId + "']//input"));
+    public SelenideElement getInputForSearchUsers() {
+        return $(By.xpath("//div[@data-componentid=\"ext-selectdialog-" + elementUtilMobile.getCurrentComponentId() + "\"]//input"));
+    }
+
+
+    /**
+     * Элемент любого выбраннного (выделен синим) пользователя в списке формы добавления пользователей
+     */
+    public SelenideElement getSelectedUserInTheList() {
+        return $(By.xpath("//div[@data-componentid=\"ext-selectdialog-" + elementUtilMobile.getCurrentComponentId() + "\"]//div[contains(@class,\"x-selected\")]"));
+    }
+
+
+    /**
+     * Элемент выбраннного (выделен синим) пользователя в списке формы добавления пользователей
+     * @param lastName Фамилия пользователя
+     */
+
+    public SelenideElement getSelectedUserInTheList(String lastName) {
+        return $(By.xpath("//div[@data-componentid=\"ext-selectdialog-" + elementUtilMobile.getCurrentComponentId() + "\"]//div[contains(@class,\"x-selected\")]//div[contains(text(),'" + lastName + "')]"));
     }
 
 
@@ -293,16 +231,23 @@ public class NewTaskFormElementsMobile {
      * Набор элементов = кол-во пользователей в списке формы добавления пользователей
      */
     public ElementsCollection getListOfUsers(String componentId ) {
-        return $$(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(@data-componentid,\"ext-gridcell\")]"));
+        return $$(By.xpath("//div[@data-componentid=\"ext-selectdialog-" + elementUtilMobile.getCurrentComponentId() + "\"]//div[contains(@data-componentid,\"ext-gridcell\")]"));
     }
 
     /**
      * выбор пользователей в списке формы добавления пользователей
      */
-    public SelenideElement getUserFromList (String componentId, Employee employee) {
-        return $(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(text(),'" + employee.getLastName() + "')]"));
+    public SelenideElement getUserFromList (String componentId, String lastName) {
+        return $(By.xpath("//div[@data-componentid=\"ext-selectdialog-" + elementUtilMobile.getCurrentComponentId() + "\"]//div[contains(text(),'" + lastName + "')]"));
     }
 
+
+    /**
+     * кнопка "Назначить"
+     */
+    public SelenideElement getButtonAppointUsers(String componentId) {
+        return $(By.xpath("//div[@data-componentid=\"ext-selectdialog-" + elementUtilMobile.getCurrentComponentId() + "\"]//div[contains(@class,\"x-component x-button\")]"));
+    }
 
 
 
@@ -332,21 +277,6 @@ public class NewTaskFormElementsMobile {
      */
     public SelenideElement getWorkersField() {
         return workersField;
-    }
-
-
-    /**
-     * кнопка "Назначить"
-     */
-    public SelenideElement getButtonAppointUsers(String componentId) {
-        return $(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(@class,\"x-component x-button\")]"));
-    }
-
-    /**
-     * Поле ввода для любого поля задачи
-     */
-    public SelenideElement getEditorField() {
-        return editorField;
     }
 
     /**

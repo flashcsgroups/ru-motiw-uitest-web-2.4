@@ -1,7 +1,6 @@
 package ru.motiw.testMobile;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.testng.TextReport;
 import com.codeborne.selenide.testng.annotations.Report;
 import org.openqa.selenium.By;
@@ -18,6 +17,7 @@ import ru.motiw.mobile.steps.Tasks.EditOfTaskMobile;
 import ru.motiw.mobile.steps.Tasks.NewTaskStepsMobile;
 import ru.motiw.mobile.steps.Tasks.TaskActionsStepsMobile;
 import ru.motiw.mobile.steps.Tasks.TaskStepsMobile;
+import ru.motiw.mobile.utilsMobile.ElementUtilMobile;
 import ru.motiw.web.model.Administration.Users.Department;
 import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Tasks.Folder;
@@ -26,15 +26,10 @@ import ru.motiw.web.steps.Home.InternalSteps;
 import ru.motiw.web.steps.Login.LoginStepsSteps;
 import ru.motiw.web.steps.Tasks.UnionTasksSteps;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.clearBrowserCache;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.testng.Assert.fail;
 import static org.testng.AssertJUnit.assertTrue;
 import static ru.motiw.web.steps.Tasks.UnionTasksSteps.goToUnionTasks;
 
@@ -54,6 +49,7 @@ public class CreateTaskMobileTest extends Tasks {
     private TaskActionsStepsMobile taskActionsStepsMobile;
     private EditOfTaskMobile editOfTaskMobile;
     private LoginPageElementsMobile loginPageElementsMobile;
+    private ElementUtilMobile elementUtilMobile;
 
     @BeforeClass
     public void beforeTest() {
@@ -68,6 +64,7 @@ public class CreateTaskMobileTest extends Tasks {
         taskActionsStepsMobile = page(TaskActionsStepsMobile.class);
         editOfTaskMobile = page(EditOfTaskMobile.class);
         loginPageElementsMobile = page(LoginPageElementsMobile.class);
+        elementUtilMobile = page(ElementUtilMobile.class);
     }
 
 
@@ -113,7 +110,7 @@ public class CreateTaskMobileTest extends Tasks {
     }
 
 
-    @Test(priority = 1, dataProvider = "objectDataTaskPDA", dataProviderClass = Tasks.class)
+    @Test(priority = 22, dataProvider = "objectDataTaskPDA", dataProviderClass = Tasks.class)
     public void verifyCreateTaskMobile(Task task) throws Exception {
 
 
@@ -162,16 +159,16 @@ public class CreateTaskMobileTest extends Tasks {
     }
 
 
-    @Test(priority = 3, dataProvider = "objectDataTaskPDA",  dataProviderClass = Tasks.class)
+    @Test(priority = 1, dataProvider = "objectDataTaskPDA",  dataProviderClass = Tasks.class)
     public void checkEditingTaskPDA(Task task) throws Exception {
         refresh(); //чистим кеш, т.к остаются элементы
 
         //ЭТО для теста
         //Переход в мобильную версию по ссылке в форме авторизации
-//        $(By.xpath("//a[@class=\"m_link\"]")).waitUntil(visible, 10000);
-//        $(By.xpath("//a[@class=\"m_link\"]")).click();
-//
-//        loginPageElementsMobile.getLogin().waitUntil(Condition.visible, 20000);
+        $(By.xpath("//a[@class=\"m_link\"]")).waitUntil(visible, 10000);
+        $(By.xpath("//a[@class=\"m_link\"]")).click();
+
+        loginPageElementsMobile.getLogin().waitUntil(Condition.visible, 20000);
 
         ////
 
@@ -179,7 +176,7 @@ public class CreateTaskMobileTest extends Tasks {
 
         // Авторизация
         loginStepsMobile.loginAs(ADMIN);
-        // Ожидание скрытия маски загрузки
+        // Ожидание скрытия маски загрузки todo Ожидание появления маски загрузки?
         loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.disappear, 10000);
         // Ожидание кнопки Главного Меню
         $(By.xpath("//div[@class=\"x-component x-button no-blue-alt x-has-icon x-icon-align-left x-arrow-align-right x-button-alt x-component-alt x-layout-box-item x-layout-hbox-item\"][1]")).waitUntil(Condition.visible, 10000);
@@ -202,7 +199,7 @@ public class CreateTaskMobileTest extends Tasks {
 
         //----------------------------------------------------------------ФОРМА - Задачи
         // Проверяем отображение значений в форме созданой задачи
-        refresh(); //чтобы сбросить из кеша все элементы что остаются после работы в других формах
+        //refresh(); //чтобы сбросить из кеша все элементы что остаются после работы в других формах
         //Добавление действия и проверяем его сохранение
         taskActionsStepsMobile.postAction(editTask.getActions());
 
@@ -237,7 +234,7 @@ public class CreateTaskMobileTest extends Tasks {
 
     }
 
-    @Test(priority = 1, dataProvider = "objectDataTaskPDA",  dataProviderClass = Tasks.class)
+    @Test(priority = 11, dataProvider = "objectDataTaskPDA",  dataProviderClass = Tasks.class)
     public void checkEditingTaskPDA1(Task task) throws Exception {
 
         //ЭТО для теста
@@ -258,9 +255,9 @@ public class CreateTaskMobileTest extends Tasks {
         // Ожидание кнопки Главного Меню
         $(By.xpath("//div[@class=\"x-component x-button no-blue-alt x-has-icon x-icon-align-left x-arrow-align-right x-button-alt x-component-alt x-layout-box-item x-layout-hbox-item\"][1]")).waitUntil(Condition.visible, 30000);
 
-        open("/m/#task/345");
+        open("/m/#task/74");
 
-        sleep(500);
+        sleep(5000);
 
         taskStepsMobile.openTab("Описание");
         newTaskStepsMobile.selectGroupTab("Кому"); // Открываем вкладку "Файлы"
@@ -270,37 +267,12 @@ public class CreateTaskMobileTest extends Tasks {
 
         $(By.xpath("(//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel\")]//div[@class=\"x-input-el\"])[2]")).click();
 
-        //Ищем на странице все элементы с componentId;
-        List<SelenideElement> elements = new ArrayList<>($$(By.xpath("//div[contains(@id,\"ext-selectdialog\") and contains(@id,\"floatWrap\")]")));
 
-        List<Integer> all = new ArrayList<>();
 
-        for(SelenideElement e: elements) {
 
-            String q = e.toString();
-            String stringAfterClean = q.replaceAll("( id=\"ext-selectdialog)[^&]*",""); //удаляем все лишние символы из строки - все что после id="ext-selectdialog может содержать цифры, а значит затруднить парсинг.
-            String getNumberOfComponentId = stringAfterClean.replaceAll("\\D+",""); //удаляем все символы, которые не являются числами
 
-            //System.out.print("charAt  " + getNumberOfComponentId + " qqq");
-
-            all.add(Integer.parseInt(getNumberOfComponentId));
-
-            //Теперь не понятно, что нам дает максимальный id, когда все id уже сформированны при входе на страницу.
-            // сформированны при входе на страницу поля раб.группы
-            //поля ввода в форме выбора пользователя - при открытии формируются  - для них и пробрасываем ComponentId
-        }
-
-        int w = Collections.max(all);
-
-        //System.out.print("charAt  " + w + " qqq");
-
-        if ((newTaskStepsMobile.getIdVisibleComponent(all)) == 0) {
-            fail("Failed Test! Нет Открытой Формы добавления пользвоателя");
-         } else {
-            //выдаем Id != 0
-            System.out.print(newTaskStepsMobile.getIdVisibleComponent(all)+ ",1111 ");
-        }
-
+       // sleep(2000);
+        System.out.print(elementUtilMobile.getCurrentComponentId() + ",1111 ");
 
 
     }

@@ -16,6 +16,7 @@ public class EditOfTaskMobile extends NewTaskStepsMobile {
 
 
 
+
     /**
      * Редактирование задачи
      * @param task передаваемые атрибуты, которые заполнялись при создании задачи

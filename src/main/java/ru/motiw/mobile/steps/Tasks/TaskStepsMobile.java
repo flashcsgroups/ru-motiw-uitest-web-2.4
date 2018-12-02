@@ -214,8 +214,8 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
             for (Employee employee : employees) {
                 //проверка того, что элемент ПЕРВОГО пользователя в списке - выделен т.е выбран в роль
                 //contains(@class,"x-selected" - вроде бы всех выделенных будет находить. todo проверить это
-                $(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(@class,\"x-selected\")]//div[contains(text(),'" + employee.getLastName() + "')]")).shouldBe(visible);
-                newTaskFormElementsMobile.getInputForSearchUsers(componentId).sendKeys(Keys.chord(Keys.ESCAPE)); //Закрыть форму
+                newTaskFormElementsMobile.getSelectedUserInTheList(employee.getLastName()).shouldBe(visible);
+                newTaskFormElementsMobile.getInputForSearchUsers().sendKeys(Keys.chord(Keys.ESCAPE)); //Закрыть форму
 
                 //проверка того, что элемент ВТОРОГО пользователя в списке - выделен т.е выбран в роль.
                 //Для выделенных элементов ВТОРОГО и след. пользователей в списке class в div-е отличается от ПЕРВОГО пользователя в списке
@@ -224,8 +224,8 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         }
 
         //В случае, если employees == null - Проверяем, что элемент в списке не выделен. Нужно для проверки после удаления пользователя из поля раб.группы.
-        $(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(@class,\"x-selected\")]")).shouldNotBe(visible);
-        newTaskFormElementsMobile.getInputForSearchUsers(componentId).sendKeys(Keys.chord(Keys.ESCAPE)); //Закрыть форму
+        newTaskFormElementsMobile.getSelectedUserInTheList().shouldNotBe(visible);
+        newTaskFormElementsMobile.getInputForSearchUsers().sendKeys(Keys.chord(Keys.ESCAPE)); //Закрыть форму
 
     }
 
@@ -636,7 +636,6 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
             if (task.getFileName() == null) {
                 return this;
             } else {
-
                 for (String fileName : task.getFileName()) {
                     $(By.xpath("//i[contains(@class,'file')]/ancestor::div[contains(@class,\"x-body-wrap-el x-panel-body-wrap-el x-container-body-wrap-el x-component-body-wrap-el \")]//div[contains(text(),'" + fileName + "')]"))
                             .click(); //открытие файла в предпросмотре
@@ -645,7 +644,6 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
                     $(By.xpath("//div[@class=\"x-component x-button x-round-button-floated x-has-icon x-icon-align-left x-arrow-align-right x-button-alt x-component-alt x-button-round x-component-round x-floating\"]"))
                             .click();  //закрытие предпросмотра
                     sleep(500);
-
                 }
             }
         }
@@ -702,6 +700,9 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
     // Ожидание и проверка элементов в форме задачи на вкладке Описание
     public void verifyElementsOnDescriptionPage() {
        taskElementsMobile.getElementsOnDescriptionPage().shouldHave(CollectionCondition.size(7), 10000);
+       //todo имеет смысл заменить на проверку элементов которые рельно видны?
+        //Сейчас получается, что если не перезагружать страницу после формы создания, то он проверяет кол-во 7, а их на самом деле в DOM-e 16.
+        // Таким образом, проверка на кол-во мешает строить тесты без принудетельной перезагрузки формы.
     }
 
 }

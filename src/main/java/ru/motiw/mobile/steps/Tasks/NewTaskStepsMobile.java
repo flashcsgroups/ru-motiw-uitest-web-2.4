@@ -152,7 +152,7 @@ public class NewTaskStepsMobile extends BaseSteps {
      * Проверка Загрузки страницы - форма Создания задачи - проверка отображения и кол-ва элементов (все блоки компонетов - поля задачи) в форме задачи
      */
     private NewTaskStepsMobile ensurePageLoaded() {
-        newTaskFormElementsMobile.getCollectionNewTaskformElements().shouldHaveSize(9);
+        newTaskFormElementsMobile.getCollectionNewTaskformElements().shouldHave(CollectionCondition.size(9), 5000);
         newTaskFormElementsMobile.getButtonCreateTask().shouldBe(visible);
         return this;
     }
@@ -223,7 +223,7 @@ public class NewTaskStepsMobile extends BaseSteps {
      */
     public void openFormSelectUser(SelenideElement fieldCustomRole, String componentId) {
         fieldCustomRole.click(); //клик в само поле.
-        $(By.xpath("//div[@data-componentid='" + componentId + "']//input")).waitUntil(visible, 5000); // поле ввода
+        newTaskFormElementsMobile.getInputForSearchUsers().waitUntil(visible, 5000); // поле ввода
     }
 
 
@@ -239,11 +239,11 @@ public class NewTaskStepsMobile extends BaseSteps {
         openFormSelectUser(fieldCustomRole, componentId);
         if (employees != null) {
             for (Employee employee : employees) {
-                newTaskFormElementsMobile.getInputForSearchUsers(componentId).setValue(employee.getLastName()); // вводим в поле ввода Фамилию пользователя
+                newTaskFormElementsMobile.getInputForSearchUsers().setValue(employee.getLastName()); // вводим в поле ввода Фамилию пользователя
                 newTaskFormElementsMobile.getListOfUsers(componentId).shouldBe(CollectionCondition.size(1), 10000); //ожидание когда будет найден один пользователь. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
 
                 //выбор пользователя в списке
-                newTaskFormElementsMobile.getUserFromList(componentId, employee).shouldBe(visible).click();
+                newTaskFormElementsMobile.getUserFromList(componentId, employee.getLastName()).shouldBe(visible).click();
                 //newTaskFormElementsMobile.getListOfUsers(componentId).shouldBe(CollectionCondition.sizeGreaterThan(1), 5000); //ожидание когда загрузится список пользователей. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
                 newTaskFormElementsMobile.getButtonAppointUsers(componentId).click(); //кнопка "Назначить"
             }
@@ -263,8 +263,8 @@ public class NewTaskStepsMobile extends BaseSteps {
         if (employees != null) {
             for (Employee employee : employees) {
                 //проверка того, что элемент ПЕРВОГО пользователя в списке - выделен т.е выбран в роль
-                $(By.xpath("//div[@data-componentid='" + componentId + "']//div[contains(@class,\"x-selected\")]//div[contains(text(),'" + employee.getLastName() + "')]")).shouldBe(visible);
-                newTaskFormElementsMobile.getInputForSearchUsers(componentId).sendKeys(Keys.chord(Keys.ESCAPE)); //Закрыть форму
+                newTaskFormElementsMobile.getSelectedUserInTheList(employee.getLastName()).shouldBe(visible);
+                newTaskFormElementsMobile.getInputForSearchUsers().sendKeys(Keys.chord(Keys.ESCAPE)); //Закрыть форму
             }
         }
     }
@@ -376,7 +376,7 @@ public class NewTaskStepsMobile extends BaseSteps {
      */
     public NewTaskStepsMobile creatingTask(Task task) {
         ensurePageLoaded();
-        refresh(); //чтобы сбросить из кеша все элементы что остаются после работы в других формах
+        //refresh(); //чтобы сбросить из кеша все элементы что остаются после работы в других формах
 
        // Разворачиваем  группу полей  "Название"
         selectGroupTab("Название");
@@ -476,10 +476,11 @@ public class NewTaskStepsMobile extends BaseSteps {
 
         sleep(1000);
         newTaskFormElementsMobile.getButtonCreateTask().click();
-        //Ждем появление маски загрузки
-        loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.visible, 1000);
-        //Ждем пока исчезнит маска загрузки
-        loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.disappear, 5000);
+//        //Ждем появление маски загрузки
+//        loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.visible, 1000);
+//        //Ждем пока исчезнит маска загрузки
+//        loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.disappear, 5000);
+        //TODO видимо падает, т.к элемент уже ранее был при логине. Нужно сделать индивидульный xpath для saveTask, наверное
         return page(NewTaskStepsMobile.class);
 
     }
@@ -539,34 +540,4 @@ public class NewTaskStepsMobile extends BaseSteps {
     }
 
 
-    /**
-     * тут разместил для теста
-     * @param all
-     * @return
-     */
-    public int getIdVisibleComponent(List<Integer> all) {
-        sleep(2000);
-
-        int idVisibleComponent = 0;
-        for (Integer i : all) {
-
-            if ($(By.xpath("//div[@data-componentid=\"ext-selectdialog-" + i + "\"]//input")).is(Condition.disappear)) {
-                System.out.print(i + ",qqqqq ");
-            continue;
-            }
-
-
-            if ($(By.xpath("//div[@data-componentid=\"ext-selectdialog-" + i + "\"]//input")).is(Condition.visible)) {
-                idVisibleComponent = i;
-            }
-
-        }
-
-
-        return idVisibleComponent;
     }
-
-
-    }
-
-
