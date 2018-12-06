@@ -1,7 +1,6 @@
 package ru.motiw.mobile.steps;
 
 import com.codeborne.selenide.Condition;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.TimeoutException;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
 import ru.motiw.mobile.elements.Login.LoginPageElementsMobile;
@@ -68,7 +67,7 @@ public class LoginStepsMobile extends BaseSteps {
 
 
     /**
-     * Проверяем то, что мы разлогинены - ПДА-интерфейс
+     * Проверяем то, что мы разлогинены - АРМ-интерфейс
      */
     public boolean isNotLoggedInMobile() {
         try {

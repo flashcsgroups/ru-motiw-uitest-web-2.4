@@ -45,10 +45,10 @@ public class EditOfTaskMobile extends NewTaskStepsMobile {
 
         // Открываем  группу полей  "Кому"
         selectGroupTab("Кому");
-        currentUserSelectedInTheRole(task.getAuthors(), newTaskFormElementsMobile.getAuthorsField(), "ext-selectdialog-1"); // - по умолчанию Автор задачи текущий пользователь (admin)
-        choiceUserOnTheRole(task.getControllers(), newTaskFormElementsMobile.getСontrollersField(), "ext-selectdialog-2"); // удаляем пользователя выбранного при создании задачи из роли Контролеры задачи
-        choiceUserOnTheRole(task.getExecutiveManagers(), newTaskFormElementsMobile.getResponsiblesField(), "ext-selectdialog-3"); // удаляем пользователя выбранного при создании задачи из роли Ответственные руководители
-        choiceUserOnTheRole(task.getWorkers(), newTaskFormElementsMobile.getWorkersField(),"ext-selectdialog-4"); // удаляем пользователя выбранного при создании задачи из роли Исполнители задачи
+        currentUserSelectedInTheRole(task.getAuthors(), newTaskFormElementsMobile.getAuthorsField()); // - по умолчанию Автор задачи текущий пользователь (admin)
+        choiceUserOnTheRole(task.getControllers(), newTaskFormElementsMobile.getСontrollersField()); // удаляем пользователя выбранного при создании задачи из роли Контролеры задачи
+        choiceUserOnTheRole(task.getExecutiveManagers(), newTaskFormElementsMobile.getResponsiblesField()); // удаляем пользователя выбранного при создании задачи из роли Ответственные руководители
+        choiceUserOnTheRole(task.getWorkers(), newTaskFormElementsMobile.getWorkersField()); // удаляем пользователя выбранного при создании задачи из роли Исполнители задачи
 
         // Закрываем  группу полей  "Кому"
         selectGroupTab("Кому");

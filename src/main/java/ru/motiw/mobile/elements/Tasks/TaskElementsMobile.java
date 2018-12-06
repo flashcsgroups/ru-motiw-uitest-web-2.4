@@ -9,46 +9,57 @@ import org.openqa.selenium.support.FindBy;
  */
 public class TaskElementsMobile {
 
-    @FindBy(xpath = "//div[contains(@class,\"x-body-el x-toolbar-body-el x-container-body-el x-component-body-el x-layout-box x-align-center x-pack-start x-layout-vbox x-vertical x-size-monitored x-paint-monitored x-toolbar-side-toolbar-body-el\")]/div")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\")) and not(contains(@id,\"ext-object-toolbar\"))]" +
+            "//div[contains(@class,\"x-body-el x-toolbar-body-el x-container-body-el x-component-body-el x-layout-box x-align-center x-pack-start x-layout-vbox x-vertical x-size-monitored x-paint-monitored x-toolbar-side-toolbar-body-el\")]/div")
     private ElementsCollection menuOfTask;
 
-    @FindBy(xpath = "//div[contains(@class,\"x-toolbar x-container x-component x-noborder-trbl x-toolbar-side-toolbar\")]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\")) and not(contains(@id,\"ext-object-toolbar\"))]" +
+            "//div[contains(@class,\"x-toolbar x-container x-component x-noborder-trbl x-toolbar-side-toolbar\")]")
     private SelenideElement toolbarOfMenu;
 
-    @FindBy(xpath = "//div[contains(@class,'x-body-el x-panel-body-el x-container-body-el x-component-body-el x-layout-auto x-scroller')]/div")
-    private ElementsCollection allElementsOnDescriptionPage;
-
-    @FindBy(xpath = "//div[text()=\"Файлы\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\")) and not(contains(@id,\"ext-object-toolbar\"))]" +
+            "//div[text()=\"Файлы\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")
     private SelenideElement buttonOfFiles;
 
-    @FindBy(xpath = "//div[text()=\"Файлы\"]//ancestor::div[contains(@class,\"x-pressed\")]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\")) and not(contains(@id,\"ext-object-toolbar\"))]" +
+            "//div[text()=\"Файлы\"]//ancestor::div[contains(@class,\"x-pressed\")]")
     private SelenideElement pressedButtonOfFiles;
 
-    @FindBy(xpath = "//div[text()=\"Действия\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\")) and not(contains(@id,\"ext-object-toolbar\"))]" +
+            "//div[text()=\"Действия\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")
     private SelenideElement buttonOfActions;
 
-    @FindBy(xpath = "//div[text()=\"Действия\"]//ancestor::div[contains(@class,\"x-pressed\")]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\")) and not(contains(@id,\"ext-object-toolbar\"))]" +
+            "//div[text()=\"Действия\"]//ancestor::div[contains(@class,\"x-pressed\")]")
     private SelenideElement pressedButtonOfActions;
 
-    @FindBy(xpath = "//div[text()=\"Описание\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\")) and not(contains(@id,\"ext-object-toolbar\"))]" +
+            "//div[text()=\"Описание\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")
     private SelenideElement buttonOfDescription;
 
-    @FindBy(xpath = "//div[text()=\"Описание\"]//ancestor::div[contains(@class,\"x-pressed\")]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\")) and not(contains(@id,\"ext-object-toolbar\"))]" +
+            "//div[text()=\"Описание\"]//ancestor::div[contains(@class,\"x-pressed\")]")
     private SelenideElement pressedButtonOfDescription;
 
-    @FindBy(xpath = "//div[text()=\"Сохранить\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\")) and not(contains(@id,\"ext-object-toolbar\"))]" +
+            "//div[text()=\"Сохранить\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")
     private SelenideElement buttonOfSave;
 
-    @FindBy(xpath = "//div[text()=\"Добавить действие\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\")) and not(contains(@id,\"ext-object-toolbar\"))]" +
+            "//div[text()=\"Добавить действие\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")
     private SelenideElement buttonOfAddAction;
 
-    @FindBy(xpath = "//div[text()=\"Завершить выполнение\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\")) and not(contains(@id,\"ext-object-toolbar\"))]" +
+            "//div[text()=\"Завершить выполнение\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")
     private SelenideElement buttonOfFinalizeExecution;
 
-    @FindBy(xpath = "//div[contains(@class,\"x-body-el x-toolbar-body-el x-container-body-el x-component-body-el x-layout-box x-align-center x-pack-start x-layout-vbox x-vertical x-size-monitored x-paint-monitored x-toolbar-side-toolbar-body-el\")]//hr[@class=\"hr-toolbar-class\"]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\")) and not(contains(@id,\"ext-object-toolbar\"))]" +
+            "//div[contains(@class,\"x-body-el x-toolbar-body-el x-container-body-el x-component-body-el x-layout-box x-align-center x-pack-start x-layout-vbox x-vertical x-size-monitored x-paint-monitored x-toolbar-side-toolbar-body-el\")]" +
+            "//hr[@class=\"hr-toolbar-class\"]")
     private SelenideElement elementAmongButtonsOfMenu;
 
-    @FindBy(xpath = "//div[@class=\"x-component x-label x-layout-box-item x-layout-vbox-item counter-label\"]/div[@class=\"x-innerhtml\"]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\")) and not(contains(@id,\"ext-object-toolbar\"))]" +
+            "//div[@class=\"x-component x-label x-layout-box-item x-layout-vbox-item counter-label\"]/div[@class=\"x-innerhtml\"]")
     private SelenideElement numbersOnElementCounterFiles;
 
     /**
@@ -59,21 +70,12 @@ public class TaskElementsMobile {
         return menuOfTask;
     }
 
-
     /**
      * Тулбар меню формы задачи
      */
 
     public SelenideElement getToolbarOfMenu() {
         return toolbarOfMenu;
-    }
-
-
-    /**
-     * Коллекция элементов в форме задачи на вкладке Описание
-     */
-    public ElementsCollection getElementsOnDescriptionPage() {
-        return allElementsOnDescriptionPage;
     }
 
     /**

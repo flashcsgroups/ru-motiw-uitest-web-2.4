@@ -17,7 +17,6 @@ import ru.motiw.mobile.steps.Tasks.EditOfTaskMobile;
 import ru.motiw.mobile.steps.Tasks.NewTaskStepsMobile;
 import ru.motiw.mobile.steps.Tasks.TaskActionsStepsMobile;
 import ru.motiw.mobile.steps.Tasks.TaskStepsMobile;
-import ru.motiw.mobile.utilsMobile.ElementUtilMobile;
 import ru.motiw.web.model.Administration.Users.Department;
 import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Tasks.Folder;
@@ -49,7 +48,6 @@ public class CreateTaskMobileTest extends Tasks {
     private TaskActionsStepsMobile taskActionsStepsMobile;
     private EditOfTaskMobile editOfTaskMobile;
     private LoginPageElementsMobile loginPageElementsMobile;
-    private ElementUtilMobile elementUtilMobile;
 
     @BeforeClass
     public void beforeTest() {
@@ -64,7 +62,6 @@ public class CreateTaskMobileTest extends Tasks {
         taskActionsStepsMobile = page(TaskActionsStepsMobile.class);
         editOfTaskMobile = page(EditOfTaskMobile.class);
         loginPageElementsMobile = page(LoginPageElementsMobile.class);
-        elementUtilMobile = page(ElementUtilMobile.class);
     }
 
 
@@ -75,7 +72,7 @@ public class CreateTaskMobileTest extends Tasks {
     Folder[] folder = getRandomArrayFolders();
 
 
-    @Test(priority = 11, dataProvider = "objectDataTask", dataProviderClass = Tasks.class)
+    @Test(priority = 1, dataProvider = "objectDataTask", dataProviderClass = Tasks.class)
     public void aPreconditionForFurtherVerification(Department department, Employee[] author, Employee[] resppers, Employee[] controller, Employee[] worker,
                                                     Employee[] IWGWorker, Employee[] IWGResppers, Employee[] IWGСontroller, Task task) {
         loginPageSteps.loginAs(ADMIN);
@@ -110,7 +107,7 @@ public class CreateTaskMobileTest extends Tasks {
     }
 
 
-    @Test(priority = 22, dataProvider = "objectDataTaskPDA", dataProviderClass = Tasks.class)
+    @Test(priority = 2, dataProvider = "objectDataTaskPDA", dataProviderClass = Tasks.class)
     public void verifyCreateTaskMobile(Task task) throws Exception {
 
 
@@ -126,6 +123,8 @@ public class CreateTaskMobileTest extends Tasks {
         loginPageElementsMobile.getLogin().waitUntil(Condition.visible, 20000);
         // Авторизация
         loginStepsMobile.loginAs(ADMIN);
+        // Ожидание появления маски загрузки
+        loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.appears, 2000);
         // Ожидание скрытия маски загрузки
         loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.disappear, 10000);
         // Ожидание кнопки Главного Меню
@@ -159,16 +158,16 @@ public class CreateTaskMobileTest extends Tasks {
     }
 
 
-    @Test(priority = 1, dataProvider = "objectDataTaskPDA",  dataProviderClass = Tasks.class)
+    @Test(priority = 3, dataProvider = "objectDataTaskPDA",  dataProviderClass = Tasks.class)
     public void checkEditingTaskPDA(Task task) throws Exception {
-        refresh(); //чистим кеш, т.к остаются элементы
+        refresh(); //т.к если не перезагружать страницу, при повторном логине после нажатия кнопки "Вход" js-ошибка
 
         //ЭТО для теста
         //Переход в мобильную версию по ссылке в форме авторизации
-        $(By.xpath("//a[@class=\"m_link\"]")).waitUntil(visible, 10000);
-        $(By.xpath("//a[@class=\"m_link\"]")).click();
-
-        loginPageElementsMobile.getLogin().waitUntil(Condition.visible, 20000);
+//        $(By.xpath("//a[@class=\"m_link\"]")).waitUntil(visible, 10000);
+//        $(By.xpath("//a[@class=\"m_link\"]")).click();
+//
+//        loginPageElementsMobile.getLogin().waitUntil(Condition.visible, 20000);
 
         ////
 
@@ -176,7 +175,9 @@ public class CreateTaskMobileTest extends Tasks {
 
         // Авторизация
         loginStepsMobile.loginAs(ADMIN);
-        // Ожидание скрытия маски загрузки todo Ожидание появления маски загрузки?
+        // Ожидание появления маски загрузки
+        loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.appear, 2000);
+        // Ожидание скрытия маски загрузки
         loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.disappear, 10000);
         // Ожидание кнопки Главного Меню
         $(By.xpath("//div[@class=\"x-component x-button no-blue-alt x-has-icon x-icon-align-left x-arrow-align-right x-button-alt x-component-alt x-layout-box-item x-layout-hbox-item\"][1]")).waitUntil(Condition.visible, 10000);
@@ -208,6 +209,7 @@ public class CreateTaskMobileTest extends Tasks {
         // редактируем атрибуты задачи
         editOfTaskMobile.editOfTask(task, editTask);
         //Проверка всех отредактированных полей после перезагрузки страницы
+        refresh();
         taskStepsMobile.verifyCreateTask(editTask);
         //Проверка добавленных действий после перезагрузки страницы
         taskActionsStepsMobile.checkNewActions(editTask.getActions());
@@ -255,24 +257,19 @@ public class CreateTaskMobileTest extends Tasks {
         // Ожидание кнопки Главного Меню
         $(By.xpath("//div[@class=\"x-component x-button no-blue-alt x-has-icon x-icon-align-left x-arrow-align-right x-button-alt x-component-alt x-layout-box-item x-layout-hbox-item\"][1]")).waitUntil(Condition.visible, 30000);
 
-        open("/m/#task/74");
+        newTaskStepsMobile.goToCreateOfNewTask();
+        sleep(1000);
+        open("/m/#task/345");
 
-        sleep(5000);
+        sleep(500);
 
         taskStepsMobile.openTab("Описание");
-        newTaskStepsMobile.selectGroupTab("Кому"); // Открываем вкладку "Файлы"
-
-        $(By.xpath("(//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel\")]//div[@class=\"x-input-el\"])[1]")).click();
-        $(By.xpath("//div[@data-componentid=\"ext-selectdialog-1\"]//div[contains(@class,\"x-component x-button\")]")).click();
-
-        $(By.xpath("(//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel\")]//div[@class=\"x-input-el\"])[2]")).click();
-
 
 
 
 
        // sleep(2000);
-        System.out.print(elementUtilMobile.getCurrentComponentId() + ",1111 ");
+
 
 
     }

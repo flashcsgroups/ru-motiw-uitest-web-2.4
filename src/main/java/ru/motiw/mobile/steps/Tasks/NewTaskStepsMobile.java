@@ -152,7 +152,7 @@ public class NewTaskStepsMobile extends BaseSteps {
      * Проверка Загрузки страницы - форма Создания задачи - проверка отображения и кол-ва элементов (все блоки компонетов - поля задачи) в форме задачи
      */
     private NewTaskStepsMobile ensurePageLoaded() {
-        newTaskFormElementsMobile.getCollectionNewTaskformElements().shouldHave(CollectionCondition.size(9), 5000);
+        newTaskFormElementsMobile.getCollectionElementsFormOfTask().shouldHave(CollectionCondition.size(9), 5000);
         newTaskFormElementsMobile.getButtonCreateTask().shouldBe(visible);
         return this;
     }
@@ -221,7 +221,7 @@ public class NewTaskStepsMobile extends BaseSteps {
     /*
      * Открытие комонента выбора пользователей
      */
-    public void openFormSelectUser(SelenideElement fieldCustomRole, String componentId) {
+    public void openFormSelectUser(SelenideElement fieldCustomRole) {
         fieldCustomRole.click(); //клик в само поле.
         newTaskFormElementsMobile.getInputForSearchUsers().waitUntil(visible, 5000); // поле ввода
     }
@@ -231,21 +231,19 @@ public class NewTaskStepsMobile extends BaseSteps {
      * Добавление/Удаление пользователей в роль задачи
      * @param employees       передаваемые пользователи
      * @param fieldCustomRole выбираемая роль в задаче (Исполнители, Авторы и ОР)
-     * @param componentId т.к после каждого открытия формы выбора пользователей она остается в DOM, то приходится передавать componentId
-     * componentId = ext-selectdialog-{порядковый номер открытой формы}
      */
 
-    void choiceUserOnTheRole(Employee[] employees, SelenideElement fieldCustomRole, String componentId) {
-        openFormSelectUser(fieldCustomRole, componentId);
+    void choiceUserOnTheRole(Employee[] employees, SelenideElement fieldCustomRole) {
+        openFormSelectUser(fieldCustomRole);
         if (employees != null) {
             for (Employee employee : employees) {
                 newTaskFormElementsMobile.getInputForSearchUsers().setValue(employee.getLastName()); // вводим в поле ввода Фамилию пользователя
-                newTaskFormElementsMobile.getListOfUsers(componentId).shouldBe(CollectionCondition.size(1), 10000); //ожидание когда будет найден один пользователь. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
+                newTaskFormElementsMobile.getListOfUsers().shouldBe(CollectionCondition.size(1), 10000); //ожидание когда будет найден один пользователь. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
 
                 //выбор пользователя в списке
-                newTaskFormElementsMobile.getUserFromList(componentId, employee.getLastName()).shouldBe(visible).click();
-                //newTaskFormElementsMobile.getListOfUsers(componentId).shouldBe(CollectionCondition.sizeGreaterThan(1), 5000); //ожидание когда загрузится список пользователей. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
-                newTaskFormElementsMobile.getButtonAppointUsers(componentId).click(); //кнопка "Назначить"
+                newTaskFormElementsMobile.getUserFromList(employee.getLastName()).shouldBe(visible).click();
+                //newTaskFormElementsMobile.getListOfUsers().shouldBe(CollectionCondition.sizeGreaterThan(1), 5000); //ожидание когда загрузится список пользователей. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
+                newTaskFormElementsMobile.getButtonAppointUsers().click(); //кнопка "Назначить"
             }
         }
     }
@@ -254,12 +252,10 @@ public class NewTaskStepsMobile extends BaseSteps {
      * Проверка того, что текущий пользователь добавлен по умолчанию в роль задачи
      * @param employees       передаваемые пользователи
      * @param fieldCustomRole выбираемая роль в задаче (Исполнители, Авторы и ОР)
-     * @param componentId т.к после каждого открытия формы выбора пользователей она остается в DOM, то приходится передавать componentId
-     * componentId = ext-selectdialog-{порядковый номер открытой формы}
      */
 
-    public void currentUserSelectedInTheRole(Employee[] employees, SelenideElement fieldCustomRole, String componentId) {
-        openFormSelectUser(fieldCustomRole, componentId);
+    public void currentUserSelectedInTheRole(Employee[] employees, SelenideElement fieldCustomRole) {
+        openFormSelectUser(fieldCustomRole);
         if (employees != null) {
             for (Employee employee : employees) {
                 //проверка того, что элемент ПЕРВОГО пользователя в списке - выделен т.е выбран в роль
@@ -366,8 +362,36 @@ public class NewTaskStepsMobile extends BaseSteps {
     * Открытие группы полей на вкладке "Описание"
     * */
     public void selectGroupTab(String nameOfGroup){
-        $(By.xpath("//div[contains(text(),'" + nameOfGroup + "')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
+//
+//        try {
+//            getVisibleGroupTab(nameOfGroup).click();
+//        } catch (NullPointerException e) {
+//            fail("Failed Test! Не найдены видимые группы полей на вкладке Описание" + e + " ");
+//        }
+
+        $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//div[contains(text(),'" + nameOfGroup + "')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
+        //$(By.xpath("//div[contains(text(),'" + nameOfGroup + "')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
+        //приходит два элемента. один из них из формы создания и он  displayed:false
+        //здесь проверять на displayed? и кликать только в тот который  не displayed:false
+
+        //через метод норм. и на уровне xpath можно -  надо для всех остальных также делать -  выше по дерево у родителей искать @class, что-то с hidden.
     }
+
+    public SelenideElement getVisibleGroupTab(String nameOfGroup) throws NullPointerException {
+
+
+        List<SelenideElement> allGroupTab = new ArrayList<>($$(By.xpath("//div[contains(text(),'" + nameOfGroup + "')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")));
+
+        for (SelenideElement element : allGroupTab) {
+            if (element.isDisplayed()) {
+                return element;
+            }
+        }
+
+
+        return null; //нужно в сигнатуре добавить, что кидает NullPointerException. и ловить их
+    }
+
 
 
     /**
@@ -391,10 +415,10 @@ public class NewTaskStepsMobile extends BaseSteps {
         selectGroupTab("Кому");
 
         // выбор пользователя по ФИО - через searchlive
-        currentUserSelectedInTheRole(task.getAuthors(), newTaskFormElementsMobile.getAuthorsField(), "ext-selectdialog-1"); // - по умолчанию Автор задачи текущий пользователь (admin)
-        choiceUserOnTheRole(task.getControllers(), newTaskFormElementsMobile.getСontrollersField(), "ext-selectdialog-2"); // вводим - Контролеры задачи
-        choiceUserOnTheRole(task.getExecutiveManagers(), newTaskFormElementsMobile.getResponsiblesField(), "ext-selectdialog-3"); // вводим - Ответственные руководители
-        choiceUserOnTheRole(task.getWorkers(), newTaskFormElementsMobile.getWorkersField(),"ext-selectdialog-4"); // вводим - Исполнители задачи
+        currentUserSelectedInTheRole(task.getAuthors(), newTaskFormElementsMobile.getAuthorsField()); // - по умолчанию Автор задачи текущий пользователь (admin)
+        choiceUserOnTheRole(task.getControllers(), newTaskFormElementsMobile.getСontrollersField()); // вводим - Контролеры задачи
+        choiceUserOnTheRole(task.getExecutiveManagers(), newTaskFormElementsMobile.getResponsiblesField()); // вводим - Ответственные руководители
+        choiceUserOnTheRole(task.getWorkers(), newTaskFormElementsMobile.getWorkersField()); // вводим - Исполнители задачи
 
 
         // Закрываем  группу полей  "Кому"

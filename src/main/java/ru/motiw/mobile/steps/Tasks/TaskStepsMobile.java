@@ -41,7 +41,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         switch (nameOfTabs) {
             case "Файлы":
                 //Переходим на вкладку "Файлы"
-                taskElementsMobile.getButtonOfFilesTab().waitUntil(visible, 10000).click();
+                taskElementsMobile.getButtonOfFilesTab().waitUntil(visible, 2000).click();
 
                 //проверка на отображение
                 taskElementsMobile.getButtonOfFinalizeExecution().shouldBe(visible);
@@ -60,7 +60,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
             case "Действия":
                 //Переходим на вкладку "Действия"
 
-                taskElementsMobile.getButtonOfActionsTab().waitUntil(visible, 10000).click();
+                taskElementsMobile.getButtonOfActionsTab().waitUntil(visible, 2000).click();
 
                 //проверка на отображение
                 taskElementsMobile.getButtonOfAddAction().shouldBe(visible);
@@ -78,14 +78,14 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
             case "Описание":
 
                 //Переходим на вкладку "Описание"
-                taskElementsMobile.getButtonOfDescriptionTab().waitUntil(visible, 10000).click();
+                taskElementsMobile.getButtonOfDescriptionTab().waitUntil(visible, 2000).click();
 
                 //проверка на отображение
                 taskElementsMobile.getButtonOfSave().shouldBe(visible);
                 taskElementsMobile.getButtonOfFinalizeExecution().shouldBe(visible);
                 taskElementsMobile.getElementAmongButtonsOfMenu().shouldBe(visible);
 
-                taskElementsMobile.getPressedButtonOfDescription().waitUntil(visible, 5000);
+                taskElementsMobile.getPressedButtonOfDescription().waitUntil(visible, 2000);
                 taskElementsMobile.getButtonOfFilesTab().shouldBe(visible);
                 taskElementsMobile.getButtonOfActionsTab().shouldBe(visible);
 
@@ -109,7 +109,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         if (valueInInput == null) {
             return this;
         }
-        $(By.xpath("//div[contains(@id,\"object\")]//input[@name='" + nameOfElement + "']")).shouldHave(exactValue(valueInInput));
+        $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//input[@name='" + nameOfElement + "']")).shouldHave(exactValue(valueInInput));
         return this;
 
     }
@@ -205,11 +205,9 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
     /**
      * Проверка пользователей в формах добавления
      * @param employees       передаваемые пользователи
-     * @param componentId т.к после каждого открытия формы выбора пользователей она остается в DOM, то приходится передавать componentId
-     * componentId = ext-selectdialog-{порядковый номер открытой формы}
      */
 
-    private void verifyUserInFormOfRole(Employee[] employees, String componentId) {
+    private void verifyUserInFormOfRole(Employee[] employees) {
         if (employees != null) {
             for (Employee employee : employees) {
                 //проверка того, что элемент ПЕРВОГО пользователя в списке - выделен т.е выбран в роль
@@ -248,7 +246,10 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         newTaskFormElementsMobile.getTaskName().shouldBe(visible); // "Название"
         newTaskFormElementsMobile.getDescriptionTask().shouldBe(visible); // Описание задачи - отображение и проверка значения поля после закрытия группы полей  "Название"
         // Кому
-        $(By.xpath("(//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel x-noborder-trbl x-header-position-top x-panel-grey-background x-container-grey-background \")]//div[@class=\"x-input-el\"])[1]")).shouldBe(visible);
+        $(By.xpath("(//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]" +
+                "//div[contains(text(),'Кому')]" +
+                "//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel x-noborder-trbl x-header-position-top x-panel-grey-background x-container-grey-background \")]" +
+                "//div[@class=\"x-input-el\"])[1]")).shouldBe(visible);
         // TODO  xpath другой м.б написать - этот ищет все 4ре поля - хотя для других полей ведь тоже xpath одинаковые для раскрытого и закрытого поля. //span[contains(text(),'Ответственные руководители')]/../..//div[@class="x-input-el\ - не находит
 
         newTaskFormElementsMobile.getEndField().shouldBe(visible); // Окончание
@@ -263,13 +264,18 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
          */
 
         newTaskFormElementsMobile.getTaskNumber().shouldNotBe(visible);  //поле №
-        $(By.xpath("//span[text()='Проект']/../..//input")).shouldNotBe(visible);// - проект не должен отображаться ДО раскрытия группы полей
+        newTaskFormElementsMobile.getProjectTask().shouldNotBe(visible);// - проект не должен отображаться ДО раскрытия группы полей "Название"
 
 
-        $(By.xpath("//span[contains(text(),'Авторы')]/../..//div[@class=\"x-input-el\"]")).shouldNotBe(visible);
-        $(By.xpath("//span[contains(text(),'Контролеры')]/../..//div[@class=\"x-input-el\"]")).shouldNotBe(visible);
-        $(By.xpath("//span[contains(text(),'Ответственные руководители')]/../..//div[@class=\"x-input-el\"]")).shouldNotBe(visible);
-        $(By.xpath("//span[contains(text(),'Исполнители')]/../..//div[@class=\"x-input-el\"]")).shouldNotBe(visible);
+
+        $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]" +
+                "//span[contains(text(),'Авторы')]/../..//div[@class=\"x-input-el\"]")).shouldNotBe(visible);
+        $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]" +
+                "//span[contains(text(),'Контролеры')]/../..//div[@class=\"x-input-el\"]")).shouldNotBe(visible);
+        $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]" +
+                "//span[contains(text(),'Ответственные руководители')]/../..//div[@class=\"x-input-el\"]")).shouldNotBe(visible);
+        $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]" +
+                "//span[contains(text(),'Исполнители')]/../..//div[@class=\"x-input-el\"]")).shouldNotBe(visible);
 
 
         newTaskFormElementsMobile.getBeginField().shouldNotBe(visible); // Начало
@@ -298,19 +304,22 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         selectGroupTab("Файлы");
         selectGroupTab("Еще");
 
-
-
         //Проверка
         newTaskFormElementsMobile.getTaskName().shouldBe(visible); // "Название"
         newTaskFormElementsMobile.getDescriptionTask().shouldBe(visible); // Описание задачи
-        newTaskFormElementsMobile.getTaskNumber().shouldBe(visible);  //поле №
-        $(By.xpath("//span[text()='Проект']/../..//input")).shouldBe(visible);// - проект не должен отображаться ДО раскрытия группы полей
+        newTaskFormElementsMobile.getTaskNumber().shouldBe(visible);  // поле №
+        newTaskFormElementsMobile.getProjectTask().shouldBe(visible);// проект должен отображаться после раскрытия группы полей "Название"
+
 
         // TODO В ЕД.МЕТОД с подстановкой. xpath подойдет для других полей где div ?
-        $(By.xpath("//span[contains(text(),'Авторы')]/../..//div[@class=\"x-input-el\"]")).shouldBe(visible);
-        $(By.xpath("//span[contains(text(),'Контролеры')]/../..//div[@class=\"x-input-el\"]")).shouldBe(visible);
-        $(By.xpath("//span[contains(text(),'Ответственные руководители')]/../..//div[@class=\"x-input-el\"]")).shouldBe(visible);
-        $(By.xpath("//span[contains(text(),'Исполнители')]/../..//div[@class=\"x-input-el\"]")).shouldBe(visible);
+        $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]" +
+                "//span[contains(text(),'Авторы')]/../..//div[@class=\"x-input-el\"]")).shouldBe(visible);
+        $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]" +
+                "//span[contains(text(),'Контролеры')]/../..//div[@class=\"x-input-el\"]")).shouldBe(visible);
+        $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]" +
+                "//span[contains(text(),'Ответственные руководители')]/../..//div[@class=\"x-input-el\"]")).shouldBe(visible);
+        $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]" +
+                "//span[contains(text(),'Исполнители')]/../..//div[@class=\"x-input-el\"]")).shouldBe(visible);
 
 
         newTaskFormElementsMobile.getBeginField().shouldBe(visible); // Начало
@@ -348,8 +357,12 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
 
         verifyValueBeforeOpenGroupFields(task.getTaskName(), "taskname"); //Проверка поля названия при закрытой группы полей "Название"
 
-        $(By.xpath("//div[contains(@id,\"object\")]//div[@name=\"description\"]"))
-                .shouldHave(exactValue(task.getDescription())); // Проверка поля - Описание задачи - до раскрытия группы полей "Название". Через verifyValueInInput не проверишь т.к описание в div.
+        //div[contains(@id,'object') and not(contains(@class,"x-hidden-display"))]//div[@name="description"
+
+        newTaskFormElementsMobile.getDescriptionTask().shouldHave(exactValue(task.getDescription())); // Проверка поля - Описание задачи - до раскрытия группы полей "Название". Через verifyValueInInput не проверишь т.к описание в div.
+
+        //$(By.xpath("//div[contains(@id,\"object\")]//div[@name=\"description\"]"))
+         //       .shouldHave(exactValue(task.getDescription())); // Проверка поля - Описание задачи - до раскрытия группы полей "Название". Через verifyValueInInput не проверишь т.к описание в div.
         // Можно в отдельный схожий метод для проверки если есть ещё поля где значения в div
         verifyValueBeforeOpenGroupFields(task.getDateEnd(), "enddate"); // Проверка поля -  Дата окончания - при закрытой группе полей  "Срок".
         //verifyTaskTypeBeforeOpenGroupFields(task.getTaskType()); // Проверка поля -  Тип задачи - при закрытой группе полей "Тип задачи".
@@ -374,8 +387,10 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         //Все проверки из verifyValueInInput
         verifyValueInInput("Название", task.getTaskName());
 
-        $(By.xpath("//div[contains(@id,\"object\")]//div[@name=\"description\"]"))
-                .shouldHave(exactValue(task.getDescription())); // Описание задачи. Через verifyValueInInput не проверишь т.к описание в div.
+        newTaskFormElementsMobile.getDescriptionTask().shouldHave(exactValue(task.getDescription())); // Описание задачи. Через verifyValueInInput не проверишь т.к описание в div.
+
+//        $(By.xpath("//div[contains(@id,\"object\")]//div[@name=\"description\"]"))
+//                .shouldHave(exactValue(task.getDescription())); // Описание задачи. Через verifyValueInInput не проверишь т.к описание в div.
         // Можно в отдельный схожий метод для проверки еслиесть ещё поля где значения в div
 
         verifyValueInInput("Проект", "Главное подразделение: Задачи вне проектов");
@@ -388,20 +403,20 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
 
 
         //Проверка выбранных пользователей в форме выбора "Авторы задачи"
-        openFormSelectUser(newTaskFormElementsMobile.getAuthorsField(), "ext-selectdialog-1");
-        verifyUserInFormOfRole(task.getAuthors(),"ext-selectdialog-1");
+        openFormSelectUser(newTaskFormElementsMobile.getAuthorsField());
+        verifyUserInFormOfRole(task.getAuthors());
 
         //Проверка выбранных пользователей в форме выбора "Контролеры задачи"
-        openFormSelectUser(newTaskFormElementsMobile.getСontrollersField(), "ext-selectdialog-2");
-        verifyUserInFormOfRole(task.getControllers(),"ext-selectdialog-2");
+        openFormSelectUser(newTaskFormElementsMobile.getСontrollersField());
+        verifyUserInFormOfRole(task.getControllers());
 
         //Проверка выбранных пользователей в форме выбора "Ответственные руководители"
-        openFormSelectUser(newTaskFormElementsMobile.getResponsiblesField(), "ext-selectdialog-3");
-        verifyUserInFormOfRole(task.getExecutiveManagers(), "ext-selectdialog-3");
+        openFormSelectUser(newTaskFormElementsMobile.getResponsiblesField());
+        verifyUserInFormOfRole(task.getExecutiveManagers());
 
         //Проверка выбранных пользователей в форме выбора "Исполнители задачи"
-        openFormSelectUser(newTaskFormElementsMobile.getWorkersField(),"ext-selectdialog-4");
-        verifyUserInFormOfRole(task.getWorkers(), "ext-selectdialog-4");
+        openFormSelectUser(newTaskFormElementsMobile.getWorkersField());
+        verifyUserInFormOfRole(task.getWorkers());
 
 
         verifyValueInInput("Окончание", task.getDateEnd());
@@ -441,7 +456,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
      * @return UnionMessageSteps
      */
     public TaskStepsMobile verifyCreateTask(Task valueTask) throws Exception {
-        refresh(); // чтобы сбросить из кеша все элементы что остаются после работы в форме создания задачи
+        //refresh(); // чтобы сбросить из кеша все элементы что остаются после работы в форме создания задачи
         if (valueTask == null) {
             return null;
         } else
@@ -637,7 +652,9 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
                 return this;
             } else {
                 for (String fileName : task.getFileName()) {
-                    $(By.xpath("//i[contains(@class,'file')]/ancestor::div[contains(@class,\"x-body-wrap-el x-panel-body-wrap-el x-container-body-wrap-el x-component-body-wrap-el \")]//div[contains(text(),'" + fileName + "')]"))
+                    $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]" +
+                            "//i[contains(@class,'file')]/ancestor::div[contains(@class,\"x-body-wrap-el x-panel-body-wrap-el x-container-body-wrap-el x-component-body-wrap-el \")]" +
+                            "//div[contains(text(),'" + fileName + "')]"))
                             .click(); //открытие файла в предпросмотре
                     sleep(500);
                     verifyTextInFilesInPreviewOnDescriptionPage(fileName); //Проверка наличия текста в просмотрщике файлов
@@ -673,7 +690,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
 
             for (String nameOfFile : nameOfFiles) {
                 SelenideElement sourceElement = $(By
-                        .xpath("//div[contains(text(), '" + nameOfFile + "')]/ancestor::div[contains(@class,\"x-listitem x-component\")]"));
+                        .xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//div[contains(text(), '" + nameOfFile + "')]/ancestor::div[contains(@class,\"x-listitem x-component\")]"));
                 SelenideElement targetElement = $(taskElementsMobile.getElementAmongButtonsOfMenu());
 
                 sleep(200);
@@ -699,10 +716,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
 
     // Ожидание и проверка элементов в форме задачи на вкладке Описание
     public void verifyElementsOnDescriptionPage() {
-       taskElementsMobile.getElementsOnDescriptionPage().shouldHave(CollectionCondition.size(7), 10000);
-       //todo имеет смысл заменить на проверку элементов которые рельно видны?
-        //Сейчас получается, что если не перезагружать страницу после формы создания, то он проверяет кол-во 7, а их на самом деле в DOM-e 16.
-        // Таким образом, проверка на кол-во мешает строить тесты без принудетельной перезагрузки формы.
+       newTaskFormElementsMobile.getCollectionElementsFormOfTask().shouldHave(CollectionCondition.size(7), 10000);
     }
 
 }

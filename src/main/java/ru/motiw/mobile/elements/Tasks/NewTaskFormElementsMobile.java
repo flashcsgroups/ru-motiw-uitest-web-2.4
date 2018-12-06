@@ -5,9 +5,9 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
-import ru.motiw.mobile.utilsMobile.ElementUtilMobile;
 
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 
 /**
  * Элементы формы создания задачи
@@ -15,56 +15,58 @@ import static com.codeborne.selenide.Selenide.*;
 
 public class NewTaskFormElementsMobile {
 
-    private ElementUtilMobile elementUtilMobile = page(ElementUtilMobile.class);
     /*
      * Все элементы формы содания задачи
      */
-    @FindBy(xpath = "//div[contains(@class,'x-body-el x-panel-body-el x-container-body-el x-component-body-el x-layout-auto')]/div")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//div[contains(@class,'x-body-el x-panel-body-el x-container-body-el x-component-body-el x-layout-auto')]/div")
     private ElementsCollection newTaskFormElements;
 
     @FindBy(xpath = "//div[contains(@class,'x-component x-button x-widthed x-heighted x-has-text x-icon-align-left')]")
     private SelenideElement buttonCreateTask;
 
-    @FindBy(xpath = "//input[@name=\"taskname\"]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//input[@name=\"taskname\"]")
     private SelenideElement TaskName;
 
-    @FindBy(xpath = "//div[@name=\"description\"]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//div[@name=\"description\"]")
     private SelenideElement descriptionTask;
 
-    @FindBy(xpath = "//input[@name=\"numerator\"]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//span[text()='Проект']/../..//input")
+    private SelenideElement projectTask;
+
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//input[@name=\"numerator\"]")
     private SelenideElement taskNumber;
 
-    @FindBy(xpath = "//input[@name=\"priority\"]/ancestor::div[@class=\"x-body-el\"]//div[@class=\"x-expandtrigger x-trigger x-interactive\"]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//input[@name=\"priority\"]/ancestor::div[@class=\"x-body-el\"]//div[@class=\"x-expandtrigger x-trigger x-interactive\"]")
     private SelenideElement priority;
 
-    @FindBy(xpath = "//input[@name=\"startdate\"]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//input[@name=\"startdate\"]")
     private SelenideElement beginField;
 
-    @FindBy(xpath = "//input[@name=\"enddate\"]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//input[@name=\"enddate\"]")
     private SelenideElement endField;
 
-    @FindBy(xpath = "//input[@name=\"id_tasktype\"]/ancestor::div[@class=\"x-body-el\"]//div[@class=\"x-expandtrigger x-trigger x-interactive\"]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//input[@name=\"id_tasktype\"]/ancestor::div[@class=\"x-body-el\"]//div[@class=\"x-expandtrigger x-trigger x-interactive\"]")
     private SelenideElement fieldTaskType;
 
-    @FindBy(xpath = "//div[contains(text(),'Файлы')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel x-noborder-trbl x-header-position-top x-panel-grey-background x-container-grey-background \")]//input[@class=\"x-input-el\"]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//div[contains(text(),'Файлы')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel x-noborder-trbl x-header-position-top x-panel-grey-background x-container-grey-background \")]//input[@class=\"x-input-el\"]")
     private SelenideElement fieldFiles;
 
-    @FindBy(xpath = "//input[@type=\"file\"]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//input[@type=\"file\"]")
     private SelenideElement inputFiles;
 
-    @FindBy(xpath = "//i[contains(@class,'file')]/ancestor::div[contains(@class,\"x-body-wrap-el x-panel-body-wrap-el x-container-body-wrap-el x-component-body-wrap-el \")]//div[@class=\"x-innerhtml\"]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//i[contains(@class,'file')]/ancestor::div[contains(@class,\"x-body-wrap-el x-panel-body-wrap-el x-container-body-wrap-el x-component-body-wrap-el \")]//div[@class=\"x-innerhtml\"]")
     private ElementsCollection listOfNameFiles;
 
-    @FindBy(xpath = "(//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel\")]//div[@class=\"x-input-el\"])[1]")
+    @FindBy(xpath = "(//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel\")]//div[@class=\"x-input-el\"])[1]")
     private SelenideElement authorsField;
 
-    @FindBy(xpath = "(//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel\")]//div[@class=\"x-input-el\"])[2]")
+    @FindBy(xpath = "(//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel\")]//div[@class=\"x-input-el\"])[2]")
     private SelenideElement сontrollersField;
 
-    @FindBy(xpath = "(//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel\")]//div[@class=\"x-input-el\"])[3]")
+    @FindBy(xpath = "(//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel\")]//div[@class=\"x-input-el\"])[3]")
     private SelenideElement responsiblesManagersField;
 
-    @FindBy(xpath = "(//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel\")]//div[@class=\"x-input-el\"])[4]")
+    @FindBy(xpath = "(//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel\")]//div[@class=\"x-input-el\"])[4]")
     private SelenideElement workersField;
 
 
@@ -75,25 +77,22 @@ public class NewTaskFormElementsMobile {
     private SelenideElement importantTask;
 
 
-    @FindBy(xpath = "//input[@name=\"iswithreport\"]/ancestor::div[@class=\"x-font-icon x-icon-el\"]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//input[@name=\"iswithreport\"]/ancestor::div[@class=\"x-font-icon x-icon-el\"]")
     private SelenideElement checkboxReportRequired;
 
 
-    @FindBy(xpath = "//input[@name=\"iswithreport\"]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//input[@name=\"iswithreport\"]")
     private SelenideElement reportRequired;
 
 
-    @FindBy(xpath = "//input[@name=\"issecret\"]/ancestor::div[@class=\"x-font-icon x-icon-el\"]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//input[@name=\"issecret\"]/ancestor::div[@class=\"x-font-icon x-icon-el\"]")
     private SelenideElement checkboxIsSecret;
 
-    @FindBy(xpath = "//input[@name=\"issecret\"]")
-    private SelenideElement isSecret;
 
-
-    @FindBy(xpath = "//input[@name=\"isforexamination\"]/ancestor::div[@class=\"x-font-icon x-icon-el\"]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//input[@name=\"isforexamination\"]/ancestor::div[@class=\"x-font-icon x-icon-el\"]")
     private SelenideElement checkboxIsForReview;
 
-    @FindBy(xpath = "//input[@name=\"isforexamination\"]")
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//input[@name=\"isforexamination\"]")
     private SelenideElement IsForReview;
 
 
@@ -102,11 +101,11 @@ public class NewTaskFormElementsMobile {
 
 
     /**
-     * Набор элементов в форме Создания Задачи
-     *
-     * @return коллекция элементов в форме Создания Задачи
+     * Коллекция элементов в форме Создания Задачи
+     * Коллекция элементов в форме задачи на вкладке Описание созданной задачи
+     * @return коллекция элементов
      */
-    public ElementsCollection getCollectionNewTaskformElements() {
+    public ElementsCollection getCollectionElementsFormOfTask() {
         return newTaskFormElements;
     }
 
@@ -140,6 +139,14 @@ public class NewTaskFormElementsMobile {
      */
     public SelenideElement getTaskNumber() {
         return taskNumber;
+    }
+
+    /**
+     * Проект документа
+     */
+
+    public SelenideElement getProjectTask() {
+        return projectTask;
     }
 
     /**
@@ -205,7 +212,7 @@ public class NewTaskFormElementsMobile {
      * Поле ввода в списке формы добавления пользователей
      */
     public SelenideElement getInputForSearchUsers() {
-        return $(By.xpath("//div[@data-componentid=\"ext-selectdialog-" + elementUtilMobile.getCurrentComponentId() + "\"]//input"));
+        return $(By.xpath("//div[contains(@id,'ext-selectdialog') and not(contains(@class,\"x-hidden\")) and not(contains(@id,\"floatWrap\"))]//input"));
     }
 
 
@@ -213,7 +220,7 @@ public class NewTaskFormElementsMobile {
      * Элемент любого выбраннного (выделен синим) пользователя в списке формы добавления пользователей
      */
     public SelenideElement getSelectedUserInTheList() {
-        return $(By.xpath("//div[@data-componentid=\"ext-selectdialog-" + elementUtilMobile.getCurrentComponentId() + "\"]//div[contains(@class,\"x-selected\")]"));
+        return $(By.xpath("//div[contains(@id,'ext-selectdialog') and not(contains(@class,\"x-hidden\")) and not(contains(@id,\"floatWrap\"))]//div[contains(@class,\"x-selected\")]"));
     }
 
 
@@ -221,34 +228,33 @@ public class NewTaskFormElementsMobile {
      * Элемент выбраннного (выделен синим) пользователя в списке формы добавления пользователей
      * @param lastName Фамилия пользователя
      */
-
     public SelenideElement getSelectedUserInTheList(String lastName) {
-        return $(By.xpath("//div[@data-componentid=\"ext-selectdialog-" + elementUtilMobile.getCurrentComponentId() + "\"]//div[contains(@class,\"x-selected\")]//div[contains(text(),'" + lastName + "')]"));
+        return $(By.xpath("//div[contains(@id,'ext-selectdialog') and not(contains(@class,\"x-hidden\")) and not(contains(@id,\"floatWrap\"))]" +
+                "//div[contains(@class,\"x-selected\")]//div[contains(text(),'" + lastName + "')]"));
     }
 
 
     /**
      * Набор элементов = кол-во пользователей в списке формы добавления пользователей
      */
-    public ElementsCollection getListOfUsers(String componentId ) {
-        return $$(By.xpath("//div[@data-componentid=\"ext-selectdialog-" + elementUtilMobile.getCurrentComponentId() + "\"]//div[contains(@data-componentid,\"ext-gridcell\")]"));
+    public ElementsCollection getListOfUsers() {
+        return $$(By.xpath("//div[contains(@id,'ext-selectdialog') and not(contains(@class,\"x-hidden\")) and not(contains(@id,\"floatWrap\"))]//div[contains(@data-componentid,\"ext-gridcell\")]"));
     }
 
     /**
      * выбор пользователей в списке формы добавления пользователей
      */
-    public SelenideElement getUserFromList (String componentId, String lastName) {
-        return $(By.xpath("//div[@data-componentid=\"ext-selectdialog-" + elementUtilMobile.getCurrentComponentId() + "\"]//div[contains(text(),'" + lastName + "')]"));
+    public SelenideElement getUserFromList(String lastName) {
+        return $(By.xpath("//div[contains(@id,'ext-selectdialog') and not(contains(@class,\"x-hidden\")) and not(contains(@id,\"floatWrap\"))]//div[contains(text(),'" + lastName + "')]"));
     }
 
 
     /**
      * кнопка "Назначить"
      */
-    public SelenideElement getButtonAppointUsers(String componentId) {
-        return $(By.xpath("//div[@data-componentid=\"ext-selectdialog-" + elementUtilMobile.getCurrentComponentId() + "\"]//div[contains(@class,\"x-component x-button\")]"));
+    public SelenideElement getButtonAppointUsers() {
+        return $(By.xpath("//div[contains(@id,'ext-selectdialog') and not(contains(@class,\"x-hidden\")) and not(contains(@id,\"floatWrap\"))]//div[contains(@class,\"x-component x-button\")]"));
     }
-
 
 
     /**
@@ -326,15 +332,6 @@ public class NewTaskFormElementsMobile {
         return checkboxIsSecret;
     }
 
-
-    /**
-     * признак - Секретная
-     * Используется для проверки состояния.
-     */
-
-    public SelenideElement getIsSecret() {
-        return isSecret;
-    }
 
 
     /**
