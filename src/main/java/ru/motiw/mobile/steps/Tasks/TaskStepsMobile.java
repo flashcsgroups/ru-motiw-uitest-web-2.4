@@ -267,15 +267,10 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         newTaskFormElementsMobile.getProjectTask().shouldNotBe(visible);// - проект не должен отображаться ДО раскрытия группы полей "Название"
 
 
-
-        $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]" +
-                "//span[contains(text(),'Авторы')]/../..//div[@class=\"x-input-el\"]")).shouldNotBe(visible);
-        $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]" +
-                "//span[contains(text(),'Контролеры')]/../..//div[@class=\"x-input-el\"]")).shouldNotBe(visible);
-        $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]" +
-                "//span[contains(text(),'Ответственные руководители')]/../..//div[@class=\"x-input-el\"]")).shouldNotBe(visible);
-        $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]" +
-                "//span[contains(text(),'Исполнители')]/../..//div[@class=\"x-input-el\"]")).shouldNotBe(visible);
+        newTaskFormElementsMobile.getFieldOfWorkGroup("Авторы").shouldNotBe(visible);
+        newTaskFormElementsMobile.getFieldOfWorkGroup("Контролеры").shouldNotBe(visible);
+        newTaskFormElementsMobile.getFieldOfWorkGroup("Ответственные руководители").shouldNotBe(visible);
+        newTaskFormElementsMobile.getFieldOfWorkGroup("Исполнители").shouldNotBe(visible);
 
 
         newTaskFormElementsMobile.getBeginField().shouldNotBe(visible); // Начало
@@ -310,17 +305,10 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         newTaskFormElementsMobile.getTaskNumber().shouldBe(visible);  // поле №
         newTaskFormElementsMobile.getProjectTask().shouldBe(visible);// проект должен отображаться после раскрытия группы полей "Название"
 
-
-        // TODO В ЕД.МЕТОД с подстановкой. xpath подойдет для других полей где div ?
-        $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]" +
-                "//span[contains(text(),'Авторы')]/../..//div[@class=\"x-input-el\"]")).shouldBe(visible);
-        $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]" +
-                "//span[contains(text(),'Контролеры')]/../..//div[@class=\"x-input-el\"]")).shouldBe(visible);
-        $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]" +
-                "//span[contains(text(),'Ответственные руководители')]/../..//div[@class=\"x-input-el\"]")).shouldBe(visible);
-        $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]" +
-                "//span[contains(text(),'Исполнители')]/../..//div[@class=\"x-input-el\"]")).shouldBe(visible);
-
+        newTaskFormElementsMobile.getFieldOfWorkGroup("Авторы").shouldBe(visible);
+        newTaskFormElementsMobile.getFieldOfWorkGroup("Контролеры").shouldBe(visible);
+        newTaskFormElementsMobile.getFieldOfWorkGroup("Ответственные руководители").shouldBe(visible);
+        newTaskFormElementsMobile.getFieldOfWorkGroup("Исполнители").shouldBe(visible);
 
         newTaskFormElementsMobile.getBeginField().shouldBe(visible); // Начало
         newTaskFormElementsMobile.getEndField().shouldBe(visible); // Окончание

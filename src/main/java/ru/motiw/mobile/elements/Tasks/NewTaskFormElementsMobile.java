@@ -256,6 +256,14 @@ public class NewTaskFormElementsMobile {
         return $(By.xpath("//div[contains(@id,'ext-selectdialog') and not(contains(@class,\"x-hidden\")) and not(contains(@id,\"floatWrap\"))]//div[contains(@class,\"x-component x-button\")]"));
     }
 
+    /**
+     * Поля рабочей группы, при раскрытой группы полей "Кому"
+     * Это xpath нужен т.к xpath в getAuthorsField() виден и при закрытой группе полей
+    */
+    public SelenideElement getFieldOfWorkGroup(String nameField) {
+        return  $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//span[contains(text(),'" + nameField + "')]/../..//div[@class=\"x-input-el\"]"));
+    }
+
 
     /**
      * поле - Авторы
