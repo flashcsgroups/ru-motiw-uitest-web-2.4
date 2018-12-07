@@ -358,38 +358,31 @@ public class NewTaskStepsMobile extends BaseSteps {
     }
 
 
+    /**
+     * Проверка названий Файлов в списке прикрепленных файлов
+     * @param nameOfFile названия файлов
+     *  false  если среди файлов в списке не находим название файла
+     *  true   если среди файлов в списке находим название файла
+     */
+
+    public boolean verifyNameFileInTheListFiles(String nameOfFile) {
+
+        List<SelenideElement> nameFileInTheList = new ArrayList<>(newTaskFormElementsMobile.getListOfNameFiles());
+
+        for (SelenideElement nameFile : nameFileInTheList) {
+            if ($(nameFile).is((text(nameOfFile)))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     /*
     * Открытие группы полей на вкладке "Описание"
     * */
     public void selectGroupTab(String nameOfGroup){
-//
-//        try {
-//            getVisibleGroupTab(nameOfGroup).click();
-//        } catch (NullPointerException e) {
-//            fail("Failed Test! Не найдены видимые группы полей на вкладке Описание" + e + " ");
-//        }
-
         $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//div[contains(text(),'" + nameOfGroup + "')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
-        //$(By.xpath("//div[contains(text(),'" + nameOfGroup + "')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
-        //приходит два элемента. один из них из формы создания и он  displayed:false
-        //здесь проверять на displayed? и кликать только в тот который  не displayed:false
-
-        //через метод норм. и на уровне xpath можно -  надо для всех остальных также делать -  выше по дерево у родителей искать @class, что-то с hidden.
-    }
-
-    public SelenideElement getVisibleGroupTab(String nameOfGroup) throws NullPointerException {
-
-
-        List<SelenideElement> allGroupTab = new ArrayList<>($$(By.xpath("//div[contains(text(),'" + nameOfGroup + "')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")));
-
-        for (SelenideElement element : allGroupTab) {
-            if (element.isDisplayed()) {
-                return element;
-            }
-        }
-
-
-        return null; //нужно в сигнатуре добавить, что кидает NullPointerException. и ловить их
     }
 
 
@@ -410,7 +403,6 @@ public class NewTaskStepsMobile extends BaseSteps {
         // Закрываем  группу полей  "Название"
         selectGroupTab("Название");
 
-
         // Открываем  группу полей  "Кому"
         selectGroupTab("Кому");
 
@@ -419,7 +411,6 @@ public class NewTaskStepsMobile extends BaseSteps {
         choiceUserOnTheRole(task.getControllers(), newTaskFormElementsMobile.getСontrollersField()); // вводим - Контролеры задачи
         choiceUserOnTheRole(task.getExecutiveManagers(), newTaskFormElementsMobile.getResponsiblesField()); // вводим - Ответственные руководители
         choiceUserOnTheRole(task.getWorkers(), newTaskFormElementsMobile.getWorkersField()); // вводим - Исполнители задачи
-
 
         // Закрываем  группу полей  "Кому"
         selectGroupTab("Кому");
@@ -432,15 +423,15 @@ public class NewTaskStepsMobile extends BaseSteps {
         setImportance(task.getIsImportant()); // "Приоритет" - выбираем - Важная задача
         // Закрываем  группу полей  "Срок"
         selectGroupTab("Срок");
-        //$(By.xpath("//div[contains(@id,\"object\")]//input[@name='id_tasktype']")).shouldNotBe(empty);//Проверка поля названия при закрытой группы полей "Название" - проверяет что, поле не пустое, т.к должно быть значение по умолчанию.
+        $(By.xpath("//div[contains(@id,\"object\")]//input[@name='id_tasktype']")).shouldNotBe(empty);//Проверка поля названия при закрытой группы полей "Название" - проверяет что, поле не пустое, т.к должно быть значение по умолчанию.
         // Открываем  группу полей  "Тип задачи"
-        //selectGroupTab("Тип задачи");
-        //$(By.xpath("//div[contains(@id,\"object\")]//input[@name='id_tasktype']")).shouldNotBe(empty);//Проверка поля названия при открытой группы полей "Название" - проверяет что, поле не пустое, т.к должно быть значение по умолчанию.
-        //setTaskType(task.getTaskType()); //Тип задачи
+        selectGroupTab("Тип задачи");
+        $(By.xpath("//div[contains(@id,\"object\")]//input[@name='id_tasktype']")).shouldNotBe(empty);//Проверка поля названия при открытой группы полей "Название" - проверяет что, поле не пустое, т.к должно быть значение по умолчанию.
+        setTaskType(task.getTaskType()); //Тип задачи
         // если у пользователя была создана задача только с типом "Обычный"(по умолчанию), то баг в АРМе - у него нет поля Тип задачи.
-        // Поэтому все что связано с этим полем заккоментиронно.
+        // Поэтому все что связано с этим полем  можно заккоментировать. или найти решение как обходить эту проблему.
         // Закрываем  группу полей  "Тип задачи"
-        //selectGroupTab("Тип задачи");
+        selectGroupTab("Тип задачи");
 
 
 
@@ -543,25 +534,6 @@ public class NewTaskStepsMobile extends BaseSteps {
         return this;
     }
 
-
-    /**
-     * Проверка названий Файлов в списке прикрепленных файлов
-     * @param nameOfFile названия файлов
-     *  false  если среди файлов в списке не находим название файла
-     *  true   если среди файлов в списке находим название файла
-     */
-
-    public boolean verifyNameFileInTheListFiles(String nameOfFile) {
-
-            List<SelenideElement> nameFileInTheList = new ArrayList<>(newTaskFormElementsMobile.getListOfNameFiles());
-
-        for (SelenideElement nameFile : nameFileInTheList) {
-            if ($(nameFile).is((text(nameOfFile)))) {
-                return true;
-            }
-        }
-            return false;
-    }
 
 
     }

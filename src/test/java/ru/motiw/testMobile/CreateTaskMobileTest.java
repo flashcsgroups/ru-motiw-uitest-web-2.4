@@ -13,10 +13,7 @@ import ru.motiw.mobile.elements.Login.LoginPageElementsMobile;
 import ru.motiw.mobile.steps.Folders.GridOfFoldersSteps;
 import ru.motiw.mobile.steps.InternalStepsMobile;
 import ru.motiw.mobile.steps.LoginStepsMobile;
-import ru.motiw.mobile.steps.Tasks.EditOfTaskMobile;
-import ru.motiw.mobile.steps.Tasks.NewTaskStepsMobile;
-import ru.motiw.mobile.steps.Tasks.TaskActionsStepsMobile;
-import ru.motiw.mobile.steps.Tasks.TaskStepsMobile;
+import ru.motiw.mobile.steps.Tasks.*;
 import ru.motiw.web.model.Administration.Users.Department;
 import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Tasks.Folder;
@@ -48,6 +45,7 @@ public class CreateTaskMobileTest extends Tasks {
     private TaskActionsStepsMobile taskActionsStepsMobile;
     private EditOfTaskMobile editOfTaskMobile;
     private LoginPageElementsMobile loginPageElementsMobile;
+    private CloseTaskStepsMobile closeTaskStepsMobile;
 
     @BeforeClass
     public void beforeTest() {
@@ -62,6 +60,7 @@ public class CreateTaskMobileTest extends Tasks {
         taskActionsStepsMobile = page(TaskActionsStepsMobile.class);
         editOfTaskMobile = page(EditOfTaskMobile.class);
         loginPageElementsMobile = page(LoginPageElementsMobile.class);
+        closeTaskStepsMobile = page(CloseTaskStepsMobile.class);
     }
 
 
@@ -153,13 +152,20 @@ public class CreateTaskMobileTest extends Tasks {
         sleep(500); //ожидание папок;
         // Проверяем отображение созданной задачи в гриде папки
         gridOfFoldersSteps.checkDisplayTaskGrid(task, folder[0]);
+        //Переход в задачу из грида
+        gridOfFoldersSteps.openTaskInGrid(task);
+        //Завершаем задачу
+        closeTaskStepsMobile.closeTask();
+        //Проверяем исчезновение задачи в гриде папки
+        gridOfFoldersSteps.checkDisappearTaskInGrid(task, folder[0]);
+        //todo переход в завершенную задачу по id, проверка добавленного комментрия при завершении задачи
         // Выход из системы
         internalPageStepsMobile.logout();
     }
 
 
     @Test(priority = 3, dataProvider = "objectDataTaskPDA",  dataProviderClass = Tasks.class)
-    public void checkEditingTaskPDA(Task task) throws Exception {
+    public void checkEditingTaskMobile(Task task) throws Exception {
         refresh(); //т.к если не перезагружать страницу, при повторном логине после нажатия кнопки "Вход" js-ошибка
 
         //ЭТО для теста
@@ -236,6 +242,18 @@ public class CreateTaskMobileTest extends Tasks {
 
     }
 
+
+
+    @Test(priority = 11, dataProvider = "objectDataTaskPDA",  dataProviderClass = Tasks.class)
+    public void verifyCreateTaskMobile2(Task task) throws Exception {
+
+        //создание задачи с типом отличным от Обычный
+
+
+    }
+
+
+
     @Test(priority = 11, dataProvider = "objectDataTaskPDA",  dataProviderClass = Tasks.class)
     public void checkEditingTaskPDA1(Task task) throws Exception {
 
@@ -273,6 +291,7 @@ public class CreateTaskMobileTest extends Tasks {
 
 
     }
+
 
 /*
     @Test(priority = 4, dataProvider = "objectDataTaskPDA", dataProviderClass = Tasks.class)

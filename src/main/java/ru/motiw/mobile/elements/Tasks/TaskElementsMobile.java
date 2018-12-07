@@ -62,6 +62,10 @@ public class TaskElementsMobile {
             "//div[@class=\"x-component x-label x-layout-box-item x-layout-vbox-item counter-label\"]/div[@class=\"x-innerhtml\"]")
     private SelenideElement numbersOnElementCounterFiles;
 
+    @FindBy(xpath = "//textarea[@placeholder=\"Ваш комментарий\"]")
+    private SelenideElement inputForAddComment;
+
+
     /**
      * Все элементы меню
      * @return элементы меню форме задачи
@@ -155,6 +159,14 @@ public class TaskElementsMobile {
      */
     public SelenideElement getNumbersOnElementCounterFiles() {
         return numbersOnElementCounterFiles;
+    }
+
+
+    /**
+     * Поле ввода комментрия (форма добавления действия,форма добавления комментрия при завершении задачи)
+     */
+    public SelenideElement getInputForAddComment() {
+        return inputForAddComment;
     }
 
 }

@@ -3,21 +3,19 @@ package ru.motiw.mobile.steps;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
-import ru.motiw.web.elements.elementspda.*;
+import ru.motiw.web.elements.elementspda.HelpHtmlStepsPDA;
+import ru.motiw.web.elements.elementspda.OptionsStepsPDA;
+import ru.motiw.web.elements.elementspda.SearchStepsPDA;
 import ru.motiw.web.elements.elementspda.Task.NewTaskStepsPDA;
 import ru.motiw.web.elements.elementspda.Task.TasksReportsStepsPDA;
+import ru.motiw.web.elements.elementspda.TodayStepsPDA;
 import ru.motiw.web.steps.BaseSteps;
 
-import static com.codeborne.selenide.CollectionCondition.size;
-import static com.codeborne.selenide.Condition.appears;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.page;
 import static org.testng.Assert.assertTrue;
 
 /*
@@ -49,6 +47,7 @@ public class InternalStepsMobile extends BaseSteps {
      */
     @FindBy(xpath = "//a[@class='ui-link-inherit']")
     private ElementsCollection menuElements;
+
 
     /*
      * Выход из системы
@@ -85,12 +84,6 @@ public class InternalStepsMobile extends BaseSteps {
      */
     @FindBy(xpath = "//a[contains(@href, '/today/')]")
     private SelenideElement today;
-
-    /*
-     * Документы
-     */
-    @FindBy(xpath = "//a[contains(@href, '/documents/')]")
-    private SelenideElement documents;
 
     /*
      * Домой
@@ -176,16 +169,6 @@ public class InternalStepsMobile extends BaseSteps {
         return page(TodayStepsPDA.class);
     }
 
-    /**
-     * Переходим в грид - Документы
-     *
-     * @return DocumentsStepsPDA
-     */
-    public DocumentsStepsPDA goToDocuments() {
-        documents.click();
-        $$(By.xpath("//div[@class='ui-navbar ui-navbar-noicons']//li")).shouldBe(size(3));
-        return page(DocumentsStepsPDA.class);
-    }
 
     /**
      * Переходим в грид - Поиск

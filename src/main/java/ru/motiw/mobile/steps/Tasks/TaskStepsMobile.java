@@ -9,6 +9,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.AssertJUnit;
+import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
 import ru.motiw.mobile.elements.Tasks.TaskElementsMobile;
 import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
 import ru.motiw.web.model.Administration.Users.Employee;
@@ -25,6 +26,8 @@ import static org.testng.Assert.assertTrue;
 public class TaskStepsMobile extends NewTaskStepsMobile {
 
     private TaskElementsMobile taskElementsMobile = page(TaskElementsMobile.class);
+    private InternalElementsMobile internalElementsMobile = page(InternalElementsMobile.class);
+
 
 
 
@@ -37,7 +40,6 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
     public TaskStepsMobile openTab(String nameOfTabs) {
         // Ожидание и проверка элементов меню тулбара задачи
         verifyMenuOfTask();
-
         switch (nameOfTabs) {
             case "Файлы":
                 //Переходим на вкладку "Файлы"
@@ -368,7 +370,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         selectGroupTab("Название");
         selectGroupTab("Кому");
         selectGroupTab("Срок");
-        //selectGroupTab("Тип задачи");
+        selectGroupTab("Тип задачи");
         selectGroupTab("Файлы");
         selectGroupTab("Еще");
 
@@ -423,13 +425,13 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         Assert.assertTrue(verifyCheckboxIsSelected(task.getIsWithReport(), newTaskFormElementsMobile.getReportRequired())); // Признак - С Докладом - по умолчанию выбран при создании задачи.
 //        Assert.assertTrue(verifyCheckboxIsSelected(task.getIsSecret(), newTaskFormElementsMobile.getIsSecret())); // Признак Секретная todo motiwtest4.motiw.ru не проходит
 
-        //verifyTaskType(task.getTaskType()); // Проверка установленного Типа задачи
+        verifyTaskType(task.getTaskType()); // Проверка установленного Типа задачи
 
         //Закрытитие все групп полей
         selectGroupTab("Название");
         selectGroupTab("Кому");
         selectGroupTab("Срок");
-        //selectGroupTab("Тип задачи");
+        selectGroupTab("Тип задачи");
         selectGroupTab("Файлы");
         selectGroupTab("Еще");
         return this;
@@ -448,9 +450,8 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         if (valueTask == null) {
             return null;
         } else
-//        $(By.xpath("//div[@class=\"x-component x-title x-title-align-left x-layout-box-item x-layout-hbox-item x-flexed\"]/div[text()='" + valueTask.getTaskName() + "']"))
-//                .waitUntil(visible, 20000); // Название задачи в хедере todo почемуто валится на площадке http://motiwtest4.motiw.ru в версии 2.3
 
+         internalElementsMobile.getMainTitle().shouldHave((text(valueTask.getTaskName()))); // Название задачи в хедере
         //Переходим на вкладку "Описание"
         openTab("Описание");
         verifyElementsOnDescriptionPage();// Ожидание и проверка элементов на вкладке "Описание"

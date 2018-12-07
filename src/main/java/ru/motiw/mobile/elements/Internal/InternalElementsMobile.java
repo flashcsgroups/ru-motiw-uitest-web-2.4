@@ -37,6 +37,12 @@ public class InternalElementsMobile extends BaseSteps {
     @FindBy(xpath = "(//div[@class=\"x-component x-button noselect x-has-icon x-icon-align-left x-arrow-align-right x-button-raised x-component-raised x-button-alt x-component-alt x-button-round x-component-round x-layout-box-item x-layout-hbox-item\"])[1]")
     private SelenideElement buttonGoBack;
 
+    /*
+     * Title (общий на все формы)
+     */
+    @FindBy(xpath = "//div[contains(@id,\"ext-title\")]//div")
+    private SelenideElement mainTitle;
+
 
     /*
      * Выход из системы
@@ -45,52 +51,11 @@ public class InternalElementsMobile extends BaseSteps {
     private SelenideElement logout;
 
     /*
-     * Задачи/Задачи
-     */
-    @FindBy(xpath = "//a[@href='/tasksreports/']")
-    private SelenideElement menuTaskReports;
-
-    /*
      * Создать задачу
      */
     @FindBy(xpath = "//div[contains(text(),'Создать задачу')]/ancestor::div[contains(@class,\"x-component x-button\")]")
     private SelenideElement createTask;
 
-    /*
-     * Помощь
-     */
-    @FindBy(xpath = "//li[@class='help-but']/a")
-    private SelenideElement helpHtml;
-
-    /*
-     * Настройки
-     */
-    @FindBy(xpath = "//li[@class='option-but']/a")
-    private SelenideElement options;
-
-    /*
-     * Сегодня
-     */
-    @FindBy(xpath = "//a[contains(@href, '/today/')]")
-    private SelenideElement today;
-
-    /*
-     * Документы
-     */
-    @FindBy(xpath = "//a[contains(@href, '/documents/')]")
-    private SelenideElement documents;
-
-    /*
-     * Домой
-     */
-    @FindBy(xpath = "//a/img[contains(@src,'home')]")
-    private SelenideElement home;
-
-    /*
-     * Поле - Поиск
-     */
-    @FindBy(xpath = "//input[@name='search']")
-    private SelenideElement search;
 
     public ElementsCollection getMenuElementsMobile() {
         return menuElements;
@@ -119,6 +84,12 @@ public class InternalElementsMobile extends BaseSteps {
         return logout;
     }
 
+    /**
+     *  Title (общий на все формы)
+     */
+    public SelenideElement getMainTitle() {
+        return mainTitle;
+    }
 
 
 }

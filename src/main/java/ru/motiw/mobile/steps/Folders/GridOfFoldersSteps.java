@@ -1,20 +1,23 @@
 package ru.motiw.mobile.steps.Folders;
 
 import org.openqa.selenium.By;
+import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
+import ru.motiw.mobile.steps.InternalStepsMobile;
 import ru.motiw.web.model.Tasks.Folder;
 import ru.motiw.web.model.Tasks.Task;
 
-import static com.codeborne.selenide.Condition.exactText;
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.page;
-import static com.codeborne.selenide.Selenide.sleep;
+import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selenide.*;
 
 /*
  * Страница грида - Папка
  */
 
-public class GridOfFoldersSteps {
+public class GridOfFoldersSteps extends InternalStepsMobile {
+
+    private InternalElementsMobile internalElementsMobile = page(InternalElementsMobile.class);
+
+
 
     /**
      * Проверяем отображение созданной задачи в гриде раздела - Задачи
@@ -39,9 +42,8 @@ public class GridOfFoldersSteps {
      * @return
      */
     public GridOfFoldersSteps openTaskInGrid(Task task) {
-        $(By.xpath("//div[@id='mainblock']/table[3]//tr//span[text()='" + task.getTaskName() + "']/..")).click();
-        $(By.xpath("//ul[@class='ui-listview']//a[contains(text(),'" + task.getTaskName() + "')]"))
-                .shouldHave(exactText("" + task.getTaskName() + ""));
+        $(By.xpath("//div[contains(@id,\"ext-tasklist-item\")]//div[text()='" + task.getTaskName() + "']")).click();
+        sleep(500);
         return page(GridOfFoldersSteps.class);
     }
 
@@ -51,8 +53,17 @@ public class GridOfFoldersSteps {
      * @param task return values of attributes of the task
      * @return
      */
-    public GridOfFoldersSteps checkDisappearTaskInGrid(Task task) {
-        $(By.xpath("//div[@id='mainblock']/table[3]//tr//span[text()='" + task.getTaskName() + "']"))
+    public GridOfFoldersSteps checkDisappearTaskInGrid(Task task, Folder folderTask) {
+
+        // Если после завершения задачи мы не перешли в папку, то переходим в созданную папку
+        if (!internalElementsMobile.getMainTitle().is(text(folderTask.getNameFolder()))) {
+            goToHome();
+            // входим в созданную папку
+            $(By.xpath("//div[@class=\"m-folder\"]//div[text()='" + folderTask.getNameFolder() + "']")).click();
+            sleep(2000);//ожидание грида
+        }
+
+        $(By.xpath("//div[contains(@id,\"ext-tasklist-item\")]//div[text()='" + task.getTaskName() + "']"))
                 .shouldNotBe(visible);
         return this;
     }
