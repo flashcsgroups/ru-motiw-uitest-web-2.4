@@ -55,6 +55,7 @@ public class GridOfFoldersSteps extends InternalStepsMobile {
      */
     public GridOfFoldersSteps checkDisappearTaskInGrid(Task task, Folder folderTask) {
 
+        //sleep(2000);
         // Если после завершения задачи мы не перешли в папку, то переходим в созданную папку
         if (!internalElementsMobile.getMainTitle().is(text(folderTask.getNameFolder()))) {
             goToHome();
@@ -64,7 +65,7 @@ public class GridOfFoldersSteps extends InternalStepsMobile {
         }
 
         $(By.xpath("//div[contains(@id,\"ext-tasklist-item\")]//div[text()='" + task.getTaskName() + "']"))
-                .shouldNotBe(visible);
+                .waitUntil(not(visible), 10000);
         return this;
     }
 

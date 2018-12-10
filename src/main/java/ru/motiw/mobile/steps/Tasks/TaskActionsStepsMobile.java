@@ -4,6 +4,7 @@ package ru.motiw.mobile.steps.Tasks;
 import com.codeborne.selenide.Condition;
 import org.openqa.selenium.By;
 import ru.motiw.mobile.elements.Tasks.TaskElementsMobile;
+import ru.motiw.mobile.model.Task.TabsOfTask;
 import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Tasks.Action;
 
@@ -23,7 +24,7 @@ public class TaskActionsStepsMobile extends TaskStepsMobile {
      * @param actions кол-во передаваемых действий с атрибутами (текст действия;)
      */
     public void postAction(Action[] actions) {
-        openTab("Действия"); //Переходим на вкладку "Действия"
+        openTab(TabsOfTask.ACTIONS_TAB); //Переходим на вкладку "Действия"
         if (actions != null) {
             for (Action action : actions) {
                 $(By.xpath("//div[text()=\"Добавить действие\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")).click();
@@ -41,7 +42,7 @@ public class TaskActionsStepsMobile extends TaskStepsMobile {
      */
     public void checkNewActions(Action[] actions) {
         if (actions != null) {
-            openTab("Действия"); //Переходим на вкладку "Действия"
+            openTab(TabsOfTask.ACTIONS_TAB); //Переходим на вкладку "Действия"
             for (Action action : actions) {
                 verifyDisplayAddedActions(action.getActionText(), action.getAuthorAction(),action.getTimeOfAddAction()); // Проверяем созданные Действия
             }

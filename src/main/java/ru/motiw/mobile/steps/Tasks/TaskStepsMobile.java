@@ -11,6 +11,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.testng.AssertJUnit;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
 import ru.motiw.mobile.elements.Tasks.TaskElementsMobile;
+import ru.motiw.mobile.model.Task.TabsOfTask;
 import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
 import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Tasks.Task;
@@ -22,6 +23,10 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.testng.Assert.assertTrue;
+import static ru.motiw.mobile.model.Task.InnerGroupTabs.*;
+import static ru.motiw.mobile.model.Task.TabsOfTask.DESCRIPTION_TAB;
+import static ru.motiw.mobile.model.Task.TabsOfTask.FILES_TAB;
+
 
 public class TaskStepsMobile extends NewTaskStepsMobile {
 
@@ -37,10 +42,10 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
      *  TODO  Проверка отображения подписей под кнопками и хинтов
      * @param nameOfTabs Название вкладки на тулбаре
      */
-    public TaskStepsMobile openTab(String nameOfTabs) {
+    public TaskStepsMobile openTab(TabsOfTask nameOfTabs) {
         // Ожидание и проверка элементов меню тулбара задачи
         verifyMenuOfTask();
-        switch (nameOfTabs) {
+        switch (nameOfTabs.getNameTab()) {
             case "Файлы":
                 //Переходим на вкладку "Файлы"
                 taskElementsMobile.getButtonOfFilesTab().waitUntil(visible, 2000).click();
@@ -294,12 +299,12 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
     public TaskStepsMobile fieldsWhenGroupsOpen() {
 
         //Методы для Разворачивания всех групп полей
-        selectGroupTab("Название");
-        selectGroupTab("Кому");
-        selectGroupTab("Срок");
+        selectGroupTab(NAME);
+        selectGroupTab(TO_WHOM);
+        selectGroupTab(DATE);
         //selectGroupTab("Тип задачи");
-        selectGroupTab("Файлы");
-        selectGroupTab("Еще");
+        selectGroupTab(FILES);
+        selectGroupTab(MORE);
 
         //Проверка
         newTaskFormElementsMobile.getTaskName().shouldBe(visible); // "Название"
@@ -329,12 +334,12 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         }
 
         //Закрытитие все групп полей
-        selectGroupTab("Название");
-        selectGroupTab("Кому");
-        selectGroupTab("Срок");
-        //selectGroupTab("Тип задачи");
-        selectGroupTab("Файлы");
-        selectGroupTab("Еще");
+        selectGroupTab(NAME);
+        selectGroupTab(TO_WHOM);
+        selectGroupTab(DATE);
+        //selectGroupTab(TYPE_TASK);
+        selectGroupTab(FILES);
+        selectGroupTab(MORE);
         return this;
     }
 
@@ -367,12 +372,12 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
     public TaskStepsMobile verifyValueWhenGroupsOpen(Task task) {
 
         //Методы для Разворачивания всех групп полей
-        selectGroupTab("Название");
-        selectGroupTab("Кому");
-        selectGroupTab("Срок");
-        selectGroupTab("Тип задачи");
-        selectGroupTab("Файлы");
-        selectGroupTab("Еще");
+        selectGroupTab(NAME);
+        selectGroupTab(TO_WHOM);
+        selectGroupTab(DATE);
+        selectGroupTab(TYPE_TASK);
+        selectGroupTab(FILES);
+        selectGroupTab(MORE);
 
         //Все проверки из verifyValueInInput
         verifyValueInInput("Название", task.getTaskName());
@@ -428,12 +433,12 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
         verifyTaskType(task.getTaskType()); // Проверка установленного Типа задачи
 
         //Закрытитие все групп полей
-        selectGroupTab("Название");
-        selectGroupTab("Кому");
-        selectGroupTab("Срок");
-        selectGroupTab("Тип задачи");
-        selectGroupTab("Файлы");
-        selectGroupTab("Еще");
+        selectGroupTab(NAME);
+        selectGroupTab(TO_WHOM);
+        selectGroupTab(DATE);
+        selectGroupTab(TYPE_TASK);
+        selectGroupTab(FILES);
+        selectGroupTab(MORE);
         return this;
     }
 
@@ -453,7 +458,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
 
          internalElementsMobile.getMainTitle().shouldHave((text(valueTask.getTaskName()))); // Название задачи в хедере
         //Переходим на вкладку "Описание"
-        openTab("Описание");
+        openTab(DESCRIPTION_TAB);
         verifyElementsOnDescriptionPage();// Ожидание и проверка элементов на вкладке "Описание"
         fieldsWhenGroupsClosed(); //проверка наличия полей при закрытых группах полей
         fieldsWhenGroupsOpen();//проверка наличия полей при открытых группах полей
@@ -465,7 +470,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
          * Открываем группы полей "Срок"
          * Проверка даты начала и окончания задачи и приоритета
          */
-        selectGroupTab("Срок"); // Открываем вкладку "Срок"
+        selectGroupTab(DATE); // Открываем вкладку "Срок"
 
         /*
         $(By.xpath("//div[contains(@id,\"object\")]//input[@name=\"startdate\"]"))
@@ -473,16 +478,16 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
                 */
         // TODO подумать над необходимостью добавления проверки того, что дата по умолчанию подставилась верная. Раньше в web не было
 
-        selectGroupTab("Срок"); // Закрываем вкладку "Срок"
+        selectGroupTab(DATE); // Закрываем вкладку "Срок"
 
 
         /*
          * Открываем вкладку "Ещё"
          * Проверка признаков в чекбоксах
          */
-        selectGroupTab("Еще"); // Открываем вкладку "Еще"
+        selectGroupTab(MORE); // Открываем вкладку "Еще"
         newTaskFormElementsMobile.getIsForReview().shouldBe(disabled); // Признак -  "Для ознакомления" в созданной задаче должен быть задизейблен. Состояние чекбокса не отображается.
-        selectGroupTab("Еще"); // Закрываем вкладку "Еще"
+        selectGroupTab(MORE); // Закрываем вкладку "Еще"
 
 
         /*
@@ -538,7 +543,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
             // сравниваем кол-во прикрепленных файлов с числом отображаемым в элементе-переключтеле файлов.
             taskElementsMobile.getNumbersOnElementCounterFiles().shouldHave(text("1 / " + task.getNumberOfFiles()));
             //Проверка файлов в каруселе
-            openTab("Файлы");
+            openTab(FILES_TAB);
             verifyFilesInPreview(task.getFileName(), task.getNumberOfFiles());
             }
 

@@ -11,6 +11,7 @@ import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
 import ru.motiw.mobile.elements.Login.LoginPageElementsMobile;
 import ru.motiw.mobile.elements.Tasks.NewTaskFormElementsMobile;
 import ru.motiw.mobile.elements.Tasks.TaskElementsMobile;
+import ru.motiw.mobile.model.Task.InnerGroupTabs;
 import ru.motiw.mobile.steps.InternalStepsMobile;
 import ru.motiw.mobile.steps.LoginStepsMobile;
 import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
@@ -25,6 +26,7 @@ import java.util.List;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static org.testng.Assert.assertTrue;
+import static ru.motiw.mobile.model.Task.InnerGroupTabs.*;
 import static ru.motiw.mobile.model.URLMenuMobile.CREATE_TASK;
 import static ru.motiw.mobile.steps.BaseStepsMobile.openSectionOnURLMobile;
 
@@ -379,11 +381,12 @@ public class NewTaskStepsMobile extends BaseSteps {
 
 
     /*
-    * Открытие группы полей на вкладке "Описание"
+    * Открытие закладки группы полей на вкладке "Описание"
     * */
-    public void selectGroupTab(String nameOfGroup){
-        $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//div[contains(text(),'" + nameOfGroup + "')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
+    public void selectGroupTab(InnerGroupTabs nameOfGroup){
+        $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//div[contains(text(),'" + nameOfGroup.getNameOfGroupTab() + "')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
     }
+
 
 
 
@@ -396,15 +399,15 @@ public class NewTaskStepsMobile extends BaseSteps {
         //refresh(); //чтобы сбросить из кеша все элементы что остаются после работы в других формах
 
        // Разворачиваем  группу полей  "Название"
-        selectGroupTab("Название");
+        selectGroupTab(NAME);
        //Заполняем Название задачи
         setTaskName(task.getTaskName())
                 .setTasksDescription(task.getDescription());
         // Закрываем  группу полей  "Название"
-        selectGroupTab("Название");
+        selectGroupTab(NAME);
 
         // Открываем  группу полей  "Кому"
-        selectGroupTab("Кому");
+        selectGroupTab(TO_WHOM);
 
         // выбор пользователя по ФИО - через searchlive
         currentUserSelectedInTheRole(task.getAuthors(), newTaskFormElementsMobile.getAuthorsField()); // - по умолчанию Автор задачи текущий пользователь (admin)
@@ -413,42 +416,42 @@ public class NewTaskStepsMobile extends BaseSteps {
         choiceUserOnTheRole(task.getWorkers(), newTaskFormElementsMobile.getWorkersField()); // вводим - Исполнители задачи
 
         // Закрываем  группу полей  "Кому"
-        selectGroupTab("Кому");
+        selectGroupTab(TO_WHOM);
 
         // Открываем  группу полей  "Срок"
-        selectGroupTab("Срок");
+        selectGroupTab(DATE);
         //Заполняем Даты
         setDateBegin(task.getDateBegin())
                 .setDateEnd(task.getDateEnd());
         setImportance(task.getIsImportant()); // "Приоритет" - выбираем - Важная задача
         // Закрываем  группу полей  "Срок"
-        selectGroupTab("Срок");
+        selectGroupTab(DATE);
         $(By.xpath("//div[contains(@id,\"object\")]//input[@name='id_tasktype']")).shouldNotBe(empty);//Проверка поля названия при закрытой группы полей "Название" - проверяет что, поле не пустое, т.к должно быть значение по умолчанию.
         // Открываем  группу полей  "Тип задачи"
-        selectGroupTab("Тип задачи");
+        selectGroupTab(TYPE_TASK);
         $(By.xpath("//div[contains(@id,\"object\")]//input[@name='id_tasktype']")).shouldNotBe(empty);//Проверка поля названия при открытой группы полей "Название" - проверяет что, поле не пустое, т.к должно быть значение по умолчанию.
         setTaskType(task.getTaskType()); //Тип задачи
         // если у пользователя была создана задача только с типом "Обычный"(по умолчанию), то баг в АРМе - у него нет поля Тип задачи.
         // Поэтому все что связано с этим полем  можно заккоментировать. или найти решение как обходить эту проблему.
         // Закрываем  группу полей  "Тип задачи"
-        selectGroupTab("Тип задачи");
+        selectGroupTab(TYPE_TASK);
 
 
 
         // Открываем группу полей "Файлы"
-        selectGroupTab("Файлы");
+        selectGroupTab(FILES);
         addAttachFiles(task.getFileName());
         // Закрываем  группу полей "Файлы"
-        selectGroupTab("Файлы");
+        selectGroupTab(FILES);
 
 
         // Открываем группу полей "Ещё"
-        selectGroupTab("Еще");
+        selectGroupTab(MORE);
         newTaskFormElementsMobile.getReportRequired().shouldBe(selected); // Признак - С Докладом всегда по умолчанию должен быть выбран.
         rangeOfValuesFromTheCheckbox(task.getIsSecret(), newTaskFormElementsMobile.getCheckboxIsSecret()); // признак - Секретная
         rangeOfValuesFromTheCheckbox(task.getIsForReview(), newTaskFormElementsMobile.getCheckboxIsForReview()); // Признак - "Для ознакомления"
         // Закрываем  группу полей "Ещё"
-        selectGroupTab("Еще");
+        selectGroupTab(MORE);
 
 
 

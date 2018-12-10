@@ -27,6 +27,7 @@ import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.clearBrowserCache;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testng.AssertJUnit.assertTrue;
+import static ru.motiw.mobile.model.Task.TabsOfTask.DESCRIPTION_TAB;
 import static ru.motiw.web.steps.Tasks.UnionTasksSteps.goToUnionTasks;
 
 @Listeners({ScreenShotOnFailListener.class, TextReport.class})
@@ -281,7 +282,7 @@ public class CreateTaskMobileTest extends Tasks {
 
         sleep(500);
 
-        taskStepsMobile.openTab("Описание");
+        taskStepsMobile.openTab(DESCRIPTION_TAB);
 
 
 
