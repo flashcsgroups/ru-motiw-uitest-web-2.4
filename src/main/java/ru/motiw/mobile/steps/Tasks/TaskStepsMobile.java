@@ -217,13 +217,8 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
     private void verifyUserInFormOfRole(Employee[] employees) {
         if (employees != null) {
             for (Employee employee : employees) {
-                //проверка того, что элемент ПЕРВОГО пользователя в списке - выделен т.е выбран в роль
-                //contains(@class,"x-selected" - вроде бы всех выделенных будет находить. todo проверить это
                 newTaskFormElementsMobile.getSelectedUserInTheList(employee.getLastName()).shouldBe(visible);
                 newTaskFormElementsMobile.getInputForSearchUsers().sendKeys(Keys.chord(Keys.ESCAPE)); //Закрыть форму
-
-                //проверка того, что элемент ВТОРОГО пользователя в списке - выделен т.е выбран в роль.
-                //Для выделенных элементов ВТОРОГО и след. пользователей в списке class в div-е отличается от ПЕРВОГО пользователя в списке
                 return;
             }
         }

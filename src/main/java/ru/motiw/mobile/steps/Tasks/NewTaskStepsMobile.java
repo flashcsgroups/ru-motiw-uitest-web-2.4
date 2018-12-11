@@ -6,7 +6,6 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.support.FindBy;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
 import ru.motiw.mobile.elements.Login.LoginPageElementsMobile;
 import ru.motiw.mobile.elements.Tasks.NewTaskFormElementsMobile;
@@ -46,85 +45,6 @@ public class NewTaskStepsMobile extends BaseSteps {
     private TaskElementsMobile taskElementsMobile = page(TaskElementsMobile.class);
 
     File folder = new File(Configuration.reportsFolder);
-
-
-    /*
-     Название задачи
-     */
-    @FindBy(xpath = "//input[@id='input_prj_t' and @name='task_name']")
-    private SelenideElement tasksName;
-
-    /*
-     Описание задачи
-     */
-    @FindBy(xpath = "//textarea[@id='task_description']")
-    private SelenideElement tasksDescription;
-
-    /*
-     Окончание задачи
-     */
-    @FindBy(xpath = "//input[@id='mes_date_end']")
-    private SelenideElement dateEnd;
-
-    /*
-     Авторы
-     */
-    @FindBy(xpath = "//input[@id='ag']")
-    private SelenideElement inputFieldAuthors;
-
-    /*
-     Контролеры задачи
-     */
-    @FindBy(xpath = "(//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel x-noborder-trbl x-header-position-top x-panel-grey-background x-container-grey-background\")]//div[@class=\"x-input-el\"])[2]")
-    private SelenideElement inputFieldTaskSupervisors;
-
-    /*
-     Ответственные руководители
-     */
-    @FindBy(xpath = "//input[@id='rg']")
-    private SelenideElement inputFieldExecutiveManagers;
-
-    /*
-     Исполнители
-     */
-    @FindBy(xpath = "//input[@id='wg']")
-    private SelenideElement inputFieldPerformers;
-
-    /*
-     Секретная задача
-     */
-    @FindBy(xpath = "//div[@class='ui-checkbox']//input[@id='secret']/..//span[2]")
-    protected SelenideElement privateTask;
-
-    /*
-     C докладом
-     */
-    @FindBy(xpath = "//div[@class='ui-checkbox']//input[@id='withreport2']/..//span[2]")
-    protected SelenideElement reportRequired;
-
-    /*
-     Важная задача
-     */
-    @FindBy(xpath = "//div[@class='ui-checkbox']//input[@id='taskhigh']/..//span[2]")
-    protected SelenideElement importantTask;
-
-    /*
-     Просмотр
-     */
-    @FindBy(css = "input[name='next2']")
-    private SelenideElement view;
-
-    /*
-     Постановщик задачи
-     */
-    @FindBy(xpath = "//a [ancestor::span[@name='autor']]")
-    private SelenideElement directorOfTheTask;
-
-
-
-    //TODO Все что выше под удаление
-    //////////////////////
-
 
     /**
      * Переход в Задачи/Создать задачу напрямую по ссылке
@@ -491,14 +411,11 @@ public class NewTaskStepsMobile extends BaseSteps {
      * @return UnionMessageSteps страница UnionMessageSteps (Задачи / Задачи) - убрал т.к пишет, что ничего не возвращает. Зачем это было в ориг. методе для web?
      */
     public NewTaskStepsMobile saveTask() {
-
-        sleep(1000);
         newTaskFormElementsMobile.getButtonCreateTask().click();
 //        //Ждем появление маски загрузки
-//        loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.visible, 1000);
-//        //Ждем пока исчезнит маска загрузки
-//        loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.disappear, 5000);
-        //TODO видимо падает, т.к элемент уже ранее был при логине. Нужно сделать индивидульный xpath для saveTask, наверное
+        loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.visible, 1000);
+        //Ждем пока исчезнит маска загрузки
+        loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.disappear, 5000);
         return page(NewTaskStepsMobile.class);
 
     }
