@@ -57,7 +57,7 @@ public abstract class Tasks extends BaseTest {
                 .setExecutiveManagers(null) //null т.к при редактировании удаляем пользователей добавленных при создании, а потом проверяем поле на null
                 .setWorkers(null) //null т.к при редактировании удаляем пользователей добавленных при создании, а потом проверяем поле на null
                 .setTaskType(new TasksTypes("Обычный"))
-                .setFileName(new String[ ]{strings[0], strings[1]}) // Файлы - взаимодействуем только с названиями файлов
+                .setFileName(new String[]{strings[0], strings[1]}) // Файлы - взаимодействуем только с названиями файлов
                 .setIsSecret(true) // Секретная задача
                 .setIsWithReport(false) // C докладом
                 .setIsForReview(true); // Только для озакомления

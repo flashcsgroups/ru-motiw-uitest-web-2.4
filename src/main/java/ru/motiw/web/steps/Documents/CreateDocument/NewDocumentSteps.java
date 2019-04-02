@@ -6,17 +6,19 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.motiw.web.elements.elementsweb.Documents.CreateDocument.NewDocumentCartTabElements;
 import ru.motiw.web.elements.elementsweb.Documents.CreateDocument.NewDocumentRouteTabElements;
+import ru.motiw.web.elements.elementsweb.Tasks.TaskForm.ProjectFormElements;
 import ru.motiw.web.elements.elementsweb.Tasks.TaskForm.UsersSelectTheFormElements;
-import ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.*;
-import ru.motiw.web.model.Document.Document;
-import ru.motiw.web.steps.BaseSteps;
-import ru.motiw.web.model.DocflowAdministration.DictionaryEditor.DictionaryEditorField;
-import ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.FieldDocument;
-import ru.motiw.web.model.Tasks.Project;
 import ru.motiw.web.model.Administration.Users.Department;
 import ru.motiw.web.model.Administration.Users.Employee;
-import ru.motiw.web.elements.elementsweb.Tasks.TaskForm.ProjectFormElements;
+import ru.motiw.web.model.DocflowAdministration.DictionaryEditor.DictionaryEditorField;
+import ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.*;
+import ru.motiw.web.model.Document.Document;
+import ru.motiw.web.model.Tasks.Project;
+import ru.motiw.web.steps.BaseSteps;
 
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.io.File;
 
 import static com.codeborne.selenide.CollectionCondition.exactTexts;
 import static com.codeborne.selenide.CollectionCondition.size;
@@ -24,6 +26,7 @@ import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static org.testng.AssertJUnit.fail;
 import static ru.motiw.utils.WindowsUtil.newWindowForm;
 import static ru.motiw.web.model.URLMenu.CREATE_DOCUMENT;
 
@@ -232,13 +235,42 @@ public class NewDocumentSteps extends BaseSteps {
     }
 
     /**
+     * Аттачминг файлов в форме
+     * @param nameOfFiles  названия файлов
+     */
+    public NewDocumentSteps addAttachFiles (String[] nameOfFiles) {
+        if (nameOfFiles != null)
+            for (String nameOfFile : nameOfFiles) {
+
+                String mainFilePath = "src" + File.separator + "main" + File.separator +
+                        "resources" + File.separator + "attachfiles" + File.separator;
+
+            try {
+                Robot r = new Robot(); //создаем робота для взаимодействия с win-формой
+                newDocumentCartTabElements.getAddFileButton().click();
+                sleep(2000);
+
+                //закрываем win-форму добавления файла
+                r.keyPress(KeyEvent.VK_ESCAPE);
+                r.keyRelease(KeyEvent.VK_ESCAPE);
+            } catch (AWTException e)
+            {
+                fail("AWTException");
+            }
+                newDocumentCartTabElements.getAddFileInput().uploadFile(new File(mainFilePath, nameOfFile));;
+
+            }
+        return this;
+    }
+
+    /**
      * Заполняем пользовательские поля документа
      *
      * @param customField зн-ия полей для заполнения
      */
-    private NewDocumentSteps fillCustomFieldsDocument(FieldDocument[] customField) {
+    public NewDocumentSteps fillCustomFieldsDocument(FieldDocument[] customField) {
         if (customField == null) {
-            return null;
+            return this;
         } else
             for (FieldDocument customsField : customField) {
                 // 1. ЧИСЛО
@@ -330,13 +362,15 @@ public class NewDocumentSteps extends BaseSteps {
     /**
      * Создать документ
      *
-     * @param document атрибуты  (значения) документа для заполнения в форме Создания документа
+     * @param document атрибуты (значения) документа для заполнения в форме Создания документа
      */
     public void createDocument(Document document) {
         selFieldDocumentType(document.getDocumentType()) // выбираем проинициализированный Тип документа
                 .writeInRegistrationDate(document.getDateRegistration()) // Дата регистрации
                 .createProject(document.getProject()) // добавляем новый проект
                 .fillCustomFieldsDocument(document.getDocumentFields()) // заполнение пользовательских полей документа
+
+                .addAttachFiles(document.getValueFiles())  // не находит поле после createProject
                 .routeTab() // Выбор вкладки - Маршруты
                 .routeSelectionByName(document.getRouteSchemeForDocument().getNameRouteScheme());
 

@@ -20,6 +20,7 @@ public class Document {
     private Department[] valueDepartment;
     private Employee[] valueEmployee;
     private String valueField = "";
+    private String[] valueFiles;
     private DictionaryEditorField valueDictionaryEditor;
     private RouteSchemeEditor routeScheme;
 
@@ -126,6 +127,21 @@ public class Document {
         this.valueField = valueField;
         return this;
     }
+
+    /**
+     * Значения в системном поля типа "Файл"
+     *
+     */
+
+    public String[] getValueFiles() {
+        return valueFiles;
+    }
+
+    public Document setValueFiles(String[] valueFiles) {
+        this.valueFiles = valueFiles;
+        return this;
+    }
+
 
     /**
      * Название - Маршрутной схемы

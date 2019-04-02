@@ -23,6 +23,12 @@ public class NewDocumentCartTabElements {
     @FindBy(xpath = "//div[@id='addFileButtonDiv']//input")
     private SelenideElement addFileButtonDiv;
 
+    @FindBy(xpath = "//div[@class=\" x-panel x-panel-noborder x-column-margin x-column\"]//div[@id=\"pfiles\"]")
+    private SelenideElement addFileButton;
+
+    @FindBy(xpath = "//div[@class=\" x-panel x-panel-noborder x-column-margin x-column\"]//input")
+    private SelenideElement addFileInput;
+
     @FindBy(xpath = "//div[@id='btnScaner']//button")
     private SelenideElement btnScaner;
 
@@ -70,6 +76,7 @@ public class NewDocumentCartTabElements {
 
     @FindBy(xpath = "(//div[@class='x-form-field-wrap x-form-field-trigger-wrap'])[2]/child::input")
     private SelenideElement fieldDocumentType;
+
 
     /**
      * Выбор списка - Тип документа
@@ -209,6 +216,20 @@ public class NewDocumentCartTabElements {
      */
     public SelenideElement getAddFileButtonDiv() {
         return addFileButtonDiv;
+    }
+
+    /**
+     * кнопка "Добавить файл"
+     */
+    public SelenideElement getAddFileButton() {
+        return addFileButton;
+    }
+
+    /**
+     * input "Добавить файл"
+     */
+    public SelenideElement getAddFileInput() {
+         return addFileInput;
     }
 
     /**

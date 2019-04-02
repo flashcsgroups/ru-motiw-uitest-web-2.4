@@ -498,7 +498,7 @@ public abstract class DocflowAdministration extends BaseTest {
                         department,
                         //пременная объекта - ПОЛЬЗОВАТЕЛЬ
                         employee,
-                        //пременнаяобъекта - СПРАВОЧНИКИ
+                        //пременная объекта - СПРАВОЧНИКИ
                         directories,
                         //пременная объекта - ТИПЫ ЗАДАЧ
                         tasksTypes,
