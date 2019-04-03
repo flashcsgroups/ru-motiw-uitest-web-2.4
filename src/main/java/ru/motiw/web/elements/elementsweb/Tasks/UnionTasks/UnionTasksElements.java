@@ -9,18 +9,8 @@ import org.openqa.selenium.support.FindBy;
  */
 public class UnionTasksElements {
 
-    /*xpath по 2.1
-    @FindBy(xpath = "//tr[@class='x-toolbar-left-row'][ancestor::div[@id='tree_folders_wrapper']]//input")
-    private SelenideElement panelGroupingTasks;
-   */
-
     @FindBy(xpath = "//input[@id='clickcombo-1003-inputEl']")
     private SelenideElement panelGroupingTasks;
-
-/*
-    @FindBy(xpath = "(//div[contains(@id,'ext-gen') and contains(@style,'visibility: visible')]//div[contains(@class,'x-combo-list-item')])[14]")
-    private SelenideElement groupingFolder;
-*/
 
     @FindBy(xpath = "//ul[@id='clickcombo-1003-picker-listEl']//li[contains(@class, 'x-boundlist-item')][14]")
     private SelenideElement groupingFolder;
@@ -35,7 +25,7 @@ public class UnionTasksElements {
     @FindBy(xpath = "(//div[@id='importfolder' and contains(@style,'visibility: visible')]//span)[1]")
     private SelenideElement editFolder;
 
-    @FindBy(xpath = "//img[contains(@class,'x-tree-ec-icon') and contains(@class,'plus')]")
+    @FindBy(xpath = "//tr[@aria-expanded=\"false\"]//div[contains(@class,\"plus x-tree-expander\")]")
     private SelenideElement plusSubsites;
 
 
@@ -75,7 +65,7 @@ public class UnionTasksElements {
     }
 
     /**
-     * Элемент отображения дочерних узлов папок
+     * Элемент раскрытия узлов папок
      */
     public SelenideElement getPlusSubsites() {
         return plusSubsites;

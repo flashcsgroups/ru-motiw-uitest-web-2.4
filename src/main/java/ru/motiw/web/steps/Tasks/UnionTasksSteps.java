@@ -222,7 +222,7 @@ public class UnionTasksSteps extends BaseSteps {
                 switchTo().defaultContent();
                 switchTo().frame($(By.cssSelector("#flow")));
                 unwrapAllNodes(unionTasksElements.getPlusSubsites(),
-                        By.xpath("//img[contains(@class,'x-tree-ec-icon') and contains(@class,'plus')]"));
+                        By.xpath("//tr[@aria-expanded=\"false\"]//div[contains(@class,\"plus x-tree-expander\")]"));
                 checkDisplayCreateAFolderInTheGrid(folder.getNameFolder(), folder.isUseFilter()); // проверяем созданную Папку
             }
         }
