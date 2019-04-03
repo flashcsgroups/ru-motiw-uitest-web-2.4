@@ -45,9 +45,6 @@ public class NewTaskFormElementsMobile {
     @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//input[@name=\"enddate\"]")
     private SelenideElement endField;
 
-    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//input[@name=\"id_tasktype\"]/ancestor::div[@class=\"x-body-el\"]//div[@class=\"x-expandtrigger x-trigger x-interactive\"]")
-    private SelenideElement fieldTaskType;
-
     @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//div[contains(text(),'Файлы')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel x-noborder-trbl x-header-position-top x-panel-grey-background x-container-grey-background \")]//input[@class=\"x-input-el\"]")
     private SelenideElement fieldFiles;
 
@@ -174,15 +171,6 @@ public class NewTaskFormElementsMobile {
         return endField;
     }
 
-    /**
-     * поле - Тип задачи
-     *
-     * @return
-     */
-    public SelenideElement getFieldTaskType() {
-        return fieldTaskType;
-    }
-
 
     /**
      * поле - Файлы
@@ -213,6 +201,13 @@ public class NewTaskFormElementsMobile {
      */
     public SelenideElement getInputForSearchUsers() {
         return $(By.xpath("//div[contains(@id,'ext-selectdialog') and not(contains(@class,\"x-hidden\")) and not(contains(@id,\"floatWrap\"))]//input"));
+    }
+
+    /**
+     * Кнопка очистки поля ввода в списке формы добавления пользователей
+     */
+    public SelenideElement getClearTriggerInputForSearchUsers() {
+        return $(By.xpath("//div[contains(@id,'ext-selectdialog') and not(contains(@class,\"x-hidden\")) and not(contains(@id,\"floatWrap\"))]//div[@class=\"x-cleartrigger x-trigger x-interactive x-cleartrigger-none x-trigger-none\"]         "));
     }
 
 
@@ -248,7 +243,6 @@ public class NewTaskFormElementsMobile {
         return $(By.xpath("//div[contains(@id,'ext-selectdialog') and not(contains(@class,\"x-hidden\")) and not(contains(@id,\"floatWrap\"))]//div[contains(text(),'" + lastName + "')]"));
     }
 
-
     /**
      * кнопка "Назначить"
      */
@@ -263,7 +257,6 @@ public class NewTaskFormElementsMobile {
     public SelenideElement getFieldOfWorkGroup(String nameField) {
         return  $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//span[contains(text(),'" + nameField + "')]/../..//div[@class=\"x-input-el\"]"));
     }
-
 
     /**
      * поле - Авторы
@@ -307,8 +300,6 @@ public class NewTaskFormElementsMobile {
         return simpleTask;
     }
 
-
-
     /**
      * чексбокс - С докладом
      * Используется для установки состояния.
@@ -317,8 +308,6 @@ public class NewTaskFormElementsMobile {
     public SelenideElement getCheckboxReportRequired() {
         return checkboxReportRequired;
     }
-
-
 
     /**
      * признак - С докладом
@@ -329,18 +318,14 @@ public class NewTaskFormElementsMobile {
         return reportRequired;
     }
 
-
     /**
      * признак - Секретная
      * Используется для установки состояния.
      */
 
-
     public SelenideElement getCheckboxIsSecret() {
         return checkboxIsSecret;
     }
-
-
 
     /**
      * признак - Для ознакомления
@@ -359,6 +344,88 @@ public class NewTaskFormElementsMobile {
 
     public SelenideElement getIsForReview() {
         return IsForReview;
+    }
+
+    /**
+     *  input Пользовательских полей Тип Строка, Тип Целое, Тип Вещественное, Тип Нумератор, Тип Дата
+     */
+    public SelenideElement getInputInUserField(String nameField) {
+        return $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//span[text()='" + nameField + "']//ancestor::div[contains(@class,\" x-field\")]//input"));
+    }
+
+    /**
+     * Кнопка открытия выпадающего списка в Пользовательских строковых полях
+     */
+    public SelenideElement getTriggerInUserField(String nameField) {
+        return $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//span[text()='" + nameField + "']//ancestor::div[contains(@class,\" x-field\")]//div[@class=\"x-expandtrigger x-trigger x-interactive\"] "));
+    }
+
+    /**
+     * Выпадающий список в Пользовательских строковых полях
+     */
+    public SelenideElement getValueInTheListOfUserField(String valueInTheList) {
+        return $(By.xpath("//div[contains(@id,'boundlist') and not(contains(@id,\"floatWrap\")) and not(contains(@class,\"x-hidden-display\"))]//span[text()='" + valueInTheList + "']"));
+    }
+
+    /**
+     *  input Пользовательских полей Тип Сотрудник
+     */
+    public SelenideElement getInputInUserFieldTypeEmployee(String nameField) {
+        return $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//span[text()='" + nameField + "']//ancestor::div[contains(@class,\" x-field\")]//div[@class=\"x-input-el\"]"));
+    }
+
+    /**
+     *  чекбокс Пользовательского поля Тип Логический  - используется для установки значения
+     */
+    public SelenideElement getCheckboxInUserField(String nameField) {
+        return $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//span[text()='" + nameField + "']//ancestor::div[contains(@class,\" x-field\")]//div[@class=\"x-font-icon x-icon-el\"]"));
+    }
+
+    /**
+     *  чекбокс Пользовательского поля Тип Логический - используется для проверки значения
+     */
+    public SelenideElement getStateOfCheckboxInUserField(String nameField) {
+        return $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//span[text()='" + nameField + "']//ancestor::div[contains(@class,\" x-field\")]//input"));
+    }
+
+    /**
+     *  Набор строковых полей - используется для проверки значения
+     */
+    public ElementsCollection getSetInputs(String nameField) {
+        return $$(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//span[text()='" + nameField + "']/../..//input"));
+    }
+
+
+    /**
+     * Элемент выбраннного (выделен синим) пользователя в списке формы добавления пользователей
+     * @param lastName Фамилия пользователя
+     */
+    public SelenideElement getValueInTheList(String lastName) {
+        return $(By.xpath("//div[contains(@id,'ext-selectdialog') and not(contains(@class,\"x-hidden\")) and not(contains(@id,\"floatWrap\"))]" +
+                "//div[contains(@class,\"x-selected\")]//div[contains(text(),'" + lastName + "')]"));
+    }
+
+
+    /**
+     *  TextArea Пользовательских полей Тип Текст
+     */
+    public SelenideElement getTextAreaInCustomField(String nameField) {
+        return $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//span[text()='" + nameField + "']//ancestor::div[contains(@class,\" x-textfield x-field\")]//textarea"));
+    }
+
+
+    /**
+     *  TextArea Пользовательских полей Тип Текст
+     */
+    public ElementsCollection getCollectionOfTextAreaInCustomField(String nameField) {
+        return $$(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//span[text()='" + nameField + "']//ancestor::div[contains(@class,\" x-textfield x-field\")]//textarea"));
+    }
+
+    /**
+     *  Названия всех пользовательских полей в форме задачи
+     */
+    public ElementsCollection getNameOfFieldsInCustomFields() {
+        return $$(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//span[text()=\"Тип задачи\"]/ancestor::div[contains(@class,\"x-component-body-el x-scroller x-form-field-separators\")]//span[contains(@id,'ext')]"));
     }
 
 }

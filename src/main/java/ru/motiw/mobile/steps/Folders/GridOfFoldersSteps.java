@@ -24,7 +24,7 @@ public class GridOfFoldersSteps extends InternalStepsMobile {
      *
      * @param task       return values of attributes of the task
      * @param folderTask наименование папки в к-й будет содержаться созданный объект - Задача
-     * @return TasksReportsStepsPDA
+     * @return GridOfFoldersSteps
      */
     public GridOfFoldersSteps checkDisplayTaskGrid(Task task, Folder folderTask) {
         // входим в созданную папку
@@ -61,11 +61,19 @@ public class GridOfFoldersSteps extends InternalStepsMobile {
             goToHome();
             // входим в созданную папку
             $(By.xpath("//div[@class=\"m-folder\"]//div[text()='" + folderTask.getNameFolder() + "']")).click();
-            sleep(2000);//ожидание грида
+            sleep(500);//ожидание грида
         }
 
-        $(By.xpath("//div[contains(@id,\"ext-tasklist-item\")]//div[text()='" + task.getTaskName() + "']"))
-                .waitUntil(not(visible), 10000);
+        // Если пакет amq ещё не пришел, то грид может не обновиться. Поэтому делаем так:
+        // сначала проверяем на отображение завершенной задачи в гриде.
+        // И если завершенная задача продолжает отображаться, то перезагружаем страницу и проверяем снова.
+        if(($(By.xpath("//div[contains(@id,\"ext-tasklist-item\")]//div[text()='" + task.getTaskName() + "']")).isDisplayed())) {
+            refresh();
+            sleep(5000);// Todo может недожидаться на самом деле грида, и проходить. надо ожидание грида нормально реализовать
+            $(By.xpath("//div[contains(@id,\"ext-tasklist-item\")]//div[text()='" + task.getTaskName() + "']")).shouldNotBe(visible);
+        }
+
+
         return this;
     }
 

@@ -18,27 +18,25 @@ import static ru.motiw.data.dataproviders.Administration.getRandomEmployer;
 public abstract class Tasks extends BaseTest {
 
 
+
+    // Инициализация объекта - Названия Файлов задачи
+    String[] filename = new String[] {
+            FilesForAttachment.FILE_1.getNameFile(),
+            FilesForAttachment.FILE_2.getNameFile(),
+            FilesForAttachment.FILE_3.getNameFile(),
+    };
+
+    // Инициализация объекта - Действия
+    Action[] actions = new Action[]{
+            getRandomAction(),
+            getRandomAction()
+    };
+
+
     /**
-     * Метод создания полностью случайного объекта - "Задача" for PDA
+     * Метод создания полностью случайного объекта - "Задача"
      */
     public Task getRandomObjectTask() {
-
-        // Инициализация объекта - Действия
-        Action[] actions = new Action[]{
-                getRandomAction(),
-                getRandomAction()
-        };
-
-
-
-        // Инициализация объекта - Названия Файлов задачи
-        String[] strings = new String[] {
-                FilesForAttachment.FILE_1.getNameFile(),
-                FilesForAttachment.FILE_2.getNameFile(),
-                FilesForAttachment.FILE_3.getNameFile(),
-        };
-
-
 
         return new Task()
                 //Добавляем текстовые действия задачи
@@ -52,12 +50,13 @@ public abstract class Tasks extends BaseTest {
                 .setDescription(randomString(100))  // для Описания АРМа пока в одну строку
                 .setDateEnd(tomorrowDateWithoutTime())
                 .setIsImportant(true) // Важная задача
-                .setAuthors(new Employee[]{EMPLOYEE_ADMIN})
-                .setControllers(null) //null т.к при редактировании удаляем пользователей добавленных при создании, а потом проверяем поле на null
-                .setExecutiveManagers(null) //null т.к при редактировании удаляем пользователей добавленных при создании, а потом проверяем поле на null
-                .setWorkers(null) //null т.к при редактировании удаляем пользователей добавленных при создании, а потом проверяем поле на null
+                .setAuthorDefault(EMPLOYEE_ADMIN)
+                .setAuthors(null)
+                .setControllers(null)
+                .setExecutiveManagers(null)
+                .setWorkers(null)
                 .setTaskType(new TasksTypes("Обычный"))
-                .setFileName(new String[ ]{strings[0], strings[1]}) // Файлы - взаимодействуем только с названиями файлов
+                .setFileName(new String[ ]{filename[0], filename[1]}) // Файлы - взаимодействуем только с названиями файлов
                 .setIsSecret(true) // Секретная задача
                 .setIsWithReport(false) // C докладом
                 .setIsForReview(true); // Только для озакомления
@@ -91,18 +90,10 @@ public abstract class Tasks extends BaseTest {
 
 
     /**
-     * Параметризация - Инициализируем модель - Задача for PDA
+     * Параметризация - Инициализируем модель - Задача тип Обычный
      */
     @DataProvider
     public Object[][] objectDataTaskPDA() {
-
-        // Инициализация объекта - Названия Файлов задачи
-        String[] strings = new String[] {
-                FilesForAttachment.FILE_1.getNameFile(),
-                FilesForAttachment.FILE_2.getNameFile(),
-                FilesForAttachment.FILE_3.getNameFile(),
-        };
-
 
 
         return new Object[][]{
@@ -112,6 +103,7 @@ public abstract class Tasks extends BaseTest {
                         /*.setDescription(randomString(100) + "\n " + randomString(100) + "\n " + randomString(100))*/
                         //.setDateBegin(yesterdayDate()) //можно убрать, т.к проверка на автозаполнение даты начало м.б важнее
                         .setDateEnd(tomorrowDateWithoutTime())
+                        .setAuthorDefault(EMPLOYEE_ADMIN)
                         .setAuthors(new Employee[]{EMPLOYEE_ADMIN})
                         .setControllers(new Employee[]{EMPLOYEE_ADMIN})
                         .setExecutiveManagers(new Employee[]{EMPLOYEE_ADMIN})
@@ -120,7 +112,7 @@ public abstract class Tasks extends BaseTest {
                         .setIsSecret(true) // Секретная задача
                         .setIsWithReport(true) // C докладом
                         .setIsForReview(true) // Только для озакомления
-                        .setFileName(new String[] {strings[2]}) // Файл
+                        .setFileName(new String[] {filename[2]}) // Файл
                         .setIsImportant(true)}, // Важная задача
         };
     }
@@ -293,6 +285,38 @@ public abstract class Tasks extends BaseTest {
 
         };
     }
+
+
+    /**
+     * Метод создания полностью случайного объекта - "ШАБЛОН ЗАДАЧ"
+     */
+    private TemplateOfTask getRandomTemplateOfTask() {
+        return new TemplateOfTask()
+                .setName("TemplateOfTask" + " " + randomString(11));
+    }
+
+
+
+    /**
+     * Параметризация - Инициализируем модель - ШАБЛОН ЗАДАЧ
+     */
+    @DataProvider
+    public Object[][] objectDataTemplateOfTask() {
+
+        TemplateOfTask[] template = new TemplateOfTask[] {
+                getRandomTemplateOfTask(),
+                getRandomTemplateOfTask()
+        };
+
+        return new Object[][] {
+
+                {
+                        template
+                }
+        };
+    }
+
+
 
 }
 

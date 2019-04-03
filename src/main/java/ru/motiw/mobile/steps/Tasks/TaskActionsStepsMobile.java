@@ -40,7 +40,7 @@ public class TaskActionsStepsMobile extends TaskStepsMobile {
     /**
      * Проверяем отображение созданного Действия
      */
-    public void checkNewActions(Action[] actions) {
+    public void checkAddedActions(Action[] actions) {
         if (actions != null) {
             openTab(TabsOfTask.ACTIONS_TAB); //Переходим на вкладку "Действия"
             for (Action action : actions) {

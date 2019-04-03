@@ -60,7 +60,6 @@ public abstract class BaseSteps {
 
     /**
      * Проверяем кол-во вкладок в форме редактирования объекта и их имена (отображение)
-     *
      * @param tabsLocator     locator element tabs
      * @param numberOfTabs    передаваемое кол-во вкладок в форме редактирования объекта
      * @param tabsNameLocator locator element name tabs
@@ -163,12 +162,20 @@ public abstract class BaseSteps {
      * @param nodes локатор элемента для взаиммодействия
      */
     protected void unwrapAllNodes(SelenideElement knot, By nodes) {
-        try {
-            while (isElementPresent(nodes))
+
+        while (isElementPresent(nodes))
+            {
                 knot.click();
-        } catch (NoSuchElementException e) {
-            e.printStackTrace();
-        }
+                sleep(500);
+            }
+
+//todo в блоке try catch иногда происходит ошибка, корневое подразделение дерева нормально открывается, но дальше нету больше локатора узла и в результате ловит NoSuchElementException
+//        try {
+//            while (isElementPresent(nodes))
+//                knot.click();
+//        } catch (NoSuchElementException e) {
+//            e.printStackTrace();
+//        }
     }
 
 }

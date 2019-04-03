@@ -12,6 +12,7 @@ public class Directories extends TaskTypeListEditObject {
     private boolean accessToRecords;
     private boolean isMappingDevice;
     private boolean searchSettings;
+    private DirectoriesField[] directoriesFields;
 
     public Directories(String nameTableType) {
         super(nameTableType);
@@ -62,6 +63,18 @@ public class Directories extends TaskTypeListEditObject {
 
     public Directories setSearchSettings(boolean searchSettings) {
         this.searchSettings = searchSettings;
+        return this;
+    }
+
+    /**
+     * Поля задачи - массив объектов - пользовательские поля любого типа
+     */
+    public DirectoriesField[] getDirectoriesFields() {
+        return directoriesFields;
+    }
+
+    public Directories setDirectoriesFields(DirectoriesField[] directoriesFields) {
+        this.directoriesFields = directoriesFields;
         return this;
     }
 

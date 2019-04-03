@@ -1,7 +1,9 @@
 package ru.motiw.web.model.Administration.FieldsObject;
 
+import ru.motiw.web.model.Administration.Directories.DirectoriesField;
 import ru.motiw.web.model.Administration.TasksTypes.ObligatoryField;
 import ru.motiw.web.model.Administration.TasksTypes.SettingsForTaskTypeListFields;
+import ru.motiw.web.model.Administration.Users.Employee;
 
 /**
  * Модель объекта - Поле, для объектов Справочники, Таблицы и Типы задач и etc..
@@ -15,6 +17,10 @@ public class FieldObject {
     private boolean hideInSearch;
     private FieldObject field;
     private SettingsForTaskTypeListFields isUniqueField;
+    private String valueField = "";
+    private Employee[] valueEmployeeField;
+    private boolean valueBooleanField;
+    private DirectoriesField[] valueDirectoriesField;
 
 
     /**
@@ -91,6 +97,59 @@ public class FieldObject {
         this.isUniqueField = isUniqueField;
         return this;
     }
+
+    /**
+     * Значение поля задачи  - любой примитивный тип данных
+     */
+    public String getValueField() {
+        return valueField;
+    }
+
+    public FieldObject setValueField(String valueField) {
+        this.valueField = valueField;
+        return this;
+    }
+
+
+    /**
+     * Значение поля задачи  - тип Логический
+     */
+    public boolean getValueBooleanField() {
+        return valueBooleanField;
+    }
+
+    public FieldObject setValueBooleanField(Boolean valueBooleanField) {
+        this.valueBooleanField = valueBooleanField;
+        return this;
+    }
+
+
+    /**
+     * Значение поля задачи  - тип Сотрудник
+     */
+    public Employee[] getValueEmployeeField() {
+        return valueEmployeeField;
+    }
+
+    public FieldObject setValueEmployeeField(Employee[] employees) {
+        this.valueEmployeeField = employees;
+        return this;
+    }
+
+
+
+    /**
+     * Значение поля задачи  - тип Справочник
+     */
+    public DirectoriesField[] getValueDirectoriesField() {
+        return valueDirectoriesField;
+    }
+
+    public FieldObject setValueDirectoriesField(DirectoriesField[] valueDirectoriesField) {
+        this.valueDirectoriesField = valueDirectoriesField;
+        return this;
+    }
+
 
 
 }

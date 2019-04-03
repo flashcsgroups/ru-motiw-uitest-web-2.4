@@ -17,26 +17,9 @@ public class LoginStepsMobile extends BaseSteps {
     private LoginPageElementsMobile loginPageElementsMobile = page(LoginPageElementsMobile.class);
     private InternalElementsMobile internalElementsMobile = page(InternalElementsMobile.class);
 
-
-    /**
-     * вводим Логин и Пароль пользователя
-     *
-     * @param login input text login
-     * @param password input text password
-     */
-    public void loginAs(String login, String password) {
-        loginPageElementsMobile.getLogin().clear();
-        loginPageElementsMobile.getLogin().setValue(login);
-        loginPageElementsMobile.getLogin().clear();
-        loginPageElementsMobile.getPassword().setValue(password);
-        loginPageElementsMobile.getLogin().click();
-    }
-
     /**
      * Вводим Login пользователя
-     *
      * @param login input text login
-     * @return
      */
     public LoginStepsMobile setLoginField(String login) {
         loginPageElementsMobile.getLogin().setValue(login);
@@ -45,7 +28,6 @@ public class LoginStepsMobile extends BaseSteps {
 
     /**
      * Вводим пароль пользователя
-     *
      * @param password input text password
      */
     public LoginStepsMobile setPasswordField(String password) {
@@ -55,14 +37,30 @@ public class LoginStepsMobile extends BaseSteps {
 
     /**
      * Авторизация под пользователем
-     *
-     * @param user pass and login users
      */
     public LoginStepsMobile loginAs(Employee user) {
+        if (loginPageElementsMobile.getLinkToMobile().is(Condition.visible)) {
+            //Переход в мобильную версию по ссылке в форме авторизации полной версии
+            loginPageElementsMobile.getLinkToMobile().click();
+            loginPageElementsMobile.getLogin().waitUntil(Condition.visible, 20000);
+        }
+
         setLoginField(user.getLoginName());
         setPasswordField(user.getPassword());
         loginPageElementsMobile.getLogon().click();
         return this;
+    }
+
+    /**
+     *Ожидание открытия главной страницы после авторизации
+     */
+    public void waitLoadMainPage() {
+        // Ожидание появления маски загрузки
+        loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.appear, 2000);
+        // Ожидание скрытия маски загрузки
+        loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.disappear, 10000);
+        // Ожидание кнопки Главного Меню
+        internalElementsMobile.getButtonMainMenu().waitUntil(Condition.visible, 10000);
     }
 
 
