@@ -49,7 +49,7 @@ public abstract class BaseSteps {
      * @param webElementButton    подтверждение (взаимодействие над объектом)
      */
     protected String checkingMessagesConfirmationOfTheObject(SelenideElement element, String expectedMessageText,
-                                                          SelenideElement webElementButton) {
+                                                             SelenideElement webElementButton) {
         String actualMessageText = element.shouldBe(Condition.exactText(expectedMessageText)).getText();
         if (expectedMessageText != null && expectedMessageText.equals(actualMessageText)) {
             webElementButton.click();
@@ -60,6 +60,7 @@ public abstract class BaseSteps {
 
     /**
      * Проверяем кол-во вкладок в форме редактирования объекта и их имена (отображение)
+     *
      * @param tabsLocator     locator element tabs
      * @param numberOfTabs    передаваемое кол-во вкладок в форме редактирования объекта
      * @param tabsNameLocator locator element name tabs
@@ -162,20 +163,13 @@ public abstract class BaseSteps {
      * @param nodes локатор элемента для взаиммодействия
      */
     protected void unwrapAllNodes(SelenideElement knot, By nodes) {
-
-        while (isElementPresent(nodes))
-            {
-                knot.click();
-                sleep(500);
-            }
-
-//todo в блоке try catch иногда происходит ошибка, корневое подразделение дерева нормально открывается, но дальше нету больше локатора узла и в результате ловит NoSuchElementException
-//        try {
-//            while (isElementPresent(nodes))
-//                knot.click();
-//        } catch (NoSuchElementException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            while (isElementPresent(nodes))
+            knot.click();
+            sleep(500);
+        } catch (NoSuchElementException e) {
+            e.printStackTrace();
+        }
     }
 
 }
