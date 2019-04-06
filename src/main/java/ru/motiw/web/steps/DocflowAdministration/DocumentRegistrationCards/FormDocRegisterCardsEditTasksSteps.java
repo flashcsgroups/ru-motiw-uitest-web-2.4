@@ -15,7 +15,7 @@ import static ru.motiw.utils.ElementUtil.setOfValuesOnTheList;
  */
 public class FormDocRegisterCardsEditTasksSteps extends BaseSteps {
 
-    private static FormDocRegisterCardsEditTasksElements formEditRCDTasksElement = page(FormDocRegisterCardsEditTasksElements.class);
+    private FormDocRegisterCardsEditTasksElements formEditRCDTasksElement = page(FormDocRegisterCardsEditTasksElements.class);
 
     /**
      * Копирование полей при создании задачи
@@ -89,7 +89,7 @@ public class FormDocRegisterCardsEditTasksSteps extends BaseSteps {
      *
      * @return FormDocRegisterCardsEditTasksSteps
      */
-    public static FormDocRegisterCardsEditTasksSteps tasksTabRCD() {
+    public FormDocRegisterCardsEditTasksSteps tasksTabRCD() {
         formEditRCDTasksElement.getTasksTab().click();
         return page(FormDocRegisterCardsEditTasksSteps.class);
     }

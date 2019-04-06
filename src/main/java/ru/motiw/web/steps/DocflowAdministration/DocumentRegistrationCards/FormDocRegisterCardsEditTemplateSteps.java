@@ -11,7 +11,7 @@ import static com.codeborne.selenide.Selenide.page;
  */
 public class FormDocRegisterCardsEditTemplateSteps extends BaseSteps {
 
-    private static FormDocRegisterCardsEditTemplateElements formEditRCDTemplateElement = page(FormDocRegisterCardsEditTemplateElements.class);
+    private FormDocRegisterCardsEditTemplateElements formEditRCDTemplateElement = page(FormDocRegisterCardsEditTemplateElements.class);
 
 
     private FormDocRegisterCardsEditTemplateSteps addDisplayNameTemplate(String nameTemplate) {
@@ -43,7 +43,7 @@ public class FormDocRegisterCardsEditTemplateSteps extends BaseSteps {
      *
      * @return FormDocRegisterCardsEditTemplateSteps
      */
-    public static FormDocRegisterCardsEditTemplateSteps TemplateTabRCD() {
+    public FormDocRegisterCardsEditTemplateSteps TemplateTabRCD() {
         formEditRCDTemplateElement.getTemplateSettingsTab().click();
         return page(FormDocRegisterCardsEditTemplateSteps.class);
     }

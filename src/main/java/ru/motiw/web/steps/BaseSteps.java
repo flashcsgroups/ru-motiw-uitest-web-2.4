@@ -166,7 +166,7 @@ public abstract class BaseSteps {
         try {
             while (isElementPresent(nodes))
             knot.click();
-            sleep(500);
+            sleep(1000);
         } catch (NoSuchElementException e) {
             e.printStackTrace();
         }

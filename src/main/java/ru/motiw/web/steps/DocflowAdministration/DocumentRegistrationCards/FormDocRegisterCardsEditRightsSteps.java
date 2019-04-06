@@ -17,7 +17,7 @@ import static ru.motiw.utils.ElementUtil.setOfValuesOnTheList;
  */
 public class FormDocRegisterCardsEditRightsSteps extends BaseSteps {
 
-    private static FormDocRegisterCardsEditRightsElements formEditRCDRightsElement = page(FormDocRegisterCardsEditRightsElements.class);
+    private FormDocRegisterCardsEditRightsElements formEditRCDRightsElement = page(FormDocRegisterCardsEditRightsElements.class);
 
     /**
      * Метод выбора уровня доступа к РКД (Регистрационная карточка документа)
@@ -223,7 +223,7 @@ public class FormDocRegisterCardsEditRightsSteps extends BaseSteps {
      *
      * @return FormDocRegisterCardsEditRightsSteps форма редактирования РКД
      */
-    public static FormDocRegisterCardsEditRightsSteps rightsTabRCD() {
+    public FormDocRegisterCardsEditRightsSteps rightsTabRCD() {
         formEditRCDRightsElement.getRightsTab().click();
         return page(FormDocRegisterCardsEditRightsSteps.class);
     }

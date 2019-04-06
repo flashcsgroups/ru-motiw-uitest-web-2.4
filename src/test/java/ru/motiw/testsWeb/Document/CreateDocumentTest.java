@@ -17,6 +17,8 @@ import ru.motiw.web.model.Document.Document;
 import ru.motiw.web.steps.Administration.Directories.DirectoriesEditSteps;
 import ru.motiw.web.steps.Administration.Directories.DirectoriesSteps;
 import ru.motiw.web.steps.Administration.Users.UsersSteps;
+import ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditConnectedRoutesSteps;
+import ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditFieldsSteps;
 import ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditGeneralSteps;
 import ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.GridDocRegisterCardsSteps;
 import ru.motiw.web.steps.Home.InternalSteps;
@@ -27,9 +29,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testng.AssertJUnit.assertTrue;
 import static ru.motiw.web.steps.Administration.Users.DepartmentSteps.goToURLDepartments;
 import static ru.motiw.web.steps.DocflowAdministration.DictionaryEditorSteps.goToURLDictionaryEditor;
-import static ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditConnectedRoutesSteps.routesTabRCD;
-import static ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditFieldsSteps.fieldsTabRCD;
-import static ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditGeneralSteps.generalTabRCD;
 import static ru.motiw.web.steps.Documents.CreateDocument.NewDocumentSteps.goToURLNewDocument;
 
 
@@ -40,12 +39,18 @@ public class CreateDocumentTest extends DocflowAdministration {
     private LoginStepsSteps loginPageSteps;
     private InternalSteps internalPageSteps;
     private UsersSteps userPageSteps;
+    private FormDocRegisterCardsEditFieldsSteps formDocRegisterCardsEditFieldsSteps;
+    private FormDocRegisterCardsEditConnectedRoutesSteps formDocRegisterCardsEditConnectedRoutesSteps;
+    private FormDocRegisterCardsEditGeneralSteps formDocRegisterCardsEditGeneralSteps;
 
     @BeforeClass
     public void beforeTest() {
         loginPageSteps = page(LoginStepsSteps.class);
         internalPageSteps = page(InternalSteps.class);
         userPageSteps = page(UsersSteps.class);
+        formDocRegisterCardsEditFieldsSteps = page(FormDocRegisterCardsEditFieldsSteps.class);
+        formDocRegisterCardsEditConnectedRoutesSteps = page(FormDocRegisterCardsEditConnectedRoutesSteps.class);
+        formDocRegisterCardsEditGeneralSteps = page(FormDocRegisterCardsEditGeneralSteps.class);
     }
 
 
@@ -91,14 +96,14 @@ public class CreateDocumentTest extends DocflowAdministration {
         /**
          * Добавляем поля для РКД (регистрационная карточка документа) на вкладке - ПОЛЯ
          */
-        fieldsTabRCD().addFieldsDocRegisterCards(registerCards);
+        formDocRegisterCardsEditFieldsSteps.addFieldsDocRegisterCards(registerCards);
 
         /**
          * Устанавливаем настройки для РКД (регистрационная карточка документа) на вкладке - МАРШРУТЫ
          */
-        routesTabRCD().checkBoxUseAllPossibleRoutes(registerCards);
+        formDocRegisterCardsEditConnectedRoutesSteps.checkBoxUseAllPossibleRoutes(registerCards);
 
-        generalTabRCD().addNameDocumentRegisterCards(registerCards);
+        formDocRegisterCardsEditGeneralSteps.addNameDocumentRegisterCards(registerCards);
 
         // Сохранение настроек РКД
         GridDocRegisterCardsSteps gridDocRegisterCards = editRCD.saveAllChangesInDoc(); // Сохранение всех изменений в РКД

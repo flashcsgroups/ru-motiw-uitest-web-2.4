@@ -16,8 +16,7 @@ import ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.DocReg
 import ru.motiw.web.model.Document.Document;
 import ru.motiw.web.steps.Administration.Directories.DirectoriesEditSteps;
 import ru.motiw.web.steps.Administration.TasksTypes.TaskTypesEditSteps;
-import ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditGeneralSteps;
-import ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.GridDocRegisterCardsSteps;
+import ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.*;
 import ru.motiw.web.steps.Home.InternalSteps;
 import ru.motiw.web.steps.Login.LoginStepsSteps;
 
@@ -27,11 +26,6 @@ import static org.testng.AssertJUnit.assertTrue;
 import static ru.motiw.web.steps.Administration.Directories.DirectoriesSteps.goToURLDirectories;
 import static ru.motiw.web.steps.Administration.TasksTypes.TaskTypesSteps.goToURLTaskTypes;
 import static ru.motiw.web.steps.DocflowAdministration.DictionaryEditorSteps.goToURLDictionaryEditor;
-import static ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditConnectedRoutesSteps.routesTabRCD;
-import static ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditFieldsSteps.fieldsTabRCD;
-import static ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditGeneralSteps.generalTabRCD;
-import static ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditRightsSteps.rightsTabRCD;
-import static ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditTasksSteps.tasksTabRCD;
 
 
 @Listeners({ScreenShotOnFailListener.class, TextReport.class})
@@ -41,12 +35,23 @@ public class DocumentRegistrationCardsTest extends DocflowAdministration {
     private LoginStepsSteps loginPageSteps;
     private InternalSteps internalPage;
     private TaskTypesEditSteps formEditTaskTypes;
+    private FormDocRegisterCardsEditFieldsSteps formDocRegisterCardsEditFieldsSteps;
+    private FormDocRegisterCardsEditGeneralSteps formDocRegisterCardsEditGeneralSteps;
+    private FormDocRegisterCardsEditConnectedRoutesSteps formDocRegisterCardsEditConnectedRoutesSteps;
+    private FormDocRegisterCardsEditRightsSteps formDocRegisterCardsEditRightsSteps;
+    private FormDocRegisterCardsEditTasksSteps formDocRegisterCardsEditTasksSteps;
+
 
     @BeforeClass
     public void beforeTest() {
         loginPageSteps = page(LoginStepsSteps.class);
         internalPage = page(InternalSteps.class);
         formEditTaskTypes = page(TaskTypesEditSteps.class);
+        formDocRegisterCardsEditFieldsSteps = page(FormDocRegisterCardsEditFieldsSteps.class);
+        formDocRegisterCardsEditGeneralSteps = page(FormDocRegisterCardsEditGeneralSteps.class);
+        formDocRegisterCardsEditConnectedRoutesSteps = page(FormDocRegisterCardsEditConnectedRoutesSteps.class);
+        formDocRegisterCardsEditRightsSteps = page(FormDocRegisterCardsEditRightsSteps.class);
+        formDocRegisterCardsEditTasksSteps = page(FormDocRegisterCardsEditTasksSteps.class);
     }
 
 
@@ -83,12 +88,13 @@ public class DocumentRegistrationCardsTest extends DocflowAdministration {
         /*
          * Устанавливаем настройки для РКД (регистрационная карточка документа) на вкладке - ПОЛЯ
          */
-        fieldsTabRCD().addFieldsDocRegisterCards(registerCards);  // TODO при запуске подряд DocumentRegistrationCardsTest и CreateDocumentTest, почему-то здесь валится. Если отдельно запустить - проходит. Повторяется в 2.2
+        formDocRegisterCardsEditFieldsSteps.addFieldsDocRegisterCards(registerCards);
 
         /*
          * Устанавливаем настройки для РКД (регистрационная карточка документа) на вкладке - ОБЩЕЕ
          */
-        generalTabRCD().addNameDocumentRegisterCards(registerCards)
+        formDocRegisterCardsEditGeneralSteps
+                .addNameDocumentRegisterCards(registerCards)
                 .directionOfDisplacementOfTheDate(registerCards) // Направление смещения даты при попадании на нерабочее время
                 .defaultSettingsWhenYouSendTheDocumentBackForRevision(registerCards) // Настройки по умолчанию при отправке документа на доработку
                 .statusOfTheDocumentLifeCycle(registerCards) // Статусы документа
@@ -109,7 +115,8 @@ public class DocumentRegistrationCardsTest extends DocflowAdministration {
          */
 
 
-        rightsTabRCD().accessesRCD(registerCards)
+        formDocRegisterCardsEditRightsSteps
+                .accessesRCD(registerCards)
                 .setSettingsChangingTheSignOfFinalVersion(registerCards)
                 .setSettingsStatusEditYourDocuments(registerCards)
                 .setSettingUpAccessToTheSectionsOfTheDocumentWhenViewingOREditing(registerCards)
@@ -119,12 +126,13 @@ public class DocumentRegistrationCardsTest extends DocflowAdministration {
         /*
          * Устанавливаем настройки для РКД (регистрационная карточка документа) на вкладке - МАРШРУТЫ
          */
-        routesTabRCD().checkBoxUseAllPossibleRoutes(registerCards);
+        formDocRegisterCardsEditConnectedRoutesSteps.checkBoxUseAllPossibleRoutes(registerCards);
 
         /*
          * Устанавливаем настройки для РКД (регистрационная карточка документа) на вкладке - ЗАДАЧИ
          */
-        tasksTabRCD().setCopyingFieldsWhenCreatingTask(registerCards)
+        formDocRegisterCardsEditTasksSteps
+                .setCopyingFieldsWhenCreatingTask(registerCards)
                 .setSettingsFieldsDocumentContaining(registerCards)
                 .toSetTheTypeOfReviewTasks(registerCards, "Тип задачи по рассмотрению") // Тип задачи по рассмотрению документа
                 .toSetTheTypeOfReviewTasks(registerCards, "Тип задачи по исполнению"); // Тип задачи по рассмотрению документа
