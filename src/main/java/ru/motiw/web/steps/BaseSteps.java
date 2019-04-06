@@ -164,9 +164,11 @@ public abstract class BaseSteps {
      */
     protected void unwrapAllNodes(SelenideElement knot, By nodes) {
         try {
-            while (isElementPresent(nodes))
-            knot.click();
-            sleep(1000);
+            while (isElementPresent(nodes)) {
+                if(isElementPresent(nodes)) {
+                    knot.click();
+                }
+            }
         } catch (NoSuchElementException e) {
             e.printStackTrace();
         }
