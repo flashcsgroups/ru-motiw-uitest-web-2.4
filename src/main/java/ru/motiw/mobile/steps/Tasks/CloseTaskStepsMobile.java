@@ -4,9 +4,8 @@ import com.codeborne.selenide.Condition;
 import org.openqa.selenium.By;
 import ru.motiw.mobile.elements.Tasks.TaskElementsMobile;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.page;
-import static com.codeborne.selenide.Selenide.sleep;
+import static com.codeborne.selenide.Selenide.*;
+import static ru.motiw.mobile.model.Task.TabsOfTask.DESCRIPTION_TAB;
 
 /**
  *Завершение задачи
@@ -21,7 +20,7 @@ public class CloseTaskStepsMobile  extends TaskStepsMobile {
      *Завершение задачи
      */
     public void closeTask() {
-        openTab("Описание"); //Переходим на вкладку "Описание"
+        openTab(DESCRIPTION_TAB); //Переходим на вкладку "Описание"
         taskElementsMobile.getButtonOfFinalizeExecution().click();
         sleep(500);
         taskElementsMobile.getInputForAddComment().setValue("Завершение задачи");

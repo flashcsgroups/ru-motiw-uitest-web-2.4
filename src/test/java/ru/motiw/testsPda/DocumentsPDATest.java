@@ -7,12 +7,9 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import ru.motiw.data.dataproviders.DocflowAdministration;
 import ru.motiw.data.listeners.ScreenShotOnFailListener;
-import ru.motiw.web.steps.BaseSteps;
 import ru.motiw.web.elements.elementspda.DocumentsStepsPDA;
 import ru.motiw.web.elements.elementspda.InternalStepsPDA;
 import ru.motiw.web.elements.elementspda.LoginStepsPDA;
-import ru.motiw.web.steps.Login.LoginStepsSteps;
-import ru.motiw.web.steps.Login.RestorePasswordSteps;
 import ru.motiw.web.model.Administration.Directories.Directories;
 import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
 import ru.motiw.web.model.Administration.Users.Department;
@@ -23,9 +20,12 @@ import ru.motiw.web.model.Document.Document;
 import ru.motiw.web.steps.Administration.Directories.DirectoriesEditSteps;
 import ru.motiw.web.steps.Administration.Directories.DirectoriesSteps;
 import ru.motiw.web.steps.Administration.Users.UsersSteps;
+import ru.motiw.web.steps.BaseSteps;
 import ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditGeneralSteps;
 import ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.GridDocRegisterCardsSteps;
 import ru.motiw.web.steps.Home.InternalSteps;
+import ru.motiw.web.steps.Login.LoginStepsSteps;
+import ru.motiw.web.steps.Login.RestorePasswordSteps;
 
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Selenide.page;
@@ -33,9 +33,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testng.Assert.assertTrue;
 import static ru.motiw.web.steps.Administration.Users.DepartmentSteps.goToURLDepartments;
 import static ru.motiw.web.steps.DocflowAdministration.DictionaryEditorSteps.goToURLDictionaryEditor;
-import static ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditConnectedRoutesSteps.routesTabRCD;
-import static ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditFieldsSteps.fieldsTabRCD;
-import static ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditGeneralSteps.generalTabRCD;
 import static ru.motiw.web.steps.Documents.CreateDocument.NewDocumentSteps.goToURLNewDocument;
 
 
@@ -97,14 +94,14 @@ public class DocumentsPDATest extends DocflowAdministration {
         /**
          * Добавляем поля для РКД (регистрационная карточка документа) на вкладке - ПОЛЯ
          */
-        fieldsTabRCD().addFieldsDocRegisterCards(registerCards);
+        //fieldsTabRCD().addFieldsDocRegisterCards(registerCards);
 
         /**
          * Устанавливаем настройки для РКД (регистрационная карточка документа) на вкладке - МАРШРУТЫ
          */
-        routesTabRCD().checkBoxUseAllPossibleRoutes(registerCards);
+        //routesTabRCD().checkBoxUseAllPossibleRoutes(registerCards);
 
-        generalTabRCD().addNameDocumentRegisterCards(registerCards);
+        //generalTabRCD().addNameDocumentRegisterCards(registerCards);
         // Сохранение настроек РКД
         GridDocRegisterCardsSteps gridDocRegisterCards = editRCD.saveAllChangesInDoc(); // Сохранение всех изменений в РКД
         gridDocRegisterCards.verifyDocRegisterCards(registerCards.getDocRegisterCardsName());

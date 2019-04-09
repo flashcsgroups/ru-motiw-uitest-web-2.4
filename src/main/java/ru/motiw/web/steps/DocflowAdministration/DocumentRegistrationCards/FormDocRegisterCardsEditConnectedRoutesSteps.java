@@ -11,7 +11,7 @@ import static com.codeborne.selenide.Selenide.page;
  */
 public class FormDocRegisterCardsEditConnectedRoutesSteps extends BaseSteps {
 
-    private static FormDocRegisterCardsEditConnectedRoutesElements formEditRCDConnectedRoutesElement = page(FormDocRegisterCardsEditConnectedRoutesElements.class);
+    private FormDocRegisterCardsEditConnectedRoutesElements formEditRCDConnectedRoutesElement = page(FormDocRegisterCardsEditConnectedRoutesElements.class);
 
     /**
      * Производим выбор настройки - Использовать все МС
@@ -44,7 +44,7 @@ public class FormDocRegisterCardsEditConnectedRoutesSteps extends BaseSteps {
      *
      * @return FormDocRegisterCardsEditRightsSteps вкладка Маршруты
      */
-    public static FormDocRegisterCardsEditConnectedRoutesSteps routesTabRCD() {
+    public FormDocRegisterCardsEditConnectedRoutesSteps routesTabRCD() {
         formEditRCDConnectedRoutesElement.getConnectedRoutesTab().click();
         return page(FormDocRegisterCardsEditConnectedRoutesSteps.class);
     }

@@ -16,7 +16,7 @@ import static ru.motiw.utils.ElementUtil.offsetAndRangeOfValuesOnTheList;
  */
 public class FormDocRegisterCardsEditGeneralSteps extends BaseSteps {
 
-    private static FormDocRegisterCardsEditGeneralElements formEditRCDGeneralElement = page(FormDocRegisterCardsEditGeneralElements.class);
+    private FormDocRegisterCardsEditGeneralElements formEditRCDGeneralElement = page(FormDocRegisterCardsEditGeneralElements.class);
 
     /**
      * Статусы документа:
@@ -179,7 +179,6 @@ public class FormDocRegisterCardsEditGeneralSteps extends BaseSteps {
 
     /**
      * Автоматическое вычисление полей-нумераторов
-     *
      * @param registerCards передаваемое значение
      */
     public FormDocRegisterCardsEditGeneralSteps setAutoCalculationNumeratorFields(DocRegisterCards registerCards) {
@@ -205,7 +204,7 @@ public class FormDocRegisterCardsEditGeneralSteps extends BaseSteps {
      *
      * @return FormDocRegisterCardsEditGeneralSteps
      */
-    public static FormDocRegisterCardsEditGeneralSteps generalTabRCD() {
+    public FormDocRegisterCardsEditGeneralSteps generalTabRCD() {
         formEditRCDGeneralElement.getGeneralTab().click();
         return page(FormDocRegisterCardsEditGeneralSteps.class);
     }

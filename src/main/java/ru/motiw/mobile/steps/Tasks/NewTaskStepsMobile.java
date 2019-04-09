@@ -6,13 +6,15 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.support.FindBy;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
 import ru.motiw.mobile.elements.Login.LoginPageElementsMobile;
 import ru.motiw.mobile.elements.Tasks.NewTaskFormElementsMobile;
 import ru.motiw.mobile.elements.Tasks.TaskElementsMobile;
+import ru.motiw.mobile.model.Task.InnerGroupTabs;
 import ru.motiw.mobile.steps.InternalStepsMobile;
 import ru.motiw.mobile.steps.LoginStepsMobile;
+import ru.motiw.web.model.Administration.Directories.DirectoriesField;
+import ru.motiw.web.model.Administration.FieldsObject.*;
 import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
 import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Tasks.Task;
@@ -23,8 +25,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.page;
 import static org.testng.Assert.assertTrue;
+import static ru.motiw.mobile.model.Task.InnerGroupTabs.*;
 import static ru.motiw.mobile.model.URLMenuMobile.CREATE_TASK;
 import static ru.motiw.mobile.steps.BaseStepsMobile.openSectionOnURLMobile;
 
@@ -44,85 +48,6 @@ public class NewTaskStepsMobile extends BaseSteps {
     private TaskElementsMobile taskElementsMobile = page(TaskElementsMobile.class);
 
     File folder = new File(Configuration.reportsFolder);
-
-
-    /*
-     Название задачи
-     */
-    @FindBy(xpath = "//input[@id='input_prj_t' and @name='task_name']")
-    private SelenideElement tasksName;
-
-    /*
-     Описание задачи
-     */
-    @FindBy(xpath = "//textarea[@id='task_description']")
-    private SelenideElement tasksDescription;
-
-    /*
-     Окончание задачи
-     */
-    @FindBy(xpath = "//input[@id='mes_date_end']")
-    private SelenideElement dateEnd;
-
-    /*
-     Авторы
-     */
-    @FindBy(xpath = "//input[@id='ag']")
-    private SelenideElement inputFieldAuthors;
-
-    /*
-     Контролеры задачи
-     */
-    @FindBy(xpath = "(//div[contains(text(),'Кому')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel x-noborder-trbl x-header-position-top x-panel-grey-background x-container-grey-background\")]//div[@class=\"x-input-el\"])[2]")
-    private SelenideElement inputFieldTaskSupervisors;
-
-    /*
-     Ответственные руководители
-     */
-    @FindBy(xpath = "//input[@id='rg']")
-    private SelenideElement inputFieldExecutiveManagers;
-
-    /*
-     Исполнители
-     */
-    @FindBy(xpath = "//input[@id='wg']")
-    private SelenideElement inputFieldPerformers;
-
-    /*
-     Секретная задача
-     */
-    @FindBy(xpath = "//div[@class='ui-checkbox']//input[@id='secret']/..//span[2]")
-    protected SelenideElement privateTask;
-
-    /*
-     C докладом
-     */
-    @FindBy(xpath = "//div[@class='ui-checkbox']//input[@id='withreport2']/..//span[2]")
-    protected SelenideElement reportRequired;
-
-    /*
-     Важная задача
-     */
-    @FindBy(xpath = "//div[@class='ui-checkbox']//input[@id='taskhigh']/..//span[2]")
-    protected SelenideElement importantTask;
-
-    /*
-     Просмотр
-     */
-    @FindBy(css = "input[name='next2']")
-    private SelenideElement view;
-
-    /*
-     Постановщик задачи
-     */
-    @FindBy(xpath = "//a [ancestor::span[@name='autor']]")
-    private SelenideElement directorOfTheTask;
-
-
-
-    //TODO Все что выше под удаление
-    //////////////////////
-
 
     /**
      * Переход в Задачи/Создать задачу напрямую по ссылке
@@ -228,7 +153,7 @@ public class NewTaskStepsMobile extends BaseSteps {
 
 
     /**
-     * Добавление/Удаление пользователей в роль задачи
+     * Добавление/Удаление пользователей в роли задачи
      * @param employees       передаваемые пользователи
      * @param fieldCustomRole выбираемая роль в задаче (Исполнители, Авторы и ОР)
      */
@@ -237,31 +162,38 @@ public class NewTaskStepsMobile extends BaseSteps {
         openFormSelectUser(fieldCustomRole);
         if (employees != null) {
             for (Employee employee : employees) {
+
+                //Очищаем поле, если содержит ранее введенные значения
+                if (newTaskFormElementsMobile.getClearTriggerInputForSearchUsers().isDisplayed()) {
+                     newTaskFormElementsMobile.getClearTriggerInputForSearchUsers().click();
+                }
+
                 newTaskFormElementsMobile.getInputForSearchUsers().setValue(employee.getLastName()); // вводим в поле ввода Фамилию пользователя
                 newTaskFormElementsMobile.getListOfUsers().shouldBe(CollectionCondition.size(1), 10000); //ожидание когда будет найден один пользователь. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
 
-                //выбор пользователя в списке
+                //Выбор пользователя в списке
                 newTaskFormElementsMobile.getUserFromList(employee.getLastName()).shouldBe(visible).click();
                 //newTaskFormElementsMobile.getListOfUsers().shouldBe(CollectionCondition.sizeGreaterThan(1), 5000); //ожидание когда загрузится список пользователей. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
-                newTaskFormElementsMobile.getButtonAppointUsers().click(); //кнопка "Назначить"
             }
+            newTaskFormElementsMobile.getButtonAppointUsers().click(); //кнопка "Назначить"
+            newTaskFormElementsMobile.getInputForSearchUsers().waitUntil(not(visible), 2000); // Ожидание закрытия формы
         }
     }
 
     /**
      * Проверка того, что текущий пользователь добавлен по умолчанию в роль задачи
-     * @param employees       передаваемые пользователи
+     * @param currentUser     передаваемый пользователи
      * @param fieldCustomRole выбираемая роль в задаче (Исполнители, Авторы и ОР)
      */
 
-    public void currentUserSelectedInTheRole(Employee[] employees, SelenideElement fieldCustomRole) {
+    public void currentUserSelectedInTheRole(Employee currentUser, SelenideElement fieldCustomRole) {
         openFormSelectUser(fieldCustomRole);
-        if (employees != null) {
-            for (Employee employee : employees) {
+        if (currentUser != null) {
+//            for (Employee employee : employees) {
                 //проверка того, что элемент ПЕРВОГО пользователя в списке - выделен т.е выбран в роль
-                newTaskFormElementsMobile.getSelectedUserInTheList(employee.getLastName()).shouldBe(visible);
+                newTaskFormElementsMobile.getSelectedUserInTheList(currentUser.getLastName()).shouldBe(visible);
                 newTaskFormElementsMobile.getInputForSearchUsers().sendKeys(Keys.chord(Keys.ESCAPE)); //Закрыть форму
-            }
+//            }
         }
     }
 
@@ -305,7 +237,6 @@ public class NewTaskStepsMobile extends BaseSteps {
     }
 
 
-
     /**
      * Выбор булевой настройки в форме задачи в зависимости от состояния чекбокса.
      * Например, признак "Важная задача", "Секретная задача", "С докладом"
@@ -341,20 +272,180 @@ public class NewTaskStepsMobile extends BaseSteps {
 
 
     /**
-     * Установка типа задачи
+     * Выбор значений из выпадающего списка типа задачи
      * @param taskType передаваемое имя типа задачи
      */
     private NewTaskStepsMobile setTaskType(TasksTypes taskType) {
         if (taskType == null) {
             return this;
         } else {
-            $(newTaskFormElementsMobile.getFieldTaskType()).shouldBe(Condition.visible);
+            $(newTaskFormElementsMobile.getTriggerInUserField("Тип задачи")).shouldBe(Condition.visible);
         }
-        newTaskFormElementsMobile.getFieldTaskType().click();
-        $(By.xpath("//div[contains(@class,\"x-list x-dataview x-container x-component x-floated\")]//span[text()='" + taskType.getObjectTypeName() + "']"))
-                .click();
+        newTaskFormElementsMobile.getTriggerInUserField("Тип задачи").click();
+        newTaskFormElementsMobile.getValueInTheListOfUserField(taskType.getObjectTypeName()).click();
         return this;
 
+    }
+
+    /**
+     * Общий метод заполнения пользовательских полей типа Строка, Целое, Вещественное, Дата, Нумератор задачи
+     *
+     * @param nameField имя поля документа для заполнения
+     * @param valueLine передаваемое значение для заполнения
+     */
+    private NewTaskStepsMobile enterValueInFieldInput(String nameField, String valueLine) {
+        if (valueLine == null) {
+            return this;
+        } else {
+            newTaskFormElementsMobile.getInputInUserField(nameField).click(); // находим поле по Названию
+            newTaskFormElementsMobile.getInputInUserField(nameField).setValue(valueLine);
+        }
+        return this;
+    }
+
+
+    /**
+     * Общий метод заполнения пользовательских полей типа Текст
+     *
+     * @param nameField имя поля документа для заполнения
+     * @param valueLine передаваемое значение для заполнения
+     */
+    private NewTaskStepsMobile enterValueInFieldText(String nameField, String valueLine) {
+        if (valueLine == null) {
+            return this;
+        } else {
+            newTaskFormElementsMobile.getTextAreaInCustomField(nameField).click(); // находим поле по Названию
+            newTaskFormElementsMobile.getTextAreaInCustomField(nameField).setValue(valueLine);
+        }
+        return this;
+    }
+
+
+    /**
+     * Общий метод заполнения пользовательских строковых полей с выбором из списка
+     *
+     * @param nameField имя поля документа для заполнения
+     * @param valueLine передаваемое значение для заполнения
+     */
+    private NewTaskStepsMobile choiceValueInFieldWithListDirectory(String nameField, String valueLine) {
+        if (valueLine == null) {
+            return this;
+        } else {
+            $(newTaskFormElementsMobile.getTriggerInUserField(nameField)).shouldBe(Condition.visible);
+        }
+        newTaskFormElementsMobile.getTriggerInUserField(nameField).click();
+        newTaskFormElementsMobile.getValueInTheListOfUserField(valueLine).click();
+        return this;
+    }
+
+
+    /**
+     * Общий метод заполнения пользовательских полей типа "Справочник" с выбором из списка
+     *
+     * @param nameField имя поля документа для заполнения
+     * @param directoriesFields массив полей объекта, который содержит передаваемое значение для заполнения
+     */
+    private NewTaskStepsMobile choiceValueInFieldWithListDirectory(String nameField, DirectoriesField[] directoriesFields) {
+        if (directoriesFields == null) {
+            return this;
+        } else {
+            $(newTaskFormElementsMobile.getTriggerInUserField(nameField)).shouldBe(Condition.visible);
+        }
+        for (DirectoriesField valueLine : directoriesFields) {
+            newTaskFormElementsMobile.getTriggerInUserField(nameField).click();
+            newTaskFormElementsMobile.getValueInTheListOfUserField(valueLine.getDirectoriesItem()).click();
+        }
+        return this;
+    }
+
+
+    /**
+     * Удаления значений в пользовательских полях
+     * требуется при редактировании ранее созданной задачи
+     */
+    public NewTaskStepsMobile removeValueInCustomFields(FieldObject[] fieldObjects) {
+
+        if (fieldObjects == null) {
+            return this;
+        }
+        for (FieldObject fieldObject : fieldObjects) {
+            // СОТРУДНИК
+            if (fieldObject.getFieldType() instanceof TypeListFieldsEmployee) {
+
+                //------------- Проверка удаления ранее выбранных пользователей
+                choiceUserOnTheRole(fieldObject.getValueEmployeeField(), newTaskFormElementsMobile.getInputInUserFieldTypeEmployee(fieldObject.getFieldName())); // удаляем пользователя выбранного при создании задачи
+            }
+        }
+        return this;
+    }
+
+
+    /**
+     * Заполнение пользовательских полей
+     */
+    public NewTaskStepsMobile setValueInCustomFields(FieldObject[] fieldObjects) {
+
+        if (fieldObjects == null) {
+            return this;
+        }
+            for (FieldObject fieldObject : fieldObjects) {
+
+                // СТРОКА
+                if (fieldObject.getFieldType() instanceof TypeListFieldsString) {
+                    enterValueInFieldInput(fieldObject.getFieldName(), fieldObject.getValueField());
+                }
+
+                // ТЕКСТ
+                if (fieldObject.getFieldType() instanceof TypeListFieldsText) {
+                    enterValueInFieldText(fieldObject.getFieldName(), fieldObject.getValueField());
+                }
+
+                // Целое
+                if (fieldObject.getFieldType() instanceof TypeListFieldsInteger) {
+                    enterValueInFieldInput(fieldObject.getFieldName(), fieldObject.getValueField());
+                }
+
+                // ВЕЩЕСТВЕННОЕ
+                if (fieldObject.getFieldType() instanceof TypeListFieldsDouble) {
+                    enterValueInFieldInput(fieldObject.getFieldName(), fieldObject.getValueField());
+                }
+
+                // ДАТА
+                if (fieldObject.getFieldType() instanceof TypeListFieldsDate) {
+                    enterValueInFieldInput(fieldObject.getFieldName(), fieldObject.getValueField());
+                }
+
+                // ЛОГИЧЕСКИЙ
+                if (fieldObject.getFieldType() instanceof TypeListFieldsBoolean) {
+                    rangeOfValuesFromTheCheckbox(fieldObject.getValueBooleanField(), newTaskFormElementsMobile.getCheckboxInUserField(fieldObject.getFieldName()));
+                }
+
+                // НУМЕРАТОР
+                if (fieldObject.getFieldType() instanceof TypeListFieldsNumerator) {
+                    enterValueInFieldInput(fieldObject.getFieldName(), fieldObject.getValueField());
+                }
+
+                // ПОДРАЗДЕЛЕНИЕ
+                if (fieldObject.getFieldType() instanceof TypeListFieldsDepartment) {
+                    choiceValueInFieldWithListDirectory(fieldObject.getFieldName(), fieldObject.getValueField());
+                }
+
+                // СОТРУДНИК
+                if (fieldObject.getFieldType() instanceof TypeListFieldsEmployee) {
+                    choiceUserOnTheRole(fieldObject.getValueEmployeeField(), newTaskFormElementsMobile.getInputInUserFieldTypeEmployee(fieldObject.getFieldName()));
+                }
+
+                //СПРАВОЧНИК
+                if (fieldObject.getFieldType() instanceof TypeListFieldsDirectory) {
+                   choiceValueInFieldWithListDirectory(fieldObject.getFieldName(), fieldObject.getValueDirectoriesField());
+                }
+
+                // МН.СПРАВОЧНИК
+                if (fieldObject.getFieldType() instanceof TypeListFieldsMultiDirectory) {
+                    choiceValueInFieldWithListDirectory(fieldObject.getFieldName(), fieldObject.getValueDirectoriesField());
+                }
+            }
+        return this;
     }
 
 
@@ -379,102 +470,83 @@ public class NewTaskStepsMobile extends BaseSteps {
 
 
     /*
-    * Открытие группы полей на вкладке "Описание"
+    * Открытие/Закрытие закладки группы полей на вкладке "Описание"
     * */
-    public void selectGroupTab(String nameOfGroup){
-        $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//div[contains(text(),'" + nameOfGroup + "')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
+    public void selectGroupTab(InnerGroupTabs nameOfGroup){
+        $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//div[contains(text(),'" + nameOfGroup.getNameOfGroupTab() + "')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
     }
 
 
 
+
     /**
-     * Создание обычной задачи КОПИЯ МЕТОДА ДЛЯ WEB
+     * Создание обычной задачи
      * @param task передаваемые атрибуты задачи
      */
     public NewTaskStepsMobile creatingTask(Task task) {
         ensurePageLoaded();
-        //refresh(); //чтобы сбросить из кеша все элементы что остаются после работы в других формах
 
-       // Разворачиваем  группу полей  "Название"
-        selectGroupTab("Название");
-       //Заполняем Название задачи
+        //--------------------------------- группа полей  "Название"
+       // Разворачиваем  группу полей "Название"
+        selectGroupTab(NAME);
+        //Заполняем Название задачи
         setTaskName(task.getTaskName())
                 .setTasksDescription(task.getDescription());
         // Закрываем  группу полей  "Название"
-        selectGroupTab("Название");
+        selectGroupTab(NAME);
 
-        // Открываем  группу полей  "Кому"
-        selectGroupTab("Кому");
-
+        //--------------------------------- группа полей  "Кому"
+        // Открываем  группу полей "Кому"
+        selectGroupTab(TO_WHOM);
         // выбор пользователя по ФИО - через searchlive
-        currentUserSelectedInTheRole(task.getAuthors(), newTaskFormElementsMobile.getAuthorsField()); // - по умолчанию Автор задачи текущий пользователь (admin)
+        currentUserSelectedInTheRole(task.getAuthorDefault(), newTaskFormElementsMobile.getAuthorsField()); // - по умолчанию Автор задачи текущий пользователь (admin)
+        choiceUserOnTheRole(task.getAuthors(), newTaskFormElementsMobile.getAuthorsField()); // вводим - Авторы задачи
         choiceUserOnTheRole(task.getControllers(), newTaskFormElementsMobile.getСontrollersField()); // вводим - Контролеры задачи
         choiceUserOnTheRole(task.getExecutiveManagers(), newTaskFormElementsMobile.getResponsiblesField()); // вводим - Ответственные руководители
         choiceUserOnTheRole(task.getWorkers(), newTaskFormElementsMobile.getWorkersField()); // вводим - Исполнители задачи
-
         // Закрываем  группу полей  "Кому"
-        selectGroupTab("Кому");
+        selectGroupTab(TO_WHOM);
 
-        // Открываем  группу полей  "Срок"
-        selectGroupTab("Срок");
+        //--------------------------------- группа полей "Срок"
+        // Открываем  группу полей "Срок"
+        selectGroupTab(DATE);
         //Заполняем Даты
         setDateBegin(task.getDateBegin())
                 .setDateEnd(task.getDateEnd());
         setImportance(task.getIsImportant()); // "Приоритет" - выбираем - Важная задача
         // Закрываем  группу полей  "Срок"
-        selectGroupTab("Срок");
+        selectGroupTab(DATE);
+
+        //--------------------------------- группа полей "Тип задачи"
         $(By.xpath("//div[contains(@id,\"object\")]//input[@name='id_tasktype']")).shouldNotBe(empty);//Проверка поля названия при закрытой группы полей "Название" - проверяет что, поле не пустое, т.к должно быть значение по умолчанию.
         // Открываем  группу полей  "Тип задачи"
-        selectGroupTab("Тип задачи");
+        selectGroupTab(TYPE_TASK);
         $(By.xpath("//div[contains(@id,\"object\")]//input[@name='id_tasktype']")).shouldNotBe(empty);//Проверка поля названия при открытой группы полей "Название" - проверяет что, поле не пустое, т.к должно быть значение по умолчанию.
         setTaskType(task.getTaskType()); //Тип задачи
         // если у пользователя была создана задача только с типом "Обычный"(по умолчанию), то баг в АРМе - у него нет поля Тип задачи.
         // Поэтому все что связано с этим полем  можно заккоментировать. или найти решение как обходить эту проблему.
+
+
+        // Заполнение пользовательских полей
+        setValueInCustomFields(task.getTaskFields());
         // Закрываем  группу полей  "Тип задачи"
-        selectGroupTab("Тип задачи");
+        selectGroupTab(TYPE_TASK);
 
-
-
+        //--------------------------------- группа полей "Файлы"
         // Открываем группу полей "Файлы"
-        selectGroupTab("Файлы");
+        selectGroupTab(FILES);
         addAttachFiles(task.getFileName());
         // Закрываем  группу полей "Файлы"
-        selectGroupTab("Файлы");
+        selectGroupTab(FILES);
 
-
+        //--------------------------------- группа полей "Ещё"
         // Открываем группу полей "Ещё"
-        selectGroupTab("Еще");
+        selectGroupTab(MORE);
         newTaskFormElementsMobile.getReportRequired().shouldBe(selected); // Признак - С Докладом всегда по умолчанию должен быть выбран.
         rangeOfValuesFromTheCheckbox(task.getIsSecret(), newTaskFormElementsMobile.getCheckboxIsSecret()); // признак - Секретная
         rangeOfValuesFromTheCheckbox(task.getIsForReview(), newTaskFormElementsMobile.getCheckboxIsForReview()); // Признак - "Для ознакомления"
         // Закрываем  группу полей "Ещё"
-        selectGroupTab("Еще");
-
-
-
-       /*
-       setEnd(task.getDateEnd());
-        createProject(task.getProject());
-        setTaskName(task.getTaskName())
-                .setTaskDescription(task.getDescription())
-                .setDataBegin(task.getDateBegin())
-                .setImportance(task.getIsImportant());
-        // выбор пользователя по ФИО - Авторы - через searchlive
-        choiceUsersThroughTheSearchLiveSurname(task.getAuthors(), insetDescriptionTaskFormElements.getAuthorsField(),
-                insetDescriptionTaskFormElements.getEditorField());
-        // выбор пользователя - Контролер - через searchlive
-        choiceUsersThroughTheSearchLiveForSpace(task.getControllers(), insetDescriptionTaskFormElements.getСontrollersField(),
-                insetDescriptionTaskFormElements.getEditorField());
-        // выбор пользователя - Исполнителей - через searchlive
-        choiceUsersThroughTheSearchLiveForSpace(task.getWorkers(), insetDescriptionTaskFormElements.getWorkersField(),
-                insetDescriptionTaskFormElements.getEditorField());
-        // выбор пользователя - Ответственные руководители - через searchlive
-        choiceUsersThroughTheSearchLiveForSpace(task.getExecutiveManagers(), insetDescriptionTaskFormElements.getExecutiveManagersField(),
-                insetDescriptionTaskFormElements.getEditorField());
-        setTaskType(task.getTaskType()) // выбор - Тип задачи
-                .setReport(task.getIsWithReport())
-                .setSecret(task.getIsSecret())
-                .setReview(task.getIsForReview());*/
+        selectGroupTab(MORE);
 
         return this;
 
@@ -485,17 +557,13 @@ public class NewTaskStepsMobile extends BaseSteps {
      * Сохранить задачу
      * Ждем появление маски загрузки
      * Ждем пока исчезнит маска загрузки
-     * @return UnionMessageSteps страница UnionMessageSteps (Задачи / Задачи) - убрал т.к пишет, что ничего не возвращает. Зачем это было в ориг. методе для web?
      */
     public NewTaskStepsMobile saveTask() {
-
-        sleep(1000);
         newTaskFormElementsMobile.getButtonCreateTask().click();
 //        //Ждем появление маски загрузки
-//        loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.visible, 1000);
-//        //Ждем пока исчезнит маска загрузки
-//        loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.disappear, 5000);
-        //TODO видимо падает, т.к элемент уже ранее был при логине. Нужно сделать индивидульный xpath для saveTask, наверное
+        loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.visible, 1000);
+        //Ждем пока исчезнит маска загрузки
+        loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.disappear, 10000);
         return page(NewTaskStepsMobile.class);
 
     }

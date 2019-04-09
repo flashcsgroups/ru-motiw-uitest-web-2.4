@@ -18,16 +18,16 @@ import static ru.motiw.web.model.URLMenu.MANUALS;
 /**
  * Руководства
  */
-public class DocumentionTestSteps extends BaseSteps {
+public class DocumentationTestSteps extends BaseSteps {
 
-    private DocumantionTestElements documantionTestElements = page(DocumantionTestElements.class);
+    private DocumantionTestElements documentationTestElements = page(DocumantionTestElements.class);
 
 
     /*
     *  Проверка Загрузки pdf-страницы
     * */
     private void ensurePageLoaded()  {
-        documantionTestElements.getPdfPage().shouldBe(Condition.visible);
+        documentationTestElements.getPdfPage().shouldBe(Condition.visible);
     }
 
 
@@ -36,7 +36,7 @@ public class DocumentionTestSteps extends BaseSteps {
 * */
 
     private void ensureHtmlPageLoaded() {
-        documantionTestElements.getHtmlPage().shouldBe(Condition.visible);
+        documentationTestElements.getHtmlPage().shouldBe(Condition.visible);
     }
 
 
@@ -44,9 +44,9 @@ public class DocumentionTestSteps extends BaseSteps {
     /**
      * раздел: Справка - Руководства
      */
-    public static DocumentionTestSteps goToURLManuals() {
+    public static DocumentationTestSteps goToURLManuals() {
         openSectionOnURL(MANUALS.getMenuURL());
-        return page(DocumentionTestSteps.class);
+        return page(DocumentationTestSteps.class);
     }
 
 
@@ -58,10 +58,10 @@ public class DocumentionTestSteps extends BaseSteps {
 
     private void checkPdfManuals() {
             //проверяем кол-во ссылок на pdf-мануалы
-            documantionTestElements.getAllReferenceToPdfManual().shouldHaveSize(13);
+            documentationTestElements.getAllReferenceToPdfManual().shouldHaveSize(13);
             String parentWindowHandler = getWebDriver().getWindowHandle(); //Запоминаем окно в котором находимся
             //все ссылки на pdf добавляем в список
-            List<SelenideElement> elements = new ArrayList<>($$(documantionTestElements.getAllReferenceToPdfManual()));
+            List<SelenideElement> elements = new ArrayList<>($$(documentationTestElements.getAllReferenceToPdfManual()));
 
             for (SelenideElement link:elements) {
                 link.click();
@@ -80,10 +80,10 @@ public class DocumentionTestSteps extends BaseSteps {
     private void checkHtmlManuals() {
 
         //проверяем кол-во ссылок на html-руководства
-        documantionTestElements.getAllReferenceToHtmlManual().shouldHaveSize(14);
+        documentationTestElements.getAllReferenceToHtmlManual().shouldHaveSize(14);
         String parentWindowHandler = getWebDriver().getWindowHandle(); //Запоминаем окно в котором находимся
          //все ссылки на html добавляем в список
-        List<SelenideElement> elements = new ArrayList<>($$(documantionTestElements.getAllReferenceToHtmlManual()));
+        List<SelenideElement> elements = new ArrayList<>($$(documentationTestElements.getAllReferenceToHtmlManual()));
 
         for (SelenideElement link:elements) {
             link.click();
@@ -92,7 +92,7 @@ public class DocumentionTestSteps extends BaseSteps {
 
             {
                 if (isElementPresent(By.xpath("//frame[@name='hmcontent']"))) {
-                    getFrameObject($(documantionTestElements.getFrameHtml())); //  уходим во фрейм hmcontent
+                    getFrameObject($(documentationTestElements.getFrameHtml())); //  уходим во фрейм hmcontent
                     ensureHtmlPageLoaded();//Проверяем Загрузку html-страницы
                     //checkTextOnHtmlPage();   // Проверяем наличе текста, который отображается на страницах html-мануала
                 }

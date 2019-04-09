@@ -47,5 +47,4 @@ public class UserAuthenticationTest extends UserAuthentication {
         assertTrue(loginPageSteps.isNotLoggedIn());
     }
 
-
 }

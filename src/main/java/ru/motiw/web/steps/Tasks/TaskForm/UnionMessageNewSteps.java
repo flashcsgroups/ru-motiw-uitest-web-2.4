@@ -25,7 +25,7 @@ import static ru.motiw.utils.WindowsUtil.newWindowForm;
 import static ru.motiw.web.model.URLMenu.CREATE_TASK;
 
 /**
- * форма - СОЗДАТЬ ЗАДАЧУ
+ * Форма - СОЗДАТЬ ЗАДАЧУ
  */
 public class UnionMessageNewSteps extends BaseSteps {
 

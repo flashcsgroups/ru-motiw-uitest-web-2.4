@@ -9,29 +9,29 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import ru.motiw.data.BaseTest;
 import ru.motiw.data.listeners.ScreenShotOnFailListener;
-import ru.motiw.web.steps.Administration.DocumentionTestSteps;
+import ru.motiw.web.steps.Administration.DocumentationTestSteps;
 import ru.motiw.web.steps.Home.InternalSteps;
 import ru.motiw.web.steps.Login.LoginStepsSteps;
 
 import static com.codeborne.selenide.Selenide.page;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testng.AssertJUnit.assertTrue;
-import static ru.motiw.web.steps.Administration.DocumentionTestSteps.goToURLManuals;
+import static ru.motiw.web.steps.Administration.DocumentationTestSteps.goToURLManuals;
 
 
 @Listeners({ScreenShotOnFailListener.class, TextReport.class, VideoListener.class})
 @Report
-public class DocumantionTest extends BaseTest {
+public class DocumentationTest extends BaseTest {
 
     private LoginStepsSteps loginPageSteps;
     private InternalSteps internalPage;
-    private DocumentionTestSteps documantionTestSteps;
+    private DocumentationTestSteps documentationTestSteps;
 
     @BeforeClass
     public void beforeTest() {
         loginPageSteps = page(LoginStepsSteps.class);
         internalPage = page(InternalSteps.class);
-        documantionTestSteps = page(DocumentionTestSteps.class);
+        documentationTestSteps = page(DocumentationTestSteps.class);
     }
 
     @Video(name = "Отсутствует Документация")
@@ -45,7 +45,7 @@ public class DocumantionTest extends BaseTest {
         // Переход в раздел Справка/Руководства
         goToURLManuals();
         //Проверка всех Руководств
-        documantionTestSteps.checkManuals();
+        documentationTestSteps.checkManuals();
 
     }
 }

@@ -1,5 +1,6 @@
 package ru.motiw.web.model.Tasks;
 
+import ru.motiw.web.model.Administration.FieldsObject.FieldObject;
 import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
 import ru.motiw.web.model.Administration.Users.Department;
 import ru.motiw.web.model.Administration.Users.Employee;
@@ -20,10 +21,13 @@ public class Task {
     private boolean forReview;
     private String dateBegin;
     private String dateEnd;
+    private Employee authorDefault;
     private Employee[] authors;
     private Employee[] controllers;
     private Employee[] executiveManagers;
     private Employee[] workers;
+    private FieldObject[] taskFields;
+    private FieldObject[] taskFieldsName;
     private Checkpoint[] checkpoints;
     private IWG[] iwg;
     private Event[] events;
@@ -31,6 +35,7 @@ public class Task {
     private Action[] actions;
     private String[] fileName;
     private Integer numberOfFiles;
+    private TemplateOfTask templateOfTask;
 
 
     /**
@@ -168,6 +173,18 @@ public class Task {
     }
 
     /**
+     * Автор по умолчанию - объект - типа сотрудник
+     */
+    public Employee getAuthorDefault() {
+        return authorDefault;
+    }
+
+    public Task setAuthorDefault(Employee authorDefault) {
+        this.authorDefault = authorDefault;
+        return this;
+    }
+
+    /**
      * Авторы - массив объектов - типа сотрудник
      *
      * @return
@@ -214,6 +231,31 @@ public class Task {
 
     public Task setWorkers(Employee[] workers) {
         this.workers = workers;
+        return this;
+    }
+
+
+    /**
+     * Поля задачи - массив объектов - пользовательские поля любого типа
+     */
+    public FieldObject[] getTaskFields() {
+        return taskFields;
+    }
+
+    public Task setTaskFields(FieldObject[] taskFields) {
+        this.taskFields = taskFields;
+        return this;
+    }
+
+    /**
+     * Набор названий полей, которые содержит тип задачи - массив объектов - пользовательские поля любого типа
+     */
+    public FieldObject[] getTaskFieldsName() {
+        return taskFieldsName;
+    }
+
+    public Task setTaskFieldsName(FieldObject[] taskFieldsName) {
+        this.taskFieldsName = taskFieldsName;
         return this;
     }
 
@@ -293,7 +335,6 @@ public class Task {
      * Кол-во прикрепленных файлов
      * При каждом обращении к методу будет считаться кол-во прикрепляемых файлов
      */
-
     public int  getNumberOfFiles() {
         if(numberOfFiles == null) {
             setNumberOfFiles();
@@ -312,6 +353,17 @@ public class Task {
     }
 
 
+    /**
+     * Шаблоны задачи
+     */
+    public TemplateOfTask getTemplateOfTask() {
+        return templateOfTask;
+    }
+
+    public Task setTemplateOfTask(TemplateOfTask templateOfTask) {
+        this.templateOfTask = templateOfTask;
+        return this;
+    }
 
 
 }

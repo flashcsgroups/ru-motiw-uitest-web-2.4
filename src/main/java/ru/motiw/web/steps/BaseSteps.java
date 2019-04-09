@@ -49,7 +49,7 @@ public abstract class BaseSteps {
      * @param webElementButton    подтверждение (взаимодействие над объектом)
      */
     protected String checkingMessagesConfirmationOfTheObject(SelenideElement element, String expectedMessageText,
-                                                          SelenideElement webElementButton) {
+                                                             SelenideElement webElementButton) {
         String actualMessageText = element.shouldBe(Condition.exactText(expectedMessageText)).getText();
         if (expectedMessageText != null && expectedMessageText.equals(actualMessageText)) {
             webElementButton.click();
@@ -164,8 +164,11 @@ public abstract class BaseSteps {
      */
     protected void unwrapAllNodes(SelenideElement knot, By nodes) {
         try {
-            while (isElementPresent(nodes))
-                knot.click();
+            while (isElementPresent(nodes)) {
+                if(isElementPresent(nodes)) {
+                    knot.click();
+                }
+            }
         } catch (NoSuchElementException e) {
             e.printStackTrace();
         }

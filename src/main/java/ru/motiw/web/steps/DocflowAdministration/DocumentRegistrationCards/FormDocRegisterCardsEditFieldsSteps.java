@@ -20,7 +20,7 @@ import static ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards
  */
 public class FormDocRegisterCardsEditFieldsSteps extends BaseSteps {
 
-    private static FormDocRegisterCardsEditFieldsElements formEditRCDFieldsElement = page(FormDocRegisterCardsEditFieldsElements.class);
+    private FormDocRegisterCardsEditFieldsElements formEditRCDFieldsElement = page(FormDocRegisterCardsEditFieldsElements.class);
 
     /**
      * Выбор только из справочника
@@ -345,10 +345,9 @@ public class FormDocRegisterCardsEditFieldsSteps extends BaseSteps {
 
     /**
      * Производим выбор вкладки - ПОЛЯ
-     *
      * @return FormDocRegisterCardsEditFieldsSteps
      */
-    public static FormDocRegisterCardsEditFieldsSteps fieldsTabRCD() {
+    public FormDocRegisterCardsEditFieldsSteps fieldsTabRCD() {
         formEditRCDFieldsElement.getFieldsTab().click();
         return page(FormDocRegisterCardsEditFieldsSteps.class);
     }

@@ -969,7 +969,7 @@ Session ID: cf56f32590e4abe5dd15dbe4679d51d7
           </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- verifyCreateTask -->
+        </test-method> <!-- verifyCreatedTask -->
         <test-method status="PASS" signature="clearCache()[pri:0, instance:ru.motiw.testsWeb.Tasks.CreateTaskTest@262b2c86]" name="clearCache" is-config="true" duration-ms="9" started-at="2017-01-14T20:08:55Z" finished-at="2017-01-14T20:08:55Z">
           <reporter-output>
           </reporter-output>

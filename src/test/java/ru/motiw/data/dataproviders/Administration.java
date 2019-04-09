@@ -3,6 +3,7 @@ package ru.motiw.data.dataproviders;
 import org.testng.annotations.DataProvider;
 import ru.motiw.data.BaseTest;
 import ru.motiw.web.model.Administration.Directories.Directories;
+import ru.motiw.web.model.Administration.Directories.DirectoriesField;
 import ru.motiw.web.model.Administration.FieldsObject.*;
 import ru.motiw.web.model.Administration.TaskTypeListEditObject;
 import ru.motiw.web.model.Administration.TasksTypes.ComputeModeNumerator;
@@ -244,6 +245,69 @@ public abstract class Administration extends BaseTest {
 
                 {
                         directories,
+                }
+        };
+
+    }
+
+    /**
+     * Параметризация - Инициализируем модель - Рег.карточка Справочника и Справочник (со всеми надстройками)
+     */
+    @DataProvider
+    public Object[][] objectRandomDataDirectories() {
+
+        // 1. СТРОКА (Выбор из списка == Нет)
+        FieldObject fieldStringIsNotListChoice = new TypeListFieldsString()
+                .setFieldName("Строка (Выбор из списка == Нет) " + randomString(10))
+                .setFieldID("STRNOTLIST" + randomIdentifier(5))
+                .setFieldType(new TypeListFieldsString()
+                        .setIsListChoice(NO)); // Выбор из списка
+
+
+
+
+        // Инициализируем объект - Регистрационная карточка Справочника
+        TaskTypeListEditObject registerCardDirectories = new Directories("wD_Справочник " + randomString(10))
+
+                // Вкладка - Настройки
+                .setShareRecords(true) // Общедоступность записей
+                .setAccessToRecords(true) // Настройка доступа к записям
+                .setMappingDevice(true) // Способ отображения - Линейный ли? true - да; false - иерархический
+                .setSearchSettings(true) // true - поиск записей через SOLR; false - поиск записей через БД
+                .setTaskTypeListObjectFields(new FieldObject[]{fieldStringIsNotListChoice});
+
+        //--------------------------------------------------------------------------------------------------Инициализируем объекты - Записи Справочника
+        FieldObject recordOneDirectory = new DirectoriesField()
+
+                // Осуществляем заполнение (наполнение) полей справочника через массив
+                .setDirectoryItems(randomString(11))
+                .setFieldName(fieldStringIsNotListChoice.getFieldName())
+                .setFieldType(new TypeListFieldsString()
+                        .setIsListChoice(NO)); // Выбор из списка;
+
+        FieldObject recordTwoDirectory = new DirectoriesField()
+
+                // Осуществляем заполнение (наполнение) полей справочника через массив
+                .setDirectoryItems(randomString(11))
+                .setFieldName(fieldStringIsNotListChoice.getFieldName())
+                .setFieldType(new TypeListFieldsString()
+                        .setIsListChoice(NO)); // Выбор из списка;
+
+
+        // Инициализируем объект - Справочник
+        Directories directory = new Directories(registerCardDirectories.getObjectTypeName())
+
+                // Осуществляем заполнение (наполнение) полей справочника через массив
+                .setDirectoriesFields(new DirectoriesField[] {
+                        (DirectoriesField) recordOneDirectory,
+                        (DirectoriesField) recordTwoDirectory
+                });
+
+        return new Object[][]{
+
+                {
+                        registerCardDirectories,
+                        directory
                 }
         };
 
