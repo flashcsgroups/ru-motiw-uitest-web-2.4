@@ -91,7 +91,7 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
          * Проверка того, чтобы кол-во файлов в элементе-переключателе файлов соответствовало числу файлов содержашихся в задаче
          * проверка скачивания файлов и текста в просмотрике файлов (каруселе)
          */
-        verifyFiles(valueTask);
+        verifyFilesInTask(valueTask);
 
         return this;
     }
@@ -839,7 +839,14 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
     }
 
 
-    public TaskStepsMobile verifyFiles(Task task) throws Exception {
+    /**
+     * Проверка кол-во прикрепленных файлов
+     * Проверка файлов в каруселе
+     * @param task
+     * @return TaskStepsMobile
+     * @throws Exception
+     */
+    public TaskStepsMobile verifyFilesInTask(Task task) throws Exception {
         if (task.getFileName() == null) {
             return this;
         } else {
@@ -855,9 +862,9 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
 
     /**
      * Скачивание файла в просмотрщике файлов формы задачи
-     * Проверяем имя скаченного файла и наличие текста в просмотрщике файла.
+     * Проверяем имя скаченного файла и наличие текста ( текст содержит имя файла) в просмотрщике файла.
      * @param nameFiles передаваемое Имя файла для скачивания
-     * @return TaskActionsStepsPDA форма задачи
+     * @return TaskStepsMobile форма задачи
      * @throws FileNotFoundException  в том случае, если файл не будет загружен метод .download() выкинет FileNotFoundException
      */
     public TaskStepsMobile verifyFilesInPreview(String[] nameFiles, int numbersOfFiles) throws FileNotFoundException {
@@ -908,7 +915,6 @@ public class TaskStepsMobile extends NewTaskStepsMobile {
      */
 
     private boolean verifyNameAndTextOfFile(String nameOfDownloadedFile, String[] nameFiles) {
-
         for(String nameFile : nameFiles) {
             if(nameOfDownloadedFile.equals(nameFile)){
                 verifyTextInFilesInPreview(nameFile); // Проверяем наличие текста в просмотрщике файла.

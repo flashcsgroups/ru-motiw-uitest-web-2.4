@@ -71,7 +71,7 @@ public class NewDocumentCartTabElements {
     @FindBy(xpath = "//div[count(img)=2]//img[1]")
     private SelenideElement selectExistentProject;
 
-    @FindBy(xpath = "(//span[contains(@class,'x-tab-strip')][ancestor::li[contains(@class,'x-tab-strip-active')]])[2]")
+    @FindBy(xpath = "(//span[contains(@class,'x-tab-strip')][ancestor::li[contains(@id,'tab-card')]])[2]")
     private SelenideElement documentCartTab;
 
     @FindBy(xpath = "(//div[@class='x-form-field-wrap x-form-field-trigger-wrap'])[2]/child::input")

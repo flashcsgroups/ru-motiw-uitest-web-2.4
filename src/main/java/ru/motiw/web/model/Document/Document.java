@@ -15,6 +15,7 @@ public class Document {
 
     private DocRegisterCards documentType;
     private FieldDocument[] docFields;
+    private Employee authorOfDocument;
     private String dateRegistration = "";
     private Project project;
     private Department[] valueDepartment;
@@ -23,6 +24,7 @@ public class Document {
     private String[] valueFiles;
     private DictionaryEditorField valueDictionaryEditor;
     private RouteSchemeEditor routeScheme;
+    private Integer numberOfFiles;
 
 
     /**
@@ -154,6 +156,39 @@ public class Document {
     public Document setRouteSchemeForDocument(RouteSchemeEditor routeScheme) {
         this.routeScheme = routeScheme;
         return this;
+    }
+
+    /**
+     * АВТОР ДОКУМЕНТА
+     */
+    public Employee getAuthorOfDocument() {
+        return authorOfDocument;
+    }
+
+    public Document setAuthorOfDocument(Employee authorOfDocument) {
+        this.authorOfDocument = authorOfDocument;
+        return this;
+    }
+
+    /**
+     * Кол-во прикрепленных файлов
+     * При каждом обращении к методу будет считаться кол-во прикрепляемых файлов
+     */
+    public int  getNumberOfFiles() {
+        if(numberOfFiles == null) {
+            setNumberOfFiles();
+        }
+        return numberOfFiles;
+    }
+
+    private void setNumberOfFiles() {
+
+        int numberOfFile = 0;
+        for (String s : getValueFiles()) {
+            numberOfFile++;
+        }
+
+        this.numberOfFiles = numberOfFile;
     }
 
 }

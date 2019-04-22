@@ -57,13 +57,14 @@ public abstract class DocflowAdministrationMobile extends BaseTest {
     Document document = new Document()
 
             .setDocumentType(registerCards) // Тип документа
+            .setAuthorOfDocument(ADMIN)
             .setDateRegistration(randomDateTime()) // Дата регистрации
             .setProject(getRandomProject()) // Инициализируем проект документа
             .setValueFiles(new String[] {file[0], file[1]})
             .setRouteSchemeForDocument(new RouteSchemeEditor()
                     .setRouteScheme("Согласование входящей корреспонденции - Постановка задачи")
                     .setReviewDuration(randomInt(999))
-                    .setUserRoute(new Employee[]{employee[0]})
+                    .setUserRoute(new Employee[]{employee[0]}) // Добавляем в маршрут созданного пользователя
             );
 
 
@@ -100,8 +101,7 @@ public abstract class DocflowAdministrationMobile extends BaseTest {
     @DataProvider
     public Object[][] objectDataDocument() {
         
-        
-        
+
         return new Object[][]{
 
             {

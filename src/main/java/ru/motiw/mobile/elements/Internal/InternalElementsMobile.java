@@ -6,7 +6,6 @@ import org.openqa.selenium.support.FindBy;
 import ru.motiw.web.steps.BaseSteps;
 
 
-
 /**
  * Внутреняя страница системы
  */
@@ -28,13 +27,13 @@ public class InternalElementsMobile extends BaseSteps {
     /*
      * Кнопка "Домой"
      */
-    @FindBy(xpath = "(//div[@class=\"x-component x-button noselect x-has-icon x-icon-align-left x-arrow-align-right x-button-raised x-component-raised x-button-alt x-component-alt x-button-round x-component-round x-layout-box-item x-layout-hbox-item\"])[2]")
+    @FindBy(xpath = "//div[@data-componentid=\"ext-main-navigatebutton-2\"]")
     private SelenideElement buttonGoHome;
 
     /*
      * Кнопка "Назад"
      */
-    @FindBy(xpath = "(//div[@class=\"x-component x-button noselect x-has-icon x-icon-align-left x-arrow-align-right x-button-raised x-component-raised x-button-alt x-component-alt x-button-round x-component-round x-layout-box-item x-layout-hbox-item\"])[1]")
+    @FindBy(xpath = "//div[@data-componentid=\"ext-main-navigatebutton-1\"]")
     private SelenideElement buttonGoBack;
 
     /*

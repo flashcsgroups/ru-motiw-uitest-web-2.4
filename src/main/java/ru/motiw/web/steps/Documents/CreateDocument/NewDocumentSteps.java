@@ -43,6 +43,7 @@ public class NewDocumentSteps extends BaseSteps {
 
     /**
      * Документы/Создать документ
+     *
      * @return NewDocumentSteps
      */
     public static NewDocumentSteps goToURLNewDocument() {
@@ -99,9 +100,9 @@ public class NewDocumentSteps extends BaseSteps {
             projectFormElements.getProjectField().click();
             // заполняем поле Проект (Название проекта)
             projectFormElements.getEditorFieldProject().setValue(project.getNameProject());
-    // выбор поля Описание
+            // выбор поля Описание
             projectFormElements.getProjectDescription().click();
-    // заполняем поле Описание проекта
+            // заполняем поле Описание проекта
             projectFormElements.getEditorDescriptionProject().setValue(project.getDescription());
             projectFormElements.getProjectEnd().click(); //клик в другое поле для перевода фокуса с поля Описание
             projectFormElements.getProjectClient().click();
@@ -109,12 +110,12 @@ public class NewDocumentSteps extends BaseSteps {
             projectFormElements.getProjectEnd().click();
             projectFormElements.getEditorFieldProject().setValue(project.getEndDate());
             projectFormElements.getProjectSave().click();
-    waitForProjectMask();
-    switchTo().defaultContent();
-    switchTo().frame($(By.cssSelector("#flow")));
-}
+            waitForProjectMask();
+            switchTo().defaultContent();
+            switchTo().frame($(By.cssSelector("#flow")));
+        }
         return this;
-                }
+    }
 
     /**
      * Ожидание маски проекта
@@ -236,30 +237,42 @@ public class NewDocumentSteps extends BaseSteps {
 
     /**
      * Аттачминг файлов в форме
-     * @param nameOfFiles  названия файлов
+     * @param nameOfFiles названия файлов
      */
-    public NewDocumentSteps addAttachFiles (String[] nameOfFiles) {
+    public NewDocumentSteps addAttachFiles(String[] nameOfFiles) {
         if (nameOfFiles != null)
             for (String nameOfFile : nameOfFiles) {
 
                 String mainFilePath = "src" + File.separator + "main" + File.separator +
                         "resources" + File.separator + "attachfiles" + File.separator;
 
-            try {
-                Robot r = new Robot(); //создаем робота для взаимодействия с win-формой
-                newDocumentCartTabElements.getAddFileButton().click();
-                sleep(2000);
+                try {
+                    Robot r = new Robot(); //создаем робота для взаимодействия с win-формой
+                    newDocumentCartTabElements.getAddFileButton().click();
+                    sleep(1000);
 
-                //закрываем win-форму добавления файла
-                r.keyPress(KeyEvent.VK_ESCAPE);
-                r.keyRelease(KeyEvent.VK_ESCAPE);
-            } catch (AWTException e)
-            {
-                fail("AWTException");
+                    //закрываем win-форму добавления файла
+                    r.keyPress(KeyEvent.VK_ESCAPE);
+                    r.keyRelease(KeyEvent.VK_ESCAPE);
+                    //TODO ПОЧЕМУ-то не закрывает форму. Может повторно вызывать закрытие после добавления файла?
+                } catch (AWTException e) {
+                    fail("AWTException");
+                }
+                newDocumentCartTabElements.getAddFileInput().uploadFile(new File(mainFilePath, nameOfFile));
             }
-                newDocumentCartTabElements.getAddFileInput().uploadFile(new File(mainFilePath, nameOfFile));;
+        return this;
+    }
 
-            }
+    /**
+     * Добавление файлов в форме
+     * Возвращение с вкладки "Файлы" на Вкладку "Карточка документа"
+     * @param nameOfFiles названия файлов
+     */
+    public NewDocumentSteps addFiles(String[] nameOfFiles) {
+        if (nameOfFiles != null) {
+            addAttachFiles(nameOfFiles);
+            documentCardTab(); // Возвращаемся с вкладки "Файлы" на Вкладку "Карточка документа"
+        }
         return this;
     }
 
@@ -306,6 +319,15 @@ public class NewDocumentSteps extends BaseSteps {
                     // TODO добавляем проверку - заполнение значения поля документа
                 }
             }
+        return this;
+    }
+
+    /**
+     * Выбираем вкладку - Карточка документа
+     */
+    private NewDocumentSteps documentCardTab() {
+        newDocumentCartTabElements.getDocumentCartTab().click();
+        newDocumentCartTabElements.getFieldDocumentType().shouldBe(visible);
         return this;
     }
 
@@ -361,16 +383,14 @@ public class NewDocumentSteps extends BaseSteps {
 
     /**
      * Создать документ
-     *
      * @param document атрибуты (значения) документа для заполнения в форме Создания документа
      */
     public void createDocument(Document document) {
         selFieldDocumentType(document.getDocumentType()) // выбираем проинициализированный Тип документа
+                .addFiles(document.getValueFiles()) // Добавление файлов
                 .writeInRegistrationDate(document.getDateRegistration()) // Дата регистрации
                 .createProject(document.getProject()) // добавляем новый проект
                 .fillCustomFieldsDocument(document.getDocumentFields()) // заполнение пользовательских полей документа
-
-                .addAttachFiles(document.getValueFiles())  // не находит поле после createProject
                 .routeTab() // Выбор вкладки - Маршруты
                 .routeSelectionByName(document.getRouteSchemeForDocument().getNameRouteScheme());
 

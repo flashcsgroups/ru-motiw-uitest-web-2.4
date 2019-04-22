@@ -197,7 +197,7 @@ public class CreateTaskMobileTest extends TasksMobile {
         //----------------------------------------------------------------ГРИД - Папка
         sleep(500); //ожидание папок;
         // Проверяем отображение созданной задачи в гриде папки
-        gridOfFoldersSteps.checkDisplayTaskGrid(editTask, folder[0]);
+        gridOfFoldersSteps.checkDisplayTaskInGrid(editTask, folder[0]);
         //Переход в задачу из грида
         gridOfFoldersSteps.openTaskInGrid(editTask);
 
@@ -250,7 +250,7 @@ public class CreateTaskMobileTest extends TasksMobile {
         //----------------------------------------------------------------ГРИД - Папка
         sleep(500); //ожидание папок;
         // Проверяем отображение созданной задачи в гриде папки
-        gridOfFoldersSteps.checkDisplayTaskGrid(editTask, folder[0]);
+        gridOfFoldersSteps.checkDisplayTaskInGrid(editTask, folder[0]);
         //Переход в задачу из грида
         gridOfFoldersSteps.openTaskInGrid(editTask);
 
@@ -277,7 +277,7 @@ public class CreateTaskMobileTest extends TasksMobile {
         //----------------------------------------------------------------ГРИД - Папка
         sleep(500); //ожидание папок;
         // Проверяем отображение созданной задачи в гриде папки
-        gridOfFoldersSteps.checkDisplayTaskGrid(editTask, folder[0]);
+        gridOfFoldersSteps.checkDisplayTaskInGrid(editTask, folder[0]);
 
 //        newTaskStepsMobile.goToCreateOfNewTask();
 //        sleep(1000);
