@@ -21,6 +21,7 @@ public class TaskActionsStepsMobile extends TaskStepsMobile {
 
     /**
      * Добавление объекта - Действие
+     *
      * @param actions кол-во передаваемых действий с атрибутами (текст действия;)
      */
     public void postAction(Action[] actions) {
@@ -31,7 +32,7 @@ public class TaskActionsStepsMobile extends TaskStepsMobile {
                 sleep(500);
                 taskElementsMobile.getInputForAddComment().setValue(action.getActionText());
                 $(By.xpath("//div[text()=\"Сохранить\"]//ancestor::div[contains(@class,\"x-component x-button x-has-text\")]")).click();
-                verifyDisplayAddedActions(action.getActionText(), action.getAuthorAction(),action.getTimeOfAddAction()); //  Проверяем отображение добавлого текста в ленту действий
+                verifyDisplayAddedActions(action.getActionText(), action.getAuthorAction(), action.getTimeOfAddAction()); //  Проверяем отображение добавлого текста в ленту действий
             }
         }
     }
@@ -44,7 +45,7 @@ public class TaskActionsStepsMobile extends TaskStepsMobile {
         if (actions != null) {
             openTab(TabsOfTask.ACTIONS_TAB); //Переходим на вкладку "Действия"
             for (Action action : actions) {
-                verifyDisplayAddedActions(action.getActionText(), action.getAuthorAction(),action.getTimeOfAddAction()); // Проверяем созданные Действия
+                verifyDisplayAddedActions(action.getActionText(), action.getAuthorAction(), action.getTimeOfAddAction()); // Проверяем созданные Действия
             }
         }
     }
@@ -52,20 +53,21 @@ public class TaskActionsStepsMobile extends TaskStepsMobile {
 
     /**
      * Проверяем отображение добавленного текста в ленту действий
+     *
      * @param user пользователь добавивший действие
      */
-    public TaskActionsStepsMobile verifyDisplayAddedActions (String action, Employee user, String timeOfAddAction){
+    public TaskActionsStepsMobile verifyDisplayAddedActions(String action, Employee user, String timeOfAddAction) {
 
-        $(By.xpath("//div[contains(@id,\"ext-actionlist-item\")]//div[text()='" + action  + "']")).waitUntil(Condition.visible, 10000);
+        $(By.xpath("//div[contains(@id,\"ext-actionlist-item\")]//div[text()='" + action + "']")).waitUntil(Condition.visible, 10000);
 
         //Проверка что в действии есть имя пользователя
-        $(By.xpath("//div[contains(@id,\"ext-actionlist-item\")]//div[text()='" + action  + "']//ancestor::div[@class=\"action-list-item  \"]//div[@class=\"action-list-item-name\"]")).shouldHave(Condition.exactText(user.getLastName()));
+        $(By.xpath("//div[contains(@id,\"ext-actionlist-item\")]//div[text()='" + action + "']//ancestor::div[@class=\"action-list-item  \"]//div[@class=\"action-list-item-name\"]")).shouldHave(Condition.exactText(user.getLastName()));
 
         //Дата добавления действия
-        $(By.xpath("//div[contains(@id,\"ext-actionlist-item\")]//div[text()='" + action  + "']//ancestor::div[@class=\"action-list-item  \"]//div[@class=\"small-text\"]")).shouldHave(Condition.text("Сегодня" + " " + timeOfAddAction));
+        $(By.xpath("//div[contains(@id,\"ext-actionlist-item\")]//div[text()='" + action + "']//ancestor::div[@class=\"action-list-item  \"]//div[@class=\"small-text\"]")).shouldHave(Condition.text("Сегодня" + " " + timeOfAddAction));
 
         //Фото
-        $(By.xpath("//div[contains(@id,\"ext-actionlist-item\")]//div[text()='" + action  + "']//ancestor::div[@class=\"action-list-item  \"]//div[@class=\"action-list-item-photo\"]")).shouldBe(Condition.visible);
+        $(By.xpath("//div[contains(@id,\"ext-actionlist-item\")]//div[text()='" + action + "']//ancestor::div[@class=\"action-list-item  \"]//div[@class=\"action-list-item-photo\"]")).shouldBe(Condition.visible);
         return this;
     }
-    }
+}

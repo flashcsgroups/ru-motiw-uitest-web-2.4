@@ -1,8 +1,12 @@
 package ru.motiw.testMobile;
 
+import com.codeborne.selenide.testng.TextReport;
+import com.codeborne.selenide.testng.annotations.Report;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import ru.motiw.data.dataproviders.DocflowAdministrationMobile;
+import ru.motiw.data.listeners.ScreenShotOnFailListener;
 import ru.motiw.mobile.elements.Login.LoginPageElementsMobile;
 import ru.motiw.mobile.model.FilesForAttachment;
 import ru.motiw.mobile.steps.Document.DocumentStepsMobile;
@@ -36,6 +40,8 @@ import static ru.motiw.web.steps.Administration.Users.DepartmentSteps.goToURLDep
 import static ru.motiw.web.steps.Documents.CreateDocument.NewDocumentSteps.goToURLNewDocument;
 import static ru.motiw.web.steps.Tasks.UnionTasksSteps.goToUnionTasks;
 
+@Listeners({ScreenShotOnFailListener.class, TextReport.class})
+@Report
 public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
 
 
@@ -184,7 +190,7 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
 
         Folder[] folder1 = new Folder[]{
                 new Folder()
-                .setNameFolder("w") // Зн-ие НЕ изменять - используется в проверке - checkDisplayCreateAFolderInTheGrid()
+                        .setNameFolder("wD_Smart_Box ЬfТЮ") // Зн-ие НЕ изменять - используется в проверке - checkDisplayCreateAFolderInTheGrid()
         };
 
 
@@ -199,7 +205,7 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
         //----------------------------------------------------------------------------------------------------------- Инициализация Документа
         Document document1 = new Document()
 
-                .setDocumentType(new DocRegisterCards("wD_Тестовая карточка uс5oЩfЕHXBфрЭ8ШГpоуo")) // Тип документа
+                .setDocumentType(new DocRegisterCards("wD_Тестовая карточка ГvЪНsФНfFЖрYtЭЧЦ4TРм")) // Тип документа
                 .setAuthorOfDocument(ADMIN)
                 .setDateRegistration(randomDateTime()) // Дата регистрации
                 .setProject(getRandomProject()) // Инициализируем проект документа
@@ -218,12 +224,42 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
         // Проверка карточки под разными пользователями
         documentStepsMobile.verifyDocumentOnDifferentUsers(document1, folder1);
 
-        //Выполнение действий с документом
-
-
-        //Комментарии на файле
+        // Выполнение действий с документом под разными пользователями
+        //1.Выполнение операций
+        //2. Комментарии на файле
+        documentStepsMobile.verifyExecutionOnDifferentUsers(document1, folder1);
 
     }
+
+
+    /*
+    * --
+сейчас самой простой вариант - это выполнение операций в документе будет контролироваться в методе на низком уровне
+ (так мы проверим оперделенные критичные случаи, но множественные варинты проверок в будущем потребуют дописыванью новых низкоуровневых методов)
+прим. stepsOfExecutionDocument - в нем будет verifyExecutionInFormOFDocument - verifyExecutionOperations(TypeOperation, roleOfUser)
+передаем в verifyExecutionOperations TypeOperation тех операций которые мы выполним в нашем сценарии
+Например, для автора это: те операции, которые не повредят дальнейшей проверке отв.исп этапа МС
+прим. можно: создать резщолюцию. нельзя: завершать документ, не переводить на другой этап
+Но все это мы опередляем в сценарии - в методе verifyExecutionInFormOFDocument или stepsOfExecutionDocument
+
+как сделать выполнение операций в документе в зависимости от входных данных в dataProviderClass? возможно ли это, не слишком усложнено будет?
+
+например: в dataProviderClass должна быть модель объекта "выполнения документа" в которой пошагово расписано, кто и когда должен выполнить действие,
+при этом не навредя проверке под посследующем пользователем.
+
+можнов этой модели считать - выполнил участник действие или нет и в зависимости от этого гнать на следующий этап.
+
+такая модель позволит сделать универсальные методы выполнения операций в зависимотси от входных параметров, Но какие могут быть минусы?
+плюсы:
+при этом входные параметры мы можем переписывать под любые тестовые случаи не внося измений в низкоуровневые методы
+(в простой текуще реализации это будет сложно?
+- ведь мы должны будем добавлять инструкции прямо в новые методы verifyExecutionInFormOFDocument - т.е это получается одноразовый метод? ).
+Это похоже на реализацию заполнения полей разными данными в разные поля? можно сделать на каждый тест с разными типами полей разные методы.
+а можно в одном методе перебирать - тип поля и в зависимости от наличия его во входных параметрах  работаь с ним
+так?
+
+    * */
+
 
 
 }

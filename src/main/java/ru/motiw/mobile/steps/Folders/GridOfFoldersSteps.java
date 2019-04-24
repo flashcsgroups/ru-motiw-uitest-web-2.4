@@ -40,6 +40,36 @@ public class GridOfFoldersSteps extends InternalStepsMobile {
     }
 
     /**
+     * Проверяем исчезновение задачи в гриде раздела - Задачи
+     *
+     * @param task return values of attributes of the task
+     * @return
+     */
+    public GridOfFoldersSteps checkDisappearTaskInGrid(Task task, Folder folderTask) {
+
+        //sleep(2000);
+        // Если после завершения задачи мы не перешли в папку, то переходим в созданную папку
+        if (!internalElementsMobile.getMainTitle().is(text(folderTask.getNameFolder()))) {
+            goToHome();
+            // входим в созданную папку
+            gridOfFolderElementsMobile.getFolder(folderTask.getNameFolder()).click();
+            sleep(500);//ожидание грида
+        }
+
+        // Если пакет amq ещё не пришел, то грид может не обновиться. Поэтому делаем так:
+        // 1. проверяем на отображение завершенной задачи в гриде.
+        // 2. и если завершенная задача продолжает отображаться, то перезагружаем страницу и проверяем снова.
+        if ((gridOfFolderElementsMobile.getItemInTheGrid(task.getTaskName()).isDisplayed())) {
+            refresh();
+            sleep(5000);// Todo может недожидаться на самом деле грида, и проходить. надо ожидание грида нормально реализовать
+            (gridOfFolderElementsMobile.getItemInTheGrid(task.getTaskName())).shouldNotBe(visible);
+        }
+
+
+        return this;
+    }
+
+    /**
      * Проверяем отображение созданного документа в гриде раздела - Папки
      *
      * @param document return values of attributes of the task
@@ -75,43 +105,21 @@ public class GridOfFoldersSteps extends InternalStepsMobile {
      * @param document return values of attributes of the document
      * @return
      */
-    public GridOfFoldersSteps openDocumentInGrid(Document document) {
+    public GridOfFoldersSteps openDocumentInGrid(Document document, Folder folder) {
+
+        if (!internalElementsMobile.getMainTitle().is(text(folder.getNameFolder()))) // Если мы не в папке, то переходим в неё
+        {
+            // входим в созданную папку
+            gridOfFolderElementsMobile.getFolder(folder.getNameFolder()).click();
+            sleep(500);//ожидание грида
+        }
+
         gridOfFolderElementsMobile.getItemInTheGrid(document.getDocumentType().getDocRegisterCardsName()).click(); // Открываем по записи, которая содержит Тип документа.
         // todo нужно чтобы шаблон отображения в арме имел более уникальное значение чем Тип документа.  Открывать записи по такому уникальному значению.
         sleep(500);
         return page(GridOfFoldersSteps.class);
     }
 
-
-    /**
-     * Проверяем исчезновение задачи в гриде раздела - Задачи
-     *
-     * @param task return values of attributes of the task
-     * @return
-     */
-    public GridOfFoldersSteps checkDisappearTaskInGrid(Task task, Folder folderTask) {
-
-        //sleep(2000);
-        // Если после завершения задачи мы не перешли в папку, то переходим в созданную папку
-        if (!internalElementsMobile.getMainTitle().is(text(folderTask.getNameFolder()))) {
-            goToHome();
-            // входим в созданную папку
-            gridOfFolderElementsMobile.getFolder(folderTask.getNameFolder()).click();
-            sleep(500);//ожидание грида
-        }
-
-        // Если пакет amq ещё не пришел, то грид может не обновиться. Поэтому делаем так:
-        // сначала проверяем на отображение завершенной задачи в гриде.
-        // И если завершенная задача продолжает отображаться, то перезагружаем страницу и проверяем снова.
-        if ((gridOfFolderElementsMobile.getItemInTheGrid(task.getTaskName()).isDisplayed())) {
-            refresh();
-            sleep(5000);// Todo может недожидаться на самом деле грида, и проходить. надо ожидание грида нормально реализовать
-            (gridOfFolderElementsMobile.getItemInTheGrid(task.getTaskName())).shouldNotBe(visible);
-        }
-
-
-        return this;
-    }
 
     /**
      * Проверяем отображение или отсутствие признака нового документа в гриде папки
@@ -134,6 +142,30 @@ public class GridOfFoldersSteps extends InternalStepsMobile {
         }
     }
 
+    /**
+     * Проверяем отсутствие признака нового документа после возвращения в гриде папки
+     *
+     * @param document
+     */
+    public void checkDisappearMarkOfNewDocument(Document document, Folder folder) {
+        // Если после выполнения операций задачи мы не перешли в папку, то переходим в созданную папку
+        if (!internalElementsMobile.getMainTitle().is(text(folder.getNameFolder()))) {
+            goToHome();
+            // входим в созданную папку
+            gridOfFolderElementsMobile.getFolder(folder.getNameFolder()).click();
+            sleep(500);//ожидание грида
+        }
+
+
+        // Если пакет amq ещё не пришел, то грид может не обновиться. Поэтому делаем так:
+        // 1. проверяем на отображение завершенной Признака в гриде.
+        // 2. если Признак продолжает отображаться, то перезагружаем страницу и проверяем снова.
+        if ((gridOfFolderElementsMobile.getMarkOfNewItem(document.getDocumentType().getDocRegisterCardsName()).isDisplayed())) {
+            refresh();
+            gridOfFolderElementsMobile.getItemInTheGrid(document.getDocumentType().getDocRegisterCardsName()).waitUntil(visible, 5000);
+            gridOfFolderElementsMobile.getMarkOfNewItem(document.getDocumentType().getDocRegisterCardsName()).shouldNotBe(visible);
+        }
+    }
 
     /**
      * Нажатие на кнопку конт.меню операций для объекта (задачи\документа) в гриде папки

@@ -20,7 +20,6 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.page;
 import static com.codeborne.selenide.Selenide.sleep;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testng.AssertJUnit.fail;
 import static ru.motiw.mobile.model.Document.RoleOfUser.AUTHOR;
 import static ru.motiw.mobile.model.Document.RoleOfUser.CONSIDER_OF_DOCUMENT;
@@ -190,10 +189,6 @@ public class DocumentStepsMobile {
         loginStepsMobile
                 .loginAs(employee) // Авторизация под участником рассмотрения документа
                 .waitLoadMainPage(); // Ожидание открытия главной страницы
-        internalPageStepsMobile.goToInternalMenu(); // Открываем главное меню
-        assertThat("Check that the displayed menu item 9 (User Info; Tasks And Documents; Create Tasks; Today; Search; Settings; Help; Exit; Go To Full Version)",
-                internalPageStepsMobile.hasMenuUserComplete());
-
         //----------------------------------------------------------------ГРИД - Папка
         sleep(500); //ожидание папок;
         // Проверяем отображение созданного документа в гриде папки
@@ -206,16 +201,20 @@ public class DocumentStepsMobile {
         verifyOperationForDocument(document, roleOfUser);
 
         //Переход в документ из грида
-        gridOfFoldersSteps.openDocumentInGrid(document);
+        gridOfFoldersSteps.openDocumentInGrid(document, folders[0]);
         //----------------------------------------------------------------ФОРМА - Документ
         verifyPageOfDocument(document, roleOfUser);
+
+        //----------------------------------------------------------------ГРИД - Папка
+        // Проверяем отсутствие признака нового документа после возвращения в грид папки
+        gridOfFoldersSteps.checkDisappearMarkOfNewDocument(document, folders[0]);
+
         // Выход из системы
         internalPageStepsMobile.logout();
     }
 
-
     /**
-     * Проверяем под разными пользователями
+     * Проверяем карточку под разными пользователями
      *
      * @param document документ
      * @param folders  папки с которыми будем работать
@@ -239,6 +238,82 @@ public class DocumentStepsMobile {
         } else
             for (Employee employee : document.getRouteSchemeForDocument().getUserRoute()) {
                 stepsOfVerifyDocument(document, employee, folders, CONSIDER_OF_DOCUMENT);
+            }
+
+        return this;
+    }
+
+
+    /**
+     * Шаги при проверке выполнения действий в карточке документа
+     *
+     * @param document
+     * @param employee
+     * @param folders
+     * @param roleOfUser
+     * @throws Exception
+     */
+    private void stepsOfExecutionDocument(Document document, Employee employee, Folder[] folders, RoleOfUser roleOfUser) throws Exception {
+        loginStepsMobile
+                .loginAs(employee) // Авторизация под участником рассмотрения документа
+                .waitLoadMainPage(); // Ожидание открытия главной страницы
+        //----------------------------------------------------------------ГРИД - Папка
+        sleep(500); //ожидание папок;
+
+        //Переход в документ из грида
+        gridOfFoldersSteps.openDocumentInGrid(document, folders[0]);
+        //----------------------------------------------------------------ФОРМА - Документ
+        //1.Выполнение операций
+        verifyExecutionInFormOFDocument(document, roleOfUser);
+
+        //----------------------------------------------------------------ГРИД - Папка
+        // Проверяем отсутствие признака нового документа после возвращения в грид папки
+        gridOfFoldersSteps.checkDisappearMarkOfNewDocument(document, folders[0]);
+
+        // Выход из системы
+        internalPageStepsMobile.logout();
+    }
+
+    /**
+     *  Выполнение различных действий в карточке
+     *
+     * @param document
+     * @param roleOfUser
+     */
+    private void verifyExecutionInFormOFDocument(Document document, RoleOfUser roleOfUser) {
+
+        // Выполнение операций
+        //verifyExecutionOperations(roleOfUser); // также как verifyAccessToOperations - локаторы кнопкок операций зависят от того, где мы находимся
+
+        // Работа с файлами
+
+    }
+
+    /**
+     * Проверяем выполнение действий под разными пользователями
+     *
+     * @param document документ
+     * @param folders  папки с которыми будем работать
+     * @return
+     * @throws Exception
+     */
+    public DocumentStepsMobile verifyExecutionOnDifferentUsers(Document document, Folder[] folders) throws Exception {
+        if (document == null || folders == null) {
+            return null;
+        }
+
+        //Проверки для Автора
+        if (document.getAuthorOfDocument() == null) {
+            return null;
+        } else
+            stepsOfExecutionDocument(document, document.getAuthorOfDocument(), folders, AUTHOR);
+
+        //Проверки для каждого рассматривающиего
+        if (document.getRouteSchemeForDocument().getUserRoute() == null) {
+            return null;
+        } else
+            for (Employee employee : document.getRouteSchemeForDocument().getUserRoute()) {
+                stepsOfExecutionDocument(document, employee, folders, CONSIDER_OF_DOCUMENT);
             }
 
         return this;
