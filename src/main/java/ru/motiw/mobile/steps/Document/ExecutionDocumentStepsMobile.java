@@ -11,7 +11,9 @@ import ru.motiw.mobile.steps.LoginStepsMobile;
 import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Document.Document;
 import ru.motiw.web.model.Document.ExecutionOfDocument;
+import ru.motiw.web.model.Document.Resolution;
 import ru.motiw.web.model.Tasks.Folder;
+import ru.motiw.web.model.Tasks.Task;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -79,7 +81,8 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
 
         switch (executionOfDocument.getTypeExecutionOperation()) {
             case CREATE_RESOLUTION:
-                resolutionStepsMobile.createResolution(document);
+                for (Task resolution: document.getResolutionOfDocument())
+                    resolutionStepsMobile.createResolution(document, (Resolution) resolution);
 
                 break;
 
@@ -127,10 +130,10 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
 
         // ---------------------------------------------------------------- Выполнение операций в карточке документа
         if (executionPlace == TypeOfExecutionPlace.DOCUMENT_CARD) {
-            //Переход в документ из грида
+            // Переход в документ из грида
             gridOfFoldersSteps.openDocumentInGrid(document, folder);
             //----------------------------------------------------------------ФОРМА - Документ
-            //Выполнение операций
+            // Выполнение операций
             executionInFormOfDocument(document, executionOfDocument);
         }
         // Выход из системы
@@ -178,10 +181,11 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
     }
 
     /**
-     * Проверка раннее выполненых операций
+     * Проверка раннее выполненых операций под разными пользователями
      *
      * @param document
-     * @param folder
+     * @param folder              папка с которой будем работать
+     * @param executionOfDocument раннее выполненая операция
      * @return
      */
     public ExecutionDocumentStepsMobile verifyExecutionOnDifferentUsers(Document document, Folder folder, ExecutionOfDocument executionOfDocument) {
@@ -189,19 +193,19 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
         if (document == null || folder == null) {
             return null;
         }
-            //Проверки для Автора
-            if (document.getAuthorOfDocument() == null) {
-                return null;
-            } else
-                stepsOfVerifyExecutionDocument(document, document.getAuthorOfDocument(), folder, executionOfDocument, AUTHOR);
+        //Проверки для Автора
+        if (document.getAuthorOfDocument() == null) {
+            return null;
+        } else
+            stepsOfVerifyExecutionDocument(document, document.getAuthorOfDocument(), folder, executionOfDocument, AUTHOR);
 
-            //Проверки для каждого рассматривающиего
-            if (document.getRouteSchemeForDocument().getUserRoute() == null) {
-                return null;
-            } else
-                for (Employee employee : document.getRouteSchemeForDocument().getUserRoute()) {
-                    stepsOfVerifyExecutionDocument(document, employee, folder, executionOfDocument, CONSIDER_OF_DOCUMENT);
-                }
+        //Проверки для каждого рассматривающиего
+        if (document.getRouteSchemeForDocument().getUserRoute() == null) {
+            return null;
+        } else
+            for (Employee employee : document.getRouteSchemeForDocument().getUserRoute()) {
+                stepsOfVerifyExecutionDocument(document, employee, folder, executionOfDocument, CONSIDER_OF_DOCUMENT);
+            }
 
         return this;
     }
@@ -210,9 +214,10 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
      * Шаги при проверке раннее выполненых операций
      *
      * @param document
-     * @param employee
-     * @param folder
-     * @param executionOfDocument
+     * @param employee            пользователь под которым проверяем
+     * @param folder              папка с которой будем работать
+     * @param executionOfDocument раннее выполненая операция
+     * @param roleOfUser          роль пользователя под которым проверяем
      */
     private void stepsOfVerifyExecutionDocument(Document document, Employee employee, Folder folder, ExecutionOfDocument executionOfDocument, RoleOfUser roleOfUser) {
         loginStepsMobile
@@ -221,7 +226,7 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
         gridOfFoldersSteps.openFolder(folder);
         //----------------------------------------------------------------ГРИД - Папка
 
-        //
+        // Проверка раннее выполненых операций
         verifyExecutionOfDocument(document, folder, executionOfDocument, roleOfUser);
 
         // Выход из системы
@@ -229,6 +234,14 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
 
     }
 
+    /**
+     * Проверка раннее выполненых операций в карточке или гриде
+     *
+     * @param document
+     * @param folder
+     * @param executionOfDocument
+     * @param roleOfUser
+     */
     private void verifyExecutionOfDocument(Document document, Folder folder, ExecutionOfDocument executionOfDocument, RoleOfUser roleOfUser) {
 
         switch (executionOfDocument.getTypeExecutionOperation()) {
@@ -241,9 +254,9 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
                 // Ожидание и проверка кнопок тулбара
                 taskElementsMobile.getToolbarOfMenu().waitUntil(visible, 15000);
                 verifyAccessToOperations(document.isOnExecution(), roleOfUser);
-
                 // Проверка резолюции
-                resolutionStepsMobile.verifyCreatedResolution(document);
+                for (Task resolution: document.getResolutionOfDocument())
+                    resolutionStepsMobile.verifyCreatedResolution(document, (Resolution) resolution);
                 break;
 
             case MOVE_TO_EXECUTION:
@@ -253,13 +266,11 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
                 break;
 
             case CLOSE_EXECUTION:
-
+                break;
 
             default:
                 throw new IllegalArgumentException("Неверное название типа операции:" + executionOfDocument.getTypeExecutionOperation());
         }
-
-
     }
 
 }

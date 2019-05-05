@@ -1,5 +1,6 @@
 package ru.motiw.mobile.steps.Folders;
 
+import com.codeborne.selenide.ex.ElementNotFound;
 import ru.motiw.mobile.elements.Documents.DocumentElementsMobile;
 import ru.motiw.mobile.elements.Internal.GridOfFolderElementsMobile;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
@@ -31,7 +32,7 @@ public class GridOfFoldersSteps extends InternalStepsMobile {
         try {
             gridOfFolderElementsMobile.getFolder(folder.getNameFolder()).click();
             sleep(500);//ожидание грида
-        } catch (Throwable e) {
+        } catch (ElementNotFound e) {
             e.printStackTrace();
             fail("Не найдена папка");
         }

@@ -7,6 +7,7 @@ import ru.motiw.web.model.DocflowAdministration.RouteSchemeEditor.RouteSchemeEdi
 import ru.motiw.web.model.Tasks.Project;
 import ru.motiw.web.model.Administration.Users.Department;
 import ru.motiw.web.model.Administration.Users.Employee;
+import ru.motiw.web.model.Tasks.Task;
 
 /**
  * Модель объекта - Документ (форма создания / редактирования документа)
@@ -26,10 +27,10 @@ public class Document {
     private DictionaryEditorField valueDictionaryEditor;
     private RouteSchemeEditor routeScheme;
     private Integer numberOfFiles;
+    private Task[] resolutionOfDocument;
 
     /**
      * Тип документа
-     *
      */
     public DocRegisterCards getDocumentType() {
         return documentType;
@@ -54,7 +55,6 @@ public class Document {
 
     /**
      * Проект документа
-     *
      */
     public Project getProject() {
         return project;
@@ -67,7 +67,6 @@ public class Document {
 
     /**
      * Поля Типа документа
-     *
      */
     public FieldDocument[] getDocumentFields() {
         return docFields;
@@ -80,7 +79,6 @@ public class Document {
 
     /**
      * Значение для поля типа - "Словарь"
-     *
      */
     public DictionaryEditorField getValueDictionaryEditor() {
         return valueDictionaryEditor;
@@ -93,7 +91,6 @@ public class Document {
 
     /**
      * Значение для поля типа - "Подразделение"
-     *
      */
     public Department[] getValueDepartment() {
         return valueDepartment;
@@ -106,7 +103,6 @@ public class Document {
 
     /**
      * Значение для поля типа - "Сотрудник"
-     *
      */
     public Employee[] getValueEmployee() {
         return valueEmployee;
@@ -119,7 +115,6 @@ public class Document {
 
     /**
      * Значения поля документа
-     *
      */
     public String getValueField() {
         return valueField;
@@ -132,7 +127,6 @@ public class Document {
 
     /**
      * Значения в системном поля типа "Файл"
-     *
      */
 
     public String[] getValueFiles() {
@@ -147,7 +141,6 @@ public class Document {
 
     /**
      * Название - Маршрутной схемы
-     *
      */
     public RouteSchemeEditor getRouteSchemeForDocument() {
         return routeScheme;
@@ -171,11 +164,26 @@ public class Document {
     }
 
     /**
+     * Резолюция документа
+     * Основные атрибуты резолюции являются частью объекта Task, но также для резолюции могут быть специфические атрибуты. см. класс Resolution
+     *
+     * @return
+     */
+    public Task[] getResolutionOfDocument() {
+        return resolutionOfDocument;
+    }
+
+    public Document setResolutionOfDocument(Task[] resolutionOfDocument) {
+        this.resolutionOfDocument = resolutionOfDocument;
+        return this;
+    }
+
+    /**
      * Кол-во прикрепленных файлов
      * При каждом обращении к методу будет считаться кол-во прикрепляемых файлов
      */
-    public int  getNumberOfFiles() {
-        if(numberOfFiles == null) {
+    public int getNumberOfFiles() {
+        if (numberOfFiles == null) {
             setNumberOfFiles();
         }
         return numberOfFiles;
@@ -194,13 +202,14 @@ public class Document {
 
     /**
      * Выполняемые операции в карточке документа
+     *
      * @return
      */
     public ExecutionOfDocument[] getExecutionOfDocument() {
         return executionOfDocument;
     }
 
-    public Document setExecutionOfDocument (ExecutionOfDocument[] executionOfDocument) {
+    public Document setExecutionOfDocument(ExecutionOfDocument[] executionOfDocument) {
         this.executionOfDocument = executionOfDocument;
         return this;
     }
@@ -209,6 +218,7 @@ public class Document {
      * Этап Документа
      * на рассмотрении - false
      * на исполнении - true
+     *
      * @return
      */
     public boolean isOnExecution() {

@@ -9,7 +9,9 @@ import ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.DocReg
 import ru.motiw.web.model.DocflowAdministration.RouteSchemeEditor.RouteSchemeEditor;
 import ru.motiw.web.model.Document.Document;
 import ru.motiw.web.model.Document.ExecutionOfDocument;
+import ru.motiw.web.model.Document.Resolution;
 import ru.motiw.web.model.Tasks.Folder;
+import ru.motiw.web.model.Tasks.Task;
 
 import static ru.motiw.data.dataproviders.Administration.getRandomDepartment;
 import static ru.motiw.data.dataproviders.Administration.getRandomEmployer;
@@ -33,7 +35,7 @@ public abstract class DocflowAdministrationMobile extends BaseTest {
     //---------------------------------------------------------------------------------------------------------- Инициализируем объект - Подразделение и Пользователь
     Department[] department = new Department[]{getRandomDepartment()};
 
-    Employee[] employee = new Employee[]{getRandomEmployer(), getRandomEmployer(), getRandomEmployer()};
+    Employee[] employee = new Employee[]{getRandomEmployer()};
 
     // Инициализация РКД и её настроек
     DocRegisterCards registerCards = new DocRegisterCards("wD_Тестовая карточка " + randomString(20))
@@ -71,7 +73,13 @@ public abstract class DocflowAdministrationMobile extends BaseTest {
 
                     }
             )
-            .setOnExecution(false); // Документ на рассмотрении
+            .setResolutionOfDocument(new Task[]{
+                    new Resolution()
+                            .setTextOfResolution(randomString(21))
+                            .setAuthorDefault(ADMIN)
+                            .setExecutiveManagers(employee)
+
+            }); // Резолюция
 
 
     // ----------------------------------------------------------------------------------------------------------- Инициализация Папки

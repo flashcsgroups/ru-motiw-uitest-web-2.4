@@ -25,7 +25,9 @@ import ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.DocReg
 import ru.motiw.web.model.DocflowAdministration.RouteSchemeEditor.RouteSchemeEditor;
 import ru.motiw.web.model.Document.Document;
 import ru.motiw.web.model.Document.ExecutionOfDocument;
+import ru.motiw.web.model.Document.Resolution;
 import ru.motiw.web.model.Tasks.Folder;
+import ru.motiw.web.model.Tasks.Task;
 import ru.motiw.web.steps.Administration.Users.UsersSteps;
 import ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditConnectedRoutesSteps;
 import ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditGeneralSteps;
@@ -238,10 +240,16 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
                                         .setExecutionOperation(2, ADMIN, CREATE_RESOLUTION),
 
                                 new ExecutionOfDocument()
-                                        .setExecutionOperation(1, qqq[0], MOVE_TO_EXECUTION),
+                                        .setExecutionOperation(12, qqq[0], MOVE_TO_EXECUTION),
 
                         })
-                .setOnExecution(false); // Документ на рассмотрении
+                .setResolutionOfDocument(new Task[]{
+                        new Resolution()
+                                .setTextOfResolution(randomString(21))
+                                .setAuthorDefault(EMPLOYEE_ADMIN)
+                                .setExecutiveManagers(qqq)
+
+                });
 
 
         // Проверка карточки под разными пользователями

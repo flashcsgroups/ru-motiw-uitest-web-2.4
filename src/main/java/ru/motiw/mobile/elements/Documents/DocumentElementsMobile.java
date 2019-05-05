@@ -1,5 +1,6 @@
 package ru.motiw.mobile.elements.Documents;
 
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
@@ -14,12 +15,24 @@ public class DocumentElementsMobile {
     @FindBy(xpath = "//div[contains(@id,\"ext-formdialog\") and contains(@class,\"x-dialog\") and not (contains(@class,\"x-hidden\"))]")
     private SelenideElement formOfResolution;
 
+    @FindBy(xpath = "//div[contains(@id,\"ext-resolutionlist-item\")]")
+    private ElementsCollection itemInResolutionList;
+
+
     /**
      *  Форма резолюции отображаемаемая в данный момент
      * @return
      */
     public SelenideElement getFormOfResolution() {
         return formOfResolution;
+    }
+
+    /**
+     * Карточки предпросмотра резолюции в списке резолюций
+     * @return
+     */
+    public ElementsCollection getItemInResolutionList() {
+        return itemInResolutionList;
     }
 
     /**
