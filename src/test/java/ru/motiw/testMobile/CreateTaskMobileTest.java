@@ -197,9 +197,9 @@ public class CreateTaskMobileTest extends TasksMobile {
         //----------------------------------------------------------------ГРИД - Папка
         sleep(500); //ожидание папок;
         // Проверяем отображение созданной задачи в гриде папки
-        gridOfFoldersSteps.checkDisplayTaskInGrid(editTask, folder[0]);
+        gridOfFoldersSteps.checkDisplayItemInGrid(editTask.getTaskName(), folder[0]);
         //Переход в задачу из грида
-        gridOfFoldersSteps.openTaskInGrid(editTask);
+        gridOfFoldersSteps.openItemInGrid(editTask.getTaskName(), folder[0]);
 
         //Проверка всех отредактированных полей после перезагрузки страницы
         taskStepsMobile.verifyCreatedTask(editTask);
@@ -209,7 +209,7 @@ public class CreateTaskMobileTest extends TasksMobile {
         //Завершаем задачу
         closeTaskStepsMobile.closeTask();
         //Проверяем исчезновение задачи в гриде папки
-        gridOfFoldersSteps.checkDisappearTaskInGrid(editTask, folder[0]);
+        gridOfFoldersSteps.checkDisappearItemInGrid(editTask.getTaskName(), folder[0]);
         //todo переход в завершенную задачу по id, проверка добавленного комментрия при завершении задачи
         // Выход из системы
         internalPageStepsMobile.logout();
@@ -250,9 +250,9 @@ public class CreateTaskMobileTest extends TasksMobile {
         //----------------------------------------------------------------ГРИД - Папка
         sleep(500); //ожидание папок;
         // Проверяем отображение созданной задачи в гриде папки
-        gridOfFoldersSteps.checkDisplayTaskInGrid(editTask, folder[0]);
+        gridOfFoldersSteps.checkDisplayItemInGrid(editTask.getTaskName(), folder[0]);
         //Переход в задачу из грида
-        gridOfFoldersSteps.openTaskInGrid(editTask);
+        gridOfFoldersSteps.openItemInGrid(editTask.getTaskName(), folder[0]);
 
         //Проверка всех отредактированных полей после перезагрузки страницы
         taskStepsMobile.verifyCreatedTask(editTask);
@@ -262,7 +262,7 @@ public class CreateTaskMobileTest extends TasksMobile {
         //Завершаем задачу
         closeTaskStepsMobile.closeTask();
         //Проверяем исчезновение задачи в гриде папки
-        gridOfFoldersSteps.checkDisappearTaskInGrid(editTask, folder[0]);
+        gridOfFoldersSteps.checkDisappearItemInGrid(editTask.getTaskName(), folder[0]);
         //todo переход в завершенную задачу по id, проверка добавленного комментрия при завершении задачи
         // Выход из системы
         internalPageStepsMobile.logout();
@@ -277,7 +277,7 @@ public class CreateTaskMobileTest extends TasksMobile {
         //----------------------------------------------------------------ГРИД - Папка
         sleep(500); //ожидание папок;
         // Проверяем отображение созданной задачи в гриде папки
-        gridOfFoldersSteps.checkDisplayTaskInGrid(editTask, folder[0]);
+        gridOfFoldersSteps.checkDisplayItemInGrid(editTask.getTaskName(), folder[0]);
 
 //        newTaskStepsMobile.goToCreateOfNewTask();
 //        sleep(1000);

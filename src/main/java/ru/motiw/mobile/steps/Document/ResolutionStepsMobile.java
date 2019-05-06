@@ -1,7 +1,6 @@
 package ru.motiw.mobile.steps.Document;
 
 import com.codeborne.selenide.CollectionCondition;
-import org.openqa.selenium.By;
 import ru.motiw.mobile.elements.Documents.DocumentElementsMobile;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
 import ru.motiw.mobile.model.Document.OperationsOfDocument;
@@ -12,7 +11,6 @@ import ru.motiw.web.model.Document.Resolution;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.page;
 
 /**
@@ -58,9 +56,12 @@ public class ResolutionStepsMobile {
     public ResolutionStepsMobile verifyCreatedResolution(Document document, Resolution resolution) {
         documentElementsMobile.getButtonOfTab(OperationsOfDocument.LIST_OF_RESOLUTION.getNameOperation()).click();
         documentElementsMobile.getItemInResolutionList().shouldBe(CollectionCondition.sizeGreaterThan(0), 20000);
-        $(By.xpath("//div[@class=\"x-component x-label resolution-list-text x-layout-auto-item\"]//div[@class=\"x-innerhtml\"]")).shouldHave(text(resolution.getTextOfResolution()));
-        $(By.xpath("//div[@class=\"x-component x-label resolution-list-authors x-layout-box-item x-layout-hbox-item\"]//div[@class=\"x-innerhtml\"]")).shouldHave(text(resolution.getAuthorDefault().getLastName()));
-        // todo в случае наличия нескольких резолюций эти xpath будут возвращать все резолюциии, нужно проверять в цикле
+
+        // Проверяем текст резолюции в списке резолюций
+        documentElementsMobile.getTextOfResolutionInCertainItem(resolution.getTextOfResolution()).shouldBe(visible);
+        // Проверяем автора резолюции в списке резолюций
+        documentElementsMobile.getAuthorsOfResolutionInCertainItem(resolution.getTextOfResolution()).shouldHave(text(resolution.getAuthorDefault().getLastName()));
+
         return this;
     }
 

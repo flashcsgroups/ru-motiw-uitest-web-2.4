@@ -8,7 +8,6 @@ import ru.motiw.mobile.model.Document.RoleOfUser;
 import ru.motiw.mobile.steps.InternalStepsMobile;
 import ru.motiw.web.model.Document.Document;
 import ru.motiw.web.model.Tasks.Folder;
-import ru.motiw.web.model.Tasks.Task;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
@@ -31,41 +30,39 @@ public class GridOfFoldersSteps extends InternalStepsMobile {
     public GridOfFoldersSteps openFolder(Folder folder) {
         try {
             gridOfFolderElementsMobile.getFolder(folder.getNameFolder()).click();
-            sleep(500);//ожидание грида
+            gridOfFolderElementsMobile.getItemHeaderOfGridFolder().waitUntil(appear, 2000);
         } catch (ElementNotFound e) {
             e.printStackTrace();
             fail("Не найдена папка");
         }
-        gridOfFolderElementsMobile.getListOfGridFolder().waitUntil(appear, 2000);
         return this;
     }
 
+
     /**
-     * Проверяем отображение созданной задачи в гриде раздела - Папки
+     * Проверяем отображение созданного объекта в гриде раздела - Папки
      *
-     * @param task       return values of attributes of the task
-     * @param folderTask наименование папки в к-й будет содержаться созданный объект - Задача
+     * @param nameOfItem уникальный текст по которому ищем объект в гриде (наименование задачи, наименование типа документа)
+     * @param folderTask наименование папки в к-й будет содержаться созданный объект
      * @return GridOfFoldersSteps
      */
-    public GridOfFoldersSteps checkDisplayTaskInGrid(Task task, Folder folderTask) {
+    public GridOfFoldersSteps checkDisplayItemInGrid(String nameOfItem, Folder folderTask) {
         if (!internalElementsMobile.getMainTitle().is(text(folderTask.getNameFolder())))
         {
             openFolder(folderTask);  // входим в созданную папку
         }
-        gridOfFolderElementsMobile.getItemInTheGrid(task.getTaskName())
-                .shouldHave(exactText(task.getTaskName())); // проверяем отображение созданной задачи в гриде (отображается наименование задачи)
+        gridOfFolderElementsMobile.getItemInTheGrid(nameOfItem).waitUntil(visible, 2000); // проверяем отображение созданного объекта в гриде (отображается наименование задачи)
         return this;
     }
 
     /**
-     * Проверяем исчезновение задачи в гриде раздела - Задачи
+     * Проверяем исчезновение объекта в гриде раздела - Папки
      *
-     * @param task return values of attributes of the task
+     * @param nameOfItem уникальный текст по которому ищем объект в гриде (наименование задачи, наименование типа документа)
      * @return
      */
-    public GridOfFoldersSteps checkDisappearTaskInGrid(Task task, Folder folder) {
+    public GridOfFoldersSteps checkDisappearItemInGrid(String nameOfItem, Folder folder) {
 
-        //sleep(2000);
         // Если после завершения задачи мы не перешли в папку, то переходим в созданную папку
         if (!internalElementsMobile.getMainTitle().is(text(folder.getNameFolder()))) {
             goToHome();
@@ -75,63 +72,31 @@ public class GridOfFoldersSteps extends InternalStepsMobile {
         // Если пакет amq ещё не пришел, то грид может не обновиться. Поэтому делаем так:
         // 1. проверяем на отображение завершенной задачи в гриде.
         // 2. и если завершенная задача продолжает отображаться, то перезагружаем страницу и проверяем снова.
-        if ((gridOfFolderElementsMobile.getItemInTheGrid(task.getTaskName()).isDisplayed())) {
+        if ((gridOfFolderElementsMobile.getItemInTheGrid(nameOfItem).isDisplayed())) {
             refresh();
-            sleep(5000);// Todo может недожидаться на самом деле грида, и проходить. надо ожидание грида нормально реализовать
-            (gridOfFolderElementsMobile.getItemInTheGrid(task.getTaskName())).shouldNotBe(visible);
+            gridOfFolderElementsMobile.getItemHeaderOfGridFolder().waitUntil(appear, 5000);
+            (gridOfFolderElementsMobile.getItemInTheGrid(nameOfItem)).shouldNotBe(visible);
         }
 
-
-        return this;
-    }
-
-    /**
-     * Проверяем отображение созданного документа в гриде раздела - Папки
-     *
-     * @param document return values of attributes of the document
-     * @param folder   наименование папки в к-й будет содержаться созданный объект - Документ
-     * @return GridOfFoldersSteps
-     */
-    public GridOfFoldersSteps checkDisplayDocumentInGrid(Document document, Folder folder) {
-        if (!internalElementsMobile.getMainTitle().is(text(folder.getNameFolder())))
-        {
-            openFolder(folder);  // входим в созданную папку
-        }
-        gridOfFolderElementsMobile.getItemInTheGrid(document.getDocumentType().getDocRegisterCardsName())
-                .waitUntil(visible, 2000)
-                .shouldHave(exactText(document.getDocumentType().getDocRegisterCardsName())); // проверяем отображение созданного документа в гриде (отображается наименование типа документа )
         return this;
     }
 
 
     /**
-     * Открываем задачу в гриде папки
+     * Открываем объект в гриде папки
      *
-     * @param task return values of attributes of the task
+     * @param nameOfItem уникальный текст по которому ищем объект в гриде (наименование задачи, наименование типа документа)
      * @return
      */
-    public GridOfFoldersSteps openTaskInGrid(Task task) {
-        gridOfFolderElementsMobile.getItemInTheGrid(task.getTaskName()).click();
-        sleep(500);
-        return page(GridOfFoldersSteps.class);
-    }
-
-
-    /**
-     * Открываем документ в гриде папки
-     *
-     * @param document return values of attributes of the document
-     * @return
-     */
-    public GridOfFoldersSteps openDocumentInGrid(Document document, Folder folder) {
+    public GridOfFoldersSteps openItemInGrid(String nameOfItem, Folder folder) {
 
         if (!internalElementsMobile.getMainTitle().is(text(folder.getNameFolder()))) // Если мы не в папке, то переходим в неё
         {
             openFolder(folder);  // входим в созданную папку
         }
 
-        gridOfFolderElementsMobile.getItemInTheGrid(document.getDocumentType().getDocRegisterCardsName()).click(); // Открываем по записи, которая содержит Тип документа.
-        // todo нужно чтобы шаблон отображения в арме имел более уникальное значение чем Тип документа.  Открывать записи по такому уникальному значению.
+        gridOfFolderElementsMobile.getItemInTheGrid(nameOfItem).click(); // Открываем по записи, которая содержит Тип документа.
+
         sleep(500);
         return page(GridOfFoldersSteps.class);
     }
@@ -170,9 +135,8 @@ public class GridOfFoldersSteps extends InternalStepsMobile {
             openFolder(folder);  // входим в созданную папку
         }
 
-
         // Если пакет amq ещё не пришел, то грид может не обновиться. Поэтому делаем так:
-        // 1. проверяем на отображение завершенной Признака в гриде.
+        // 1. проверяем на отображение Признака в гриде.
         // 2. если Признак продолжает отображаться, то перезагружаем страницу и проверяем снова.
         if ((gridOfFolderElementsMobile.getMarkOfNewItem(document.getDocumentType().getDocRegisterCardsName()).isDisplayed())) {
             refresh();

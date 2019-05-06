@@ -17,13 +17,27 @@ public class GridOfFolderElementsMobile {
     @FindBy(xpath = "//div[contains(@id,\"ext-tasklist\") and not (contains(@class,\"x-hidden\"))]//div[contains(@class,\"x-list-outer-ct x-scroller\")]")
     private SelenideElement listOfGridFolder;
 
+    @FindBy(xpath = "//div[contains(@id,\"ext-itemheader\")]")
+    private SelenideElement itemHeaderOfGridFolder;
+
     /**
      * Элемент в котором расположены объекты (задача или документа) в Гриде Папки
+     *
      * @return
      */
     public SelenideElement getListOfGridFolder() {
         return listOfGridFolder;
     }
+
+    /**
+     * Элемент c названием группировки Грида Папки (Новые/Непрочитанные)
+     *
+     * @return
+     */
+    public SelenideElement getItemHeaderOfGridFolder() {
+        return itemHeaderOfGridFolder;
+    }
+
 
     /**
      * Элемент для открытия объекта (задача или документа) в гриде папки
@@ -93,6 +107,7 @@ public class GridOfFolderElementsMobile {
 
     /**
      * Операция в конт.меню объекта (задачи\документа) в гриде папки
+     *
      * @param nameOfOperation
      * @return
      */

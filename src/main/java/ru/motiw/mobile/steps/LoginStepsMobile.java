@@ -8,6 +8,7 @@ import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.steps.BaseSteps;
 
 import static com.codeborne.selenide.Selenide.page;
+import static com.codeborne.selenide.Selenide.sleep;
 
 /*
  * Страница авторизации - Mobile

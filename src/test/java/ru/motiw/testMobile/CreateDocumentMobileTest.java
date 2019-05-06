@@ -41,8 +41,7 @@ import static com.codeborne.selenide.WebDriverRunner.clearBrowserCache;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testng.AssertJUnit.assertTrue;
 import static ru.motiw.data.dataproviders.Tasks.getRandomProject;
-import static ru.motiw.mobile.model.Document.TypeOperationsOfDocument.CREATE_RESOLUTION;
-import static ru.motiw.mobile.model.Document.TypeOperationsOfDocument.MOVE_TO_EXECUTION;
+import static ru.motiw.mobile.model.Document.TypeOperationsOfDocument.CLOSE_EXECUTION;
 import static ru.motiw.web.steps.Administration.Users.DepartmentSteps.goToURLDepartments;
 import static ru.motiw.web.steps.Documents.CreateDocument.NewDocumentSteps.goToURLNewDocument;
 import static ru.motiw.web.steps.Tasks.UnionTasksSteps.goToUnionTasks;
@@ -178,7 +177,7 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
 //        //Создаем task
 //        gridOfFoldersSteps.checkDisplayDocumentInGrid(document, folders[0]);
 //        //Переход в документ из грида
-//        gridOfFoldersSteps.openDocumentInGrid(document);
+//        gridOfFoldersSteps.openItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folders[0]);
 //
 //        //----------------------------------------------------------------ФОРМА - Документ
 //        documentStepsMobile0.verifyPageOfDocument(document);
@@ -237,10 +236,10 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
                 .setExecutionOfDocument(new ExecutionOfDocument[]
                         {
                                 new ExecutionOfDocument()
-                                        .setExecutionOperation(2, ADMIN, CREATE_RESOLUTION),
+                                        .setExecutionOperation(1, ADMIN, CLOSE_EXECUTION),
 
                                 new ExecutionOfDocument()
-                                        .setExecutionOperation(12, qqq[0], MOVE_TO_EXECUTION),
+                                        .setExecutionOperation(2, qqq[0], CLOSE_EXECUTION),
 
                         })
                 .setResolutionOfDocument(new Task[]{
@@ -257,7 +256,7 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
         // Выполнение действий с документом под разными пользователями
         //1.Выполнение операций
         //2. Комментарии на файле
-        executionDocumentStepsMobile.executionOnDifferentUsers(document1, folder1[0], TypeOfExecutionPlace.CONTEXT_MENU_IN_THE_GRID_FOLDER);
+        executionDocumentStepsMobile.executionOnDifferentUsers(document1, folder1[0], TypeOfExecutionPlace.DOCUMENT_CARD);
 
         // проверку на выполненую операцию нужно делать после каждой операциии. пример, одно из действий заврешение документа - документа не будет в гриде просто
         // или проверять тоько последнюю совершенную операци?

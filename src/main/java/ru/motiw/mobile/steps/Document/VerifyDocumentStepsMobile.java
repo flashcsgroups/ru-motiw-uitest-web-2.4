@@ -72,7 +72,7 @@ public class VerifyDocumentStepsMobile extends DocumentStepsMobile {
         //----------------------------------------------------------------ГРИД - Папка
         sleep(500); //ожидание папок;
         // Проверяем отображение созданного документа в гриде папки
-        gridOfFoldersSteps.checkDisplayDocumentInGrid(document, folders[0]);
+        gridOfFoldersSteps.checkDisplayItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folders[0]);
 
         // Проверяем отображение или отсутствие признака нового документа в гриде папки
         gridOfFoldersSteps.verifyMarkOfNewDocument(document, roleOfUser);
@@ -81,7 +81,7 @@ public class VerifyDocumentStepsMobile extends DocumentStepsMobile {
         verifyOperationForDocumentInTheGrid(document, roleOfUser);
 
         //Переход в документ из грида
-        gridOfFoldersSteps.openDocumentInGrid(document, folders[0]);
+        gridOfFoldersSteps.openItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folders[0]); // todo нужно чтобы шаблон отображения в арме имел более уникальное значение чем Тип документа.  Открывать записи по такому уникальному значению.
         //----------------------------------------------------------------ФОРМА - Документ
         verifyPageOfDocument(document, roleOfUser);
 

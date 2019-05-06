@@ -18,9 +18,15 @@ public class DocumentElementsMobile {
     @FindBy(xpath = "//div[contains(@id,\"ext-resolutionlist-item\")]")
     private ElementsCollection itemInResolutionList;
 
+    @FindBy(xpath = "//div[@class=\"x-component x-label resolution-list-text x-layout-auto-item\"]//div[@class=\"x-innerhtml\"]")
+    private ElementsCollection textOfResolutionInItemInResolutionList;
+
+    @FindBy(xpath = "//div[@class=\"x-component x-label resolution-list-authors x-layout-box-item x-layout-hbox-item\"]//div[@class=\"x-innerhtml\"]")
+    private ElementsCollection authorsOfResolutionInItemInResolutionList;
 
     /**
-     *  Форма резолюции отображаемаемая в данный момент
+     * Форма резолюции отображаемаемая в данный момент
+     *
      * @return
      */
     public SelenideElement getFormOfResolution() {
@@ -29,6 +35,7 @@ public class DocumentElementsMobile {
 
     /**
      * Карточки предпросмотра резолюции в списке резолюций
+     *
      * @return
      */
     public ElementsCollection getItemInResolutionList() {
@@ -36,7 +43,48 @@ public class DocumentElementsMobile {
     }
 
     /**
+     * Текст резолюции в списке резолюций
+     *
+     * @return все элементы из списка всех резолюций
+     */
+    public ElementsCollection getTextOfResolutionInItemInResolutionList() {
+        return textOfResolutionInItemInResolutionList;
+    }
+
+    /**
+     * Автор резолюции в списке резолюций
+     *
+     * @return все элементы из списка всех резолюций
+     */
+    public ElementsCollection getAuthorsOfResolutionInItemInResolutionList() {
+        return authorsOfResolutionInItemInResolutionList;
+    }
+
+    /**
+     * Автор резолюции в конкретной карточке списка резолюций
+     *
+     * @param textOfResolution Текст резолюции
+     * @return
+     */
+    public SelenideElement getAuthorsOfResolutionInCertainItem(String textOfResolution) {
+        return $(By.xpath("//div[contains(text(),'" + textOfResolution + "')]/ancestor::div[contains(@id,\"ext-resolutionlist-item\")]" +
+                "//div[@class=\"x-component x-label resolution-list-authors x-layout-box-item x-layout-hbox-item\"]" +
+                "//div[@class=\"x-innerhtml\"]"));
+    }
+
+    /**
+     * Текст резолюции в конкретной карточке списка резолюций
+     *
+     * @param textOfResolution Текст резолюции
+     * @return
+     */
+    public SelenideElement getTextOfResolutionInCertainItem(String textOfResolution) {
+        return $(By.xpath("//div[@class=\"x-component x-label resolution-list-text x-layout-auto-item\"]//div[contains(text(),'" + textOfResolution + "')]"));
+    }
+
+    /**
      * Кнопки на тулбаре
+     *
      * @param nameOfButton название кнопки
      * @return
      */
@@ -46,7 +94,7 @@ public class DocumentElementsMobile {
     }
 
     /**
-     *  input поля Тип Сотрудник в форме резолюции
+     * input поля Тип Сотрудник в форме резолюции
      */
     public SelenideElement getInputEmployeeFieldInFormOfCreateResolution(String nameField) {
         return $(By.xpath("//div[contains(@id,\"ext-formdialog\") and contains(@class,\"x-dialog\") and not (contains(@class,\"x-hidden\"))]" +
@@ -55,7 +103,7 @@ public class DocumentElementsMobile {
     }
 
     /**
-     *  textarea в форме резолюции
+     * textarea в форме резолюции
      */
     public SelenideElement getTextareaInFormOfCreateResolution(String nameField) {
         return $(By.xpath("//div[contains(@id,\"ext-formdialog\") and contains(@class,\"x-dialog\") and not (contains(@class,\"x-hidden\"))]" +
