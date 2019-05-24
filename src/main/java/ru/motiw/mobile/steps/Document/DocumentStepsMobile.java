@@ -6,11 +6,17 @@ import ru.motiw.mobile.elements.Internal.GridOfFolderElementsMobile;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
 import ru.motiw.mobile.elements.Tasks.TaskElementsMobile;
 import ru.motiw.mobile.model.Document.OperationsOfDocument;
-import ru.motiw.mobile.model.Document.RoleOfUser;
 import ru.motiw.mobile.model.Document.TypeOperationsOfDocument;
 import ru.motiw.mobile.steps.Folders.GridOfFoldersSteps;
 import ru.motiw.mobile.steps.Tasks.TaskStepsMobile;
+import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Document.Document;
+import ru.motiw.web.model.Document.OperationOfDocument;
+import ru.motiw.web.model.Document.Resolution;
+import ru.motiw.web.model.Tasks.Task;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
@@ -31,55 +37,217 @@ public class DocumentStepsMobile {
 
 
     /**
-     * Проверка кнопок доступных операций в гриде или в карточке документа
+     * Проверка доступных операций в гриде или в карточке документа
      * Набор кнопок зависит от роли пользователя и от того, на каком этапе находится документ ( на рассмотрении - false, на исполнении - true)
-     *
-     * @param onExecution на рассмотрении - false, на исполнении - true)
+     * <p>
+     * isOnExecution на рассмотрении - false, на исполнении - true)
      */
-    public void verifyAccessToOperations(Boolean onExecution, RoleOfUser role) {
+    public void verifyAccessToOperations(Document document, Employee currentUser) {
 
-        verifyAccessToOperationsOnlyInDocumentForm(onExecution, OperationsOfDocument.LIST_OF_RESOLUTION.getNameOperation());
+        // Проверка кнопки операции "Список резолюций"
+        verifyAccessToOperationsOnlyInDocumentForm(document.isOnExecution(), OperationsOfDocument.LIST_OF_RESOLUTION.getNameOperation());
 
-        if (!onExecution) {
-            getElementOfOperation(OperationsOfDocument.MOVE_TO_EXECUTION.getNameOperation()).shouldBe(visible);
-            getElementOfOperation(OperationsOfDocument.MOVE_TO_ARCHIVE.getNameOperation()).shouldBe(visible);
-            getElementOfOperation(OperationsOfDocument.CLOSE_EXECUTION.getNameOperation()).shouldNotBe(visible);
+        // Документ не на исполнении - Автор документа
+        if (!document.isOnExecution() && document.getAuthorOfDocument() == currentUser) {
+            verifySetOfOperationForDocument(
+                    new OperationOfDocument()
+                            .setMoveToExecution(true)
+                            .setMoveToArchive(true)
+                            .setCreateResolution(true));
         }
 
-        if (onExecution) {
-            getElementOfOperation(OperationsOfDocument.CLOSE_EXECUTION.getNameOperation()).shouldBe(visible);
-            getElementOfOperation(OperationsOfDocument.MOVE_TO_EXECUTION.getNameOperation()).shouldNotBe(visible);
-            getElementOfOperation(OperationsOfDocument.MOVE_TO_ARCHIVE.getNameOperation()).shouldNotBe(visible);
+        // Документ не на исполнении - Рассматривающий документа
+        if (!document.isOnExecution() && compareCurrentUserAndUserInDocument(document.getRouteSchemeForDocument().getUserRoute(), currentUser)) {
+            verifySetOfOperationForDocument(
+                    new OperationOfDocument()
+                            .setMoveToExecution(true)
+                            .setMoveToArchive(true));
         }
 
-        switch (role) {
-            case AUTHOR:
+        // ----------- Документ на исполнении (создана резолюция)
+        if (document.isOnExecution()) {
+
+            // список всех резолюций по документу
+            List<Resolution> resolutions = new ArrayList<>();
+
+            for (Task resolution : document.getResolutionOfDocument()) {
+                resolutions.add((Resolution) resolution);
+            }
+            // Наличие отправленного отчета по исполнению резолюции
+            boolean resolutionWithReportOfExecution = resolutionWithReportOfExecution(resolutions);
+
+            // ----------- Отчет по исполнению резолюции не отправлен
+            if (!resolutionWithReportOfExecution) {
+                // Документ на исполнении и Отчет по исполнению резолюции не отправлен - Автор документа
+                if (document.getAuthorOfDocument() == currentUser) {
+                    verifySetOfOperationForDocument(
+                            new OperationOfDocument()
+                                    .setCloseExecution(true)
+                                    .setCreateResolution(true));
+                }
+
+                // Документ на исполнении и Отчет по исполнению резолюции не отправлен -  Рассматривающий документа
+                if (compareCurrentUserAndUserInDocument(document.getRouteSchemeForDocument().getUserRoute(), currentUser)) {
+                    verifySetOfOperationForDocument(
+                            new OperationOfDocument());
+                }
+
+                // Документ на исполнении и Отчет по исполнению резолюции не отправлен -  Отв.Исполнитель резолюции
+                for (Resolution resolution : resolutions) {
+                    if (compareCurrentUserAndUserInDocument(resolution.getExecutiveManagers(), currentUser)) {
+                        verifySetOfOperationForDocument(
+                                new OperationOfDocument()
+                                        .setCloseExecution(true));
+                    }
+                }
+            }
+
+            // -----------  Отчет по исполнению резолюции отправлен
+            if (resolutionWithReportOfExecution) {
+                // Отчет по исполнению резолюции отправлен - Автор документа
+                if (document.getAuthorOfDocument() == currentUser) {
+                    verifySetOfOperationForDocument(
+                            new OperationOfDocument()
+                                    .setReturnToExecution(true)
+                                    .setCloseExecution(true)
+                                    .setCreateResolution(true));
+                }
+
+
+                // Отчет по исполнению резолюции отправлен - Рассматривающий документа
+                if (compareCurrentUserAndUserInDocument(document.getRouteSchemeForDocument().getUserRoute(), currentUser)) {
+                    verifySetOfOperationForDocument(
+                            new OperationOfDocument());
+                }
+
+
+                // Отчет по исполнению Документа отправлен - Отв.Исполнитель резолюции
+
+                for (Resolution resolution : resolutions)
+                    if (resolution.getExecutiveManagers() != null) {
+                        if (compareCurrentUserAndUserInDocument(resolution.getExecutiveManagers(), currentUser)) {
+                            // отчет по резолюции, где текущий пользователь отв.рук отправлен
+                            if (resolution.isReportOfExecution()) {
+                                verifySetOfOperationForDocument(
+                                        new OperationOfDocument());
+                            }
+
+                            // отчет по резолюции, где текущий пользователь отв.рук не отправлен
+                            if (!resolution.isReportOfExecution()) {
+                                verifySetOfOperationForDocument(
+                                        new OperationOfDocument()
+                                                .setCloseExecution(true));
+                            }
+                        }
+                    }
+            }
+        }
+    }
+
+    /**
+     * Метод для нахождения текущего пользователя в массиве пользователей из метаданных документа
+     *
+     * @param usersInDocument
+     * @param currentUser
+     * @return
+     */
+    public boolean compareCurrentUserAndUserInDocument(Employee[] usersInDocument, Employee currentUser) {
+        if (usersInDocument != null)
+            for (Employee userInDocument : usersInDocument) {
+                if (userInDocument == currentUser) {
+                    return true;
+                }
+            }
+
+        return false;
+    }
+
+    /**
+     * Метод для нахождения текущего пользователя среди отв.рук массива резолюций
+     *
+     * @param resolutions
+     * @param currentUser
+     * @return
+     */
+    public boolean compareCurrentUserAndExecutiveManagersInResolutions(Task[] resolutions, Employee currentUser) {
+        if (resolutions != null)
+            for (Task resolution : resolutions) {
+                for (Employee executiveManager : resolution.getExecutiveManagers()) {
+                    if (executiveManager == currentUser) {
+                        return true;
+                    }
+                }
+            }
+        return false;
+    }
+
+
+    /**
+     * Проверка всех резолюций на наличие по ним отправленного отчета по исполнению резолюции
+     * отправлен - true
+     * не отправлен - false
+     *
+     * @param resolutions - список резолюций
+     * @return
+     */
+    private boolean resolutionWithReportOfExecution(List<Resolution> resolutions) {
+        for (Resolution resolution : resolutions) {
+            if (resolution.isReportOfExecution()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Проверка кнопок доступных операций в гриде или в карточке документа
+     *
+     * @param operationOfDocument - Операции Документа
+     */
+    public void verifySetOfOperationForDocument(OperationOfDocument operationOfDocument) {
+
+        // todo тут как-то getElementOfOperation вынести в переменную метода, чтобы при каждой проверке не обращаться к получению элемента
+
+            if (operationOfDocument.isCreateResolution()) {
                 getElementOfOperation(getNameOfOperation(TypeOperationsOfDocument.CREATE_RESOLUTION)).shouldBe(visible);
-                break;
-
-            case CONSIDER_OF_DOCUMENT:
+            } else
                 getElementOfOperation(getNameOfOperation(TypeOperationsOfDocument.CREATE_RESOLUTION)).shouldNotBe(visible);
-                break;
 
-            default:
-                throw new IllegalArgumentException("Неверное название роли:" + role);
-        }
+            if (operationOfDocument.isMoveToExecution()) {
+                getElementOfOperation(OperationsOfDocument.MOVE_TO_EXECUTION.getNameOperation()).shouldBe(visible);
+            } else
+                getElementOfOperation(OperationsOfDocument.MOVE_TO_EXECUTION.getNameOperation()).shouldNotBe(visible);
+
+            if (operationOfDocument.isMoveToArchive()) {
+                getElementOfOperation(OperationsOfDocument.MOVE_TO_ARCHIVE.getNameOperation()).shouldBe(visible);
+            } else
+                getElementOfOperation(OperationsOfDocument.MOVE_TO_ARCHIVE.getNameOperation()).shouldNotBe(visible);
+
+            if (operationOfDocument.isReturnToExecution()) {
+                getElementOfOperation(OperationsOfDocument.RETURN_TO_EXECUTION.getNameOperation()).shouldBe(visible);
+            } else
+                getElementOfOperation(OperationsOfDocument.RETURN_TO_EXECUTION.getNameOperation()).shouldNotBe(visible);
+
+            if (operationOfDocument.isCloseExecution()) {
+                getElementOfOperation(OperationsOfDocument.CLOSE_EXECUTION.getNameOperation()).shouldBe(visible);
+            } else
+                getElementOfOperation(OperationsOfDocument.CLOSE_EXECUTION.getNameOperation()).shouldNotBe(visible);
     }
 
     /**
      * Проверяем наличие доступных операций с документом из грида
      *
      * @param document
-     * @param roleOfUser
      */
-    public void verifyOperationForDocumentInTheGrid(Document document, RoleOfUser roleOfUser) {
+    public void verifyOperationForDocumentInTheGrid(Document document, Employee currentUser) {
         // Открываем меню операций
         gridOfFoldersSteps.clickContextMenuForItemInGrid(document.getDocumentType().getDocRegisterCardsName());
         // Проверяем наличие доступных операций с документом из грида
-        verifyAccessToOperations(document.isOnExecution(), roleOfUser);
+        verifyAccessToOperations(document, currentUser);
         // Закрываем меню операций
         gridOfFoldersSteps.clickContextMenuForItemInGrid(document.getDocumentType().getDocRegisterCardsName());
     }
+
 
     /**
      * Проверка кнопок операций, которые доступны только в карточке документа
@@ -93,9 +261,7 @@ public class DocumentStepsMobile {
         {
             if (!onExecution) {
                 documentElementsMobile.getButtonOfTab(nameOperation).shouldNotBe(visible);
-            }
-
-            if (onExecution) {
+            } else {
                 documentElementsMobile.getButtonOfTab(nameOperation).shouldBe(visible);
             }
         }
@@ -131,6 +297,7 @@ public class DocumentStepsMobile {
     SelenideElement getElementOfOperation(String nameOfOperation) {
 
         SelenideElement elementOfOperation = null;
+
 
         if (!gridOfFolderElementsMobile.getAllItemsInTheGridOfFolder().isEmpty()) // Если мы в гриде
         {
@@ -170,7 +337,7 @@ public class DocumentStepsMobile {
         }
 
         if (nameOfOperationCreateResolution == null) {
-            fail("Для операции " + operation.name() + " отсутствует Название");
+            fail("Для операции " + operation.name() + " отсутствует Название ИЛИ не найдено место выполнения операции");
         }
 
         return nameOfOperationCreateResolution;

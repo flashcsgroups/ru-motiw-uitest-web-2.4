@@ -8,7 +8,7 @@ public enum TypeOperationsOfDocument {
     CREATE_RESOLUTION,
     MOVE_TO_EXECUTION,
     MOVE_TO_ARCHIVE,
-    MOVE_FROM_REFINEMENT_TO_EXECUTION, // Возврат с доработки
+    RETURN_TO_EXECUTION,
     CLOSE_EXECUTION;
 
     TypeOperationsOfDocument() {

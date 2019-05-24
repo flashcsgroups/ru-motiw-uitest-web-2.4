@@ -8,6 +8,7 @@ import ru.motiw.web.model.Tasks.Task;
 public class Resolution extends Task {
 
     private String textOfResolution;
+    private boolean reportOfExecution;
 
 
     /**
@@ -23,4 +24,19 @@ public class Resolution extends Task {
         return this;
     }
 
+    /**
+     * Отчет по исполнению Документа
+     * отчет не отправлен - false
+     * отчет отправлен - true
+     *
+     * @return
+     */
+    public boolean isReportOfExecution() {
+        return reportOfExecution;
+    }
+
+    public Resolution setReportOfExecution(boolean reportOfExecution) {
+        this.reportOfExecution = reportOfExecution;
+        return this;
+    }
 }

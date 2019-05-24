@@ -20,6 +20,9 @@ public class GridOfFolderElementsMobile {
     @FindBy(xpath = "//div[contains(@id,\"ext-itemheader\")]")
     private SelenideElement itemHeaderOfGridFolder;
 
+    @FindBy(xpath = "//div[contains(text(),'Документов нет')]")
+    private SelenideElement textNoHaveDocumentInGridFolder;
+
     /**
      * Элемент в котором расположены объекты (задача или документа) в Гриде Папки
      *
@@ -38,6 +41,14 @@ public class GridOfFolderElementsMobile {
         return itemHeaderOfGridFolder;
     }
 
+    /**
+     * Текст "Документов нет" в Гриде Папки
+     *
+     * @return
+     */
+    public SelenideElement getTextNoHaveDocumentInGridFolder() {
+        return textNoHaveDocumentInGridFolder;
+    }
 
     /**
      * Элемент для открытия объекта (задача или документа) в гриде папки
@@ -97,7 +108,23 @@ public class GridOfFolderElementsMobile {
 
 
     /**
-     * Кнопка конт.меню операций для объекта (задачи\документа) в гриде папки
+     * Маска на кнопке Открытия/закрытия конт.меню объекта(задача или документа) в гриде папки
+     *
+     * @param nameOfObject название задачи или документа, по которому идинтифицируем объект в гриде
+     * @return
+     */
+    public SelenideElement getMaskOnButtonOfCloseContextMenu(String nameOfObject) {
+        return $(By.xpath("//div[contains(@id,\"ext-tasklist-item\")]//div[text()='" + nameOfObject + "']" +
+                "/ancestor::div[contains(@id,\"ext-tasklist-item\")]" +
+                "//div[contains(@id,\"ext-all-lightmask\")]"));
+    }
+
+
+
+
+
+    /**
+     * Конт.меню операций для объекта (задачи\документа) в гриде папки
      *
      * @return
      */

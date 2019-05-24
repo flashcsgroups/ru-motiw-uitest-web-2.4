@@ -13,7 +13,7 @@ import ru.motiw.web.model.Tasks.Task;
  * Модель объекта - Документ (форма создания / редактирования документа)
  */
 public class Document {
-    public ExecutionOfDocument[] executionOfDocument;
+    private ExecutionOfDocument[] executionOfDocument;
     private boolean onExecution = false;
     private DocRegisterCards documentType;
     private FieldDocument[] docFields;
@@ -229,4 +229,5 @@ public class Document {
         this.onExecution = onExecution;
         return this;
     }
+
 }

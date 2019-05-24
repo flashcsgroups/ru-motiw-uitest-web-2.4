@@ -34,7 +34,7 @@ public abstract class BaseTest {
         setDriverByName("chrome");
         /*VideoRecorder.conf()
                 .withVideoFolder("build/reports/video");*/
-        Configuration.baseUrl = http + "192.168.1.5";
+        Configuration.baseUrl = http + "172.22.244.49";
         Configuration.timeout = 8000;
         TextReport.onSucceededTest = true;
         TextReport.onFailedTest = true;
@@ -127,7 +127,7 @@ public abstract class BaseTest {
             .setPassword("admin");
 
     public final static Employee EMPLOYEE_ADMIN = new Employee().setName("admin")
-            .setLastName("admin").setPatronymic("admin");
+            .setLastName("admin").setPatronymic("admin").setLoginName("admin").setPassword("admin");
 
     // -------------------------------Automation Randomizing Data-----------------------------
     public static Random random = new Random();

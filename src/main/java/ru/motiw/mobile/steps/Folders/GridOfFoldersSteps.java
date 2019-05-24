@@ -4,14 +4,15 @@ import com.codeborne.selenide.ex.ElementNotFound;
 import ru.motiw.mobile.elements.Documents.DocumentElementsMobile;
 import ru.motiw.mobile.elements.Internal.GridOfFolderElementsMobile;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
-import ru.motiw.mobile.model.Document.RoleOfUser;
 import ru.motiw.mobile.steps.InternalStepsMobile;
+import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Document.Document;
 import ru.motiw.web.model.Tasks.Folder;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static org.testng.Assert.fail;
+import static ru.motiw.utils.ElementUtil.scrollToAndClick;
 
 /*
  * Страница грида - Папка
@@ -27,15 +28,29 @@ public class GridOfFoldersSteps extends InternalStepsMobile {
     /**
      * Открытие папки
      */
-    public GridOfFoldersSteps openFolder(Folder folder) {
+    public void openFolder(Folder folder) {
         try {
+            sleep(500);
             gridOfFolderElementsMobile.getFolder(folder.getNameFolder()).click();
-            gridOfFolderElementsMobile.getItemHeaderOfGridFolder().waitUntil(appear, 2000);
-        } catch (ElementNotFound e) {
-            e.printStackTrace();
+        } catch (ElementNotFound notFoundFolder) {
+            notFoundFolder.printStackTrace();
             fail("Не найдена папка");
         }
-        return this;
+
+        try {
+            // Ждем элемент с названием группировки Грида Папки
+            gridOfFolderElementsMobile.getItemHeaderOfGridFolder().waitUntil(appear, 2000);
+        } catch (Throwable notFoundItemHeaderOfGridFolder) {
+            try {
+                // Ждем элемент с Текст "Документов нет" в Гриде Папки
+                gridOfFolderElementsMobile.getTextNoHaveDocumentInGridFolder().waitUntil(visible, 2000);
+            } catch (ElementNotFound notFoundTextNoHaveDocumentInGridFolder) {
+                notFoundItemHeaderOfGridFolder.printStackTrace();
+                notFoundTextNoHaveDocumentInGridFolder.printStackTrace();
+                fail("Не найден элемент в гриде папки");
+            }
+        }
+
     }
 
 
@@ -43,13 +58,12 @@ public class GridOfFoldersSteps extends InternalStepsMobile {
      * Проверяем отображение созданного объекта в гриде раздела - Папки
      *
      * @param nameOfItem уникальный текст по которому ищем объект в гриде (наименование задачи, наименование типа документа)
-     * @param folderTask наименование папки в к-й будет содержаться созданный объект
+     * @param folder     наименование папки в к-й будет содержаться созданный объект
      * @return GridOfFoldersSteps
      */
-    public GridOfFoldersSteps checkDisplayItemInGrid(String nameOfItem, Folder folderTask) {
-        if (!internalElementsMobile.getMainTitle().is(text(folderTask.getNameFolder())))
-        {
-            openFolder(folderTask);  // входим в созданную папку
+    public GridOfFoldersSteps checkDisplayItemInGrid(String nameOfItem, Folder folder) {
+        if (!internalElementsMobile.getMainTitle().is(text(folder.getNameFolder()))) {
+            openFolder(folder);  // входим в созданную папку
         }
         gridOfFolderElementsMobile.getItemInTheGrid(nameOfItem).waitUntil(visible, 2000); // проверяем отображение созданного объекта в гриде (отображается наименование задачи)
         return this;
@@ -66,7 +80,7 @@ public class GridOfFoldersSteps extends InternalStepsMobile {
         // Если после завершения задачи мы не перешли в папку, то переходим в созданную папку
         if (!internalElementsMobile.getMainTitle().is(text(folder.getNameFolder()))) {
             goToHome();
-            openFolder(folder);  // входим в созданную папкуа
+            openFolder(folder);  // входим в созданную папку
         }
 
         // Если пакет amq ещё не пришел, то грид может не обновиться. Поэтому делаем так:
@@ -106,20 +120,22 @@ public class GridOfFoldersSteps extends InternalStepsMobile {
      * Проверяем отображение или отсутствие признака нового документа в гриде папки
      *
      * @param document
-     * @param roleOfUser
+     * @param currentUser текущий пользователь
      */
-    public void verifyMarkOfNewDocument(Document document, RoleOfUser roleOfUser) {
-        switch (roleOfUser) {
-            case AUTHOR:
-                gridOfFolderElementsMobile.getMarkOfNewItem(document.getDocumentType().getDocRegisterCardsName()).shouldNotBe(visible);
-                break;
+    public void verifyMarkOfNewDocument(Document document, Employee currentUser) {
 
-            case CONSIDER_OF_DOCUMENT:
-                gridOfFolderElementsMobile.getMarkOfNewItem(document.getDocumentType().getDocRegisterCardsName()).shouldBe(visible);
-                break;
+        // Автор документа
+        if (document.getAuthorOfDocument() != null && document.getAuthorOfDocument() == currentUser) {
+            gridOfFolderElementsMobile.getMarkOfNewItem(document.getDocumentType().getDocRegisterCardsName()).shouldNotBe(visible);
+        }
 
-            default:
-                throw new IllegalArgumentException("Неверное название роли:" + roleOfUser);
+        // Рассматривающий документа
+        if (document.getRouteSchemeForDocument().getUserRoute() != null) {
+            for (Employee userRoute : document.getRouteSchemeForDocument().getUserRoute()) {
+                if (userRoute == currentUser) {
+                    gridOfFolderElementsMobile.getMarkOfNewItem(document.getDocumentType().getDocRegisterCardsName()).shouldBe(visible);
+                }
+            }
         }
     }
 
@@ -151,14 +167,20 @@ public class GridOfFoldersSteps extends InternalStepsMobile {
      * @param nameOfItem - текст по которому находим объект в гриде
      */
     public void clickContextMenuForItemInGrid(String nameOfItem) {
-        gridOfFolderElementsMobile.getItemInTheGrid(nameOfItem).waitUntil(visible, 2000);
+        gridOfFolderElementsMobile.getItemInTheGrid(nameOfItem).waitUntil(visible, 5000);
         if ((gridOfFolderElementsMobile.getButtonOfOpenContextMenu(nameOfItem).is(visible))) {
-            // click ContextMenu
-            gridOfFolderElementsMobile.getButtonOfOpenContextMenu(nameOfItem).click();
+            // Скроллинг до объекта (задачи\документа) в гриде и клик
+            scrollToAndClick(gridOfFolderElementsMobile.getButtonOfOpenContextMenu(nameOfItem));
+            // Ждем скрытие маски на кнопке Открытия/закрытия конт.меню
+            gridOfFolderElementsMobile.getMaskOnButtonOfCloseContextMenu(nameOfItem).waitUntil(not(visible), 5000);
             // Проверяем, что Кнопка закрытия конт.меню появилась
             gridOfFolderElementsMobile.getButtonOfCloseContextMenu(nameOfItem).shouldBe(visible);
-            // Проверяем, что конт.меню открылось
-            gridOfFolderElementsMobile.getContextMenu().shouldBe(visible);
+
+            // Проверяем отображение текста во всплывающем Toast-е "Нет доступных операций" или Конт.меню операций
+            if (!internalElementsMobile.getToastWithText().is(text("Нет доступных операций"))) {
+                gridOfFolderElementsMobile.getContextMenu().shouldBe(visible);
+            }
+
         } else {
             // click ContextMenu
             gridOfFolderElementsMobile.getButtonOfCloseContextMenu(nameOfItem).click();

@@ -16,8 +16,7 @@ import ru.motiw.web.model.Tasks.Task;
 import static ru.motiw.data.dataproviders.Administration.getRandomDepartment;
 import static ru.motiw.data.dataproviders.Administration.getRandomEmployer;
 import static ru.motiw.data.dataproviders.Tasks.getRandomProject;
-import static ru.motiw.mobile.model.Document.TypeOperationsOfDocument.CREATE_RESOLUTION;
-import static ru.motiw.mobile.model.Document.TypeOperationsOfDocument.MOVE_TO_EXECUTION;
+import static ru.motiw.mobile.model.Document.TypeOperationsOfDocument.*;
 
 
 /**
@@ -35,26 +34,16 @@ public abstract class DocflowAdministrationMobile extends BaseTest {
     //---------------------------------------------------------------------------------------------------------- Инициализируем объект - Подразделение и Пользователь
     Department[] department = new Department[]{getRandomDepartment()};
 
-    Employee[] employee = new Employee[]{getRandomEmployer()};
+    Employee[] employee = new Employee[]{getRandomEmployer(), getRandomEmployer(), getRandomEmployer(), getRandomEmployer()};
 
     // Инициализация РКД и её настроек
     DocRegisterCards registerCards = new DocRegisterCards("wD_Тестовая карточка " + randomString(20))
-
-            // Статус документа
-            .setDocumentStatesOnReview("На рассмотрении " + randomString(20)) // - На рассмотрении
-            .setDocumentStatesReviewed("Рассмотрен " + randomString(20)) // - Рассмотрен
-            .setDocumentStatesOnApproval("На подписании " + randomString(20)) // - На подписании
-            .setDocumentStatesOnExecution("На исполнении " + randomString(20)) // - На исполнении
-            .setDocumentStatesInArchive("В архиве " + randomString(20)) // - В архиве
-
             .setCheckBoxUseAllPossibleRoutes(true); // Использовать все возможные маршруты
 
-
-    //----------------------------------------------------------------------------------------------------------- Инициализация Документа
     Document document = new Document()
 
             .setDocumentType(registerCards) // Тип документа
-            .setAuthorOfDocument(ADMIN)
+            .setAuthorOfDocument(EMPLOYEE_ADMIN)
             .setDateRegistration(randomDateTime()) // Дата регистрации
             .setProject(getRandomProject()) // Инициализируем проект документа
             .setValueFiles(new String[]{file[0], file[1]})
@@ -64,22 +53,37 @@ public abstract class DocflowAdministrationMobile extends BaseTest {
                     .setUserRoute(new Employee[]{employee[0]}) // Добавляем в маршрут созданного пользователя
             )
             .setExecutionOfDocument(new ExecutionOfDocument[]
-                    {
-                            new ExecutionOfDocument()
-                                    .setExecutionOperation(1, ADMIN, CREATE_RESOLUTION),
+                            {
+                                    new ExecutionOfDocument()
+                                            .setExecutionOperation(1, EMPLOYEE_ADMIN, CREATE_RESOLUTION),
+                                    new ExecutionOfDocument()
+                                            .setExecutionOperation(2, employee[1], CLOSE_EXECUTION),
+                                    new ExecutionOfDocument()
+                                            .setExecutionOperation(3, employee[2], CLOSE_EXECUTION),
+                                    new ExecutionOfDocument()
+                                            .setExecutionOperation(4, EMPLOYEE_ADMIN, RETURN_TO_EXECUTION),
+                                    new ExecutionOfDocument()
+                                            .setExecutionOperation(5, EMPLOYEE_ADMIN, CLOSE_EXECUTION)
 
-                            new ExecutionOfDocument()
-                                    .setExecutionOperation(2, employee[0], MOVE_TO_EXECUTION)
 
-                    }
+                            } // Выполняемые операции в карточке документа
             )
-            .setResolutionOfDocument(new Task[]{
-                    new Resolution()
-                            .setTextOfResolution(randomString(21))
-                            .setAuthorDefault(ADMIN)
-                            .setExecutiveManagers(employee)
 
-            }); // Резолюция
+            .setResolutionOfDocument(new Task[]{
+                            new Resolution()
+                                    .setTextOfResolution(randomString(20))
+                                    .setAuthorDefault(EMPLOYEE_ADMIN)
+                                    .setExecutiveManagers(new Employee[]{employee[1]}),
+                            new Resolution()
+                                    .setTextOfResolution(randomString(20))
+                                    .setAuthorDefault(EMPLOYEE_ADMIN)
+                                    .setExecutiveManagers(new Employee[]{employee[2]})
+
+                    } // Резолюция
+            );
+
+
+    //----------------------------------------------------------------------------------------------------------- Инициализация Документа
 
 
     // ----------------------------------------------------------------------------------------------------------- Инициализация Папки
@@ -129,5 +133,6 @@ public abstract class DocflowAdministrationMobile extends BaseTest {
                 }
         };
     }
+
 
 }
