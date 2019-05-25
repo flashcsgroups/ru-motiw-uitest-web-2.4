@@ -54,6 +54,8 @@ public abstract class DocflowAdministrationMobile extends BaseTest {
             .setExecutionOfDocument(new ExecutionOfDocument[]
                     {
                             new ExecutionOfDocument()
+                                    .setExecutionOperation(0, employee[0], MOVE_TO_EXECUTION),
+                            new ExecutionOfDocument()
                                     .setExecutionOperation(1, EMPLOYEE_ADMIN, CREATE_RESOLUTION),
                             new ExecutionOfDocument()
                                     .setExecutionOperation(2, employee[1], CLOSE_EXECUTION),

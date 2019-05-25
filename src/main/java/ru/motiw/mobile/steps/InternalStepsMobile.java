@@ -3,8 +3,7 @@ package ru.motiw.mobile.steps;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
 import ru.motiw.web.steps.BaseSteps;
 
-import static com.codeborne.selenide.Selenide.page;
-import static com.codeborne.selenide.Selenide.refresh;
+import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.clearBrowserCache;
 import static org.testng.Assert.assertTrue;
 
@@ -49,6 +48,7 @@ public class InternalStepsMobile extends BaseSteps {
      * Универсальный выход из системы (где бы ненаходился пользователь)
      */
     public void logout() {
+        sleep(500);
         goToHome(); // Переходим в папки
         goToInternalMenu(); // Открываем главное меню
         internalElementsMobile.getLogout().click(); // Выход  todo после goToInternalMenu() Открывается страница поиска - надо посмотреть - после создания резолюций

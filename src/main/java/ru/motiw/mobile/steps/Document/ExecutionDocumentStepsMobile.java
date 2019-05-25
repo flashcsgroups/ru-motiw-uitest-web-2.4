@@ -223,7 +223,7 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
         }
 
         //Проверки для участников резолюции
-        if (!(document.getResolutionOfDocument() == null) || !(document.isOnExecution())) {
+        if (!(document.getResolutionOfDocument() == null) && document.isOnExecution()) {
             for (Resolution resolution : document.getResolutionOfDocument()) {
                 for (Employee executiveManager : resolution.getExecutiveManagers()) {
                     stepsOfVerifyExecutionDocument(document, executiveManager, folder, executionOfDocument);
@@ -268,7 +268,7 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
             executionOfDocument, Employee currentUser) {
 
         // Проверки для Авторов документа и участников резолюции
-        if (document.getAuthorOfDocument() == currentUser || compareCurrentUserAndExecutiveManagersInResolutions(document.getResolutionOfDocument(), currentUser)) {
+        if (document.getAuthorOfDocument() == currentUser || currentUserIsExecutiveManagersInResolution(document.getResolutionOfDocument(), currentUser)) {
             switch (executionOfDocument.getTypeExecutionOperation()) {
                 case CREATE_RESOLUTION:
                     // Проверяем наличие доступных операций с документом
@@ -279,6 +279,8 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
                     break;
 
                 case MOVE_TO_EXECUTION:
+                    // Проверяем наличие доступных операций с документом
+                    stepsOfVerifyOperationForDocument(document, currentUser, folder);
                     break;
 
                 case MOVE_TO_ARCHIVE:
@@ -312,7 +314,7 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
         }
 
         // Проверки для участников рассмотрения
-        if (compareCurrentUserAndUserInDocument(document.getRouteSchemeForDocument().getUserRoute(), currentUser)) {
+        if (currentUserIsUserInDocument(document.getRouteSchemeForDocument().getUserRoute(), currentUser)) {
             switch (executionOfDocument.getTypeExecutionOperation()) {
                 case CREATE_RESOLUTION:
                     //Проверяем что документа нет гриде
@@ -320,6 +322,8 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
                     break;
 
                 case MOVE_TO_EXECUTION:
+                    // Проверяем наличие доступных операций с документом
+                    stepsOfVerifyOperationForDocument(document, currentUser, folder);
                     break;
 
                 case MOVE_TO_ARCHIVE:

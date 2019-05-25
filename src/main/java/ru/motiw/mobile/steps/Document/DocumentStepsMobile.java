@@ -53,7 +53,7 @@ public class DocumentStepsMobile {
         }
 
         // Документ не на исполнении - Рассматривающий документа
-        if (!document.isOnExecution() && compareCurrentUserAndUserInDocument(document.getRouteSchemeForDocument().getUserRoute(), currentUser)) {
+        if (!document.isOnExecution() && currentUserIsUserInDocument(document.getRouteSchemeForDocument().getUserRoute(), currentUser)) {
             verifySetOfOperationForDocument(
                     new OperationOfDocument()
                             .setMoveToExecution(true)
@@ -76,14 +76,14 @@ public class DocumentStepsMobile {
                 }
 
                 // Документ на исполнении и Отчет по исполнению резолюции не отправлен -  Рассматривающий документа
-                if (compareCurrentUserAndUserInDocument(document.getRouteSchemeForDocument().getUserRoute(), currentUser)) {
+                if (currentUserIsUserInDocument(document.getRouteSchemeForDocument().getUserRoute(), currentUser)) {
                     verifySetOfOperationForDocument(
                             new OperationOfDocument());
                 }
 
                 // Документ на исполнении и Отчет по исполнению резолюции не отправлен -  Отв.Исполнитель резолюции
                 for (Resolution resolution : document.getResolutionOfDocument()) {
-                    if (compareCurrentUserAndUserInDocument(resolution.getExecutiveManagers(), currentUser)) {
+                    if (currentUserIsUserInDocument(resolution.getExecutiveManagers(), currentUser)) {
                         verifySetOfOperationForDocument(
                                 new OperationOfDocument()
                                         .setCloseExecution(true));
@@ -104,7 +104,7 @@ public class DocumentStepsMobile {
 
 
                 // Отчет по исполнению резолюции отправлен - Рассматривающий документа
-                if (compareCurrentUserAndUserInDocument(document.getRouteSchemeForDocument().getUserRoute(), currentUser)) {
+                if (currentUserIsUserInDocument(document.getRouteSchemeForDocument().getUserRoute(), currentUser)) {
                     verifySetOfOperationForDocument(
                             new OperationOfDocument());
                 }
@@ -114,7 +114,7 @@ public class DocumentStepsMobile {
 
                 for (Resolution resolution : document.getResolutionOfDocument())
                     if (resolution.getExecutiveManagers() != null) {
-                        if (compareCurrentUserAndUserInDocument(resolution.getExecutiveManagers(), currentUser)) {
+                        if (currentUserIsUserInDocument(resolution.getExecutiveManagers(), currentUser)) {
                             // отчет по резолюции, где текущий пользователь отв.рук, отправлен
                             if (resolution.isReportOfExecution()) {
                                 verifySetOfOperationForDocument(
@@ -139,7 +139,7 @@ public class DocumentStepsMobile {
      * @param currentUser
      * @return
      */
-    public boolean compareCurrentUserAndUserInDocument(Employee[] usersInDocument, Employee currentUser) {
+    public boolean currentUserIsUserInDocument(Employee[] usersInDocument, Employee currentUser) {
         if (usersInDocument != null)
             for (Employee userInDocument : usersInDocument) {
                 if (userInDocument == currentUser) {
@@ -157,7 +157,7 @@ public class DocumentStepsMobile {
      * @param currentUser
      * @return
      */
-    public boolean compareCurrentUserAndExecutiveManagersInResolutions(Resolution[] resolutions, Employee currentUser) {
+    public boolean currentUserIsExecutiveManagersInResolution(Resolution[] resolutions, Employee currentUser) {
         if (resolutions != null)
             for (Resolution resolution : resolutions) {
                 for (Employee executiveManager : resolution.getExecutiveManagers()) {

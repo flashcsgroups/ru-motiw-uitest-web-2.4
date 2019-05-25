@@ -276,7 +276,7 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
         //----------------------------------------------------------------ГРИД - Папка
 
         // Проверка карточки под разными пользователями
-        //verifyDocumentStepsMobile.verifyDocumentOnDifferentUsers(document1, folder1);
+        verifyDocumentStepsMobile.verifyDocumentOnDifferentUsers(document1, folder1);
 
         //Выполнение действий с документом
           executionDocumentStepsMobile.executionOnDifferentUsers(document1, folder1[0], TypeOfExecutionPlace.DOCUMENT_CARD);
