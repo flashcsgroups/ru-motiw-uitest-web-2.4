@@ -13,10 +13,6 @@ import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Document.Document;
 import ru.motiw.web.model.Document.OperationOfDocument;
 import ru.motiw.web.model.Document.Resolution;
-import ru.motiw.web.model.Tasks.Task;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
@@ -66,15 +62,8 @@ public class DocumentStepsMobile {
 
         // ----------- Документ на исполнении (создана резолюция)
         if (document.isOnExecution()) {
-
-            // список всех резолюций по документу
-            List<Resolution> resolutions = new ArrayList<>();
-
-            for (Task resolution : document.getResolutionOfDocument()) {
-                resolutions.add((Resolution) resolution);
-            }
             // Наличие отправленного отчета по исполнению резолюции
-            boolean resolutionWithReportOfExecution = resolutionWithReportOfExecution(resolutions);
+            boolean resolutionWithReportOfExecution = findResolutionWithReportOfExecution(document.getResolutionOfDocument());
 
             // ----------- Отчет по исполнению резолюции не отправлен
             if (!resolutionWithReportOfExecution) {
@@ -93,7 +82,7 @@ public class DocumentStepsMobile {
                 }
 
                 // Документ на исполнении и Отчет по исполнению резолюции не отправлен -  Отв.Исполнитель резолюции
-                for (Resolution resolution : resolutions) {
+                for (Resolution resolution : document.getResolutionOfDocument()) {
                     if (compareCurrentUserAndUserInDocument(resolution.getExecutiveManagers(), currentUser)) {
                         verifySetOfOperationForDocument(
                                 new OperationOfDocument()
@@ -123,16 +112,15 @@ public class DocumentStepsMobile {
 
                 // Отчет по исполнению Документа отправлен - Отв.Исполнитель резолюции
 
-                for (Resolution resolution : resolutions)
+                for (Resolution resolution : document.getResolutionOfDocument())
                     if (resolution.getExecutiveManagers() != null) {
                         if (compareCurrentUserAndUserInDocument(resolution.getExecutiveManagers(), currentUser)) {
-                            // отчет по резолюции, где текущий пользователь отв.рук отправлен
+                            // отчет по резолюции, где текущий пользователь отв.рук, отправлен
                             if (resolution.isReportOfExecution()) {
                                 verifySetOfOperationForDocument(
                                         new OperationOfDocument());
                             }
-
-                            // отчет по резолюции, где текущий пользователь отв.рук не отправлен
+                            // отчет по резолюции, где текущий пользователь отв.рук, не отправлен
                             if (!resolution.isReportOfExecution()) {
                                 verifySetOfOperationForDocument(
                                         new OperationOfDocument()
@@ -169,9 +157,9 @@ public class DocumentStepsMobile {
      * @param currentUser
      * @return
      */
-    public boolean compareCurrentUserAndExecutiveManagersInResolutions(Task[] resolutions, Employee currentUser) {
+    public boolean compareCurrentUserAndExecutiveManagersInResolutions(Resolution[] resolutions, Employee currentUser) {
         if (resolutions != null)
-            for (Task resolution : resolutions) {
+            for (Resolution resolution : resolutions) {
                 for (Employee executiveManager : resolution.getExecutiveManagers()) {
                     if (executiveManager == currentUser) {
                         return true;
@@ -190,7 +178,7 @@ public class DocumentStepsMobile {
      * @param resolutions - список резолюций
      * @return
      */
-    private boolean resolutionWithReportOfExecution(List<Resolution> resolutions) {
+    private boolean findResolutionWithReportOfExecution(Resolution[] resolutions) {
         for (Resolution resolution : resolutions) {
             if (resolution.isReportOfExecution()) {
                 return true;

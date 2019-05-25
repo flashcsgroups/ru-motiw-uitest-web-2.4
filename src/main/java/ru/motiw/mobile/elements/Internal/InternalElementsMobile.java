@@ -17,7 +17,7 @@ public class InternalElementsMobile extends BaseSteps {
     /*
      * Кнопка главного меню
      */
-    @FindBy(xpath = "//div[@class=\"x-component x-button no-blue-alt x-has-icon x-icon-align-left x-arrow-align-right x-button-alt x-component-alt x-layout-box-item x-layout-hbox-item\"][1]")
+    @FindBy(xpath = "//div[contains(@class,\"x-titlebar-left\")]//div[@class=\"x-component x-button no-blue-alt x-has-icon x-icon-align-left x-arrow-align-right x-button-alt x-component-alt x-layout-box-item x-layout-hbox-item\"]")
     private SelenideElement buttonMainMenu;
 
 
@@ -30,7 +30,7 @@ public class InternalElementsMobile extends BaseSteps {
     /*
      * Кнопка "Домой"
      */
-    @FindBy(xpath = "//div[@data-componentid=\"ext-main-navigatebutton-2\"]")
+    @FindBy(xpath = "//div[@class=\"x-icon-el x-font-icon x-mi mi-home home-btn-icon\"]//ancestor::div[@data-componentid=\"ext-main-navigatebutton-2\"]")
     private SelenideElement buttonGoHome;
 
     /*

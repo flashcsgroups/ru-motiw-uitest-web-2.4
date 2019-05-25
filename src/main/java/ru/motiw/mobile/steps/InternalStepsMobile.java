@@ -51,7 +51,7 @@ public class InternalStepsMobile extends BaseSteps {
     public void logout() {
         goToHome(); // Переходим в папки
         goToInternalMenu(); // Открываем главное меню
-        internalElementsMobile.getLogout().click(); // Выход
+        internalElementsMobile.getLogout().click(); // Выход  todo после goToInternalMenu() Открывается страница поиска - надо посмотреть - после создания резолюций
         assertTrue(loginStepsMobile.isNotLoggedInMobile());// Проверяем то, что мы разлогинены
         clearBrowserCache();
         refresh(); // т.к после логаута могут быть проблемы с повторной автворизацией.

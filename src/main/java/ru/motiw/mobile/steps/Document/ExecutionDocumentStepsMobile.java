@@ -12,7 +12,6 @@ import ru.motiw.web.model.Document.Document;
 import ru.motiw.web.model.Document.ExecutionOfDocument;
 import ru.motiw.web.model.Document.Resolution;
 import ru.motiw.web.model.Tasks.Folder;
-import ru.motiw.web.model.Tasks.Task;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -75,16 +74,9 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
      * @param executionOfDocument
      */
     private void executionOperations(Document document, Folder folder, ExecutionOfDocument executionOfDocument, TypeOfExecutionPlace executionPlace) {
-        // список всех резолюций по документу
-        List<Resolution> resolutions = new ArrayList<>();
-
-        for (Task resolution : document.getResolutionOfDocument()) {
-            resolutions.add((Resolution) resolution);
-        }
-
         switch (executionOfDocument.getTypeExecutionOperation()) {
             case CREATE_RESOLUTION:
-                for (Resolution resolution : resolutions)
+                for (Resolution resolution : document.getResolutionOfDocument())
                     resolutionStepsMobile.createResolution(document, folder, resolution, executionPlace);
                 break;
 
@@ -101,20 +93,19 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
             case RETURN_TO_EXECUTION:
                 executionOperationWithAdditionText(OperationsOfDocument.RETURN_TO_EXECUTION.getNameOperation(), OperationsOfDocument.RETURN_TO_EXECUTION.getNameOperation());
                 internalElementsMobile.getToastWithText().waitUntil(text("Возврат на доработку"), 10000);
-                for (Resolution resolution : resolutions) {
+                for (Resolution resolution : document.getResolutionOfDocument()) {
                     if (resolution.isReportOfExecution()) {
                         resolution.setReportOfExecution(false); //  Выставляем для каждой резолюции признак того, что Отчет по исполнению резолюции возвращен на доработку (не отправлен).
                     }
                 }
                 break;
 
-
             case CLOSE_EXECUTION:
                 executionOperationWithAdditionText(OperationsOfDocument.CLOSE_EXECUTION.getNameOperation(), OperationsOfDocument.CLOSE_EXECUTION.getNameOperation());
                 internalElementsMobile.getToastWithText().waitUntil(text("Выполнение завершено"), 20000);
                 // Выставляем признак "Отчет по исполнению Документа отправлен", если операцию выполнил "Ответственные руководитель" резолюции
                 if (executionOfDocument.getExecutiveUser() != document.getAuthorOfDocument()) {
-                    for (Resolution resolution : resolutions) {
+                    for (Resolution resolution : document.getResolutionOfDocument()) {
                         for (Employee executiveManagerInResolution : resolution.getExecutiveManagers())
                             if (executionOfDocument.getExecutiveUser() == executiveManagerInResolution) {
                                 resolution.setReportOfExecution(true); //  Выставляем признак для документа "Отчет по исполнению Документа отправлен"
@@ -233,14 +224,9 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
 
         //Проверки для участников резолюции
         if (!(document.getResolutionOfDocument() == null) || !(document.isOnExecution())) {
-            for (Task resolution : document.getResolutionOfDocument()) {
-                // все резолюции по документу
-                List<Resolution> resolutions = new ArrayList<>();
-                resolutions.add((Resolution) resolution);
-                for (Resolution r : resolutions) {
-                    for (Employee executiveManager : r.getExecutiveManagers()) {
-                        stepsOfVerifyExecutionDocument(document, executiveManager, folder, executionOfDocument);
-                    }
+            for (Resolution resolution : document.getResolutionOfDocument()) {
+                for (Employee executiveManager : resolution.getExecutiveManagers()) {
+                    stepsOfVerifyExecutionDocument(document, executiveManager, folder, executionOfDocument);
                 }
             }
         }
@@ -288,8 +274,8 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
                     // Проверяем наличие доступных операций с документом
                     stepsOfVerifyOperationForDocument(document, currentUser, folder);
                     // Проверка резолюции
-                    for (Task resolution : document.getResolutionOfDocument())
-                        resolutionStepsMobile.verifyCreatedResolution(document, (Resolution) resolution);
+                    for (Resolution resolution : document.getResolutionOfDocument())
+                        resolutionStepsMobile.verifyCreatedResolution(document, resolution);
                     break;
 
                 case MOVE_TO_EXECUTION:
@@ -311,7 +297,7 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
                         gridOfFoldersSteps.checkDisappearItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folder);
                     }
                     //Исполнитель резолюции закрывает - документ остается в гриде
-                    for (Task resolution : document.getResolutionOfDocument()) {
+                    for (Resolution resolution : document.getResolutionOfDocument()) {
                         for (Employee executiveManagerInResolution : resolution.getExecutiveManagers())
                             if (executionOfDocument.getExecutiveUser() == executiveManagerInResolution) {
                                 // Проверяем наличие доступных операций с документом

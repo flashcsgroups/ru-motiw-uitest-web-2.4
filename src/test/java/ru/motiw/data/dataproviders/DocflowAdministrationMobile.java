@@ -11,7 +11,6 @@ import ru.motiw.web.model.Document.Document;
 import ru.motiw.web.model.Document.ExecutionOfDocument;
 import ru.motiw.web.model.Document.Resolution;
 import ru.motiw.web.model.Tasks.Folder;
-import ru.motiw.web.model.Tasks.Task;
 
 import static ru.motiw.data.dataproviders.Administration.getRandomDepartment;
 import static ru.motiw.data.dataproviders.Administration.getRandomEmployer;
@@ -25,22 +24,22 @@ import static ru.motiw.mobile.model.Document.TypeOperationsOfDocument.*;
 public abstract class DocflowAdministrationMobile extends BaseTest {
 
     // Инициализация объекта - Названия Файлов задачи
-    String[] file = new String[]{
+    private String[] file = new String[]{
             FilesForAttachment.FILE_1.getNameFile(),
             FilesForAttachment.FILE_2.getNameFile(),
             FilesForAttachment.FILE_3.getNameFile(),
     };
 
     //---------------------------------------------------------------------------------------------------------- Инициализируем объект - Подразделение и Пользователь
-    Department[] department = new Department[]{getRandomDepartment()};
+    private Department[] department = new Department[]{getRandomDepartment()};
 
-    Employee[] employee = new Employee[]{getRandomEmployer(), getRandomEmployer(), getRandomEmployer(), getRandomEmployer()};
+    private Employee[] employee = new Employee[]{getRandomEmployer(), getRandomEmployer(), getRandomEmployer(), getRandomEmployer()};
 
     // Инициализация РКД и её настроек
-    DocRegisterCards registerCards = new DocRegisterCards("wD_Тестовая карточка " + randomString(20))
+    private DocRegisterCards registerCards = new DocRegisterCards("wD_Тестовая карточка " + randomString(20))
             .setCheckBoxUseAllPossibleRoutes(true); // Использовать все возможные маршруты
 
-    Document document = new Document()
+    private Document document = new Document()
 
             .setDocumentType(registerCards) // Тип документа
             .setAuthorOfDocument(EMPLOYEE_ADMIN)
@@ -53,28 +52,28 @@ public abstract class DocflowAdministrationMobile extends BaseTest {
                     .setUserRoute(new Employee[]{employee[0]}) // Добавляем в маршрут созданного пользователя
             )
             .setExecutionOfDocument(new ExecutionOfDocument[]
-                            {
-                                    new ExecutionOfDocument()
-                                            .setExecutionOperation(1, EMPLOYEE_ADMIN, CREATE_RESOLUTION),
-                                    new ExecutionOfDocument()
-                                            .setExecutionOperation(2, employee[1], CLOSE_EXECUTION),
-                                    new ExecutionOfDocument()
-                                            .setExecutionOperation(3, employee[2], CLOSE_EXECUTION),
-                                    new ExecutionOfDocument()
-                                            .setExecutionOperation(4, EMPLOYEE_ADMIN, RETURN_TO_EXECUTION),
-                                    new ExecutionOfDocument()
-                                            .setExecutionOperation(5, EMPLOYEE_ADMIN, CLOSE_EXECUTION)
+                    {
+                            new ExecutionOfDocument()
+                                    .setExecutionOperation(1, EMPLOYEE_ADMIN, CREATE_RESOLUTION),
+                            new ExecutionOfDocument()
+                                    .setExecutionOperation(2, employee[1], CLOSE_EXECUTION),
+                            new ExecutionOfDocument()
+                                    .setExecutionOperation(3, employee[2], CLOSE_EXECUTION),
+                            new ExecutionOfDocument()
+                                    .setExecutionOperation(4, EMPLOYEE_ADMIN, RETURN_TO_EXECUTION),
+                            new ExecutionOfDocument()
+                                    .setExecutionOperation(5, EMPLOYEE_ADMIN, CLOSE_EXECUTION)
 
 
-                            } // Выполняемые операции в карточке документа
+                    } // Выполняемые операции в карточке документа
             )
 
-            .setResolutionOfDocument(new Task[]{
-                            new Resolution()
+            .setResolutionOfDocument(new Resolution[]{
+                            (Resolution) new Resolution()
                                     .setTextOfResolution(randomString(20))
                                     .setAuthorDefault(EMPLOYEE_ADMIN)
                                     .setExecutiveManagers(new Employee[]{employee[1]}),
-                            new Resolution()
+                            (Resolution) new Resolution()
                                     .setTextOfResolution(randomString(20))
                                     .setAuthorDefault(EMPLOYEE_ADMIN)
                                     .setExecutiveManagers(new Employee[]{employee[2]})
@@ -87,7 +86,7 @@ public abstract class DocflowAdministrationMobile extends BaseTest {
 
 
     // ----------------------------------------------------------------------------------------------------------- Инициализация Папки
-    Folder[] folder = getRandomArrayFolders();
+    private Folder[] folder = getRandomArrayFolders();
 
     /**
      * Метод создания полностью случайного массива объектов - "Папка"

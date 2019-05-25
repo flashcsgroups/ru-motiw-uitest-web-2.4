@@ -7,7 +7,6 @@ import ru.motiw.web.model.DocflowAdministration.RouteSchemeEditor.RouteSchemeEdi
 import ru.motiw.web.model.Tasks.Project;
 import ru.motiw.web.model.Administration.Users.Department;
 import ru.motiw.web.model.Administration.Users.Employee;
-import ru.motiw.web.model.Tasks.Task;
 
 /**
  * Модель объекта - Документ (форма создания / редактирования документа)
@@ -27,7 +26,7 @@ public class Document {
     private DictionaryEditorField valueDictionaryEditor;
     private RouteSchemeEditor routeScheme;
     private Integer numberOfFiles;
-    private Task[] resolutionOfDocument;
+    private Resolution[] resolutionOfDocument;
 
     /**
      * Тип документа
@@ -169,11 +168,11 @@ public class Document {
      *
      * @return
      */
-    public Task[] getResolutionOfDocument() {
+    public Resolution[] getResolutionOfDocument() {
         return resolutionOfDocument;
     }
 
-    public Document setResolutionOfDocument(Task[] resolutionOfDocument) {
+    public Document setResolutionOfDocument(Resolution[] resolutionOfDocument) {
         this.resolutionOfDocument = resolutionOfDocument;
         return this;
     }

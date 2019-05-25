@@ -28,7 +28,6 @@ import ru.motiw.web.model.Document.Document;
 import ru.motiw.web.model.Document.ExecutionOfDocument;
 import ru.motiw.web.model.Document.Resolution;
 import ru.motiw.web.model.Tasks.Folder;
-import ru.motiw.web.model.Tasks.Task;
 import ru.motiw.web.steps.Administration.Users.UsersSteps;
 import ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditConnectedRoutesSteps;
 import ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditGeneralSteps;
@@ -158,7 +157,6 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
         goToURLNewDocument().createDocument(document);
 
 
-
         // Выход
         internalPageSteps.logout();
         // Проверка - пользователь разлогинен
@@ -170,7 +168,7 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
     public void verifyDocument(Department[] departments, Employee[] employee, DocRegisterCards registerCards, Document document, Folder[] folders) throws Exception {
 
         // Проверка карточки под разными пользователями
-       verifyDocumentStepsMobile.verifyDocumentOnDifferentUsers(document, folders);
+        verifyDocumentStepsMobile.verifyDocumentOnDifferentUsers(document, folders);
 
         //Выполнение действий с документом
         executionDocumentStepsMobile.executionOnDifferentUsers(document, folders[0], TypeOfExecutionPlace.DOCUMENT_CARD);
@@ -187,7 +185,6 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
                 new Folder()
                         .setNameFolder("wD_Smart_Box бБЮо") // Зн-ие НЕ изменять - используется в проверке - checkDisplayCreateAFolderInTheGrid()
         };
-
 
 
         Employee[] qqq = new Employee[]{
@@ -223,38 +220,36 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
                 .setProject(getRandomProject()) // Инициализируем проект документа
                 //.setValueFiles(new String[]{file[0], file[1]})
                 .setRouteSchemeForDocument(new RouteSchemeEditor()
-                        .setRouteScheme("Согласование входящей корреспонденции - Постановка задачи")
-                        .setReviewDuration(randomInt(999))
-                        .setUserRoute(new Employee[]{
-                                new Employee()
-                                        .setName("qqq")
-                                        .setLastName("qqq")
-                                        .setLoginName("qqq")
-                                        .setPassword("qqq")})
+                                .setRouteScheme("Согласование входящей корреспонденции - Постановка задачи")
+                                .setReviewDuration(randomInt(999))
+//                                .setUserRoute(new Employee[]{
+//                                        new Employee()
+//                                                .setName("qqq")
+//                                                .setLastName("qqq")
+//                                                .setLoginName("qqq")
+//                                                .setPassword("qqq")})
                         // Добавляем в маршрут созданного пользователя
                 )
                 .setExecutionOfDocument(new ExecutionOfDocument[]
                         {
-
 //                                new ExecutionOfDocument()
-//                                        .setExecutionOperation(1, ADMIN, CREATE_RESOLUTION),
+//                                        .setExecutionOperation(1, EMPLOYEE_ADMIN, CREATE_RESOLUTION),
                                 new ExecutionOfDocument()
                                         .setExecutionOperation(2, qqq[0], CLOSE_EXECUTION),
 
                         })
-                .setResolutionOfDocument(new Task[]{
-                        new Resolution()
+                .setResolutionOfDocument(new Resolution[]{
+                        (Resolution) new Resolution()
                                 .setTextOfResolution(randomString(21))
                                 .setAuthorDefault(EMPLOYEE_ADMIN)
                                 .setExecutiveManagers(qqq)
                         ,
-                        new Resolution()
+                        (Resolution) new Resolution()
                                 .setTextOfResolution(randomString(21))
                                 .setAuthorDefault(EMPLOYEE_ADMIN)
                                 .setExecutiveManagers(qqq1)
                 })
-                .setOnExecution(true)
-                ;
+                .setOnExecution(true);
 
 
         // Проверка карточки под разными пользователями
@@ -262,33 +257,29 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
         // Выполнение действий с документом под разными пользователями
         //1.Выполнение операций
         //2. Комментарии на файле
-       // executionDocumentStepsMobile.executionOnDifferentUsers(document1, folder1[0], TypeOfExecutionPlace.CONTEXT_MENU_IN_THE_GRID_FOLDER);
+        // executionDocumentStepsMobile.executionOnDifferentUsers(document1, folder1[0], TypeOfExecutionPlace.CONTEXT_MENU_IN_THE_GRID_FOLDER);
 
 
 //        loginStepsMobile
 //                .loginAs(ADMIN) // Авторизация под участником рассмотрения документа
 //                .waitLoadMainPage(); // Ожидание открытия главной страницы
-   //     gridOfFoldersSteps.openFolder(folder1[0]);
-       // gridOfFoldersSteps.openItemInGrid("Входящая корреспонденция", folder1[0]);
+        //     gridOfFoldersSteps.openFolder(folder1[0]);
+        // gridOfFoldersSteps.openItemInGrid("Входящая корреспонденция", folder1[0]);
 
         // Ожидание и проверка кнопок тулбара
-     //   $(By.xpath("//div[contains(@class,\"x-toolbar x-container x-component x-noborder-trbl x-toolbar-side-toolbar\")]")).waitUntil(Condition.visible, 15000);
-
+        //   $(By.xpath("//div[contains(@class,\"x-toolbar x-container x-component x-noborder-trbl x-toolbar-side-toolbar\")]")).waitUntil(Condition.visible, 15000);
 
 
         //gridOfFoldersSteps.clickContextMenuForItemInGrid("Входящая корреспонденция");
 
 
-
-
         //----------------------------------------------------------------ГРИД - Папка
 
         // Проверка карточки под разными пользователями
-        verifyDocumentStepsMobile.verifyDocumentOnDifferentUsers(document1, folder1);
+        //verifyDocumentStepsMobile.verifyDocumentOnDifferentUsers(document1, folder1);
 
         //Выполнение действий с документом
-     //   executionDocumentStepsMobile.executionOnDifferentUsers(document1, folder1[0], TypeOfExecutionPlace.DOCUMENT_CARD);
-
+          executionDocumentStepsMobile.executionOnDifferentUsers(document1, folder1[0], TypeOfExecutionPlace.DOCUMENT_CARD);
 
     }
 
