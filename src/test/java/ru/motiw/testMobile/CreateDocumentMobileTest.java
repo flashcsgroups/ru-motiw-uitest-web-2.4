@@ -123,7 +123,6 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
         userPageSteps.createUser(employee[0].setDepartment(departments[0]));
         userPageSteps.createUser(employee[1].setDepartment(departments[0]));
         userPageSteps.createUser(employee[2].setDepartment(departments[0]));
-        userPageSteps.createUser(employee[3].setDepartment(departments[0]));
 
         //---------------------------------------------------------------- Задачи/Задачи
         goToUnionTasks();
@@ -169,9 +168,9 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
 
         // Проверка карточки под разными пользователями
         verifyDocumentStepsMobile.verifyDocumentOnDifferentUsers(document, folders);
-
         //Выполнение действий с документом
         executionDocumentStepsMobile.executionOnDifferentUsers(document, folders[0], TypeOfExecutionPlace.DOCUMENT_CARD);
+
 
         //Комментарии на файле
 

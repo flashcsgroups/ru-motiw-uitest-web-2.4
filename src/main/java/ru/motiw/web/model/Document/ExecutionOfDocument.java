@@ -9,7 +9,7 @@ import ru.motiw.web.model.Administration.Users.Employee;
  */
 public class ExecutionOfDocument {
 
-    private Integer numberOfExecution;
+    private Integer executionNumber;
     private Employee executiveUser;
     private TypeOperationsOfDocument typeExecutionOperation;
 
@@ -19,8 +19,8 @@ public class ExecutionOfDocument {
      *
      * @return
      */
-    public Integer getNumberOfExecution() {
-        return numberOfExecution;
+    public Integer getExecutionNumber() {
+        return executionNumber;
     }
 
     /**
@@ -44,13 +44,13 @@ public class ExecutionOfDocument {
     /**
      * Установка параметров выполнения операции
      *
-     * @param numberOfExecution   Порядковый номер выполнения операции
+     * @param executionNumber   Порядковый номер выполнения операции
      * @param executiveUser Пользователь выполняющий действия
      * @param typeExecutionOperation Тип выполняемой операции
      * @return
      */
-    public ExecutionOfDocument setExecutionOperation(Integer numberOfExecution, Employee executiveUser, TypeOperationsOfDocument typeExecutionOperation) {
-        this.numberOfExecution = numberOfExecution;
+    public ExecutionOfDocument setExecutionOperation(Integer executionNumber, Employee executiveUser, TypeOperationsOfDocument typeExecutionOperation) {
+        this.executionNumber = executionNumber;
         this.executiveUser = executiveUser;
         this.typeExecutionOperation = typeExecutionOperation;
         return this;

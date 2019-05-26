@@ -151,9 +151,11 @@ public class GridOfFoldersSteps extends InternalStepsMobile {
             openFolder(folder);  // входим в созданную папку
         }
 
-        // Если пакет amq ещё не пришел, то грид может не обновиться. Поэтому делаем так:
-        // 1. проверяем на отображение Признака в гриде.
-        // 2. если Признак продолжает отображаться, то перезагружаем страницу и проверяем снова.
+        /*
+          Если пакет amq ещё не пришел, то грид может не обновиться. Поэтому делаем так:
+          1. проверяем на отображение Признака в гриде.
+          2. если Признак продолжает отображаться, то перезагружаем страницу и проверяем снова.
+         */
         if ((gridOfFolderElementsMobile.getMarkOfNewItem(document.getDocumentType().getDocRegisterCardsName()).isDisplayed())) {
             refresh();
             gridOfFolderElementsMobile.getItemInTheGrid(document.getDocumentType().getDocRegisterCardsName()).waitUntil(visible, 5000);

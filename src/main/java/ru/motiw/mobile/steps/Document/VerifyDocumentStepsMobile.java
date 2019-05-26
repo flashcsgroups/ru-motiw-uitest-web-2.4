@@ -7,6 +7,7 @@ import ru.motiw.mobile.steps.InternalStepsMobile;
 import ru.motiw.mobile.steps.LoginStepsMobile;
 import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Document.Document;
+import ru.motiw.web.model.Document.Resolution;
 import ru.motiw.web.model.Tasks.Folder;
 
 import static com.codeborne.selenide.Condition.text;
@@ -23,8 +24,6 @@ public class VerifyDocumentStepsMobile extends DocumentStepsMobile {
     private GridOfFoldersSteps gridOfFoldersSteps = page(GridOfFoldersSteps.class);
     private InternalElementsMobile internalElementsMobile = page(InternalElementsMobile.class);
     private TaskElementsMobile taskElementsMobile = page(TaskElementsMobile.class);
-
-
 
 
     /**
@@ -56,37 +55,64 @@ public class VerifyDocumentStepsMobile extends DocumentStepsMobile {
     /**
      * Шаги при проверке карточки документа
      *
-     * @param document   документ
-     * @param employee   пользователь
-     * @param folders    папки с которыми будем работать
+     * @param document    документ
+     * @param currentUser пользователь
+     * @param folders     папки с которыми будем работать
      * @throws Exception
      */
-    private void stepsOfVerifyDocument(Document document, Employee employee, Folder[] folders) throws Exception {
+    private void stepsOfVerifyDocument(Document document, Employee currentUser, Folder[] folders) throws Exception {
         loginStepsMobile
-                .loginAs(employee) // Авторизация под участником рассмотрения документа
+                .loginAs(currentUser) // Авторизация под участником рассмотрения документа
                 .waitLoadMainPage(); // Ожидание открытия главной страницы
         //----------------------------------------------------------------ГРИД - Папка
+        gridOfFoldersSteps.openFolder(folders[0]);  // входим в папку
         sleep(500); //ожидание папок;
-        // Проверяем отображение созданного документа в гриде папки
-        gridOfFoldersSteps.checkDisplayItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folders[0]);
 
-        // Проверяем отображение или отсутствие признака нового документа в гриде папки
-        gridOfFoldersSteps.verifyMarkOfNewDocument(document, employee);
+        // Проверки для Авторов документа и участников резолюции
+        if (document.getAuthorOfDocument() == currentUser || currentUserIsExecutiveManagersInResolution(document.getResolutionOfDocument(), currentUser)) {
+            stepsOfVerifyExistingDocument(document, currentUser, folders[0]);
+        }
 
-        // Проверяем доступные операции с документом из грида
-        verifyOperationForDocumentInTheGrid(document, employee);
-
-        //Переход в документ из грида
-        gridOfFoldersSteps.openItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folders[0]); // todo нужно чтобы шаблон отображения в арме имел более уникальное значение чем Тип документа.  Открывать записи по такому уникальному значению.
-        //----------------------------------------------------------------ФОРМА - Документ
-        verifyPageOfDocument(document, employee);
-
-        //----------------------------------------------------------------ГРИД - Папка
-        // Проверяем отсутствие признака нового документа после возвращения в грид папки
-        gridOfFoldersSteps.checkDisappearMarkOfNewDocument(document, folders[0]);
+        // Проверки для участников рассмотрения
+        if (currentUserIsUserInDocument(document.getRouteSchemeForDocument().getUserRoute(), currentUser)) {
+            if (!document.isOnExecution()) {
+                stepsOfVerifyExistingDocument(document, currentUser, folders[0]);
+            } else
+                //Проверяем что документа нет гриде
+                gridOfFoldersSteps.checkDisappearItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folders[0]);
+        }
 
         // Выход из системы
         internalPageStepsMobile.logout();
+    }
+
+    /**
+     * Общие шаги при проверке документа, который доступен пользователю для взаимодействия
+     *
+     * @param document
+     * @param currentUser
+     * @param folder
+     * @throws Exception
+     */
+    private void stepsOfVerifyExistingDocument(Document document, Employee currentUser, Folder folder) throws Exception {
+
+        // Проверяем отображение созданного документа в гриде папки
+        gridOfFoldersSteps.checkDisplayItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folder);
+
+        // Проверяем отображение или отсутствие признака нового документа в гриде папки
+        gridOfFoldersSteps.verifyMarkOfNewDocument(document, currentUser);
+
+        // Проверяем доступные операции с документом из грида
+        verifyOperationForDocumentInTheGrid(document, currentUser);
+
+        //Переход в документ из грида
+        gridOfFoldersSteps.openItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folder); // todo нужно чтобы шаблон отображения в арме имел более уникальное значение чем Тип документа.  Открывать записи по такому уникальному значению.
+        //----------------------------------------------------------------ФОРМА - Документ
+        verifyPageOfDocument(document, currentUser);
+
+        //----------------------------------------------------------------ГРИД - Папка
+        // Проверяем отсутствие признака нового документа после возвращения в грид папки
+        gridOfFoldersSteps.checkDisappearMarkOfNewDocument(document, folder);
     }
 
     /**
@@ -102,21 +128,26 @@ public class VerifyDocumentStepsMobile extends DocumentStepsMobile {
             return null;
         }
 
-        //Проверки для Автора
-        if (document.getAuthorOfDocument() == null) {
-            return null;
-        } else
+        // Проверки для Автора
+        if (!(document.getAuthorOfDocument() == null)) {
             stepsOfVerifyDocument(document, document.getAuthorOfDocument(), folders);
+        }
 
-        //Проверки для каждого рассматривающиего
-        if (document.getRouteSchemeForDocument().getUserRoute() == null) {
-            return null;
-        } else
+        // Проверки для каждого рассматривающиего
+        if (!(document.getRouteSchemeForDocument().getUserRoute() == null)) {
             for (Employee employee : document.getRouteSchemeForDocument().getUserRoute()) {
                 stepsOfVerifyDocument(document, employee, folders);
             }
+        }
 
-            //todo Проверки для участников резолюции, если она создана
+        // Проверки для участников резолюции
+        if (!(document.getResolutionOfDocument() == null) && document.isOnExecution()) {
+            for (Resolution resolution : document.getResolutionOfDocument()) {
+                for (Employee executiveManager : resolution.getExecutiveManagers()) {
+                    stepsOfVerifyDocument(document, executiveManager, folders);
+                }
+            }
+        }
 
         return this;
     }

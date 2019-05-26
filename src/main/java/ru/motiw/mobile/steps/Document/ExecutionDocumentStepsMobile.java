@@ -108,7 +108,7 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
                     for (Resolution resolution : document.getResolutionOfDocument()) {
                         for (Employee executiveManagerInResolution : resolution.getExecutiveManagers())
                             if (executionOfDocument.getExecutiveUser() == executiveManagerInResolution) {
-                                resolution.setReportOfExecution(true); //  Выставляем признак для документа "Отчет по исполнению Документа отправлен"
+                                resolution.setReportOfExecution(true); //  Выставляем признак для резолюции "Отчет по исполнению Документа отправлен"
                             }
                     }
                 }
@@ -174,20 +174,20 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
         }
 
         if (document.getExecutionOfDocument() != null) {
-            List<Integer> allNumbersOfExecution = new ArrayList<>(); // Все порядковые номера выполняемых операций
+            List<Integer> allExecutionNumber = new ArrayList<>(); // Все порядковые номера выполняемых операций
 
             //  Находим все порядковые номера выполняемых операций
             for (ExecutionOfDocument execution : document.getExecutionOfDocument()) {
-                allNumbersOfExecution.add(execution.getNumberOfExecution());
+                allExecutionNumber.add(execution.getExecutionNumber());
             }
 
             // Cортируем по возрастанию все порядковые номера выполняемых операций
-            Collections.sort(allNumbersOfExecution);
+            Collections.sort(allExecutionNumber);
 
             // Обработка выполняемых операций согласно их порядковым номерам
-            for (Integer numberOfExecutionInAscendingOrder : allNumbersOfExecution) {
+            for (Integer executionNumberInAscendingOrder : allExecutionNumber) {
                 for (ExecutionOfDocument executionOfDocument : document.getExecutionOfDocument()) {
-                    if (numberOfExecutionInAscendingOrder.equals(executionOfDocument.getNumberOfExecution())) {
+                    if (executionNumberInAscendingOrder.equals(executionOfDocument.getExecutionNumber())) {
                         stepsOfExecutionDocument(document, executionOfDocument.getExecutiveUser(), folder, executionOfDocument, typeOfExecutionPlace);
                     }
                 }
@@ -297,15 +297,15 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
                     //Автор закрывает - документа нет гриде
                     if (executionOfDocument.getExecutiveUser() == document.getAuthorOfDocument()) {
                         gridOfFoldersSteps.checkDisappearItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folder);
-                    }
-                    //Исполнитель резолюции закрывает - документ остается в гриде
-                    for (Resolution resolution : document.getResolutionOfDocument()) {
-                        for (Employee executiveManagerInResolution : resolution.getExecutiveManagers())
-                            if (executionOfDocument.getExecutiveUser() == executiveManagerInResolution) {
-                                // Проверяем наличие доступных операций с документом
-                                stepsOfVerifyOperationForDocument(document, currentUser, folder);
-                            }
-                    }
+                    } else
+                        //Исполнитель резолюции закрывает - документ остается в гриде
+                        for (Resolution resolution : document.getResolutionOfDocument()) {
+                            for (Employee executiveManagerInResolution : resolution.getExecutiveManagers())
+                                if (executionOfDocument.getExecutiveUser() == executiveManagerInResolution) {
+                                    // Проверяем наличие доступных операций с документом
+                                    stepsOfVerifyOperationForDocument(document, currentUser, folder);
+                                }
+                        }
                     break;
 
                 default:

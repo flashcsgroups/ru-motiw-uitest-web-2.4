@@ -111,7 +111,6 @@ public class DocumentStepsMobile {
 
 
                 // Отчет по исполнению Документа отправлен - Отв.Исполнитель резолюции
-
                 for (Resolution resolution : document.getResolutionOfDocument())
                     if (resolution.getExecutiveManagers() != null) {
                         if (currentUserIsUserInDocument(resolution.getExecutiveManagers(), currentUser)) {
@@ -119,13 +118,11 @@ public class DocumentStepsMobile {
                             if (resolution.isReportOfExecution()) {
                                 verifySetOfOperationForDocument(
                                         new OperationOfDocument());
-                            }
-                            // отчет по резолюции, где текущий пользователь отв.рук, не отправлен
-                            if (!resolution.isReportOfExecution()) {
+                            } else
+                                // отчет по резолюции, где текущий пользователь отв.рук, не отправлен
                                 verifySetOfOperationForDocument(
                                         new OperationOfDocument()
                                                 .setCloseExecution(true));
-                            }
                         }
                     }
             }
@@ -196,30 +193,30 @@ public class DocumentStepsMobile {
 
         // todo тут как-то getElementOfOperation вынести в переменную метода, чтобы при каждой проверке не обращаться к получению элемента
 
-            if (operationOfDocument.isCreateResolution()) {
-                getElementOfOperation(getNameOfOperation(TypeOperationsOfDocument.CREATE_RESOLUTION)).shouldBe(visible);
-            } else
-                getElementOfOperation(getNameOfOperation(TypeOperationsOfDocument.CREATE_RESOLUTION)).shouldNotBe(visible);
+        if (operationOfDocument.isCreateResolution()) {
+            getElementOfOperation(getNameOfOperation(TypeOperationsOfDocument.CREATE_RESOLUTION)).shouldBe(visible);
+        } else
+            getElementOfOperation(getNameOfOperation(TypeOperationsOfDocument.CREATE_RESOLUTION)).shouldNotBe(visible);
 
-            if (operationOfDocument.isMoveToExecution()) {
-                getElementOfOperation(OperationsOfDocument.MOVE_TO_EXECUTION.getNameOperation()).shouldBe(visible);
-            } else
-                getElementOfOperation(OperationsOfDocument.MOVE_TO_EXECUTION.getNameOperation()).shouldNotBe(visible);
+        if (operationOfDocument.isMoveToExecution()) {
+            getElementOfOperation(OperationsOfDocument.MOVE_TO_EXECUTION.getNameOperation()).shouldBe(visible);
+        } else
+            getElementOfOperation(OperationsOfDocument.MOVE_TO_EXECUTION.getNameOperation()).shouldNotBe(visible);
 
-            if (operationOfDocument.isMoveToArchive()) {
-                getElementOfOperation(OperationsOfDocument.MOVE_TO_ARCHIVE.getNameOperation()).shouldBe(visible);
-            } else
-                getElementOfOperation(OperationsOfDocument.MOVE_TO_ARCHIVE.getNameOperation()).shouldNotBe(visible);
+        if (operationOfDocument.isMoveToArchive()) {
+            getElementOfOperation(OperationsOfDocument.MOVE_TO_ARCHIVE.getNameOperation()).shouldBe(visible);
+        } else
+            getElementOfOperation(OperationsOfDocument.MOVE_TO_ARCHIVE.getNameOperation()).shouldNotBe(visible);
 
-            if (operationOfDocument.isReturnToExecution()) {
-                getElementOfOperation(OperationsOfDocument.RETURN_TO_EXECUTION.getNameOperation()).shouldBe(visible);
-            } else
-                getElementOfOperation(OperationsOfDocument.RETURN_TO_EXECUTION.getNameOperation()).shouldNotBe(visible);
+        if (operationOfDocument.isReturnToExecution()) {
+            getElementOfOperation(OperationsOfDocument.RETURN_TO_EXECUTION.getNameOperation()).shouldBe(visible);
+        } else
+            getElementOfOperation(OperationsOfDocument.RETURN_TO_EXECUTION.getNameOperation()).shouldNotBe(visible);
 
-            if (operationOfDocument.isCloseExecution()) {
-                getElementOfOperation(OperationsOfDocument.CLOSE_EXECUTION.getNameOperation()).shouldBe(visible);
-            } else
-                getElementOfOperation(OperationsOfDocument.CLOSE_EXECUTION.getNameOperation()).shouldNotBe(visible);
+        if (operationOfDocument.isCloseExecution()) {
+            getElementOfOperation(OperationsOfDocument.CLOSE_EXECUTION.getNameOperation()).shouldBe(visible);
+        } else
+            getElementOfOperation(OperationsOfDocument.CLOSE_EXECUTION.getNameOperation()).shouldNotBe(visible);
     }
 
     /**

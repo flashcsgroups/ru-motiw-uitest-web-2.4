@@ -33,7 +33,7 @@ public abstract class DocflowAdministrationMobile extends BaseTest {
     //---------------------------------------------------------------------------------------------------------- Инициализируем объект - Подразделение и Пользователь
     private Department[] department = new Department[]{getRandomDepartment()};
 
-    private Employee[] employee = new Employee[]{getRandomEmployer(), getRandomEmployer(), getRandomEmployer(), getRandomEmployer()};
+    private Employee[] employee = new Employee[]{getRandomEmployer(), getRandomEmployer(), getRandomEmployer(), getRandomEmployer(), getRandomEmployer()};
 
     // Инициализация РКД и её настроек
     private DocRegisterCards registerCards = new DocRegisterCards("wD_Тестовая карточка " + randomString(20))
@@ -53,8 +53,6 @@ public abstract class DocflowAdministrationMobile extends BaseTest {
             )
             .setExecutionOfDocument(new ExecutionOfDocument[]
                     {
-                            new ExecutionOfDocument()
-                                    .setExecutionOperation(0, employee[0], MOVE_TO_EXECUTION),
                             new ExecutionOfDocument()
                                     .setExecutionOperation(1, EMPLOYEE_ADMIN, CREATE_RESOLUTION),
                             new ExecutionOfDocument()
