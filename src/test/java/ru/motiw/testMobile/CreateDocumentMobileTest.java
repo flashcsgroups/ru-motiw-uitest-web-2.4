@@ -1,25 +1,17 @@
 package ru.motiw.testMobile;
 
+import com.codeborne.selenide.testng.ScreenShooter;
 import com.codeborne.selenide.testng.TextReport;
 import com.codeborne.selenide.testng.annotations.Report;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import ru.motiw.data.dataproviders.DocflowAdministrationMobile;
-import ru.motiw.data.listeners.ScreenShotOnFailListener;
-import ru.motiw.mobile.elements.Login.LoginPageElementsMobile;
-import ru.motiw.mobile.model.Document.TypeOfExecutionPlace;
+import ru.motiw.mobile.model.Document.TypeOfLocation;
 import ru.motiw.mobile.model.FilesForAttachment;
 import ru.motiw.mobile.steps.Document.DocumentStepsMobile;
 import ru.motiw.mobile.steps.Document.ExecutionDocumentStepsMobile;
 import ru.motiw.mobile.steps.Document.VerifyDocumentStepsMobile;
-import ru.motiw.mobile.steps.Folders.GridOfFoldersSteps;
-import ru.motiw.mobile.steps.InternalStepsMobile;
-import ru.motiw.mobile.steps.LoginStepsMobile;
-import ru.motiw.mobile.steps.Tasks.EditOfTaskMobile;
-import ru.motiw.mobile.steps.Tasks.NewTaskStepsMobile;
-import ru.motiw.mobile.steps.Tasks.TaskActionsStepsMobile;
-import ru.motiw.mobile.steps.Tasks.TaskStepsMobile;
 import ru.motiw.web.model.Administration.Users.Department;
 import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.DocRegisterCards;
@@ -46,22 +38,13 @@ import static ru.motiw.web.steps.Administration.Users.DepartmentSteps.goToURLDep
 import static ru.motiw.web.steps.Documents.CreateDocument.NewDocumentSteps.goToURLNewDocument;
 import static ru.motiw.web.steps.Tasks.UnionTasksSteps.goToUnionTasks;
 
-@Listeners({ScreenShotOnFailListener.class, TextReport.class})
+@Listeners({ScreenShooter.class, TextReport.class})
 @Report
 public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
 
-
     private LoginStepsSteps loginPageSteps;
     private InternalSteps internalPageSteps;
-    private InternalStepsMobile internalPageStepsMobile;
     private UnionTasksSteps unionTasksSteps;
-    private TaskStepsMobile taskStepsMobile;
-    private LoginStepsMobile loginStepsMobile;
-    private NewTaskStepsMobile newTaskStepsMobile;
-    private GridOfFoldersSteps gridOfFoldersSteps;
-    private TaskActionsStepsMobile taskActionsStepsMobile;
-    private EditOfTaskMobile editOfTaskMobile;
-    private LoginPageElementsMobile loginPageElementsMobile;
     private UsersSteps userPageSteps;
     private FormDocRegisterCardsEditConnectedRoutesSteps formDocRegisterCardsEditConnectedRoutesSteps;
     private FormDocRegisterCardsEditGeneralSteps formDocRegisterCardsEditGeneralSteps;
@@ -73,15 +56,7 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
     public void beforeTest() {
         loginPageSteps = page(LoginStepsSteps.class);
         internalPageSteps = page(InternalSteps.class);
-        internalPageStepsMobile = page(InternalStepsMobile.class);
         unionTasksSteps = page(UnionTasksSteps.class);
-        taskStepsMobile = page(TaskStepsMobile.class);
-        loginStepsMobile = page(LoginStepsMobile.class);
-        newTaskStepsMobile = page(NewTaskStepsMobile.class);
-        gridOfFoldersSteps = page(GridOfFoldersSteps.class);
-        taskActionsStepsMobile = page(TaskActionsStepsMobile.class);
-        editOfTaskMobile = page(EditOfTaskMobile.class);
-        loginPageElementsMobile = page(LoginPageElementsMobile.class);
         userPageSteps = page(UsersSteps.class);
         formDocRegisterCardsEditConnectedRoutesSteps = page(FormDocRegisterCardsEditConnectedRoutesSteps.class);
         formDocRegisterCardsEditGeneralSteps = page(FormDocRegisterCardsEditGeneralSteps.class);
@@ -169,7 +144,7 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
         // Проверка карточки под разными пользователями
         verifyDocumentStepsMobile.verifyDocumentOnDifferentUsers(document, folders);
         //Выполнение действий с документом
-        executionDocumentStepsMobile.executionOnDifferentUsers(document, folders[0], TypeOfExecutionPlace.DOCUMENT_CARD);
+        executionDocumentStepsMobile.executionOnDifferentUsers(document, folders[0], TypeOfLocation.PAGE_CARD);
 
 
         //Комментарии на файле
@@ -182,24 +157,27 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
 
         Folder[] folder1 = new Folder[]{
                 new Folder()
-                        .setNameFolder("wD_Smart_Box бБЮо") // Зн-ие НЕ изменять - используется в проверке - checkDisplayCreateAFolderInTheGrid()
+                        .setNameFolder("wD_Smart_Box IHЭG") // Зн-ие НЕ изменять - используется в проверке - checkDisplayCreateAFolderInTheGrid()
         };
 
 
-        Employee[] qqq = new Employee[]{
-                new Employee()
-                        .setName("qqq")
-                        .setLoginName("qqq")
-                        .setLastName("qqq")
-                        .setPassword("qqq")};
+       Employee e1 = new Employee()
+                .setName("qqq")
+                .setLoginName("qqq")
+                .setLastName("qqq")
+                .setPassword("qqq");
+
+        Employee[] qqq = new Employee[]{ e1, new Employee().setName("11")};
+        Employee[] qqq11 = new Employee[]{e1};
+
 
 
         Employee[] qqq1 = new Employee[]{
                 new Employee()
                         .setName("qqq")
-                        .setLoginName("SчeыbЦnhоz")
+                        .setLoginName("qqq")
                         .setLastName("qqq")
-                        .setPassword("123")};
+                        .setPassword("qqq")};
 
 
         // Инициализация объекта - Названия Файлов задачи
@@ -213,7 +191,7 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
         //----------------------------------------------------------------------------------------------------------- Инициализация Документа
         Document document1 = new Document()
 
-                .setDocumentType(new DocRegisterCards("wD_Тестовая карточка ъ2mыЦоe5yeяУХ2e3xе9Ы")) // Тип документа
+                .setDocumentType(new DocRegisterCards("[31]/, as")) // Тип документа
                 .setAuthorOfDocument(ADMIN)
                 .setDateRegistration(randomDateTime()) // Дата регистрации
                 .setProject(getRandomProject()) // Инициализируем проект документа
@@ -221,34 +199,32 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
                 .setRouteSchemeForDocument(new RouteSchemeEditor()
                                 .setRouteScheme("Согласование входящей корреспонденции - Постановка задачи")
                                 .setReviewDuration(randomInt(999))
-//                                .setUserRoute(new Employee[]{
-//                                        new Employee()
-//                                                .setName("qqq")
-//                                                .setLastName("qqq")
-//                                                .setLoginName("qqq")
-//                                                .setPassword("qqq")})
+                                .setUserRoute(new Employee[]{
+                                        new Employee()
+                                                .setName("qqq")
+                                                .setLastName("qqq")
+                                                .setLoginName("qqq")
+                                                .setPassword("qqq")})
                         // Добавляем в маршрут созданного пользователя
                 )
                 .setExecutionOfDocument(new ExecutionOfDocument[]
                         {
 //                                new ExecutionOfDocument()
 //                                        .setExecutionOperation(1, EMPLOYEE_ADMIN, CREATE_RESOLUTION),
-                                new ExecutionOfDocument()
-                                        .setExecutionOperation(2, qqq[0], CLOSE_EXECUTION),
+                                new ExecutionOfDocument(2, qqq[0], CLOSE_EXECUTION),
 
                         })
                 .setResolutionOfDocument(new Resolution[]{
                         (Resolution) new Resolution()
                                 .setTextOfResolution(randomString(21))
                                 .setAuthorDefault(EMPLOYEE_ADMIN)
-                                .setExecutiveManagers(qqq)
-                        ,
+                                .setExecutiveManagers(qqq1),
                         (Resolution) new Resolution()
                                 .setTextOfResolution(randomString(21))
                                 .setAuthorDefault(EMPLOYEE_ADMIN)
                                 .setExecutiveManagers(qqq1)
                 })
-                .setOnExecution(true);
+                .setOnExecution(false);
 
 
         // Проверка карточки под разными пользователями
@@ -256,7 +232,7 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
         // Выполнение действий с документом под разными пользователями
         //1.Выполнение операций
         //2. Комментарии на файле
-        // executionDocumentStepsMobile.executionOnDifferentUsers(document1, folder1[0], TypeOfExecutionPlace.CONTEXT_MENU_IN_THE_GRID_FOLDER);
+        // executionDocumentStepsMobile.executionOnDifferentUsers(document1, folder1[0], TypeOfLocation.GRID_FOLDER);
 
 
 //        loginStepsMobile
@@ -275,12 +251,18 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
         //----------------------------------------------------------------ГРИД - Папка
 
         // Проверка карточки под разными пользователями
-        verifyDocumentStepsMobile.verifyDocumentOnDifferentUsers(document1, folder1);
+
+//        assertThat(Arrays.asList(document1.getResolutionOfDocument()), contains(
+//                hasProperty("reportOfExecution", is(false))
+//        ));
+
+       // assertTrue(documentStepsMobile.currentUserIsExecutiveManagersInResolution(document1.getResolutionOfDocument(), qqq[0]));
+
+        //verifyDocumentStepsMobile.verifyDocumentOnDifferentUsers(document1, folder1);
 
         //Выполнение действий с документом
-          executionDocumentStepsMobile.executionOnDifferentUsers(document1, folder1[0], TypeOfExecutionPlace.DOCUMENT_CARD);
+        // executionDocumentStepsMobile.executionOnDifferentUsers(document1, folder1[0], TypeOfLocation.PAGE_CARD);
 
     }
-
 
 }

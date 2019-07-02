@@ -3,7 +3,7 @@ package ru.motiw.mobile.steps.Document;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
 import ru.motiw.mobile.elements.Tasks.TaskElementsMobile;
 import ru.motiw.mobile.model.Document.OperationsOfDocument;
-import ru.motiw.mobile.model.Document.TypeOfExecutionPlace;
+import ru.motiw.mobile.model.Document.TypeOfLocation;
 import ru.motiw.mobile.steps.Folders.GridOfFoldersSteps;
 import ru.motiw.mobile.steps.InternalStepsMobile;
 import ru.motiw.mobile.steps.LoginStepsMobile;
@@ -14,6 +14,7 @@ import ru.motiw.web.model.Document.Resolution;
 import ru.motiw.web.model.Tasks.Folder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,13 +34,14 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
     private ResolutionStepsMobile resolutionStepsMobile = page(ResolutionStepsMobile.class);
 
 
+
     /**
      * Выполнение различных действий из грида папки в конт.меню операций
      *
      * @param document
      * @param executionOfDocument
      */
-    private void executionInGrid(Document document, Folder folder, ExecutionOfDocument executionOfDocument, TypeOfExecutionPlace executionPlace) {
+    private void executionInGrid(Document document, Folder folder, ExecutionOfDocument executionOfDocument, TypeOfLocation executionPlace) {
         // Открываем меню операций
         gridOfFoldersSteps.clickContextMenuForItemInGrid(document.getDocumentType().getDocRegisterCardsName());
         // Выполняем операции
@@ -58,11 +60,11 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
      * @param document
      * @param executionOfDocument
      */
-    private void executionInFormOfDocument(Document document, Folder folder, ExecutionOfDocument executionOfDocument, TypeOfExecutionPlace executionPlace) {
+    private void executionInFormOfDocument(Document document, Folder folder, ExecutionOfDocument executionOfDocument, TypeOfLocation executionPlace) {
         // Ожидание и проверка кнопок тулбара
         taskElementsMobile.getToolbarOfMenu().waitUntil(visible, 15000);
         // Выполнение операций
-        executionOperations(document, folder, executionOfDocument, executionPlace); // также как verifyAccessToOperations - локаторы кнопкок операций зависят от того, где мы находимся
+        executionOperations(document, folder, executionOfDocument, executionPlace); // также как visibleWithRightAccessToOperations - локаторы кнопкок операций зависят от того, где мы находимся
 
         // Работа с файлами
 
@@ -73,15 +75,16 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
      *
      * @param executionOfDocument
      */
-    private void executionOperations(Document document, Folder folder, ExecutionOfDocument executionOfDocument, TypeOfExecutionPlace executionPlace) {
+    private void executionOperations(Document document, Folder folder, ExecutionOfDocument executionOfDocument, TypeOfLocation executionPlace) {
         switch (executionOfDocument.getTypeExecutionOperation()) {
+
             case CREATE_RESOLUTION:
                 for (Resolution resolution : document.getResolutionOfDocument())
                     resolutionStepsMobile.createResolution(document, folder, resolution, executionPlace);
                 break;
 
             case MOVE_TO_EXECUTION:
-                getElementOfOperation(OperationsOfDocument.MOVE_TO_EXECUTION.getNameOperation()).click();
+                getElementOfOperation(OperationsOfDocument.MOVE_TO_EXECUTION.getNameOperation(), getCurrentLocation()).click();
                 internalElementsMobile.getToastWithText().shouldHave(text("В данный момент создание задачи по исполнению в разработке"));
                 break;
 
@@ -130,21 +133,21 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
      * @throws Exception
      */
     private void stepsOfExecutionDocument(Document document, Employee employee, Folder folder, ExecutionOfDocument
-            executionOfDocument, TypeOfExecutionPlace executionPlace) {
+            executionOfDocument, TypeOfLocation executionPlace) {
         loginStepsMobile
                 .loginAs(employee) // Авторизация под участником рассмотрения документа
                 .waitLoadMainPage(); // Ожидание открытия главной страницы
         gridOfFoldersSteps.openFolder(folder);
         //----------------------------------------------------------------ГРИД - Папка
-        gridOfFoldersSteps.checkDisplayItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folder);
+        gridOfFoldersSteps.validateThatInGrid().itemDisplayed(document.getDocumentType().getDocRegisterCardsName(), folder);
 
         // ---------------------------------------------------------------- Выполнение операций из грида папки в конт.меню операций
-        if (executionPlace == TypeOfExecutionPlace.CONTEXT_MENU_IN_THE_GRID_FOLDER) {
+        if (executionPlace == TypeOfLocation.GRID_FOLDER) {
             executionInGrid(document, folder, executionOfDocument, executionPlace);
         }
 
         // ---------------------------------------------------------------- Выполнение операций в карточке документа
-        if (executionPlace == TypeOfExecutionPlace.DOCUMENT_CARD) {
+        if (executionPlace == TypeOfLocation.PAGE_CARD) {
             // Переход в документ из грида
             gridOfFoldersSteps.openItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folder);
             //----------------------------------------------------------------ФОРМА - Документ
@@ -168,7 +171,7 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
      * @return
      */
     public ExecutionDocumentStepsMobile executionOnDifferentUsers(Document document, Folder
-            folder, TypeOfExecutionPlace typeOfExecutionPlace) {
+            folder, TypeOfLocation typeOfExecutionPlace) {
         if (document == null || folder == null) {
             return null;
         }
@@ -258,7 +261,7 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
     }
 
     /**
-     * Проверка раннее выполненых операций в карточке или гриде
+     * Проверка раннее выполненных операций в карточке или гриде
      *
      * @param document
      * @param folder
@@ -268,14 +271,14 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
             executionOfDocument, Employee currentUser) {
 
         // Проверки для Авторов документа и участников резолюции
-        if (document.getAuthorOfDocument() == currentUser || currentUserIsExecutiveManagersInResolution(document.getResolutionOfDocument(), currentUser)) {
+        if (document.getAuthorOfDocument() == currentUser || assertThatInDocument().currentUserIsExecutiveManagersInResolution(document.getResolutionOfDocument(), currentUser)) {
             switch (executionOfDocument.getTypeExecutionOperation()) {
                 case CREATE_RESOLUTION:
                     // Проверяем наличие доступных операций с документом
                     stepsOfVerifyOperationForDocument(document, currentUser, folder);
                     // Проверка резолюции
                     for (Resolution resolution : document.getResolutionOfDocument())
-                        resolutionStepsMobile.verifyCreatedResolution(document, resolution);
+                        resolutionStepsMobile.verifyCreatedResolution(resolution);
                     break;
 
                 case MOVE_TO_EXECUTION:
@@ -285,7 +288,7 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
 
                 case MOVE_TO_ARCHIVE:
                     //Проверяем что документа нет гриде
-                    gridOfFoldersSteps.checkDisappearItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folder);
+                    gridOfFoldersSteps.validateThatInGrid().itemDisappear(document.getDocumentType().getDocRegisterCardsName(), folder);
                     break;
 
                 case RETURN_TO_EXECUTION:
@@ -296,7 +299,7 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
                 case CLOSE_EXECUTION:
                     //Автор закрывает - документа нет гриде
                     if (executionOfDocument.getExecutiveUser() == document.getAuthorOfDocument()) {
-                        gridOfFoldersSteps.checkDisappearItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folder);
+                        gridOfFoldersSteps.validateThatInGrid().itemDisappear(document.getDocumentType().getDocRegisterCardsName(), folder);
                     } else
                         //Исполнитель резолюции закрывает - документ остается в гриде
                         for (Resolution resolution : document.getResolutionOfDocument()) {
@@ -314,11 +317,11 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
         }
 
         // Проверки для участников рассмотрения
-        if (currentUserIsUserInDocument(document.getRouteSchemeForDocument().getUserRoute(), currentUser)) {
+        if (Arrays.asList(document.getRouteSchemeForDocument().getUserRoute()).contains(currentUser)) {
             switch (executionOfDocument.getTypeExecutionOperation()) {
                 case CREATE_RESOLUTION:
                     //Проверяем что документа нет гриде
-                    gridOfFoldersSteps.checkDisappearItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folder);
+                    gridOfFoldersSteps.validateThatInGrid().itemDisappear(document.getDocumentType().getDocRegisterCardsName(), folder);
                     break;
 
                 case MOVE_TO_EXECUTION:
@@ -328,17 +331,17 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
 
                 case MOVE_TO_ARCHIVE:
                     //Проверяем что документа нет гриде
-                    gridOfFoldersSteps.checkDisappearItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folder);
+                    gridOfFoldersSteps.validateThatInGrid().itemDisappear(document.getDocumentType().getDocRegisterCardsName(), folder);
                     break;
 
                 case RETURN_TO_EXECUTION:
                     //Проверяем что документа нет гриде
-                    gridOfFoldersSteps.checkDisappearItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folder);
+                    gridOfFoldersSteps.validateThatInGrid().itemDisappear(document.getDocumentType().getDocRegisterCardsName(), folder);
                     break;
 
                 case CLOSE_EXECUTION:
                     //Проверяем что документа нет гриде
-                    gridOfFoldersSteps.checkDisappearItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folder);
+                    gridOfFoldersSteps.validateThatInGrid().itemDisappear(document.getDocumentType().getDocRegisterCardsName(), folder);
 
                     break;
 
@@ -356,15 +359,15 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
      */
     private void stepsOfVerifyOperationForDocument(Document document, Employee currentUser, Folder folder) {
         //---------------------------------------------------------------- Грид папки
-        gridOfFoldersSteps.checkDisplayItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folder);
+        gridOfFoldersSteps.validateThatInGrid().itemDisplayed(document.getDocumentType().getDocRegisterCardsName(), folder);
         // Проверяем доступные операции с документом из грида
-        verifyOperationForDocumentInTheGrid(document, currentUser);
+        validateThatOperations().accessedInTheGrid(document, currentUser);
         //Переход в документ из грида
         gridOfFoldersSteps.openItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folder);
         //----------------------------------------------------------------ФОРМА - Документ
         // Ожидание и проверка кнопок тулбара
         taskElementsMobile.getToolbarOfMenu().waitUntil(visible, 15000);
-        verifyAccessToOperations(document, currentUser);
+        validateThatOperations().visibleWithRightAccessToOperations(document, currentUser);
 
     }
 

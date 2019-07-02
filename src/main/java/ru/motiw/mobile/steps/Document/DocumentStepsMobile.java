@@ -1,277 +1,80 @@
 package ru.motiw.mobile.steps.Document;
 
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import ru.motiw.mobile.elements.Documents.DocumentElementsMobile;
 import ru.motiw.mobile.elements.Internal.GridOfFolderElementsMobile;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
 import ru.motiw.mobile.elements.Tasks.TaskElementsMobile;
 import ru.motiw.mobile.model.Document.OperationsOfDocument;
+import ru.motiw.mobile.model.Document.TypeOfLocation;
 import ru.motiw.mobile.model.Document.TypeOperationsOfDocument;
-import ru.motiw.mobile.steps.Folders.GridOfFoldersSteps;
-import ru.motiw.mobile.steps.Tasks.TaskStepsMobile;
-import ru.motiw.web.model.Administration.Users.Employee;
-import ru.motiw.web.model.Document.Document;
-import ru.motiw.web.model.Document.OperationOfDocument;
-import ru.motiw.web.model.Document.Resolution;
+import ru.motiw.mobile.steps.CardStepsMobile;
+import ru.motiw.mobile.steps.Document.AssertionDocument.AssertDocument;
+import ru.motiw.mobile.steps.Document.ValidationSteps.ValidateOperationsOfDocumentStepsMobile;
+import ru.motiw.mobile.steps.Tasks.ValidationSteps.ValidateFilesStepsMobile;
 
-import static com.codeborne.selenide.Condition.text;
+import java.util.ArrayList;
+
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.page;
 import static com.codeborne.selenide.Selenide.sleep;
 import static org.testng.AssertJUnit.fail;
 
+
 /**
  * Работа с документами
  */
-public class DocumentStepsMobile {
+public class DocumentStepsMobile extends CardStepsMobile {
     private InternalElementsMobile internalElementsMobile = page(InternalElementsMobile.class);
-    private TaskStepsMobile taskStepsMobile = page(TaskStepsMobile.class);
     private TaskElementsMobile taskElementsMobile = page(TaskElementsMobile.class);
     private DocumentElementsMobile documentElementsMobile = page(DocumentElementsMobile.class);
     GridOfFolderElementsMobile gridOfFolderElementsMobile = page(GridOfFolderElementsMobile.class);
-    private GridOfFoldersSteps gridOfFoldersSteps = page(GridOfFoldersSteps.class);
+    ValidateFilesStepsMobile validateFilesStepsMobile = page(ValidateFilesStepsMobile.class);
 
 
     /**
-     * Проверка доступных операций в гриде или в карточке документа
-     * Набор кнопок зависит от роли пользователя и от того, на каком этапе находится документ ( на рассмотрении - false, на исполнении - true)
-     * <p>
-     * isOnExecution на рассмотрении - false, на исполнении - true)
+     * Получаем спискок названий операций, которые отображаются в данный момент
+     *
+     * @return спискок названий операций
      */
-    public void verifyAccessToOperations(Document document, Employee currentUser) {
+    public ArrayList<String> getNameOfCurrentVisibleOperations() {
 
-        // Проверка кнопки операции "Список резолюций"
-        verifyAccessToOperationsOnlyInDocumentForm(document.isOnExecution(), OperationsOfDocument.LIST_OF_RESOLUTION.getNameOperation());
+        ArrayList<String> textOnCurrentVisibleOperations = new ArrayList<>();
 
-        // Документ не на исполнении - Автор документа
-        if (!document.isOnExecution() && document.getAuthorOfDocument() == currentUser) {
-            verifySetOfOperationForDocument(
-                    new OperationOfDocument()
-                            .setMoveToExecution(true)
-                            .setMoveToArchive(true)
-                            .setCreateResolution(true));
+        // Извлекаем название операции
+        for (SelenideElement elementOfOperation : getElementOfAllOperation(getCurrentLocation())) {
+            textOnCurrentVisibleOperations.add(elementOfOperation.getText());
         }
 
-        // Документ не на исполнении - Рассматривающий документа
-        if (!document.isOnExecution() && currentUserIsUserInDocument(document.getRouteSchemeForDocument().getUserRoute(), currentUser)) {
-            verifySetOfOperationForDocument(
-                    new OperationOfDocument()
-                            .setMoveToExecution(true)
-                            .setMoveToArchive(true));
-        }
-
-        // ----------- Документ на исполнении (создана резолюция)
-        if (document.isOnExecution()) {
-            // Наличие отправленного отчета по исполнению резолюции
-            boolean resolutionWithReportOfExecution = findResolutionWithReportOfExecution(document.getResolutionOfDocument());
-
-            // ----------- Отчет по исполнению резолюции не отправлен
-            if (!resolutionWithReportOfExecution) {
-                // Документ на исполнении и Отчет по исполнению резолюции не отправлен - Автор документа
-                if (document.getAuthorOfDocument() == currentUser) {
-                    verifySetOfOperationForDocument(
-                            new OperationOfDocument()
-                                    .setCloseExecution(true)
-                                    .setCreateResolution(true));
-                }
-
-                // Документ на исполнении и Отчет по исполнению резолюции не отправлен -  Рассматривающий документа
-                if (currentUserIsUserInDocument(document.getRouteSchemeForDocument().getUserRoute(), currentUser)) {
-                    verifySetOfOperationForDocument(
-                            new OperationOfDocument());
-                }
-
-                // Документ на исполнении и Отчет по исполнению резолюции не отправлен -  Отв.Исполнитель резолюции
-                for (Resolution resolution : document.getResolutionOfDocument()) {
-                    if (currentUserIsUserInDocument(resolution.getExecutiveManagers(), currentUser)) {
-                        verifySetOfOperationForDocument(
-                                new OperationOfDocument()
-                                        .setCloseExecution(true));
-                    }
-                }
-            }
-
-            // -----------  Отчет по исполнению резолюции отправлен
-            if (resolutionWithReportOfExecution) {
-                // Отчет по исполнению резолюции отправлен - Автор документа
-                if (document.getAuthorOfDocument() == currentUser) {
-                    verifySetOfOperationForDocument(
-                            new OperationOfDocument()
-                                    .setReturnToExecution(true)
-                                    .setCloseExecution(true)
-                                    .setCreateResolution(true));
-                }
-
-
-                // Отчет по исполнению резолюции отправлен - Рассматривающий документа
-                if (currentUserIsUserInDocument(document.getRouteSchemeForDocument().getUserRoute(), currentUser)) {
-                    verifySetOfOperationForDocument(
-                            new OperationOfDocument());
-                }
-
-
-                // Отчет по исполнению Документа отправлен - Отв.Исполнитель резолюции
-                for (Resolution resolution : document.getResolutionOfDocument())
-                    if (resolution.getExecutiveManagers() != null) {
-                        if (currentUserIsUserInDocument(resolution.getExecutiveManagers(), currentUser)) {
-                            // отчет по резолюции, где текущий пользователь отв.рук, отправлен
-                            if (resolution.isReportOfExecution()) {
-                                verifySetOfOperationForDocument(
-                                        new OperationOfDocument());
-                            } else
-                                // отчет по резолюции, где текущий пользователь отв.рук, не отправлен
-                                verifySetOfOperationForDocument(
-                                        new OperationOfDocument()
-                                                .setCloseExecution(true));
-                        }
-                    }
-            }
-        }
+        return textOnCurrentVisibleOperations;
     }
 
+
     /**
-     * Метод для нахождения текущего пользователя в массиве пользователей из метаданных документа
+     * Получаем элемент операции в зависимости от того, где в данный момент операция отображается (конт.меню в гриде папки или форма документа)
      *
-     * @param usersInDocument
-     * @param currentUser
      * @return
      */
-    public boolean currentUserIsUserInDocument(Employee[] usersInDocument, Employee currentUser) {
-        if (usersInDocument != null)
-            for (Employee userInDocument : usersInDocument) {
-                if (userInDocument == currentUser) {
-                    return true;
-                }
-            }
+    public ElementsCollection getElementOfAllOperation(TypeOfLocation currentLocation) {
 
-        return false;
-    }
-
-    /**
-     * Метод для нахождения текущего пользователя среди отв.рук массива резолюций
-     *
-     * @param resolutions
-     * @param currentUser
-     * @return
-     */
-    public boolean currentUserIsExecutiveManagersInResolution(Resolution[] resolutions, Employee currentUser) {
-        if (resolutions != null)
-            for (Resolution resolution : resolutions) {
-                for (Employee executiveManager : resolution.getExecutiveManagers()) {
-                    if (executiveManager == currentUser) {
-                        return true;
-                    }
-                }
-            }
-        return false;
-    }
+        ElementsCollection elementOfOperation = null;
 
 
-    /**
-     * Проверка всех резолюций на наличие по ним отправленного отчета по исполнению резолюции
-     * отправлен - true
-     * не отправлен - false
-     *
-     * @param resolutions - список резолюций
-     * @return
-     */
-    private boolean findResolutionWithReportOfExecution(Resolution[] resolutions) {
-        for (Resolution resolution : resolutions) {
-            if (resolution.isReportOfExecution()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Проверка кнопок доступных операций в гриде или в карточке документа
-     *
-     * @param operationOfDocument - Операции Документа
-     */
-    public void verifySetOfOperationForDocument(OperationOfDocument operationOfDocument) {
-
-        // todo тут как-то getElementOfOperation вынести в переменную метода, чтобы при каждой проверке не обращаться к получению элемента
-
-        if (operationOfDocument.isCreateResolution()) {
-            getElementOfOperation(getNameOfOperation(TypeOperationsOfDocument.CREATE_RESOLUTION)).shouldBe(visible);
-        } else
-            getElementOfOperation(getNameOfOperation(TypeOperationsOfDocument.CREATE_RESOLUTION)).shouldNotBe(visible);
-
-        if (operationOfDocument.isMoveToExecution()) {
-            getElementOfOperation(OperationsOfDocument.MOVE_TO_EXECUTION.getNameOperation()).shouldBe(visible);
-        } else
-            getElementOfOperation(OperationsOfDocument.MOVE_TO_EXECUTION.getNameOperation()).shouldNotBe(visible);
-
-        if (operationOfDocument.isMoveToArchive()) {
-            getElementOfOperation(OperationsOfDocument.MOVE_TO_ARCHIVE.getNameOperation()).shouldBe(visible);
-        } else
-            getElementOfOperation(OperationsOfDocument.MOVE_TO_ARCHIVE.getNameOperation()).shouldNotBe(visible);
-
-        if (operationOfDocument.isReturnToExecution()) {
-            getElementOfOperation(OperationsOfDocument.RETURN_TO_EXECUTION.getNameOperation()).shouldBe(visible);
-        } else
-            getElementOfOperation(OperationsOfDocument.RETURN_TO_EXECUTION.getNameOperation()).shouldNotBe(visible);
-
-        if (operationOfDocument.isCloseExecution()) {
-            getElementOfOperation(OperationsOfDocument.CLOSE_EXECUTION.getNameOperation()).shouldBe(visible);
-        } else
-            getElementOfOperation(OperationsOfDocument.CLOSE_EXECUTION.getNameOperation()).shouldNotBe(visible);
-    }
-
-    /**
-     * Проверяем наличие доступных операций с документом из грида
-     *
-     * @param document
-     */
-    public void verifyOperationForDocumentInTheGrid(Document document, Employee currentUser) {
-        // Открываем меню операций
-        gridOfFoldersSteps.clickContextMenuForItemInGrid(document.getDocumentType().getDocRegisterCardsName());
-        // Проверяем наличие доступных операций с документом из грида
-        verifyAccessToOperations(document, currentUser);
-        // Закрываем меню операций
-        gridOfFoldersSteps.clickContextMenuForItemInGrid(document.getDocumentType().getDocRegisterCardsName());
-    }
-
-
-    /**
-     * Проверка кнопок операций, которые доступны только в карточке документа
-     * Набор кнопок зависит от роли пользователя и от того, на каком этапе находится документ ( на рассмотрении - false, на исполнении - true)
-     *
-     * @param onExecution на рассмотрении - false, на исполнении - true)
-     */
-    public void verifyAccessToOperationsOnlyInDocumentForm(Boolean onExecution, String nameOperation) {
-
-        if (taskElementsMobile.getToolbarOfMenu().is(visible)) // Если мы в карточке
+        if (currentLocation == TypeOfLocation.GRID_FOLDER) // Если мы в гриде
         {
-            if (!onExecution) {
-                documentElementsMobile.getButtonOfTab(nameOperation).shouldNotBe(visible);
-            } else {
-                documentElementsMobile.getButtonOfTab(nameOperation).shouldBe(visible);
-            }
+            elementOfOperation = gridOfFolderElementsMobile.getAllButtonsOfContextMenu();
+        } else if (currentLocation == TypeOfLocation.PAGE_CARD) // Если в карточке
+        {
+            elementOfOperation = documentElementsMobile.getAllButtonsOfTab();
         }
+
+        if (elementOfOperation == null) {
+            fail("Элемент для взаимодействия с операциями докмуента отсутствует");
+        }
+        return elementOfOperation;
     }
 
-
-    /**
-     * Проверка кол-во прикрепленных файлов
-     * Проверка файлов в каруселе
-     *
-     * @param document
-     * @return TaskStepsMobile
-     * @throws Exception
-     */
-    public DocumentStepsMobile verifyFilesInDocument(Document document) throws Exception {
-        if (document.getValueFiles() == null) {
-            return this;
-        } else {
-            // сравниваем кол-во прикрепленных файлов с числом отображаемым в элементе-переключтеле файлов.
-            taskElementsMobile.getNumbersOnElementCounterFiles().shouldHave(text("1 / " + document.getNumberOfFiles()));
-            //Проверка файлов в каруселе
-            taskStepsMobile.verifyFilesInPreview(document.getValueFiles(), document.getNumberOfFiles());
-        }
-        return this;
-    }
 
     /**
      * Получаем элемент операции в зависимости от того, где в данный момент операция отображается (конт.меню в гриде папки или форма документа)
@@ -279,15 +82,15 @@ public class DocumentStepsMobile {
      * @param nameOfOperation
      * @return
      */
-    SelenideElement getElementOfOperation(String nameOfOperation) {
+    public SelenideElement getElementOfOperation(String nameOfOperation, TypeOfLocation currentLocation) {
 
         SelenideElement elementOfOperation = null;
 
 
-        if (!gridOfFolderElementsMobile.getAllItemsInTheGridOfFolder().isEmpty()) // Если мы в гриде
+        if (currentLocation == TypeOfLocation.GRID_FOLDER) // Если мы в гриде
         {
             elementOfOperation = gridOfFolderElementsMobile.getOperationInContextMenu(nameOfOperation);
-        } else if (taskElementsMobile.getToolbarOfMenu().is(visible)) // Если в карточке
+        } else if (currentLocation == TypeOfLocation.PAGE_CARD) // Если в карточке
         {
             elementOfOperation = documentElementsMobile.getButtonOfTab(nameOfOperation);
         }
@@ -295,7 +98,6 @@ public class DocumentStepsMobile {
         if (elementOfOperation == null) {
             fail("Элемент для взаимодействия с операциями докмуента отсутствует");
         }
-
         return elementOfOperation;
     }
 
@@ -306,7 +108,7 @@ public class DocumentStepsMobile {
      * @param operation тип операции
      * @return
      */
-    String getNameOfOperation(TypeOperationsOfDocument operation) {
+    public String getNameOfOperation(TypeOperationsOfDocument operation) {
 
         String nameOfOperationCreateResolution = null;
 
@@ -324,7 +126,6 @@ public class DocumentStepsMobile {
         if (nameOfOperationCreateResolution == null) {
             fail("Для операции " + operation.name() + " отсутствует Название ИЛИ не найдено место выполнения операции");
         }
-
         return nameOfOperationCreateResolution;
     }
 
@@ -336,12 +137,30 @@ public class DocumentStepsMobile {
      */
     void executionOperationWithAdditionText(String nameOfOperation, String textForInput) {
         // Находим локатор элемента кнопки операции
-        getElementOfOperation(nameOfOperation).click();
+        getElementOfOperation(nameOfOperation, getCurrentLocation()).click();
         // Вводим текст в форму
         sleep(500);
         taskElementsMobile.getInputForAddComment().setValue(textForInput);
         // Подтверждаем выполнение действия
         internalElementsMobile.getButtonInFormOfExecutionOperations(nameOfOperation).click();
+    }
+
+    /**
+     * Проверки операций документа
+     *
+     * @return
+     */
+    ValidateOperationsOfDocumentStepsMobile validateThatOperations() {
+        return page(ValidateOperationsOfDocumentStepsMobile.class);
+    }
+
+    /**
+     * Assert'ы для документа и его внутренних объектов
+     *
+     * @return
+     */
+    AssertDocument assertThatInDocument() {
+        return page(AssertDocument.class);
     }
 
 }

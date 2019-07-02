@@ -159,21 +159,11 @@ public class UnionTasksSteps extends BaseSteps {
      * @param panelGrouping      элемент панели ПУГЗ
      * @param countPanelGrouping кол-во элементов на пенели управления группировкой задачи
      */
- /*  public void selectTheGroupInTheGridForUserComplete(SelenideElement panelGrouping, int countPanelGrouping) {
-        waitMaskForGridTask();
-        panelGrouping.click();
-        $$(By.xpath("//div[contains(@id,'ext-gen') and contains(@style,'visibility: visible')]//div[contains(@class,'x-combo-list-item')]"))
-                .shouldHaveSize(countPanelGrouping); // проверяем, кол-во зн-ий в панели группировок
-    }
-*/
-
-
     public void selectTheGroupInTheGridForUserComplete(SelenideElement panelGrouping, int countPanelGrouping) {
         waitMaskForGridTask();
         panelGrouping.click();
         $$(By.xpath("//ul[@id='clickcombo-1003-picker-listEl']//li[contains(@class, 'x-boundlist-item')]"))
                 .shouldHaveSize(countPanelGrouping); // проверяем, кол-во зн-ий в панели группировок
-
     }
 
     /**

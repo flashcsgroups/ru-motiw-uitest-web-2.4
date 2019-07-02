@@ -49,11 +49,10 @@ public class ExecutionOfDocument {
      * @param typeExecutionOperation Тип выполняемой операции
      * @return
      */
-    public ExecutionOfDocument setExecutionOperation(Integer executionNumber, Employee executiveUser, TypeOperationsOfDocument typeExecutionOperation) {
+    public ExecutionOfDocument (Integer executionNumber, Employee executiveUser, TypeOperationsOfDocument typeExecutionOperation) {
         this.executionNumber = executionNumber;
         this.executiveUser = executiveUser;
         this.typeExecutionOperation = typeExecutionOperation;
-        return this;
 
     }
 }

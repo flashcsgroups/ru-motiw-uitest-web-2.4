@@ -1,16 +1,14 @@
 package ru.motiw.mobile.steps.Folders;
 
 import com.codeborne.selenide.ex.ElementNotFound;
-import ru.motiw.mobile.elements.Documents.DocumentElementsMobile;
 import ru.motiw.mobile.elements.Internal.GridOfFolderElementsMobile;
-import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
+import ru.motiw.mobile.steps.Folders.ValidationSteps.ValidationGridOfFolders;
 import ru.motiw.mobile.steps.InternalStepsMobile;
-import ru.motiw.web.model.Administration.Users.Employee;
-import ru.motiw.web.model.Document.Document;
 import ru.motiw.web.model.Tasks.Folder;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.page;
+import static com.codeborne.selenide.Selenide.sleep;
 import static org.testng.Assert.fail;
 import static ru.motiw.utils.ElementUtil.scrollToAndClick;
 
@@ -20,10 +18,7 @@ import static ru.motiw.utils.ElementUtil.scrollToAndClick;
 
 public class GridOfFoldersSteps extends InternalStepsMobile {
 
-    private InternalElementsMobile internalElementsMobile = page(InternalElementsMobile.class);
-    private DocumentElementsMobile documentElementsMobile = page(DocumentElementsMobile.class);
     private GridOfFolderElementsMobile gridOfFolderElementsMobile = page(GridOfFolderElementsMobile.class);
-
 
     /**
      * Открытие папки
@@ -39,7 +34,7 @@ public class GridOfFoldersSteps extends InternalStepsMobile {
 
         try {
             // Ждем элемент с названием группировки Грида Папки
-            gridOfFolderElementsMobile.getItemHeaderOfGridFolder().waitUntil(appear, 2000);
+            gridOfFolderElementsMobile.getItemHeaderOfGridFolder().waitUntil(appear, 5000);
         } catch (Throwable notFoundItemHeaderOfGridFolder) {
             try {
                 // Ждем элемент с Текст "Документов нет" в Гриде Папки
@@ -50,49 +45,6 @@ public class GridOfFoldersSteps extends InternalStepsMobile {
                 fail("Не найден элемент в гриде папки");
             }
         }
-
-    }
-
-
-    /**
-     * Проверяем отображение созданного объекта в гриде раздела - Папки
-     *
-     * @param nameOfItem уникальный текст по которому ищем объект в гриде (наименование задачи, наименование типа документа)
-     * @param folder     наименование папки в к-й будет содержаться созданный объект
-     * @return GridOfFoldersSteps
-     */
-    public GridOfFoldersSteps checkDisplayItemInGrid(String nameOfItem, Folder folder) {
-        if (!internalElementsMobile.getMainTitle().is(text(folder.getNameFolder()))) {
-            openFolder(folder);  // входим в созданную папку
-        }
-        gridOfFolderElementsMobile.getItemInTheGrid(nameOfItem).waitUntil(visible, 2000); // проверяем отображение созданного объекта в гриде (отображается наименование задачи)
-        return this;
-    }
-
-    /**
-     * Проверяем исчезновение объекта в гриде раздела - Папки
-     *
-     * @param nameOfItem уникальный текст по которому ищем объект в гриде (наименование задачи, наименование типа документа)
-     * @return
-     */
-    public GridOfFoldersSteps checkDisappearItemInGrid(String nameOfItem, Folder folder) {
-
-        // Если после завершения задачи мы не перешли в папку, то переходим в созданную папку
-        if (!internalElementsMobile.getMainTitle().is(text(folder.getNameFolder()))) {
-            goToHome();
-            openFolder(folder);  // входим в созданную папку
-        }
-
-        // Если пакет amq ещё не пришел, то грид может не обновиться. Поэтому делаем так:
-        // 1. проверяем на отображение завершенной задачи в гриде.
-        // 2. и если завершенная задача продолжает отображаться, то перезагружаем страницу и проверяем снова.
-        if ((gridOfFolderElementsMobile.getItemInTheGrid(nameOfItem).isDisplayed())) {
-            refresh();
-            gridOfFolderElementsMobile.getItemHeaderOfGridFolder().waitUntil(appear, 5000);
-            (gridOfFolderElementsMobile.getItemInTheGrid(nameOfItem)).shouldNotBe(visible);
-        }
-
-        return this;
     }
 
 
@@ -115,53 +67,6 @@ public class GridOfFoldersSteps extends InternalStepsMobile {
         return page(GridOfFoldersSteps.class);
     }
 
-
-    /**
-     * Проверяем отображение или отсутствие признака нового документа в гриде папки
-     *
-     * @param document
-     * @param currentUser текущий пользователь
-     */
-    public void verifyMarkOfNewDocument(Document document, Employee currentUser) {
-
-        // Автор документа
-        if (document.getAuthorOfDocument() != null && document.getAuthorOfDocument() == currentUser) {
-            gridOfFolderElementsMobile.getMarkOfNewItem(document.getDocumentType().getDocRegisterCardsName()).shouldNotBe(visible);
-        }
-
-        // Рассматривающий документа
-        if (document.getRouteSchemeForDocument().getUserRoute() != null) {
-            for (Employee userRoute : document.getRouteSchemeForDocument().getUserRoute()) {
-                if (userRoute == currentUser) {
-                    gridOfFolderElementsMobile.getMarkOfNewItem(document.getDocumentType().getDocRegisterCardsName()).shouldBe(visible);
-                }
-            }
-        }
-    }
-
-    /**
-     * Проверяем отсутствие признака нового документа после возвращения в гриде папки
-     *
-     * @param document
-     */
-    public void checkDisappearMarkOfNewDocument(Document document, Folder folder) {
-        // Если после выполнения операций задачи мы не перешли в папку, то переходим в созданную папку
-        if (!internalElementsMobile.getMainTitle().is(text(folder.getNameFolder()))) {
-            goToHome();
-            openFolder(folder);  // входим в созданную папку
-        }
-
-        /*
-          Если пакет amq ещё не пришел, то грид может не обновиться. Поэтому делаем так:
-          1. проверяем на отображение Признака в гриде.
-          2. если Признак продолжает отображаться, то перезагружаем страницу и проверяем снова.
-         */
-        if ((gridOfFolderElementsMobile.getMarkOfNewItem(document.getDocumentType().getDocRegisterCardsName()).isDisplayed())) {
-            refresh();
-            gridOfFolderElementsMobile.getItemInTheGrid(document.getDocumentType().getDocRegisterCardsName()).waitUntil(visible, 5000);
-            gridOfFolderElementsMobile.getMarkOfNewItem(document.getDocumentType().getDocRegisterCardsName()).shouldNotBe(visible);
-        }
-    }
 
     /**
      * Нажатие на кнопку конт.меню операций для объекта (задачи\документа) в гриде папки
@@ -191,6 +96,15 @@ public class GridOfFoldersSteps extends InternalStepsMobile {
             // Проверяем, что конт.меню закрылось
             gridOfFolderElementsMobile.getContextMenu().shouldNotBe(visible);
         }
+    }
+
+    /**
+     * Проверки для грида Папки и объектов, которые он содержит
+     *
+     * @return
+     */
+    public ValidationGridOfFolders validateThatInGrid() {
+        return page(ValidationGridOfFolders.class);
     }
 }
 

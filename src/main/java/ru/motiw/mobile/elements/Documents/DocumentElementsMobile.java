@@ -24,6 +24,9 @@ public class DocumentElementsMobile {
     @FindBy(xpath = "//div[@class=\"x-component x-label resolution-list-authors x-layout-box-item x-layout-hbox-item\"]//div[@class=\"x-innerhtml\"]")
     private ElementsCollection authorsOfResolutionInItemInResolutionList;
 
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\")) and not(contains(@id,\"ext-object-toolbar\"))]//div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon x-has-text\") and not(contains(@class,\"x-hidden-display\"))]")
+    private ElementsCollection allButtonsOfTab;
+
     /**
      * Форма резолюции отображаемаемая в данный момент
      *
@@ -61,6 +64,16 @@ public class DocumentElementsMobile {
     }
 
     /**
+     * Набор элементов всех кнопкок на тулбаре
+     *
+     * @return все элементы из списка всех резолюций
+     */
+    public ElementsCollection getAllButtonsOfTab() {
+        return allButtonsOfTab;
+    }
+
+
+    /**
      * Автор резолюции в конкретной карточке списка резолюций
      *
      * @param textOfResolution Текст резолюции
@@ -90,7 +103,7 @@ public class DocumentElementsMobile {
      */
     public SelenideElement getButtonOfTab(String nameOfButton) {
         return $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\")) and not(contains(@id,\"ext-object-toolbar\"))]" +
-                "//div[text()='" + nameOfButton + "']//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]"));
+                "//div[text()='" + nameOfButton + "']//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\") and not(contains(@class,\"x-hidden-display\"))]"));
     }
 
     /**

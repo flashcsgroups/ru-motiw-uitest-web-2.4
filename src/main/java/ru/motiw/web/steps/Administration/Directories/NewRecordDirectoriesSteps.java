@@ -25,10 +25,12 @@ public class NewRecordDirectoriesSteps extends BaseSteps {
     private EditDirectoriesElements editDirectoriesElements = page(EditDirectoriesElements.class);
 
     /**
-     * @return  вощвращаем стр. для дальнейшего взаимодействия
+     * Создание новой записи
+     *
+     * @return вощвращаем стр. для дальнейшего взаимодействия
      * с елементами на странице
      */
-    public NewRecordDirectoriesSteps goTo(Directories directories) {
+    public NewRecordDirectoriesSteps addNewRecord(Directories directories) {
 
         String parentWindowHandler = getWebDriver().getWindowHandle(); //Запоминаем окно в котором находимся
 
@@ -38,13 +40,12 @@ public class NewRecordDirectoriesSteps extends BaseSteps {
         getWebDriver().switchTo().window(new WebDriverWait(getWebDriver(), 10).until(newWindowForm(By.xpath("//*[contains(text(),'Всего')]"))));
 
         //Добавление записи справочника
-        addAllFieldsTaskTypeList(directories.getDirectoriesFields());
+        addFields(directories.getDirectoriesFields());
 
         getWebDriver().close(); // Закрываем окно страницы
         getWebDriver().switchTo().window(parentWindowHandler); // Возращаемся в окно страницы 
         return page(NewRecordDirectoriesSteps.class);
     }
-
 
 
     /**
@@ -56,19 +57,16 @@ public class NewRecordDirectoriesSteps extends BaseSteps {
         typeOfField.click();
     }
 
-
     /**
-     * Добавление записи справочника
-     * Заполнение полей
+     * Заполнение полей при добавлении записи справочника
      *
      * @param directoriesFields атрибуты объекта - запись справочника
      */
-    public NewRecordDirectoriesSteps addAllFieldsTaskTypeList(DirectoriesField[] directoriesFields) {
+    private void addFields(DirectoriesField[] directoriesFields) {
         if (directoriesFields == null) {
-            return this;
+            return;
         }
         for (DirectoriesField directoriesItem : directoriesFields) {
-
             // СТРОКА
             if (directoriesItem.getFieldType() instanceof TypeListFieldsString) {
                 editDirectoriesElements.getAddRecordButton().click(); // Добавить запись
@@ -77,21 +75,16 @@ public class NewRecordDirectoriesSteps extends BaseSteps {
                 sleep(500);
                 TypeListFieldsString fieldString = (TypeListFieldsString) directoriesItem.getFieldType();
                 if (fieldString.getIsListChoice() == SettingsForTaskTypeListFields.YES) {
-                    // TODO
-                   // selectionEnumerationFieldSettingsForTheTaskTypeList(fieldsElements.getSelectionFromList(), fieldString.getIsListChoice()); // Выбор из списка
-                    //fieldsElements.getFieldListValue().setValue(fieldString.getValuesList()); // Список значений
+                    // TODO Выбор из списка
                 } else if (fieldString.getIsListChoice() == NO) {
                     editDirectoriesElements.getEditorField().setValue(directoriesItem.getDirectoriesItem()); // Ввод значений
                 }
                 $(By.xpath("//div[contains(text(),'" + directoriesItem.getFieldName() + "')]")).click(); //Убираем курсор с поля
                 editDirectoriesElements.getSaveButton().click(); // Сохранить
-                editDirectoriesElements.getTextOfSuccessefullSave().waitUntil(visible, 2000); // Окно после добавления записи "Запись успешно сохранена"
+                editDirectoriesElements.getTextOfSuccessefullSave().waitUntil(visible, 10000); // Окно после добавления записи "Запись успешно сохранена"
                 editDirectoriesElements.getOkButton().click(); // "ОК" в форме подтверждения
                 editDirectoriesElements.getRecordInGrid(directoriesItem.getDirectoriesItem()).waitUntil(visible, 1000); // Проверяем отображение в гриде
             }
-
         }
-        return this;
     }
-
 }

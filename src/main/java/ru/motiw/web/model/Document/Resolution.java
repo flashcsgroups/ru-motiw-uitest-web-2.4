@@ -39,4 +39,6 @@ public class Resolution extends Task {
         this.reportOfExecution = reportOfExecution;
         return this;
     }
+
+
 }

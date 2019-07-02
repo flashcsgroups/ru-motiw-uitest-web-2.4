@@ -2,62 +2,38 @@ package ru.motiw.mobile.steps.Tasks;
 
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
 import ru.motiw.mobile.elements.Login.LoginPageElementsMobile;
-import ru.motiw.mobile.elements.Tasks.NewTaskFormElementsMobile;
-import ru.motiw.mobile.elements.Tasks.TaskElementsMobile;
-import ru.motiw.mobile.model.Task.InnerGroupTabs;
 import ru.motiw.mobile.steps.InternalStepsMobile;
-import ru.motiw.mobile.steps.LoginStepsMobile;
+import ru.motiw.mobile.steps.Tasks.ValidationSteps.*;
 import ru.motiw.web.model.Administration.Directories.DirectoriesField;
 import ru.motiw.web.model.Administration.FieldsObject.*;
 import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
-import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Tasks.Task;
-import ru.motiw.web.steps.BaseSteps;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.page;
 import static org.testng.Assert.assertTrue;
 import static ru.motiw.mobile.model.Task.InnerGroupTabs.*;
-import static ru.motiw.mobile.model.URLMenuMobile.CREATE_TASK;
-import static ru.motiw.mobile.steps.BaseStepsMobile.openSectionOnURLMobile;
 
 /*
  Страница - Создать задачу
  */
 
+public class NewTaskStepsMobile extends CardTaskStepsMobile {
 
-public class NewTaskStepsMobile extends BaseSteps {
-
-    NewTaskFormElementsMobile newTaskFormElementsMobile = page(NewTaskFormElementsMobile.class);
-    private InternalElementsMobile internalElementsMobile = page(InternalElementsMobile.class);
-    private LoginStepsMobile loginStepsMobile = page(LoginStepsMobile.class);
     private InternalStepsMobile internalStepsMobile = page(InternalStepsMobile.class);
     private LoginPageElementsMobile loginPageElementsMobile = page(LoginPageElementsMobile.class);
-    private TaskElementsMobile taskElementsMobile = page(TaskElementsMobile.class);
-
-    File folder = new File(Configuration.reportsFolder);
-
-    /**
-     * Переход в Задачи/Создать задачу напрямую по ссылке
-     *
-     * @return UnionMessageNewSteps вощвращаем стр. для дальнейшего взаимодействия
-     * с елементами на странице
-     */
-    public static NewTaskStepsMobile goToURLNewTask() {
-        openSectionOnURLMobile(CREATE_TASK.getMenuURLMobile());
-        return page(NewTaskStepsMobile.class);
-    }
+    InternalElementsMobile internalElementsMobile = page(InternalElementsMobile.class);
+    ValidateValuesOfFieldsStepsMobile validateValuesOfFieldsStepsMobile = page(ValidateValuesOfFieldsStepsMobile.class);
+    ValidateFilesStepsMobile validateFilesStepsMobile = page(ValidateFilesStepsMobile.class);
+    ValidateActionsStepsMobile validateActionsStepsMobile = page(ValidateActionsStepsMobile.class);
+    ValidateGroupFieldsStepsMobile validateGroupFieldsStepsMobile = page(ValidateGroupFieldsStepsMobile.class);
 
 
     public NewTaskStepsMobile goToCreateOfNewTask() {
@@ -70,7 +46,6 @@ public class NewTaskStepsMobile extends BaseSteps {
         }
         return page(NewTaskStepsMobile.class);
     }
-
 
     /**
      * Проверка Загрузки страницы - форма Создания задачи - проверка отображения и кол-ва элементов (все блоки компонетов - поля задачи) в форме задачи
@@ -88,7 +63,7 @@ public class NewTaskStepsMobile extends BaseSteps {
      * @param nameTasks name task for input
      * @return page NewTaskPag
      */
-    public NewTaskStepsMobile setTaskName(String nameTasks) {
+    NewTaskStepsMobile setTaskName(String nameTasks) {
         newTaskFormElementsMobile.getTaskName().click();
         newTaskFormElementsMobile.getTaskName().setValue(nameTasks);
         return this;
@@ -100,7 +75,7 @@ public class NewTaskStepsMobile extends BaseSteps {
      * @param descriptionTasks description task for input
      * @return page NewTaskPag
      */
-    public NewTaskStepsMobile setTasksDescription(String descriptionTasks) {
+    NewTaskStepsMobile setTasksDescription(String descriptionTasks) {
         if (descriptionTasks == null) {
             return this;
         } else {
@@ -111,11 +86,10 @@ public class NewTaskStepsMobile extends BaseSteps {
         return this;
     }
 
-
     /**
      * Ввод даты начала
      */
-    public NewTaskStepsMobile setDateBegin(String begin) {
+    NewTaskStepsMobile setDateBegin(String begin) {
         if (begin == null) {
             return this;
         } else {
@@ -128,7 +102,7 @@ public class NewTaskStepsMobile extends BaseSteps {
     /**
      * Ввод даты окончания задачи
      */
-    public NewTaskStepsMobile setDateEnd(String end) {
+    NewTaskStepsMobile setDateEnd(String end) {
         if (end == null) {
             return this;
         } else {
@@ -139,86 +113,6 @@ public class NewTaskStepsMobile extends BaseSteps {
         return this;
     }
 
-
-    /*
-     * Открытие комонента выбора пользователей
-     */
-    public void openFormSelectUser(SelenideElement fieldCustomRole) {
-        fieldCustomRole.click(); //клик в само поле.
-        newTaskFormElementsMobile.getInputForSearchUsers().waitUntil(visible, 5000); // поле ввода
-    }
-
-
-    /**
-     * Добавление/Удаление пользователей в роли задачи
-     *
-     * @param employees       передаваемые пользователи
-     * @param fieldCustomRole выбираемая роль в задаче (Исполнители, Авторы и ОР)
-     */
-
-    public void choiceUserOnTheRole(Employee[] employees, SelenideElement fieldCustomRole) {
-        openFormSelectUser(fieldCustomRole);
-        if (employees != null) {
-            for (Employee employee : employees) {
-                if (employee.getLastName() != null) {
-                    //Очищаем поле, если содержит ранее введенные значения
-                    if (newTaskFormElementsMobile.getClearTriggerInputForSearchUsers().isDisplayed()) {
-                        newTaskFormElementsMobile.getClearTriggerInputForSearchUsers().click();
-                    }
-
-                    newTaskFormElementsMobile.getInputForSearchUsers().setValue(employee.getLastName()); // вводим в поле ввода Фамилию пользователя
-                    newTaskFormElementsMobile.getListOfUsers().shouldBe(CollectionCondition.size(1), 10000); //ожидание когда будет найден один пользователь. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
-
-                    //Выбор пользователя в списке
-                    newTaskFormElementsMobile.getUserFromList(employee.getLastName()).shouldBe(visible).click();
-                    //newTaskFormElementsMobile.getListOfUsers().shouldBe(CollectionCondition.sizeGreaterThan(1), 5000); //ожидание когда загрузится список пользователей. Это с учетом того, что у нас доступно для выбора больше одного пользователя.
-                }
-            }
-            newTaskFormElementsMobile.getButtonAppointUsers().click(); //кнопка "Назначить"
-            newTaskFormElementsMobile.getInputForSearchUsers().waitUntil(not(visible), 2000); // Ожидание закрытия формы
-        }
-    }
-
-    /**
-     * Проверка того, что текущий пользователь добавлен по умолчанию в роль задачи
-     *
-     * @param currentUser     передаваемый пользователи
-     * @param fieldCustomRole выбираемая роль в задаче (Исполнители, Авторы и ОР)
-     */
-
-    public void currentUserSelectedInTheRole(Employee currentUser, SelenideElement fieldCustomRole) {
-        openFormSelectUser(fieldCustomRole);
-        if (currentUser != null) {
-//            for (Employee employee : employees) {
-            //проверка того, что элемент ПЕРВОГО пользователя в списке - выделен т.е выбран в роль
-            newTaskFormElementsMobile.getSelectedUserInTheList(currentUser.getLastName()).shouldBe(visible);
-            newTaskFormElementsMobile.getInputForSearchUsers().sendKeys(Keys.chord(Keys.ESCAPE)); //Закрыть форму
-//            }
-        }
-    }
-
-
-    /**
-     * Добавление пользователей в роль задачи, через livesearch - Поиск по фамилии
-     *
-     * @param employees       передаваемые пользователи
-     * @param fieldCustomRole выбираемая роль в задаче (Исполнители, Авторы и ОР)
-     */
-    protected void choiceUsersThroughTheSearchLiveSurname(Employee[] employees, SelenideElement fieldCustomRole) {
-        if (employees != null) {
-            for (Employee employee : employees) {
-                $(fieldCustomRole).shouldNotBe(Condition.disabled);
-                //fieldCustomRole.clear();
-                fieldCustomRole.setValue(employee.getLastName());
-                // TODO баг - если пользователь НЕ admin, в данном случае нужно добавить пред условие - считывание Постановщик или прекондишен - установить соот. ФИО в реквизитах пользователя
-                $(By.xpath("//ul[contains(@style,' display: block')]//a[contains(text(),'" + employee.getLastName() + "')]"))
-                        .shouldBe(Condition.visible);
-                $(By.xpath("//ul[contains(@style,' display: block')]//a[contains(text(),'" + employee.getLastName() + "')]")).click();
-            }
-        }
-    }
-
-
     /**
      * Выбор булевой настройки в форме задачи
      * <p>
@@ -228,7 +122,7 @@ public class NewTaskStepsMobile extends BaseSteps {
      * @param inputCheckbox   совершить действие (снять/установить настройку)
      */
 
-    public void rangeOfValuesFromTheCheckbox(boolean stateOfCheckbox, SelenideElement inputCheckbox) {
+    private void rangeOfValuesFromTheCheckbox(boolean stateOfCheckbox, SelenideElement inputCheckbox) {
         if (stateOfCheckbox) {
             inputCheckbox.click();
         } else if ($(inputCheckbox).is(selected)) {
@@ -246,7 +140,7 @@ public class NewTaskStepsMobile extends BaseSteps {
      * @param stateInputOfCheckbox элемент для проверки состояния чекбокса (снят/установлен)
      */
 
-    public void rangeOfValuesFromTheCheckbox(boolean stateOfCheckbox, SelenideElement inputCheckbox, SelenideElement stateInputOfCheckbox) {
+    void rangeOfValuesFromTheCheckbox(boolean stateOfCheckbox, SelenideElement inputCheckbox, SelenideElement stateInputOfCheckbox) {
         if (stateOfCheckbox) {
             inputCheckbox.click();
         } else if ($(stateInputOfCheckbox).is(selected)) //если stateOfCheckbox не true, а чекбокс уже установлен, то снимаем.
@@ -364,7 +258,7 @@ public class NewTaskStepsMobile extends BaseSteps {
      * Удаления значений в пользовательских полях
      * требуется при редактировании ранее созданной задачи
      */
-    public NewTaskStepsMobile removeValueInCustomFields(FieldObject[] fieldObjects) {
+    NewTaskStepsMobile removeValueInCustomFields(FieldObject[] fieldObjects) {
 
         if (fieldObjects == null) {
             return this;
@@ -372,7 +266,6 @@ public class NewTaskStepsMobile extends BaseSteps {
         for (FieldObject fieldObject : fieldObjects) {
             // СОТРУДНИК
             if (fieldObject.getFieldType() instanceof TypeListFieldsEmployee) {
-
                 //------------- Проверка удаления ранее выбранных пользователей
                 choiceUserOnTheRole(fieldObject.getValueEmployeeField(), newTaskFormElementsMobile.getInputInUserFieldTypeEmployee(fieldObject.getFieldName())); // удаляем пользователя выбранного при создании задачи
             }
@@ -384,7 +277,7 @@ public class NewTaskStepsMobile extends BaseSteps {
     /**
      * Заполнение пользовательских полей
      */
-    public NewTaskStepsMobile setValueInCustomFields(FieldObject[] fieldObjects) {
+    NewTaskStepsMobile setValueInCustomFields(FieldObject[] fieldObjects) {
 
         if (fieldObjects == null) {
             return this;
@@ -451,36 +344,7 @@ public class NewTaskStepsMobile extends BaseSteps {
 
 
     /**
-     * Проверка названий Файлов в списке прикрепленных файлов
-     *
-     * @param nameOfFile названия файлов
-     *                   false  если среди файлов в списке не находим название файла
-     *                   true   если среди файлов в списке находим название файла
-     */
-
-    public boolean verifyNameFileInTheListFiles(String nameOfFile) {
-
-        List<SelenideElement> nameFileInTheList = new ArrayList<>(newTaskFormElementsMobile.getListOfNameFiles());
-
-        for (SelenideElement nameFile : nameFileInTheList) {
-            if ($(nameFile).is((text(nameOfFile)))) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    /*
-     * Открытие/Закрытие закладки группы полей на вкладке "Описание"
-     * */
-    public void selectGroupTab(InnerGroupTabs nameOfGroup) {
-        $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//div[contains(text(),'" + nameOfGroup.getNameOfGroupTab() + "')]//ancestor::div[contains(@class,\"x-unselectable x-paneltitle x-component\")]")).click();
-    }
-
-
-    /**
-     * Создание обычной задачи
+     * Создание задачи
      *
      * @param task передаваемые атрибуты задачи
      */
@@ -500,7 +364,7 @@ public class NewTaskStepsMobile extends BaseSteps {
         // Открываем  группу полей "Кому"
         selectGroupTab(TO_WHOM);
         // выбор пользователя по ФИО - через searchlive
-        currentUserSelectedInTheRole(task.getAuthorDefault(), newTaskFormElementsMobile.getAuthorsField()); // - по умолчанию Автор задачи текущий пользователь (admin)
+        validateValuesOfFieldsStepsMobile.currentUserSelectedInTheRole(task.getAuthorDefault(), newTaskFormElementsMobile.getAuthorsField()); // - по умолчанию Автор задачи текущий пользователь (admin)
         choiceUserOnTheRole(task.getAuthors(), newTaskFormElementsMobile.getAuthorsField()); // вводим - Авторы задачи
         choiceUserOnTheRole(task.getControllers(), newTaskFormElementsMobile.getСontrollersField()); // вводим - Контролеры задачи
         choiceUserOnTheRole(task.getExecutiveManagers(), newTaskFormElementsMobile.getResponsiblesField()); // вводим - Ответственные руководители
@@ -519,14 +383,13 @@ public class NewTaskStepsMobile extends BaseSteps {
         selectGroupTab(DATE);
 
         //--------------------------------- группа полей "Тип задачи"
-        $(By.xpath("//div[contains(@id,\"object\")]//input[@name='id_tasktype']")).shouldNotBe(empty);//Проверка поля названия при закрытой группы полей "Название" - проверяет что, поле не пустое, т.к должно быть значение по умолчанию.
+        $(By.xpath("//div[contains(@id,\"object\")]//input[@name='id_tasktype']")).shouldNotBe(empty);//Проверка поля названия при закрытой группы полей "Название" - проверяет, что поле не пустое, т.к должно быть значение по умолчанию.
         // Открываем  группу полей  "Тип задачи"
         selectGroupTab(TYPE_TASK);
-        $(By.xpath("//div[contains(@id,\"object\")]//input[@name='id_tasktype']")).shouldNotBe(empty);//Проверка поля названия при открытой группы полей "Название" - проверяет что, поле не пустое, т.к должно быть значение по умолчанию.
+        $(By.xpath("//div[contains(@id,\"object\")]//input[@name='id_tasktype']")).shouldNotBe(empty);//Проверка поля названия при открытой группы полей "Название" - проверяет, что поле не пустое, т.к должно быть значение по умолчанию.
         setTaskType(task.getTaskType()); //Тип задачи
         // если у пользователя была создана задача только с типом "Обычный"(по умолчанию), то баг в АРМе - у него нет поля Тип задачи.
         // Поэтому все что связано с этим полем  можно заккоментировать. или найти решение как обходить эту проблему.
-
 
         // Заполнение пользовательских полей
         setValueInCustomFields(task.getTaskFields());
@@ -548,11 +411,8 @@ public class NewTaskStepsMobile extends BaseSteps {
         rangeOfValuesFromTheCheckbox(task.getIsForReview(), newTaskFormElementsMobile.getCheckboxIsForReview()); // Признак - "Для ознакомления"
         // Закрываем  группу полей "Ещё"
         selectGroupTab(MORE);
-
         return this;
-
     }
-
 
     /**
      * Сохранить задачу
@@ -573,7 +433,6 @@ public class NewTaskStepsMobile extends BaseSteps {
     /**
      * Переходим по ссылке в появившемся toast в созданную задачу
      */
-
     public NewTaskStepsMobile goToNewTaskViaToast() {
         //Проверяем появление toast "Создана задача"
         loginPageElementsMobile.getToastOfNewTask().waitUntil(Condition.visible, 10000);
@@ -589,7 +448,7 @@ public class NewTaskStepsMobile extends BaseSteps {
      *
      * @param nameOfFiles названия файлов
      */
-    public NewTaskStepsMobile addAttachFiles(String[] nameOfFiles) {
+    NewTaskStepsMobile addAttachFiles(String[] nameOfFiles) {
         if (nameOfFiles != null)
             for (String nameOfFile : nameOfFiles) {
                 String mainFilePath = "src" + File.separator + "main" + File.separator +
@@ -598,10 +457,18 @@ public class NewTaskStepsMobile extends BaseSteps {
                         .uploadFile(new File(mainFilePath, nameOfFile));
                 assertTrue(file.exists()); // наверное, проверяет, что создан объект File.
                 assertTrue(file.getPath().replace(File.separatorChar, '/').endsWith("src/main/resources/attachfiles/" + nameOfFile + ""));
-                assertTrue(verifyNameFileInTheListFiles(nameOfFile), "Не пройдена проверка названий Файлов в списке прикрепленных файлов");
+                assertTrue(validateFilesStepsMobile.verifyNameFileInTheListFiles(nameOfFile), "Не пройдена проверка названий Файлов в списке прикрепленных файлов");
             }
         return this;
     }
 
+    /**
+     *  Проверки групп полей
+     *
+     * @return ValidateGroupFieldsStepsMobile
+     */
+    public ValidateGroupFieldsStepsMobile validateThatInGroupFields() {
+        return page(ValidateGroupFieldsStepsMobile.class);
+    }
 
 }

@@ -1,17 +1,18 @@
 package ru.motiw.testMobile;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.testng.ScreenShooter;
 import com.codeborne.selenide.testng.TextReport;
 import com.codeborne.selenide.testng.annotations.Report;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import ru.motiw.data.dataproviders.TasksMobile;
-import ru.motiw.data.listeners.ScreenShotOnFailListener;
 import ru.motiw.mobile.steps.Folders.GridOfFoldersSteps;
 import ru.motiw.mobile.steps.InternalStepsMobile;
 import ru.motiw.mobile.steps.LoginStepsMobile;
 import ru.motiw.mobile.steps.Tasks.*;
+import ru.motiw.mobile.steps.Tasks.ValidationSteps.ValidateActionsStepsMobile;
 import ru.motiw.web.elements.elementsweb.Tasks.GridTemplateOfTaskElements;
 import ru.motiw.web.model.Administration.Directories.Directories;
 import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
@@ -42,7 +43,7 @@ import static ru.motiw.web.steps.Administration.Users.DepartmentSteps.goToURLDep
 import static ru.motiw.web.steps.BaseSteps.openSectionOnURL;
 import static ru.motiw.web.steps.Tasks.UnionTasksSteps.goToUnionTasks;
 
-@Listeners({ScreenShotOnFailListener.class, TextReport.class})
+@Listeners({ScreenShooter.class, TextReport.class})
 @Report
 public class CreateTaskMobileTest extends TasksMobile {
 
@@ -60,8 +61,9 @@ public class CreateTaskMobileTest extends TasksMobile {
     private NewTaskStepsMobile newTaskStepsMobile;
     private GridOfFoldersSteps gridOfFoldersSteps;
     private TaskActionsStepsMobile taskActionsStepsMobile;
-    private EditOfTaskMobile editOfTaskMobile;
+    private EditOfTaskStepsMobile editOfTaskStepsMobile;
     private CloseTaskStepsMobile closeTaskStepsMobile;
+    private ValidateActionsStepsMobile validateActionsStepsMobile;
 
 
     @BeforeClass
@@ -72,7 +74,7 @@ public class CreateTaskMobileTest extends TasksMobile {
         newTaskStepsMobile = page(NewTaskStepsMobile.class);
         gridOfFoldersSteps = page(GridOfFoldersSteps.class);
         taskActionsStepsMobile = page(TaskActionsStepsMobile.class);
-        editOfTaskMobile = page(EditOfTaskMobile.class);
+        editOfTaskStepsMobile = page(EditOfTaskStepsMobile.class);
         closeTaskStepsMobile = page(CloseTaskStepsMobile.class);
         loginPageSteps = page(LoginStepsSteps.class);
         internalPageSteps = page(InternalSteps.class);
@@ -82,6 +84,7 @@ public class CreateTaskMobileTest extends TasksMobile {
         newRecordDirectoriesSteps = page(NewRecordDirectoriesSteps.class);
         gridTemplateOfTaskElements = page(GridTemplateOfTaskElements.class);
         templateOfTaskSteps = page(TemplateOfTaskSteps.class);
+        validateActionsStepsMobile = page(ValidateActionsStepsMobile.class);
     }
 
 
@@ -138,8 +141,8 @@ public class CreateTaskMobileTest extends TasksMobile {
         }
         //------------------------------------------------- Справочники
         if (directories != null) {
-        //Добавление записей в справочник для последующей проверки выбора из списка в АРМе
-            newRecordDirectoriesSteps.goTo(directories);
+            //Добавление записей в справочник для последующей проверки выбора из списка в АРМе
+            newRecordDirectoriesSteps.addNewRecord(directories);
         }
         //----------------- Создание типа задачи с набором пользовательских полей (новый тип задачи)
         // ---------------- ТИПЫ ЗАДАЧ
@@ -174,10 +177,11 @@ public class CreateTaskMobileTest extends TasksMobile {
 
         //----------------------------------------------------------------ФОРМА - создания Задачи
         newTaskStepsMobile.goToCreateOfNewTask().creatingTask(task);
-        taskStepsMobile.fieldsWhenGroupsClosed(); // Проверка отбражения полей при закрытых группах полей
-        taskStepsMobile.fieldsWhenGroupsOpen(task);// Проверка отбражения полей при открытых группах полей
-        taskStepsMobile.verifyValueWhenGroupsClosed(task); //проверка введенных значений в полях при закрытых группах полей
-        taskStepsMobile.verifyValueWhenGroupsOpen(task); //проверка введенных значений в полях при открытых группах полей
+        newTaskStepsMobile.validateThatInGroupFields()
+                .existFieldsWhenGroupsClosed()
+                .existFieldsWhenGroupsOpen(task)
+                .valuesInInputsExistWhenGroupsClosed(task)
+                .valuesInInputsExistWhenGroupsOpen(task);
         newTaskStepsMobile.saveTask()
                 .goToNewTaskViaToast(); //Сохраняем задачу и переходим в созданную задачу через вспылвающие уведомление - Toast
 
@@ -189,7 +193,7 @@ public class CreateTaskMobileTest extends TasksMobile {
         taskActionsStepsMobile.postAction(editTask.getActions());
 
         // редактируем атрибуты задачи
-        editOfTaskMobile.editOfTask(task, editTask);
+        editOfTaskStepsMobile.editOfTask(task, editTask);
 
         // Переходим на корневую страницу папок
         internalPageStepsMobile.goToHome();
@@ -197,19 +201,19 @@ public class CreateTaskMobileTest extends TasksMobile {
         //----------------------------------------------------------------ГРИД - Папка
         sleep(500); //ожидание папок;
         // Проверяем отображение созданной задачи в гриде папки
-        gridOfFoldersSteps.checkDisplayItemInGrid(editTask.getTaskName(), folder[0]);
+        gridOfFoldersSteps.validateThatInGrid().itemDisplayed(editTask.getTaskName(), folder[0]);
         //Переход в задачу из грида
         gridOfFoldersSteps.openItemInGrid(editTask.getTaskName(), folder[0]);
 
         //Проверка всех отредактированных полей после перезагрузки страницы
         taskStepsMobile.verifyCreatedTask(editTask);
         //Проверка добавленных действий после перезагрузки страницы
-        taskActionsStepsMobile.checkAddedActions(editTask.getActions());
+        validateActionsStepsMobile.checkAddedActions(editTask.getActions());
 
         //Завершаем задачу
         closeTaskStepsMobile.closeTask();
         //Проверяем исчезновение задачи в гриде папки
-        gridOfFoldersSteps.checkDisappearItemInGrid(editTask.getTaskName(), folder[0]);
+        gridOfFoldersSteps.validateThatInGrid().itemDisappear(editTask.getTaskName(), folder[0]);
         //todo переход в завершенную задачу по id, проверка добавленного комментрия при завершении задачи
         // Выход из системы
         internalPageStepsMobile.logout();
@@ -227,13 +231,13 @@ public class CreateTaskMobileTest extends TasksMobile {
 
         //----------------------------------------------------------------ФОРМА - создания Задачи
         newTaskStepsMobile.goToCreateOfNewTask().creatingTask(task);
-        taskStepsMobile.fieldsWhenGroupsClosed(); //проверка наличия полей при закрытых группах полей
-        taskStepsMobile.fieldsWhenGroupsOpen(task);//проверка наличия полей при открытых группах полей
-        taskStepsMobile.verifyValueWhenGroupsClosed(task); //проверка введенных значений в полях при закрытых группах полей
-        taskStepsMobile.verifyValueWhenGroupsOpen(task); //проверка введенных значений в полях при открытых группах полей
-
+        newTaskStepsMobile.validateThatInGroupFields()
+                .existFieldsWhenGroupsClosed()
+                .existFieldsWhenGroupsOpen(task)
+                .valuesInInputsExistWhenGroupsClosed(task)
+                .valuesInInputsExistWhenGroupsOpen(task);
         newTaskStepsMobile.saveTask()
-                .goToNewTaskViaToast(); //Сохраняем задачу и переходим в созданную задачу через всплывающие уведомление - Toast
+                .goToNewTaskViaToast(); // Сохраняем задачу и переходим в созданную задачу через всплывающие уведомление - Toast
 
         //----------------------------------------------------------------ФОРМА - Задача
         // Проверяем отображение значений в форме созданой задачи
@@ -242,7 +246,7 @@ public class CreateTaskMobileTest extends TasksMobile {
         //Добавление действия и проверяем его сохранение
         taskActionsStepsMobile.postAction(editTask.getActions());
         // редактируем атрибуты задачи
-        editOfTaskMobile.editOfTask(task, editTask);
+        editOfTaskStepsMobile.editOfTask(task, editTask);
 
         // Переходим на корневую страницу папок
         internalPageStepsMobile.goToHome();
@@ -250,57 +254,22 @@ public class CreateTaskMobileTest extends TasksMobile {
         //----------------------------------------------------------------ГРИД - Папка
         sleep(500); //ожидание папок;
         // Проверяем отображение созданной задачи в гриде папки
-        gridOfFoldersSteps.checkDisplayItemInGrid(editTask.getTaskName(), folder[0]);
+        gridOfFoldersSteps.validateThatInGrid().itemDisplayed(editTask.getTaskName(), folder[0]);
         //Переход в задачу из грида
         gridOfFoldersSteps.openItemInGrid(editTask.getTaskName(), folder[0]);
 
         //Проверка всех отредактированных полей после перезагрузки страницы
         taskStepsMobile.verifyCreatedTask(editTask);
         //Проверка добавленных действий после перезагрузки страницы
-        taskActionsStepsMobile.checkAddedActions(editTask.getActions());
+        validateActionsStepsMobile.checkAddedActions(editTask.getActions());
 
         //Завершаем задачу
         closeTaskStepsMobile.closeTask();
         //Проверяем исчезновение задачи в гриде папки
-        gridOfFoldersSteps.checkDisappearItemInGrid(editTask.getTaskName(), folder[0]);
+        gridOfFoldersSteps.validateThatInGrid().itemDisappear(editTask.getTaskName(), folder[0]);
         //todo переход в завершенную задачу по id, проверка добавленного комментрия при завершении задачи
         // Выход из системы
         internalPageStepsMobile.logout();
     }
-
-
-    //@Test(priority = 11, dataProvider = "objectDataEditTaskNewType", dataProviderClass = TasksMobile.class)
-    public void verifyCreateAndEditingTaskWithUserFieldsMobile1(Task task, Task editTask, Folder[] folder) throws Exception {
-        loginStepsMobile
-                .loginAs(ADMIN) // Авторизация
-                .waitLoadMainPage(); // Ожидание открытия главной страницы
-        //----------------------------------------------------------------ГРИД - Папка
-        sleep(500); //ожидание папок;
-        // Проверяем отображение созданной задачи в гриде папки
-        gridOfFoldersSteps.checkDisplayItemInGrid(editTask.getTaskName(), folder[0]);
-
-//        newTaskStepsMobile.goToCreateOfNewTask();
-//        sleep(1000);
-//        open("/m/#task/210");
-//
-//        sleep(500);
-//
-//        taskStepsMobile.openTab(DESCRIPTION_TAB);
-//        newTaskStepsMobile.selectGroupTab(TYPE_TASK);
-//
-//        DirectoriesField[] fields = new DirectoriesField[]{
-//                // Осуществляем заполнение (наполнение) полей справочника через массив
-//                (DirectoriesField) new DirectoriesField()
-//                        // Осуществляем заполнение (наполнение) полей справочника через массив
-//                        .setDirectoryItems("рУёпOъLъsдb"),
-//                (DirectoriesField) new DirectoriesField()
-//                        // Осуществляем заполнение (наполнение) полей справочника через массив
-//                        .setDirectoryItems("рУёпOъLъsдb1"),
-//        };
-//
-//        taskStepsMobile.verifyValueInInput("Множественная ссылка на справочник ЩtД2я", fields);
-
-    }
-
 
 }

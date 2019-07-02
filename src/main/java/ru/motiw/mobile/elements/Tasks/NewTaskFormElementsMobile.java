@@ -45,6 +45,9 @@ public class NewTaskFormElementsMobile {
     @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//input[@name=\"enddate\"]")
     private SelenideElement endField;
 
+    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//input[@name=\"id_tasktype\"]")
+    private SelenideElement taskType;
+
     @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//div[contains(text(),'Файлы')]//ancestor::div[contains(@class,\"x-panel x-container x-component small-collapser-panel x-noborder-trbl x-header-position-top x-panel-grey-background x-container-grey-background \")]//input[@class=\"x-input-el\"]")
     private SelenideElement fieldFiles;
 
@@ -169,6 +172,15 @@ public class NewTaskFormElementsMobile {
      */
     public SelenideElement getEndField() {
         return endField;
+    }
+
+    /**
+     * поле - Тип задачи
+     *
+     * @return
+     */
+    public SelenideElement getTaskType() {
+        return taskType;
     }
 
 
@@ -386,6 +398,14 @@ public class NewTaskFormElementsMobile {
      */
     public SelenideElement getStateOfCheckboxInUserField(String nameField) {
         return $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//span[text()='" + nameField + "']//ancestor::div[contains(@class,\" x-field\")]//input"));
+    }
+
+
+    /**
+     *  Строковое поле с индивидуальным названием - используется для проверки значений
+     */
+    public SelenideElement getInputWithCustomName(String nameField) {
+        return $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\"))]//span[text()='" + nameField + "']/../..//input"));
     }
 
     /**

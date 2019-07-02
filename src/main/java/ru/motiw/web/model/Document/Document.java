@@ -27,6 +27,7 @@ public class Document {
     private RouteSchemeEditor routeScheme;
     private Integer numberOfFiles;
     private Resolution[] resolutionOfDocument;
+    private OperationOfDocument operationOfDocument;
 
     /**
      * Тип документа
@@ -191,7 +192,8 @@ public class Document {
     private void setNumberOfFiles() {
 
         int numberOfFile = 0;
-        for (String s : getValueFiles()) {
+        for (String s : getValueFiles())  // todo можно заменить на getValueFiles().length ?
+        {
             numberOfFile++;
         }
 
@@ -228,5 +230,20 @@ public class Document {
         this.onExecution = onExecution;
         return this;
     }
+
+    /**
+     * Операции доступные для документа
+     *
+     * @return
+     */
+    public OperationOfDocument getOperationOfDocument() {
+        return operationOfDocument;
+    }
+
+    public Document setOperationOfDocument(OperationOfDocument operationOfDocument) {
+        this.operationOfDocument = operationOfDocument;
+        return this;
+    }
+
 
 }

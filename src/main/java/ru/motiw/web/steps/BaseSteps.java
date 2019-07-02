@@ -4,9 +4,16 @@ import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.ElementNotVisibleException;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
@@ -104,6 +111,33 @@ public abstract class BaseSteps {
     }
 
     /**
+     * Получить разницу между двумя списками строк (ArrayLists)
+     *
+     * @param shouldBeList Список строк, которые должны отображаться
+     * @param currentList  Список строк, которые действительно отображаются в интерфейсе
+     * @return
+     */
+    protected String getReportOfDifferenceBetweenTwoArrayLists(ArrayList<String> shouldBeList, ArrayList<String> currentList) {
+
+        Collection shouldBeCollection = new ArrayList(shouldBeList); //  Список строк, которые должны отображаться
+        Collection currentCollection = new ArrayList(currentList);  //  Список строк, которые отображаются в интерфейсе
+
+        Collection ShouldBeButNotFound = new ArrayList(shouldBeList); //  Список строк, которые должны отображаться, но не отображаются
+        Collection stringThatNotShouldBeButCurrentlyFind = new ArrayList(currentList); //  Список строк, которые не должны отображаться, но отображаются
+
+        // Получаем разницу между строками, которые должны отображаться и действительно отображаемыми в данный момент
+        ShouldBeButNotFound.removeAll(currentCollection);
+        stringThatNotShouldBeButCurrentlyFind.removeAll(shouldBeCollection);
+
+
+        return String.valueOf(" Список элементов, которые присутствуют - Current list: " + currentCollection + "\n"
+                + " Список элементов, которых не должно быть, но они есть  - Wrong Values in Current list: " + stringThatNotShouldBeButCurrentlyFind + "\n"
+                + " Список элементов, которые должны быть, но не их нет - ShouldBe But Not Found: " + ShouldBeButNotFound + "\n"
+                + " Ожидаемый список элементов - Full exp list: " + shouldBeList);
+    }
+
+
+    /**
      * Наличия элемента
      *
      * @param locator передаваемый локатор элемента для представления
@@ -119,6 +153,21 @@ public abstract class BaseSteps {
             return false;
         }
     }
+
+
+    /**
+     * Проверка значений в чебоксах для последующего сравнения с передаваемым значением методом assertTrue
+     */
+    public boolean verifyCheckboxIsSelected(boolean state, SelenideElement inputCheckbox) {
+        if (state) {
+            inputCheckbox.shouldBe(selected);
+            return true;
+        } else {
+            inputCheckbox.shouldNotBe(selected);
+            return true;
+        }
+    }
+
 
     public boolean isElementVisible(By by) {
         try {
@@ -165,7 +214,7 @@ public abstract class BaseSteps {
     protected void unwrapAllNodes(SelenideElement knot, By nodes) {
         try {
             while (isElementPresent(nodes)) {
-                if(isElementPresent(nodes)) {
+                if (isElementPresent(nodes)) {
                     knot.click();
                 }
             }

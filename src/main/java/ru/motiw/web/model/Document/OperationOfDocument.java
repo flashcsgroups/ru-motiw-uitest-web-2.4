@@ -5,55 +5,89 @@ package ru.motiw.web.model.Document;
  */
 public class OperationOfDocument extends Document {
 
-    private boolean CreateResolution;
-    private boolean MoveToExecution;
-    private boolean MoveToArchive;
-    private boolean ReturnToExecution;
-    private boolean CloseExecution;
+    private boolean listOfResolution;
+    private boolean createResolution;
+    private boolean moveToExecution;
+    private boolean moveToArchive;
+    private boolean returnToExecution;
+    private boolean closeExecution;
 
-
-    public boolean isReturnToExecution() {
-        return ReturnToExecution;
+    public boolean isListOfResolution() {
+        return listOfResolution;
     }
 
-    public OperationOfDocument setReturnToExecution(boolean returnToExecution) {
-        ReturnToExecution = returnToExecution;
+    public OperationOfDocument setListOfResolution(boolean listOfResolution) {
+        this.listOfResolution = listOfResolution;
         return this;
     }
 
+
     public boolean isCreateResolution() {
-        return CreateResolution;
+        return createResolution;
     }
 
     public OperationOfDocument setCreateResolution(boolean createResolution) {
-        CreateResolution = createResolution;
+        this.createResolution = createResolution;
         return this;
     }
 
     public boolean isMoveToExecution() {
-        return MoveToExecution;
+        return moveToExecution;
     }
 
     public OperationOfDocument setMoveToExecution(boolean moveToExecution) {
-        MoveToExecution = moveToExecution;
+        this.moveToExecution = moveToExecution;
         return this;
     }
 
     public boolean isMoveToArchive() {
-        return MoveToArchive;
+        return moveToArchive;
     }
 
     public OperationOfDocument setMoveToArchive(boolean moveToArchive) {
-        MoveToArchive = moveToArchive;
+        this.moveToArchive = moveToArchive;
+        return this;
+    }
+
+    public boolean isReturnToExecution() {
+        return returnToExecution;
+    }
+
+    public OperationOfDocument setReturnToExecution(boolean returnToExecution) {
+        this.returnToExecution = returnToExecution;
         return this;
     }
 
     public boolean isCloseExecution() {
-        return CloseExecution;
+        return closeExecution;
     }
 
     public OperationOfDocument setCloseExecution(boolean closeExecution) {
-        CloseExecution = closeExecution;
+        this.closeExecution = closeExecution;
         return this;
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        OperationOfDocument operationOfDocument = (OperationOfDocument) o;
+
+        return
+                listOfResolution == operationOfDocument.listOfResolution &&
+                        createResolution == operationOfDocument.createResolution &&
+                        moveToExecution == operationOfDocument.moveToExecution &&
+                        moveToArchive == operationOfDocument.moveToArchive &&
+                        returnToExecution == operationOfDocument.returnToExecution &&
+                        closeExecution == operationOfDocument.closeExecution;
+
+    }
+
+
 }

@@ -23,6 +23,9 @@ public class GridOfFolderElementsMobile {
     @FindBy(xpath = "//div[contains(text(),'Документов нет')]")
     private SelenideElement textNoHaveDocumentInGridFolder;
 
+    @FindBy(xpath = "//div[contains(@id,\"ext-dynamicmenu\") and contains(@class,\"x-menu\")]//div[contains(@class,\"button\")]")
+    private ElementsCollection allButtonsOfContextMenu;
+
     /**
      * Элемент в котором расположены объекты (задача или документа) в Гриде Папки
      *
@@ -120,9 +123,6 @@ public class GridOfFolderElementsMobile {
     }
 
 
-
-
-
     /**
      * Конт.меню операций для объекта (задачи\документа) в гриде папки
      *
@@ -142,6 +142,16 @@ public class GridOfFolderElementsMobile {
         return $(By.xpath("//div[contains(@id,\"ext-dynamicmenu\") and contains(@class,\"x-menu\")]//div[text()='" + nameOfOperation + "']/ancestor::div[contains(@class,\"x-button\")]"));
     }
 
+
+    /**
+     * Набор элементов всех кнопкок в конт.меню грида папки
+     *
+     * @return все элементы из списка всех резолюций
+     */
+    public ElementsCollection getAllButtonsOfContextMenu() {
+        return allButtonsOfContextMenu;
+    }
+
     /**
      * Набор видимых объектов (задачи\документа) в гриде папки
      *
@@ -150,5 +160,6 @@ public class GridOfFolderElementsMobile {
     public ElementsCollection getAllItemsInTheGridOfFolder() {
         return $$(By.xpath("//div[contains(@id,\"ext-tasklist\") and not (contains(@class,\"x-hidden\"))]//div[contains(@id,\"ext-tasklist-item\")]"));
     }
+
 
 }

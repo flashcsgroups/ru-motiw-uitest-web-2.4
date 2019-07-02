@@ -90,7 +90,7 @@ public class DirectoriesTest extends Administration {
                 .saveChangesOnObject(registerCardDirectories);
 
         // Добавление записи справочника
-        newRecordDirectoriesSteps.goTo(directories);
+        newRecordDirectoriesSteps.addNewRecord(directories);
     }
 
 }

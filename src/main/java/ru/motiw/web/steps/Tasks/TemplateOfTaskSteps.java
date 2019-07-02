@@ -2,7 +2,7 @@ package ru.motiw.web.steps.Tasks;
 
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.SelenideElement;
+import ru.motiw.mobile.steps.Tasks.ValidationSteps.ValidateValuesOfFieldsStepsMobile;
 import ru.motiw.web.elements.elementsweb.Tasks.GridTemplateOfTaskElements;
 import ru.motiw.web.elements.elementsweb.Tasks.TemplateOfTaskElements;
 import ru.motiw.web.model.Tasks.TemplateOfTask;
@@ -18,6 +18,7 @@ public class TemplateOfTaskSteps extends BaseSteps {
 
     private GridTemplateOfTaskElements gridTemplateOfTaskElements = page(GridTemplateOfTaskElements.class);;
     private TemplateOfTaskElements templateOfTaskElements = page(TemplateOfTaskElements.class);
+    private ValidateValuesOfFieldsStepsMobile validateValuesOfFieldsStepsMobile = page(ValidateValuesOfFieldsStepsMobile.class);
 
 
     /**
@@ -29,16 +30,10 @@ public class TemplateOfTaskSteps extends BaseSteps {
         }
             // Название шаблона
             if (taskTypeListEditObjects.getName() != null) {
-                verifyValueInInput(templateOfTaskElements.getInputTemplateName(), taskTypeListEditObjects.getName());
+                validateValuesOfFieldsStepsMobile.verifyValueInInputOfField(taskTypeListEditObjects.getName(), templateOfTaskElements.getInputTemplateName());
             }
 
     }
-
-    //Проверка значений в инпутах
-    private void verifyValueInInput(SelenideElement field, String valueField) {
-        field.shouldBe(Condition.exactValue(valueField));
-    }
-
 
     //Добавление записи
     public void createTemplateOfTask(TemplateOfTask[] templateOfTasks) {

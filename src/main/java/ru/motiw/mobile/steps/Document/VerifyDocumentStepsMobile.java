@@ -10,13 +10,15 @@ import ru.motiw.web.model.Document.Document;
 import ru.motiw.web.model.Document.Resolution;
 import ru.motiw.web.model.Tasks.Folder;
 
+import java.util.Arrays;
+
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.page;
 import static com.codeborne.selenide.Selenide.sleep;
 
 /**
- * Верификация карточки
+ * Проверка карточки
  */
 public class VerifyDocumentStepsMobile extends DocumentStepsMobile {
     private LoginStepsMobile loginStepsMobile = page(LoginStepsMobile.class);
@@ -42,12 +44,12 @@ public class VerifyDocumentStepsMobile extends DocumentStepsMobile {
          * Ожидание и проверка кнопок тулбара
          */
         taskElementsMobile.getToolbarOfMenu().waitUntil(visible, 10000);
-        verifyAccessToOperations(document, currentUser);
+        validateThatOperations().visibleWithRightAccessToOperations(document, currentUser);
 
         /*
          * Проверка Файлов
          */
-        verifyFilesInDocument(document);
+        validateFilesStepsMobile.verifyFilesInDocument(document);
 
         return this;
     }
@@ -69,17 +71,17 @@ public class VerifyDocumentStepsMobile extends DocumentStepsMobile {
         sleep(500); //ожидание папок;
 
         // Проверки для Авторов документа и участников резолюции
-        if (document.getAuthorOfDocument() == currentUser || currentUserIsExecutiveManagersInResolution(document.getResolutionOfDocument(), currentUser)) {
+        if (document.getAuthorOfDocument() == currentUser || assertThatInDocument().currentUserIsExecutiveManagersInResolution(document.getResolutionOfDocument(), currentUser)) {
             stepsOfVerifyExistingDocument(document, currentUser, folders[0]);
         }
 
         // Проверки для участников рассмотрения
-        if (currentUserIsUserInDocument(document.getRouteSchemeForDocument().getUserRoute(), currentUser)) {
+        if (Arrays.asList(document.getRouteSchemeForDocument().getUserRoute()).contains(currentUser)) {
             if (!document.isOnExecution()) {
                 stepsOfVerifyExistingDocument(document, currentUser, folders[0]);
             } else
                 //Проверяем что документа нет гриде
-                gridOfFoldersSteps.checkDisappearItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folders[0]);
+                gridOfFoldersSteps.validateThatInGrid().itemDisappear(document.getDocumentType().getDocRegisterCardsName(), folders[0]);
         }
 
         // Выход из системы
@@ -97,13 +99,13 @@ public class VerifyDocumentStepsMobile extends DocumentStepsMobile {
     private void stepsOfVerifyExistingDocument(Document document, Employee currentUser, Folder folder) throws Exception {
 
         // Проверяем отображение созданного документа в гриде папки
-        gridOfFoldersSteps.checkDisplayItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folder);
+        gridOfFoldersSteps.validateThatInGrid().itemDisplayed(document.getDocumentType().getDocRegisterCardsName(), folder);
 
         // Проверяем отображение или отсутствие признака нового документа в гриде папки
-        gridOfFoldersSteps.verifyMarkOfNewDocument(document, currentUser);
+        gridOfFoldersSteps.validateThatInGrid().itemHaveMarkOfNewDocumentForCurrentUser(document, currentUser);
 
         // Проверяем доступные операции с документом из грида
-        verifyOperationForDocumentInTheGrid(document, currentUser);
+        validateThatOperations().accessedInTheGrid(document, currentUser);
 
         //Переход в документ из грида
         gridOfFoldersSteps.openItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folder); // todo нужно чтобы шаблон отображения в арме имел более уникальное значение чем Тип документа.  Открывать записи по такому уникальному значению.
@@ -112,7 +114,7 @@ public class VerifyDocumentStepsMobile extends DocumentStepsMobile {
 
         //----------------------------------------------------------------ГРИД - Папка
         // Проверяем отсутствие признака нового документа после возвращения в грид папки
-        gridOfFoldersSteps.checkDisappearMarkOfNewDocument(document, folder);
+        gridOfFoldersSteps.validateThatInGrid().markOfNewDocumentDisappeared(document, folder);
     }
 
     /**
@@ -148,9 +150,7 @@ public class VerifyDocumentStepsMobile extends DocumentStepsMobile {
                 }
             }
         }
-
         return this;
     }
-
 
 }

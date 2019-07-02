@@ -1,19 +1,16 @@
 package ru.motiw.mobile.steps.Tasks;
 
-import ru.motiw.mobile.elements.Tasks.TaskElementsMobile;
 import ru.motiw.web.model.Tasks.Task;
 
-import static com.codeborne.selenide.Selenide.page;
 import static com.codeborne.selenide.Selenide.sleep;
 import static ru.motiw.mobile.model.Task.InnerGroupTabs.*;
 import static ru.motiw.mobile.model.Task.TabsOfTask.DESCRIPTION_TAB;
 
+/**
+ *  Редактирование задачи
+ */
 
-public class EditOfTaskMobile extends NewTaskStepsMobile {
-
-    private TaskStepsMobile taskStepsMobile = page(TaskStepsMobile.class);
-    private TaskElementsMobile taskElementsMobile = page(TaskElementsMobile.class);
-
+public class EditOfTaskStepsMobile extends NewTaskStepsMobile {
 
     /**
      * Редактирование задачи
@@ -21,12 +18,11 @@ public class EditOfTaskMobile extends NewTaskStepsMobile {
      * @param editTask передаваемые атрибуты заполняемые при редактировнаии задачи
      */
 
-    public EditOfTaskMobile editOfTask(Task task, Task editTask) {
+    public EditOfTaskStepsMobile editOfTask(Task task, Task editTask) {
 
         //Переходим на вкладку "Описание"
-        taskStepsMobile.openTab(DESCRIPTION_TAB);
-        taskStepsMobile.verifyElementsOnDescriptionPage();// Ожидание и проверка элементов на вкладке "Описание"
-
+        openTab(DESCRIPTION_TAB);
+        verifyElementsOnDescriptionPage();// Ожидание и проверка элементов на вкладке "Описание"
         //------------- Проверка Заполнения системных полей
         // Разворачиваем  группу полей  "Название"
         selectGroupTab(NAME);
@@ -51,7 +47,6 @@ public class EditOfTaskMobile extends NewTaskStepsMobile {
         choiceUserOnTheRole(editTask.getControllers(), newTaskFormElementsMobile.getСontrollersField()); // Добавляем нового пользователя
         choiceUserOnTheRole(editTask.getExecutiveManagers(), newTaskFormElementsMobile.getResponsiblesField()); // Добавляем нового пользователя
         choiceUserOnTheRole(editTask.getWorkers(), newTaskFormElementsMobile.getWorkersField()); // Добавляем нового пользователя
-
         // Закрываем  группу полей  "Кому"
         selectGroupTab(TO_WHOM);
 
@@ -62,7 +57,6 @@ public class EditOfTaskMobile extends NewTaskStepsMobile {
         //Заполняем Даты
         setDateBegin(editTask.getDateBegin())
                 .setDateEnd(editTask.getDateEnd());
-
         // Закрываем группу полей  "Срок"
         selectGroupTab(DATE);
 
@@ -72,14 +66,13 @@ public class EditOfTaskMobile extends NewTaskStepsMobile {
         removeValueInCustomFields(task.getTaskFields());
         // Заполнение пользовательских полей
         setValueInCustomFields(editTask.getTaskFields());
-
         // Закрываем группу полей  "Тип задачи"
         selectGroupTab(TYPE_TASK);
 
         // Открываем группу полей "Файлы"
         selectGroupTab(FILES);
         addAttachFiles(editTask.getFileName());
-        taskStepsMobile.deleteFile(task.getFileName()); // Удаляем файлы прикрепленные при создании задачи
+        validateFilesStepsMobile.deleteFile(task.getFileName()); // Удаляем файлы прикрепленные при создании задачи
         // Закрываем  группу полей "Файлы"
         selectGroupTab(FILES);
 
@@ -91,10 +84,8 @@ public class EditOfTaskMobile extends NewTaskStepsMobile {
         // Закрываем  группу полей "Ещё"
         selectGroupTab(MORE);
         sleep(1000);
-
         //Сохранить
         taskElementsMobile.getButtonOfSave().click();
-
         return this;
     }
 }

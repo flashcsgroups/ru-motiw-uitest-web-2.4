@@ -77,8 +77,8 @@ public class LoginStepsSteps extends BaseSteps {
     }
 
 
-    /*
-     *В некоторых случаях необходимо ожидание после авторизации. Учтены три разных случаев возможных после авторизации.
+    /**
+     * В некоторых случаях необходимо ожидание после авторизации. Учтены три разных случаев возможных после авторизации.
      * Заодно проверяем элементы и текст, которые должны быть при этих случаях
      */
     private void waitAfterAuthorization() {
@@ -127,7 +127,7 @@ public class LoginStepsSteps extends BaseSteps {
      */
     public boolean newUserIsLoggedInAs(Employee user) {
         return isLoggedIn()
-                && getLoggedUser().getLoginName().equals(user.getLoginName());
+                && getLoggedUser().getLoginName().equals(user.getLoginName()+1);
     }
 
     /**

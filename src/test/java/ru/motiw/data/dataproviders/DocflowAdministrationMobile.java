@@ -53,17 +53,11 @@ public abstract class DocflowAdministrationMobile extends BaseTest {
             )
             .setExecutionOfDocument(new ExecutionOfDocument[]
                     {
-                            new ExecutionOfDocument()
-                                    .setExecutionOperation(1, EMPLOYEE_ADMIN, CREATE_RESOLUTION),
-                            new ExecutionOfDocument()
-                                    .setExecutionOperation(2, employee[1], CLOSE_EXECUTION),
-                            new ExecutionOfDocument()
-                                    .setExecutionOperation(3, employee[2], CLOSE_EXECUTION),
-                            new ExecutionOfDocument()
-                                    .setExecutionOperation(4, EMPLOYEE_ADMIN, RETURN_TO_EXECUTION),
-                            new ExecutionOfDocument()
-                                    .setExecutionOperation(5, EMPLOYEE_ADMIN, CLOSE_EXECUTION)
-
+                            new ExecutionOfDocument(1, EMPLOYEE_ADMIN, CREATE_RESOLUTION),
+                            new ExecutionOfDocument(2, employee[1], CLOSE_EXECUTION),
+                            new ExecutionOfDocument(3, employee[2], CLOSE_EXECUTION),
+                            new ExecutionOfDocument(4, EMPLOYEE_ADMIN, RETURN_TO_EXECUTION),
+                            new ExecutionOfDocument(5, EMPLOYEE_ADMIN, CLOSE_EXECUTION)
 
                     } // Выполняемые операции в карточке документа
             )

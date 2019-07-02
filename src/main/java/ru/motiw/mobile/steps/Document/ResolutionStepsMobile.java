@@ -6,10 +6,9 @@ import ru.motiw.mobile.elements.Internal.GridOfFolderElementsMobile;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
 import ru.motiw.mobile.elements.Tasks.TaskElementsMobile;
 import ru.motiw.mobile.model.Document.OperationsOfDocument;
-import ru.motiw.mobile.model.Document.TypeOfExecutionPlace;
+import ru.motiw.mobile.model.Document.TypeOfLocation;
 import ru.motiw.mobile.model.Document.TypeOperationsOfDocument;
 import ru.motiw.mobile.steps.Folders.GridOfFoldersSteps;
-import ru.motiw.mobile.steps.Tasks.NewTaskStepsMobile;
 import ru.motiw.web.model.Document.Document;
 import ru.motiw.web.model.Document.Resolution;
 import ru.motiw.web.model.Tasks.Folder;
@@ -22,10 +21,8 @@ import static com.codeborne.selenide.Selenide.sleep;
 /**
  * Работа с резолюциями
  */
-public class ResolutionStepsMobile {
+public class ResolutionStepsMobile extends DocumentStepsMobile {
     private DocumentElementsMobile documentElementsMobile = page(DocumentElementsMobile.class);
-    private DocumentStepsMobile documentStepsMobile = page(DocumentStepsMobile.class);
-    private NewTaskStepsMobile newTaskStepsMobile = page(NewTaskStepsMobile.class);
     private InternalElementsMobile internalElementsMobile = page(InternalElementsMobile.class);
     private GridOfFoldersSteps gridOfFoldersSteps = page(GridOfFoldersSteps.class);
     private TaskElementsMobile taskElementsMobile = page(TaskElementsMobile.class);
@@ -34,11 +31,10 @@ public class ResolutionStepsMobile {
     /**
      * Создание резолюции
      */
-    public ResolutionStepsMobile createResolution(Document document, Folder folder, Resolution resolution, TypeOfExecutionPlace executionPlace) {
-
+    public ResolutionStepsMobile createResolution(Document document, Folder folder, Resolution resolution, TypeOfLocation executionPlace) {
         sleep(2000); // При массовом создании нужно ожидание перед определением места, где мы сейчас находимся. т.к  после создания резолции происходит переход между страницами
         // ---------------------------------------------------------------- Выполнение операций из грида папки в конт.меню операций
-        if (executionPlace == TypeOfExecutionPlace.CONTEXT_MENU_IN_THE_GRID_FOLDER) {
+        if (executionPlace == TypeOfLocation.GRID_FOLDER) {
             // Если конт.меню операций не открыто (в случае повторного выполнения операции скрыто), то открываем меню операций
             if (!(gridOfFolderElementsMobile.getContextMenu().is(visible))) {
                 gridOfFoldersSteps.clickContextMenuForItemInGrid(document.getDocumentType().getDocRegisterCardsName());
@@ -46,8 +42,8 @@ public class ResolutionStepsMobile {
         }
 
         // ---------------------------------------------------------------- Выполнение операций в карточке документа
-        if (executionPlace == TypeOfExecutionPlace.DOCUMENT_CARD) {
-            // Если мы не в карточке документа, то переходим в неё (т.к после создания резолюции происходит переход к следующему документу или в грид)
+        if (executionPlace == TypeOfLocation.PAGE_CARD) {
+            // Если мы не в карточке документа в котором должны будем выполнить операцию, то переходим в неё (т.к после создания резолюции происходит переход к следующему документу или в грид)
             if (!internalElementsMobile.getMainTitle().is(text(document.getDocumentType().getDocRegisterCardsName()))) // Название документа в хедере
             {
                 gridOfFoldersSteps.goToHome();
@@ -58,11 +54,11 @@ public class ResolutionStepsMobile {
             }
         }
 
-        documentStepsMobile.getElementOfOperation(documentStepsMobile.getNameOfOperation(TypeOperationsOfDocument.CREATE_RESOLUTION)).click();
+        getElementOfOperation(getNameOfOperation(TypeOperationsOfDocument.CREATE_RESOLUTION), getCurrentLocation()).click();
         documentElementsMobile.getFormOfResolution().waitUntil(visible, 500);
 
         // Заполнение полей раб.группа
-        newTaskStepsMobile.choiceUserOnTheRole(
+        choiceUserOnTheRole(
                 resolution.getExecutiveManagers(),
                 documentElementsMobile.getInputEmployeeFieldInFormOfCreateResolution("Ответственный руководитель"));
 
@@ -82,10 +78,9 @@ public class ResolutionStepsMobile {
     /**
      * Проверка резолюции
      *
-     * @param document
      * @return
      */
-    public ResolutionStepsMobile verifyCreatedResolution(Document document, Resolution resolution) {
+    public ResolutionStepsMobile verifyCreatedResolution(Resolution resolution) {
         documentElementsMobile.getButtonOfTab(OperationsOfDocument.LIST_OF_RESOLUTION.getNameOperation()).click(); // Открываем список
         documentElementsMobile.getItemInResolutionList().shouldBe(CollectionCondition.sizeGreaterThan(0), 20000);
 

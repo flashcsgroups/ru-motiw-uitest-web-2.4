@@ -12,7 +12,7 @@ import static org.testng.Assert.assertTrue;
  */
 public class InternalStepsMobile extends BaseSteps {
 
-    private InternalElementsMobile internalElementsMobile = page(InternalElementsMobile.class);
+    protected InternalElementsMobile internalElementsMobile = page(InternalElementsMobile.class);
     private LoginStepsMobile loginStepsMobile = page(LoginStepsMobile.class);
 
     /**
@@ -45,13 +45,13 @@ public class InternalStepsMobile extends BaseSteps {
     }
 
     /**
-     * Универсальный выход из системы (где бы ненаходился пользователь)
+     * Универсальный выход из системы (где бы не находился пользователь)
      */
     public void logout() {
         sleep(500);
         goToHome(); // Переходим в папки
         goToInternalMenu(); // Открываем главное меню
-        internalElementsMobile.getLogout().click(); // Выход  todo после goToInternalMenu() Открывается страница поиска - надо посмотреть - после создания резолюций
+        internalElementsMobile.getLogout().click(); // Выход
         assertTrue(loginStepsMobile.isNotLoggedInMobile());// Проверяем то, что мы разлогинены
         clearBrowserCache();
         refresh(); // т.к после логаута могут быть проблемы с повторной автворизацией.
