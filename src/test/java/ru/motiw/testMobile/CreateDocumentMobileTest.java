@@ -8,7 +8,6 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import ru.motiw.data.dataproviders.DocflowAdministrationMobile;
 import ru.motiw.mobile.model.Document.TypeOfLocation;
-import ru.motiw.mobile.model.FilesForAttachment;
 import ru.motiw.mobile.steps.AnnotationOnFilesSteps;
 import ru.motiw.mobile.steps.Document.DocumentStepsMobile;
 import ru.motiw.mobile.steps.Document.ExecutionDocumentStepsMobile;
@@ -19,10 +18,7 @@ import ru.motiw.mobile.steps.LoginStepsMobile;
 import ru.motiw.web.model.Administration.Users.Department;
 import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.DocRegisterCards;
-import ru.motiw.web.model.DocflowAdministration.RouteSchemeEditor.RouteSchemeEditor;
 import ru.motiw.web.model.Document.Document;
-import ru.motiw.web.model.Document.ExecutionOfDocument;
-import ru.motiw.web.model.Document.Resolution;
 import ru.motiw.web.model.Tasks.Folder;
 import ru.motiw.web.steps.Administration.Users.UsersSteps;
 import ru.motiw.web.steps.DocflowAdministration.DocumentRegistrationCards.FormDocRegisterCardsEditConnectedRoutesSteps;
@@ -36,8 +32,6 @@ import static com.codeborne.selenide.Selenide.page;
 import static com.codeborne.selenide.WebDriverRunner.clearBrowserCache;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testng.AssertJUnit.assertTrue;
-import static ru.motiw.data.dataproviders.Tasks.getRandomProject;
-import static ru.motiw.mobile.model.Document.TypeOperationsOfDocument.CLOSE_EXECUTION;
 import static ru.motiw.web.steps.Administration.Users.DepartmentSteps.goToURLDepartments;
 import static ru.motiw.web.steps.Documents.CreateDocument.NewDocumentSteps.goToURLNewDocument;
 import static ru.motiw.web.steps.Tasks.UnionTasksSteps.goToUnionTasks;
@@ -157,225 +151,4 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
         //Выполнение действий с документом
         executionDocumentStepsMobile.executionOnDifferentUsers(document, folders[0], TypeOfLocation.PAGE_CARD);
     }
-
-//    @Test(priority = 4, dataProvider = "objectDataForVerifyingCreateDocument", dataProviderClass = DocflowAdministrationMobile.class)
-//    public void verifyCommentOnFileInDocument(Department[] departments, Employee[] employee, DocRegisterCards registerCards, Document document, Folder[] folders) throws Exception {
-//
-//
-//        // todo вынести отдельно с созданием предуловий - нового документа т.к во  тут документ будет в архиве в предыдуших тестах. Каждую проверку в отдельный @test
-//
-//        Folder[] folder1 = new Folder[]{
-//                new Folder()
-//                        .setNameFolder("дог") // Зн-ие НЕ изменять - используется в проверке - checkDisplayCreateAFolderInTheGrid()
-//        };
-//
-//
-//
-//        loginStepsMobile
-//                .loginAs(ADMIN) // Авторизация под участником рассмотрения документа
-//                .waitLoadMainPage(); // Ожидание открытия главной страницы
-//        gridOfFoldersSteps.openFolder(folder1[0]);
-//        gridOfFoldersSteps.openItemInGrid("Проект документа № 4, 123123", folder1[0]);
-//
-//        //  Ожидание и проверка кнопок тулбара
-//        $(By.xpath("//div[contains(@class,\"x-toolbar x-container x-component x-noborder-trbl x-toolbar-side-toolbar\")]")).waitUntil(Condition.visible, 15000);
-//
-//
-////
-////        loginStepsMobile
-////                .loginAs(ADMIN) // Авторизация под участником рассмотрения документа TODO ПОД КЕМ? - - Пользователь-А
-////                .waitLoadMainPage(); // Ожидание открытия главной страницы
-////        gridOfFoldersSteps.openFolder(folders[0]);
-////        //----------------------------------------------------------------ГРИД - Папка
-////        gridOfFoldersSteps.validateThatInGrid().itemDisplayed(document.getDocumentType().getDocRegisterCardsName(), folders[0]); // todo какая папка?
-////
-////        gridOfFoldersSteps.openItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folders[0]);
-//
-//        //----------------------------------------------------------------ФОРМА - Документ
-//        //Комментарии на файле
-//        annotationOnFilesSteps
-//                .addCommentOfPenOnFile()
-//                .addCommentOfMarkerOnFile()
-//                .validateThat().annotationPenAndMarkerOnPdfExist();
-//
-//        // Проверяем отображение граф.комментария после перезагрузки страницы
-//        refresh();
-//        //  Ожидание и проверка кнопок тулбара
-//        $(By.xpath("//div[contains(@class,\"x-toolbar x-container x-component x-noborder-trbl x-toolbar-side-toolbar\")]")).waitUntil(Condition.visible, 15000);
-//        annotationOnFilesSteps
-//                .validateThat().annotationPenAndMarkerOnPdfExist();
-//        // Выход из системы
-//        internalStepsMobile.logout();
-//
-//        // ------------------ Проверка под участником документа, не Автор-1 граф.комментария - Пользователь-Б
-//        loginStepsMobile
-//                .loginAs(ADMIN) // Авторизация под участником рассмотрения документа
-//                .waitLoadMainPage(); // Ожидание открытия главной страницы
-//        gridOfFoldersSteps.openFolder(folder1[0]);
-//        gridOfFoldersSteps.openItemInGrid("Проект документа № 4, 123123", folder1[0]);
-//
-//        //  Ожидание и проверка кнопок тулбара
-//        $(By.xpath("//div[contains(@class,\"x-toolbar x-container x-component x-noborder-trbl x-toolbar-side-toolbar\")]")).waitUntil(Condition.visible, 15000);
-//
-//        //Проверяем отображение граф.комментария
-//        annotationOnFilesSteps.validateThat()
-//                .annotationControlsToolbarAppears() // для ожидания
-//                .annotationPenAndMarkerOnPdfExist();
-//
-//        // Включение/выключения комменатрия Автора-1 граф.комментария
-//        //todo
-//
-//        // Пробуем удалить граф.комментарий Автора-1
-//        // todo в отдельный тест такую негативную проверку? - думаю, что в отдельный тест каждую провекру, чтобы были короткие тесты, только авторизацию сделать только в пером тесте, а остальные сделать зависимыми от него.
-//
-//
-//        // Добавляем комментарий под Автор-2 граф.комментария
-//        annotationOnFilesSteps.addCommentOfPenOnFile()
-//                .validateThat().annotationPenExist(); // todo дополнительно добавить проверку скриншота со комментарием второго пользователя
-//        // Проверяем отображение граф.комментария после перезагрузки страницы
-//        refresh();
-//        //  Ожидание и проверка кнопок тулбара
-//        $(By.xpath("//div[contains(@class,\"x-toolbar x-container x-component x-noborder-trbl x-toolbar-side-toolbar\")]")).waitUntil(Condition.visible, 15000);
-//        annotationOnFilesSteps
-//                .validateThat().annotationPenExist();
-//        // Выход из системы
-//        internalStepsMobile.logout();
-//
-//
-//
-//        // ------------------ Проверка Удаления граф.комментария
-//        loginStepsMobile
-//                .loginAs(ADMIN) // Авторизация под участником рассмотрения документа
-//                .waitLoadMainPage(); // Ожидание открытия главной страницы
-//        gridOfFoldersSteps.openFolder(folder1[0]);
-//        gridOfFoldersSteps.openItemInGrid("Проект документа № 4, 123123", folder1[0]);
-//
-//        //  Ожидание и проверка кнопок тулбара
-//        $(By.xpath("//div[contains(@class,\"x-toolbar x-container x-component x-noborder-trbl x-toolbar-side-toolbar\")]")).waitUntil(Condition.visible, 15000);
-//        annotationOnFilesSteps.eraseAnnotationOnFile()
-//                .validateThat().annotationOnPdfNotExist();
-//
-//       // Проверяем отображение граф.комментария после перезагрузки страницы
-//        refresh();
-//        //  Ожидание и проверка кнопок тулбара
-//        $(By.xpath("//div[contains(@class,\"x-toolbar x-container x-component x-noborder-trbl x-toolbar-side-toolbar\")]")).waitUntil(Condition.visible, 15000);
-//        annotationOnFilesSteps
-//                .validateThat().annotationPenAndMarkerOnPdfExist();
-//        // Выход из системы
-//        internalStepsMobile.logout();
-//    }
-
-
-    @Test(priority = 3, dataProvider = "objectDataForVerifyingCreateDocument", dataProviderClass = DocflowAdministrationMobile.class)
-    public void verifyDocument1(Department[] departments, Employee[] employee, DocRegisterCards registerCards, Document document, Folder[] folders) throws Exception {
-
-        Folder[] folder1 = new Folder[]{
-                new Folder()
-                        .setNameFolder("wD_Smart_Box IHЭG") // Зн-ие НЕ изменять - используется в проверке - checkDisplayCreateAFolderInTheGrid()
-        };
-
-
-        Employee e1 = new Employee()
-                .setName("qqq")
-                .setLoginName("qqq")
-                .setLastName("qqq")
-                .setPassword("qqq");
-
-        Employee[] qqq = new Employee[]{e1, new Employee().setName("11")};
-        Employee[] qqq11 = new Employee[]{e1};
-
-
-        Employee[] qqq1 = new Employee[]{
-                new Employee()
-                        .setName("qqq")
-                        .setLoginName("qqq")
-                        .setLastName("qqq")
-                        .setPassword("qqq")};
-
-
-        // Инициализация объекта - Названия Файлов задачи
-        String[] file = new String[]{
-                FilesForAttachment.FILE_1.getNameFile(),
-                FilesForAttachment.FILE_2.getNameFile(),
-                FilesForAttachment.FILE_3.getNameFile(),
-        };
-
-
-        //----------------------------------------------------------------------------------------------------------- Инициализация Документа
-        Document document1 = new Document()
-
-                .setDocumentType(new DocRegisterCards("[31]/, as")) // Тип документа
-                .setAuthorOfDocument(ADMIN)
-                .setDateRegistration(randomDateTime()) // Дата регистрации
-                .setProject(getRandomProject()) // Инициализируем проект документа
-                //.setValueFiles(new String[]{file[0], file[1]})
-                .setRouteSchemeForDocument(new RouteSchemeEditor()
-                                .setRouteScheme("Согласование входящей корреспонденции - Постановка задачи")
-                                .setReviewDuration(randomInt(999))
-                                .setUserRoute(new Employee[]{
-                                        new Employee()
-                                                .setName("qqq")
-                                                .setLastName("qqq")
-                                                .setLoginName("qqq")
-                                                .setPassword("qqq")})
-                        // Добавляем в маршрут созданного пользователя
-                )
-                .setExecutionOfDocument(new ExecutionOfDocument[]
-                        {
-//                                new ExecutionOfDocument()
-//                                        .setExecutionOperation(1, EMPLOYEE_ADMIN, CREATE_RESOLUTION),
-                                new ExecutionOfDocument(2, qqq[0], CLOSE_EXECUTION),
-
-                        })
-                .setResolutionOfDocument(new Resolution[]{
-                        (Resolution) new Resolution()
-                                .setTextOfResolution(randomString(21))
-                                .setAuthorDefault(EMPLOYEE_ADMIN)
-                                .setExecutiveManagers(qqq1),
-                        (Resolution) new Resolution()
-                                .setTextOfResolution(randomString(21))
-                                .setAuthorDefault(EMPLOYEE_ADMIN)
-                                .setExecutiveManagers(qqq1)
-                })
-                .setOnExecution(false);
-
-
-        // Проверка карточки под разными пользователями
-        //verifyDocumentStepsMobile.verifyDocumentOnDifferentUsers(document1, folder1);
-        // Выполнение действий с документом под разными пользователями
-        //1.Выполнение операций
-        //2. Комментарии на файле
-        // executionDocumentStepsMobile.executionOnDifferentUsers(document1, folder1[0], TypeOfLocation.GRID_FOLDER);
-
-
-//        loginStepsMobile
-//                .loginAs(ADMIN) // Авторизация под участником рассмотрения документа
-//                .waitLoadMainPage(); // Ожидание открытия главной страницы
-        //     gridOfFoldersSteps.openFolder(folder1[0]);
-        // gridOfFoldersSteps.openItemInGrid("Входящая корреспонденция", folder1[0]);
-
-        // Ожидание и проверка кнопок тулбара
-        //   $(By.xpath("//div[contains(@class,\"x-toolbar x-container x-component x-noborder-trbl x-toolbar-side-toolbar\")]")).waitUntil(Condition.visible, 15000);
-
-
-        //gridOfFoldersSteps.clickContextMenuForItemInGrid("Входящая корреспонденция");
-
-
-        //----------------------------------------------------------------ГРИД - Папка
-
-        // Проверка карточки под разными пользователями
-
-//        assertThat(Arrays.asList(document1.getResolutionOfDocument()), contains(
-//                hasProperty("reportOfExecution", is(false))
-//        ));
-
-        // assertTrue(documentStepsMobile.currentUserIsExecutiveManagersInResolution(document1.getResolutionOfDocument(), qqq[0]));
-
-        //verifyDocumentStepsMobile.verifyDocumentOnDifferentUsers(document1, folder1);
-
-        //Выполнение действий с документом
-        // executionDocumentStepsMobile.executionOnDifferentUsers(document1, folder1[0], TypeOfLocation.PAGE_CARD);
-
-    }
-
 }
