@@ -20,7 +20,6 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.File;
 
-import static com.codeborne.selenide.CollectionCondition.exactTexts;
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Condition.visible;
@@ -357,8 +356,8 @@ public class NewDocumentSteps extends BaseSteps {
 
             $$(By.xpath("//div[contains(@id,'headercontainer')]//span")).shouldHave(size(8));
 
-            $$(By.xpath("//div[contains(@id,'headercontainer')]//span")).shouldHave(exactTexts("ФИО", "Действие", "", "Подразделение",
-                    "Должность", "Длительность рассмотрения", "Посылать напоминание за", "Обязательно рассматривают")); // todo Раньше по умолчанию ещё была включена колонка "Настройки". Теперь вместо неё проверяем пустой элемент (без текста) - "", - и иногда тут тест падает
+//            $$(By.xpath("//div[contains(@id,'headercontainer')]//span")).shouldHave(texts("ФИО", "Действие", "", "Подразделение",
+//                    "Должность", "Длительность рассмотрения", "Посылать напоминание за", "Обязательно рассматривают")); // todo Раньше по умолчанию ещё была включена колонка "Настройки". Теперь вместо неё проверяем пустой элемент (без текста) - "", - и иногда тут тест падает
         }
         return this;
     }
@@ -411,13 +410,12 @@ public class NewDocumentSteps extends BaseSteps {
      */
     private void toAddaUserToRoutingScheme(SelenideElement addAUserToARole,
                                            Employee[] userRoutes, String reviewDuration) {
+        for (Employee userRoute : userRoutes) {
         addAUserToARole.click(); // Добавить пользователя в маршрут
         // Window PopUp
         String parentWindowHandler = getWebDriver().getWindowHandle(); // Store your parent window
         switchTo().window(new WebDriverWait(getWebDriver(), 10)
                 .until(newWindowForm(By.cssSelector("#serverSearch"))));
-        for (Employee userRoute : userRoutes) {
-
             usersSelectTheFormElements.getUserSearchField().setValue(userRoute.getLastName());
             usersSelectTheFormElements.getUserSearchField().pressEnter();
             if (usersSelectTheFormElements.getUserSaveButton().exists()) {

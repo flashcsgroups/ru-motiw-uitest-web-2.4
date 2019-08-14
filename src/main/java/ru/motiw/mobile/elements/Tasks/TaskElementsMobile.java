@@ -14,10 +14,6 @@ public class TaskElementsMobile {
     private ElementsCollection menuOfTask;
 
     @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\")) and not(contains(@id,\"ext-object-toolbar\"))]" +
-            "//div[contains(@class,\"x-toolbar x-container x-component x-noborder-trbl x-toolbar-side-toolbar\")]")
-    private SelenideElement toolbarOfMenu;
-
-    @FindBy(xpath = "//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\")) and not(contains(@id,\"ext-object-toolbar\"))]" +
             "//div[text()=\"Файлы\"]//ancestor::div[contains(@class,\"x-component x-button x-icon-align-top x-widthed x-has-icon\")]")
     private SelenideElement buttonOfFiles;
 
@@ -72,14 +68,6 @@ public class TaskElementsMobile {
      */
     public ElementsCollection getMenuOfTask() {
         return menuOfTask;
-    }
-
-    /**
-     * Тулбар меню формы задачи
-     */
-
-    public SelenideElement getToolbarOfMenu() {
-        return toolbarOfMenu;
     }
 
     /**

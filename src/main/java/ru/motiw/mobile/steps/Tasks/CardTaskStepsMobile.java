@@ -97,7 +97,7 @@ public class CardTaskStepsMobile extends CardStepsMobile {
 
     // Ожидание и проверка элементов меню тулбара задачи
     void verifyMenuOfTask() {
-        $(taskElementsMobile.getToolbarOfMenu()).waitUntil(visible, 50000);
+        $(formElementsMobile.getToolbarOfMenu()).waitUntil(visible, 50000);
         taskElementsMobile.getMenuOfTask().shouldHaveSize(9); // 9 элементов - это вместе со скрытыми элементами.
     }
 

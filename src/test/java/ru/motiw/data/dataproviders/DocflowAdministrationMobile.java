@@ -39,6 +39,7 @@ public abstract class DocflowAdministrationMobile extends BaseTest {
     private DocRegisterCards registerCards = new DocRegisterCards("wD_Тестовая карточка " + randomString(20))
             .setCheckBoxUseAllPossibleRoutes(true); // Использовать все возможные маршруты
 
+    //----------------------------------------------------------------------------------------------------------- Инициализация Документа
     private Document document = new Document()
 
             .setDocumentType(registerCards) // Тип документа
@@ -61,7 +62,6 @@ public abstract class DocflowAdministrationMobile extends BaseTest {
 
                     } // Выполняемые операции в карточке документа
             )
-
             .setResolutionOfDocument(new Resolution[]{
                             (Resolution) new Resolution()
                                     .setTextOfResolution(randomString(20))
@@ -74,10 +74,6 @@ public abstract class DocflowAdministrationMobile extends BaseTest {
 
                     } // Резолюция
             );
-
-
-    //----------------------------------------------------------------------------------------------------------- Инициализация Документа
-
 
     // ----------------------------------------------------------------------------------------------------------- Инициализация Папки
     private Folder[] folder = getRandomArrayFolders();
@@ -99,18 +95,14 @@ public abstract class DocflowAdministrationMobile extends BaseTest {
         };
     }
 
-
     /**
-     * Параметризация - Инициализируем модель - Регистрационная карточка документа (со всеми надстройками)
+     * Параметризация - Инициализируем модель - Объекты необходимые для  проверки создания документа
      *
      * @return массив параметров объектов системы
      */
     @DataProvider
-    public Object[][] objectDataDocument() {
-
-
+    public Object[][] objectDataForVerifyingCreateDocument() {
         return new Object[][]{
-
                 {
                         //переменная объекта - ПОДРАЗДЕЛЕНИЕ
                         department,
@@ -122,10 +114,8 @@ public abstract class DocflowAdministrationMobile extends BaseTest {
                         document,
                         //переменная объекта - Папка
                         folder
-
                 }
         };
     }
-
 
 }

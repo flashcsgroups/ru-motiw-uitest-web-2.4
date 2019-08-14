@@ -2,7 +2,7 @@ package ru.motiw.web.steps.Tasks;
 
 
 import com.codeborne.selenide.Condition;
-import ru.motiw.mobile.steps.Tasks.ValidationSteps.ValidateValuesOfFieldsStepsMobile;
+import ru.motiw.mobile.steps.Tasks.ValidationStepsTasks.ValidateValuesOfFieldsStepsMobile;
 import ru.motiw.web.elements.elementsweb.Tasks.GridTemplateOfTaskElements;
 import ru.motiw.web.elements.elementsweb.Tasks.TemplateOfTaskElements;
 import ru.motiw.web.model.Tasks.TemplateOfTask;

@@ -2,7 +2,6 @@ package ru.motiw.mobile.steps;
 
 import ru.motiw.mobile.elements.FormElementsMobile;
 import ru.motiw.mobile.elements.Internal.GridOfFolderElementsMobile;
-import ru.motiw.mobile.elements.Tasks.TaskElementsMobile;
 import ru.motiw.mobile.model.Document.TypeOfLocation;
 import ru.motiw.web.steps.BaseSteps;
 
@@ -17,8 +16,7 @@ import static org.testng.AssertJUnit.fail;
 public abstract class BaseStepsMobile extends BaseSteps {
     public static final String MOBILE_PAGE_URL = baseUrl + "/m";
     private GridOfFolderElementsMobile gridOfFolderElementsMobile = page(GridOfFolderElementsMobile.class);
-    private TaskElementsMobile taskElementsMobile = page(TaskElementsMobile.class);
-    FormElementsMobile formElementsMobile = page(FormElementsMobile.class);
+    protected FormElementsMobile formElementsMobile = page(FormElementsMobile.class);
 
 
     /**
@@ -45,7 +43,7 @@ public abstract class BaseStepsMobile extends BaseSteps {
         if (!gridOfFolderElementsMobile.getAllItemsInTheGridOfFolder().isEmpty()) // Если мы в гриде
         {
             currentLocation = TypeOfLocation.GRID_FOLDER;
-        } else if (taskElementsMobile.getToolbarOfMenu().is(visible)) // Если в карточке
+        } else if (formElementsMobile.getToolbarOfMenu().is(visible)) // Если в карточке
         {
             currentLocation = TypeOfLocation.PAGE_CARD;
         }

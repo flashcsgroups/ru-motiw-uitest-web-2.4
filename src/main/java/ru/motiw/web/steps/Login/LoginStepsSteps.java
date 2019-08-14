@@ -127,7 +127,7 @@ public class LoginStepsSteps extends BaseSteps {
      */
     public boolean newUserIsLoggedInAs(Employee user) {
         return isLoggedIn()
-                && getLoggedUser().getLoginName().equals(user.getLoginName()+1);
+                && getLoggedUser().getLoginName().equals(user.getLoginName());
     }
 
     /**

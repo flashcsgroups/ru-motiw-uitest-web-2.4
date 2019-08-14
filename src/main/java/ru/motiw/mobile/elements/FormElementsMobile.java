@@ -14,6 +14,14 @@ import static com.codeborne.selenide.Selenide.$$;
 public class FormElementsMobile {
 
     /**
+     * Тулбар меню
+     */
+    public SelenideElement getToolbarOfMenu() {
+        return $(By.xpath("//div[contains(@id,'object') and not(contains(@class,\"x-hidden-display\")) and not(contains(@id,\"ext-object-toolbar\"))]" +
+                "//div[contains(@class,\"x-toolbar x-container x-component x-noborder-trbl x-toolbar-side-toolbar\")]"));
+    }
+
+    /**
      * Кнопка очистки поля ввода в списке формы добавления пользователей
      */
     public SelenideElement getClearTriggerInputForSearchUsers() {

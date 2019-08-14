@@ -62,7 +62,6 @@ public class CreateTaskTest extends Tasks {
     @Test(priority = 1, dataProvider = "objectDataTask", dataProviderClass = Tasks.class)
     public void verifyCreateTask(Department department, Employee[] author, Employee[] resppers, Employee[] controller, Employee[] worker,
                                  Employee[] IWGWorker, Employee[] IWGResppers, Employee[] IWGСontroller, Task task) {
-
         loginPageSteps.loginAs(ADMIN);
         assertThat("Check that the displayed menu item 8 (Logo; Tasks; Documents; Messages; Calendar; Library; Tools; Details)",
                 internalPageSteps.hasMenuUserComplete()); // Проверяем отображение п.м. на внутренней странице

@@ -1,6 +1,8 @@
 package ru.motiw.mobile.steps;
 
+import com.codeborne.selenide.Condition;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
+import ru.motiw.mobile.elements.Login.LoginPageElementsMobile;
 import ru.motiw.web.steps.BaseSteps;
 
 import static com.codeborne.selenide.Selenide.*;
@@ -14,6 +16,7 @@ public class InternalStepsMobile extends BaseSteps {
 
     protected InternalElementsMobile internalElementsMobile = page(InternalElementsMobile.class);
     private LoginStepsMobile loginStepsMobile = page(LoginStepsMobile.class);
+    private LoginPageElementsMobile loginPageElementsMobile = page(LoginPageElementsMobile.class);
 
     /**
      * Открываем главное меню
@@ -49,11 +52,24 @@ public class InternalStepsMobile extends BaseSteps {
      */
     public void logout() {
         sleep(500);
-        goToHome(); // Переходим в папки
+        if ( internalElementsMobile.getButtonMainMenu().is(Condition.not(Condition.exist))) {
+            goToHome(); // Если кнопка открытия главного меню недоступна, то переходим в папки
+        }
         goToInternalMenu(); // Открываем главное меню
         internalElementsMobile.getLogout().click(); // Выход
         assertTrue(loginStepsMobile.isNotLoggedInMobile());// Проверяем то, что мы разлогинены
         clearBrowserCache();
-        refresh(); // т.к после логаута могут быть проблемы с повторной автворизацией.
+        refresh(); // Очитска кэша и перезагрузка страницы т.к после логаута могут быть проблемы с повторной автворизацией.
+        loginPageElementsMobile.getLogon().waitUntil(Condition.visible, 5000); // Ждем появление формы авторизации (страница приведена в состояние пригодное к дальнейшему взаимодействию)
     }
+
+    /**
+     * Выйти из системы, если по какой-то причине (например, падение предыдущего теста) не вышли из системы.
+     */
+    public void  goToAuthorizationPage() {
+        if (!loginPageElementsMobile.getLogon().is(Condition.visible)) {
+            logout();
+        }
+    }
+
 }

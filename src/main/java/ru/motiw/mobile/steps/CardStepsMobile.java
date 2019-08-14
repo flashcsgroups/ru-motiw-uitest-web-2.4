@@ -15,7 +15,7 @@ public class CardStepsMobile extends BaseStepsMobile {
 
 
     /*
-     * Открытие комонента выбора пользователей
+     * Открытие компонента выбора пользователей
      */
     protected void openFormSelectUser(SelenideElement fieldCustomRole) {
         fieldCustomRole.click(); //клик в само поле.
@@ -29,8 +29,8 @@ public class CardStepsMobile extends BaseStepsMobile {
      * @param fieldCustomRole выбираемая роль в задаче (Исполнители, Авторы и ОР)
      */
     protected void choiceUserOnTheRole(Employee[] employees, SelenideElement fieldCustomRole) {
-        openFormSelectUser(fieldCustomRole);
         if (employees != null) {
+            openFormSelectUser(fieldCustomRole);
             for (Employee employee : employees) {
                 if (employee.getLastName() != null) {
                     //Очищаем поле, если содержит ранее введенные значения

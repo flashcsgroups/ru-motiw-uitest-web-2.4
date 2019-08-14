@@ -9,9 +9,13 @@ import org.testng.annotations.Test;
 import ru.motiw.data.dataproviders.DocflowAdministrationMobile;
 import ru.motiw.mobile.model.Document.TypeOfLocation;
 import ru.motiw.mobile.model.FilesForAttachment;
+import ru.motiw.mobile.steps.AnnotationOnFilesSteps;
 import ru.motiw.mobile.steps.Document.DocumentStepsMobile;
 import ru.motiw.mobile.steps.Document.ExecutionDocumentStepsMobile;
 import ru.motiw.mobile.steps.Document.VerifyDocumentStepsMobile;
+import ru.motiw.mobile.steps.Folders.GridOfFoldersSteps;
+import ru.motiw.mobile.steps.InternalStepsMobile;
+import ru.motiw.mobile.steps.LoginStepsMobile;
 import ru.motiw.web.model.Administration.Users.Department;
 import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.DocflowAdministration.DocumentRegistrationCards.DocRegisterCards;
@@ -43,6 +47,9 @@ import static ru.motiw.web.steps.Tasks.UnionTasksSteps.goToUnionTasks;
 public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
 
     private LoginStepsSteps loginPageSteps;
+    private LoginStepsMobile loginStepsMobile;
+    private InternalStepsMobile internalStepsMobile;
+    private GridOfFoldersSteps gridOfFoldersSteps;
     private InternalSteps internalPageSteps;
     private UnionTasksSteps unionTasksSteps;
     private UsersSteps userPageSteps;
@@ -51,10 +58,14 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
     private VerifyDocumentStepsMobile verifyDocumentStepsMobile;
     private ExecutionDocumentStepsMobile executionDocumentStepsMobile;
     private DocumentStepsMobile documentStepsMobile;
+    private AnnotationOnFilesSteps annotationOnFilesSteps;
 
     @BeforeClass
     public void beforeTest() {
         loginPageSteps = page(LoginStepsSteps.class);
+        loginStepsMobile = page(LoginStepsMobile.class);
+        internalStepsMobile = page(InternalStepsMobile.class);
+        gridOfFoldersSteps = page(GridOfFoldersSteps.class);
         internalPageSteps = page(InternalSteps.class);
         unionTasksSteps = page(UnionTasksSteps.class);
         userPageSteps = page(UsersSteps.class);
@@ -63,6 +74,7 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
         verifyDocumentStepsMobile = page(VerifyDocumentStepsMobile.class);
         executionDocumentStepsMobile = page(ExecutionDocumentStepsMobile.class);
         documentStepsMobile = page(DocumentStepsMobile.class);
+        annotationOnFilesSteps = page(AnnotationOnFilesSteps.class);
     }
 //
 //    предусловия
@@ -83,9 +95,9 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
 //    переход в документ
 //    проверка карточки: кнопки операций , файл
 
-    @Test(priority = 1, dataProvider = "objectDataDocument", dataProviderClass = DocflowAdministrationMobile.class)
-    public void preconditionForFurtherVerification(Department[] departments, Employee[] employee,
-                                                   DocRegisterCards registerCards, Document document, Folder[] folders) {
+    @Test(dataProvider = "objectDataForVerifyingCreateDocument", dataProviderClass = DocflowAdministrationMobile.class)
+    public void preconditionInWeb(Department[] departments, Employee[] employee,
+                                  DocRegisterCards registerCards, Document document, Folder[] folders) {
         loginPageSteps.loginAs(ADMIN);
         assertThat("Check that the displayed menu item 8 (Logo; Tasks; Documents; Messages; Calendar; Library; Tools; Details)",
                 internalPageSteps.hasMenuUserComplete()); // Проверяем отображение п.м. на внутренней странице
@@ -138,21 +150,123 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
         clearBrowserCache(); //чистим кеш, т.к после логаута в вебе пользователь все равно остается залогинен (баг после работы в user/tab/user/uniontasks/)
     }
 
-    @Test(priority = 2, dataProvider = "objectDataDocument", dataProviderClass = DocflowAdministrationMobile.class)
+    @Test(dataProvider = "objectDataForVerifyingCreateDocument", dataProviderClass = DocflowAdministrationMobile.class, dependsOnMethods = "preconditionInWeb")
     public void verifyDocument(Department[] departments, Employee[] employee, DocRegisterCards registerCards, Document document, Folder[] folders) throws Exception {
-
         // Проверка карточки под разными пользователями
         verifyDocumentStepsMobile.verifyDocumentOnDifferentUsers(document, folders);
         //Выполнение действий с документом
         executionDocumentStepsMobile.executionOnDifferentUsers(document, folders[0], TypeOfLocation.PAGE_CARD);
-
-
-        //Комментарии на файле
-
     }
 
+//    @Test(priority = 4, dataProvider = "objectDataForVerifyingCreateDocument", dataProviderClass = DocflowAdministrationMobile.class)
+//    public void verifyCommentOnFileInDocument(Department[] departments, Employee[] employee, DocRegisterCards registerCards, Document document, Folder[] folders) throws Exception {
+//
+//
+//        // todo вынести отдельно с созданием предуловий - нового документа т.к во  тут документ будет в архиве в предыдуших тестах. Каждую проверку в отдельный @test
+//
+//        Folder[] folder1 = new Folder[]{
+//                new Folder()
+//                        .setNameFolder("дог") // Зн-ие НЕ изменять - используется в проверке - checkDisplayCreateAFolderInTheGrid()
+//        };
+//
+//
+//
+//        loginStepsMobile
+//                .loginAs(ADMIN) // Авторизация под участником рассмотрения документа
+//                .waitLoadMainPage(); // Ожидание открытия главной страницы
+//        gridOfFoldersSteps.openFolder(folder1[0]);
+//        gridOfFoldersSteps.openItemInGrid("Проект документа № 4, 123123", folder1[0]);
+//
+//        //  Ожидание и проверка кнопок тулбара
+//        $(By.xpath("//div[contains(@class,\"x-toolbar x-container x-component x-noborder-trbl x-toolbar-side-toolbar\")]")).waitUntil(Condition.visible, 15000);
+//
+//
+////
+////        loginStepsMobile
+////                .loginAs(ADMIN) // Авторизация под участником рассмотрения документа TODO ПОД КЕМ? - - Пользователь-А
+////                .waitLoadMainPage(); // Ожидание открытия главной страницы
+////        gridOfFoldersSteps.openFolder(folders[0]);
+////        //----------------------------------------------------------------ГРИД - Папка
+////        gridOfFoldersSteps.validateThatInGrid().itemDisplayed(document.getDocumentType().getDocRegisterCardsName(), folders[0]); // todo какая папка?
+////
+////        gridOfFoldersSteps.openItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folders[0]);
+//
+//        //----------------------------------------------------------------ФОРМА - Документ
+//        //Комментарии на файле
+//        annotationOnFilesSteps
+//                .addCommentOfPenOnFile()
+//                .addCommentOfMarkerOnFile()
+//                .validateThat().annotationPenAndMarkerOnPdfExist();
+//
+//        // Проверяем отображение граф.комментария после перезагрузки страницы
+//        refresh();
+//        //  Ожидание и проверка кнопок тулбара
+//        $(By.xpath("//div[contains(@class,\"x-toolbar x-container x-component x-noborder-trbl x-toolbar-side-toolbar\")]")).waitUntil(Condition.visible, 15000);
+//        annotationOnFilesSteps
+//                .validateThat().annotationPenAndMarkerOnPdfExist();
+//        // Выход из системы
+//        internalStepsMobile.logout();
+//
+//        // ------------------ Проверка под участником документа, не Автор-1 граф.комментария - Пользователь-Б
+//        loginStepsMobile
+//                .loginAs(ADMIN) // Авторизация под участником рассмотрения документа
+//                .waitLoadMainPage(); // Ожидание открытия главной страницы
+//        gridOfFoldersSteps.openFolder(folder1[0]);
+//        gridOfFoldersSteps.openItemInGrid("Проект документа № 4, 123123", folder1[0]);
+//
+//        //  Ожидание и проверка кнопок тулбара
+//        $(By.xpath("//div[contains(@class,\"x-toolbar x-container x-component x-noborder-trbl x-toolbar-side-toolbar\")]")).waitUntil(Condition.visible, 15000);
+//
+//        //Проверяем отображение граф.комментария
+//        annotationOnFilesSteps.validateThat()
+//                .annotationControlsToolbarAppears() // для ожидания
+//                .annotationPenAndMarkerOnPdfExist();
+//
+//        // Включение/выключения комменатрия Автора-1 граф.комментария
+//        //todo
+//
+//        // Пробуем удалить граф.комментарий Автора-1
+//        // todo в отдельный тест такую негативную проверку? - думаю, что в отдельный тест каждую провекру, чтобы были короткие тесты, только авторизацию сделать только в пером тесте, а остальные сделать зависимыми от него.
+//
+//
+//        // Добавляем комментарий под Автор-2 граф.комментария
+//        annotationOnFilesSteps.addCommentOfPenOnFile()
+//                .validateThat().annotationPenExist(); // todo дополнительно добавить проверку скриншота со комментарием второго пользователя
+//        // Проверяем отображение граф.комментария после перезагрузки страницы
+//        refresh();
+//        //  Ожидание и проверка кнопок тулбара
+//        $(By.xpath("//div[contains(@class,\"x-toolbar x-container x-component x-noborder-trbl x-toolbar-side-toolbar\")]")).waitUntil(Condition.visible, 15000);
+//        annotationOnFilesSteps
+//                .validateThat().annotationPenExist();
+//        // Выход из системы
+//        internalStepsMobile.logout();
+//
+//
+//
+//        // ------------------ Проверка Удаления граф.комментария
+//        loginStepsMobile
+//                .loginAs(ADMIN) // Авторизация под участником рассмотрения документа
+//                .waitLoadMainPage(); // Ожидание открытия главной страницы
+//        gridOfFoldersSteps.openFolder(folder1[0]);
+//        gridOfFoldersSteps.openItemInGrid("Проект документа № 4, 123123", folder1[0]);
+//
+//        //  Ожидание и проверка кнопок тулбара
+//        $(By.xpath("//div[contains(@class,\"x-toolbar x-container x-component x-noborder-trbl x-toolbar-side-toolbar\")]")).waitUntil(Condition.visible, 15000);
+//        annotationOnFilesSteps.eraseAnnotationOnFile()
+//                .validateThat().annotationOnPdfNotExist();
+//
+//       // Проверяем отображение граф.комментария после перезагрузки страницы
+//        refresh();
+//        //  Ожидание и проверка кнопок тулбара
+//        $(By.xpath("//div[contains(@class,\"x-toolbar x-container x-component x-noborder-trbl x-toolbar-side-toolbar\")]")).waitUntil(Condition.visible, 15000);
+//        annotationOnFilesSteps
+//                .validateThat().annotationPenAndMarkerOnPdfExist();
+//        // Выход из системы
+//        internalStepsMobile.logout();
+//    }
 
-    @Test(priority = 3, dataProvider = "objectDataDocument", dataProviderClass = DocflowAdministrationMobile.class)
+
+    @Test(priority = 3, dataProvider = "objectDataForVerifyingCreateDocument", dataProviderClass = DocflowAdministrationMobile.class)
     public void verifyDocument1(Department[] departments, Employee[] employee, DocRegisterCards registerCards, Document document, Folder[] folders) throws Exception {
 
         Folder[] folder1 = new Folder[]{
@@ -161,15 +275,14 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
         };
 
 
-       Employee e1 = new Employee()
+        Employee e1 = new Employee()
                 .setName("qqq")
                 .setLoginName("qqq")
                 .setLastName("qqq")
                 .setPassword("qqq");
 
-        Employee[] qqq = new Employee[]{ e1, new Employee().setName("11")};
+        Employee[] qqq = new Employee[]{e1, new Employee().setName("11")};
         Employee[] qqq11 = new Employee[]{e1};
-
 
 
         Employee[] qqq1 = new Employee[]{
@@ -256,7 +369,7 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
 //                hasProperty("reportOfExecution", is(false))
 //        ));
 
-       // assertTrue(documentStepsMobile.currentUserIsExecutiveManagersInResolution(document1.getResolutionOfDocument(), qqq[0]));
+        // assertTrue(documentStepsMobile.currentUserIsExecutiveManagersInResolution(document1.getResolutionOfDocument(), qqq[0]));
 
         //verifyDocumentStepsMobile.verifyDocumentOnDifferentUsers(document1, folder1);
 

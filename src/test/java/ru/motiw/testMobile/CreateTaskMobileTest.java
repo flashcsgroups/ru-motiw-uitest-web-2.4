@@ -12,7 +12,7 @@ import ru.motiw.mobile.steps.Folders.GridOfFoldersSteps;
 import ru.motiw.mobile.steps.InternalStepsMobile;
 import ru.motiw.mobile.steps.LoginStepsMobile;
 import ru.motiw.mobile.steps.Tasks.*;
-import ru.motiw.mobile.steps.Tasks.ValidationSteps.ValidateActionsStepsMobile;
+import ru.motiw.mobile.steps.Tasks.ValidationStepsTasks.ValidateActionsStepsMobile;
 import ru.motiw.web.elements.elementsweb.Tasks.GridTemplateOfTaskElements;
 import ru.motiw.web.model.Administration.Directories.Directories;
 import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
@@ -176,7 +176,7 @@ public class CreateTaskMobileTest extends TasksMobile {
 
 
         //----------------------------------------------------------------ФОРМА - создания Задачи
-        newTaskStepsMobile.goToCreateOfNewTask().creatingTask(task);
+        newTaskStepsMobile.goToCreateNewTask().creatingTask(task);
         newTaskStepsMobile.validateThatInGroupFields()
                 .existFieldsWhenGroupsClosed()
                 .existFieldsWhenGroupsOpen(task)
@@ -230,7 +230,7 @@ public class CreateTaskMobileTest extends TasksMobile {
 
 
         //----------------------------------------------------------------ФОРМА - создания Задачи
-        newTaskStepsMobile.goToCreateOfNewTask().creatingTask(task);
+        newTaskStepsMobile.goToCreateNewTask().creatingTask(task);
         newTaskStepsMobile.validateThatInGroupFields()
                 .existFieldsWhenGroupsClosed()
                 .existFieldsWhenGroupsOpen(task)

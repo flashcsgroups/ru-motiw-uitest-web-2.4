@@ -9,10 +9,11 @@ import ru.motiw.mobile.elements.Tasks.TaskElementsMobile;
 import ru.motiw.mobile.model.Document.OperationsOfDocument;
 import ru.motiw.mobile.model.Document.TypeOfLocation;
 import ru.motiw.mobile.model.Document.TypeOperationsOfDocument;
+import ru.motiw.mobile.steps.AnnotationOnFilesSteps;
 import ru.motiw.mobile.steps.CardStepsMobile;
 import ru.motiw.mobile.steps.Document.AssertionDocument.AssertDocument;
-import ru.motiw.mobile.steps.Document.ValidationSteps.ValidateOperationsOfDocumentStepsMobile;
-import ru.motiw.mobile.steps.Tasks.ValidationSteps.ValidateFilesStepsMobile;
+import ru.motiw.mobile.steps.Document.ValidationStepsDocument.ValidateOperationsOfDocumentStepsMobile;
+import ru.motiw.mobile.steps.ValidationStepsMobile.ValidateFilesStepsMobile;
 
 import java.util.ArrayList;
 
@@ -31,6 +32,7 @@ public class DocumentStepsMobile extends CardStepsMobile {
     private DocumentElementsMobile documentElementsMobile = page(DocumentElementsMobile.class);
     GridOfFolderElementsMobile gridOfFolderElementsMobile = page(GridOfFolderElementsMobile.class);
     ValidateFilesStepsMobile validateFilesStepsMobile = page(ValidateFilesStepsMobile.class);
+    AnnotationOnFilesSteps annotationOnFiles = page(AnnotationOnFilesSteps.class);
 
 
     /**
@@ -117,7 +119,7 @@ public class DocumentStepsMobile extends CardStepsMobile {
                 if (!gridOfFolderElementsMobile.getAllItemsInTheGridOfFolder().isEmpty()) // Если мы в гриде
                 {
                     nameOfOperationCreateResolution = OperationsOfDocument.CREATE_RESOLUTION_IN_THE_GRID.getNameOperation();
-                } else if (taskElementsMobile.getToolbarOfMenu().is(visible)) // Если в карточке
+                } else if (formElementsMobile.getToolbarOfMenu().is(visible)) // Если в карточке
                 {
                     nameOfOperationCreateResolution = OperationsOfDocument.CREATE_RESOLUTION_IN_FORM_OF_DOCUMENT.getNameOperation();
                 }

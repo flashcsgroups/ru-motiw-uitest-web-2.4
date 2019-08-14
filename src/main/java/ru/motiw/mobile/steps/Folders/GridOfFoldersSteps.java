@@ -2,7 +2,7 @@ package ru.motiw.mobile.steps.Folders;
 
 import com.codeborne.selenide.ex.ElementNotFound;
 import ru.motiw.mobile.elements.Internal.GridOfFolderElementsMobile;
-import ru.motiw.mobile.steps.Folders.ValidationSteps.ValidationGridOfFolders;
+import ru.motiw.mobile.steps.Folders.ValidationStepsFolders.ValidationGridOfFolders;
 import ru.motiw.mobile.steps.InternalStepsMobile;
 import ru.motiw.web.model.Tasks.Folder;
 

@@ -65,6 +65,10 @@ public class InternalElementsMobile extends BaseSteps {
         return menuElements;
     }
 
+    /**
+     * Кнопка открытия главного меню
+     * @return
+     */
     public SelenideElement getButtonMainMenu() {
         return buttonMainMenu;
     }

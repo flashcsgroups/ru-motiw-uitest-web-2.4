@@ -43,7 +43,7 @@ public class VerifyDocumentStepsMobile extends DocumentStepsMobile {
         /**
          * Ожидание и проверка кнопок тулбара
          */
-        taskElementsMobile.getToolbarOfMenu().waitUntil(visible, 10000);
+        formElementsMobile.getToolbarOfMenu().waitUntil(visible, 10000);
         validateThatOperations().visibleWithRightAccessToOperations(document, currentUser);
 
         /*

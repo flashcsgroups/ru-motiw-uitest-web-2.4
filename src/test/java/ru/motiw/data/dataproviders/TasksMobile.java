@@ -187,8 +187,7 @@ public abstract class TasksMobile extends BaseTest {
 
 
     // Инициализация объекта - Типы задач с настройками
-    private TaskTypeListEditObject newTaskType = new TasksTypes("wD_Тип задачи_for_DRC (verify трансл. значений полей) "
-            + randomString(5))
+    private TaskTypeListEditObject newTaskType = new TasksTypes("wD_Тип задачи_for_DRC (verify трансл. значений полей) " + randomString(5))
 
             // Направление смещения даты при попадании на нерабочее время
             .setTaskTypeShiftDirection(ShiftDirection.DATE_MOVES_BACK) // Дата сдвигается назад
@@ -242,7 +241,7 @@ public abstract class TasksMobile extends BaseTest {
     }
 
     /**
-     * Метод создания полностью случайного массива объектов - "Папка"
+     * Метод создания массива объектов - "Папка"
      *
      * @return folders с атрибутами полей объекта - Папка
      */

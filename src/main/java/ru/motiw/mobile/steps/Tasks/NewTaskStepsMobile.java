@@ -7,7 +7,8 @@ import org.openqa.selenium.By;
 import ru.motiw.mobile.elements.Internal.InternalElementsMobile;
 import ru.motiw.mobile.elements.Login.LoginPageElementsMobile;
 import ru.motiw.mobile.steps.InternalStepsMobile;
-import ru.motiw.mobile.steps.Tasks.ValidationSteps.*;
+import ru.motiw.mobile.steps.Tasks.ValidationStepsTasks.*;
+import ru.motiw.mobile.steps.ValidationStepsMobile.ValidateFilesStepsMobile;
 import ru.motiw.web.model.Administration.Directories.DirectoriesField;
 import ru.motiw.web.model.Administration.FieldsObject.*;
 import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
@@ -36,7 +37,12 @@ public class NewTaskStepsMobile extends CardTaskStepsMobile {
     ValidateGroupFieldsStepsMobile validateGroupFieldsStepsMobile = page(ValidateGroupFieldsStepsMobile.class);
 
 
-    public NewTaskStepsMobile goToCreateOfNewTask() {
+    /**
+     * Переходим в форму - Создать задачу
+     *
+     * @return
+     */
+    public NewTaskStepsMobile goToCreateNewTask() {
         //Если Меню не открыто - открываем его перед тем, как перейти в форму создания задачи
         if ($(internalElementsMobile.getCreateTaskMobile()).is(Condition.disappear)) {
             internalStepsMobile.goToInternalMenu();
@@ -350,7 +356,6 @@ public class NewTaskStepsMobile extends CardTaskStepsMobile {
      */
     public NewTaskStepsMobile creatingTask(Task task) {
         ensurePageLoaded();
-
         //--------------------------------- группа полей  "Название"
         // Разворачиваем  группу полей "Название"
         selectGroupTab(NAME);
@@ -359,7 +364,6 @@ public class NewTaskStepsMobile extends CardTaskStepsMobile {
                 .setTasksDescription(task.getDescription());
         // Закрываем  группу полей  "Название"
         selectGroupTab(NAME);
-
         //--------------------------------- группа полей  "Кому"
         // Открываем  группу полей "Кому"
         selectGroupTab(TO_WHOM);
@@ -434,13 +438,21 @@ public class NewTaskStepsMobile extends CardTaskStepsMobile {
      * Переходим по ссылке в появившемся toast в созданную задачу
      */
     public NewTaskStepsMobile goToNewTaskViaToast() {
-        //Проверяем появление toast "Создана задача"
-        loginPageElementsMobile.getToastOfNewTask().waitUntil(Condition.visible, 10000);
-        loginPageElementsMobile.getTextOnToastOfNewTask().shouldHave(Condition.text("Создана задача №"));
+       verifyThatToastOfNewTaskAppear();
         //Переходим по ссылке в появившемся toast в созданную задачу
         loginPageElementsMobile.getTextOnToastOfNewTask().click();
         return page(NewTaskStepsMobile.class);
     }
+
+    /**
+     * Проверяем появление toast "Создана задача"
+     */
+    public NewTaskStepsMobile verifyThatToastOfNewTaskAppear() {
+        loginPageElementsMobile.getToastOfNewTask().waitUntil(Condition.visible, 10000);
+        loginPageElementsMobile.getTextOnToastOfNewTask().shouldHave(Condition.text("Создана задача №"));
+        return page(NewTaskStepsMobile.class);
+    }
+
 
 
     /**

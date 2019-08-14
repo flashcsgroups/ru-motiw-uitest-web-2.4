@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Assert'ы для документа и его внутринних объектов
+ * Assert'ы для документа и его внутренних объектов
  *
  */
 public class AssertDocument extends CardStepsMobile {

@@ -27,7 +27,7 @@ import static com.codeborne.selenide.Selenide.page;
  */
 public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
     private LoginStepsMobile loginStepsMobile = page(LoginStepsMobile.class);
-    private InternalStepsMobile internalPageStepsMobile = page(InternalStepsMobile.class);
+    private InternalStepsMobile internalStepsMobile = page(InternalStepsMobile.class);
     private GridOfFoldersSteps gridOfFoldersSteps = page(GridOfFoldersSteps.class);
     private InternalElementsMobile internalElementsMobile = page(InternalElementsMobile.class);
     private TaskElementsMobile taskElementsMobile = page(TaskElementsMobile.class);
@@ -62,12 +62,9 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
      */
     private void executionInFormOfDocument(Document document, Folder folder, ExecutionOfDocument executionOfDocument, TypeOfLocation executionPlace) {
         // Ожидание и проверка кнопок тулбара
-        taskElementsMobile.getToolbarOfMenu().waitUntil(visible, 15000);
+        formElementsMobile.getToolbarOfMenu().waitUntil(visible, 15000);
         // Выполнение операций
         executionOperations(document, folder, executionOfDocument, executionPlace); // также как visibleWithRightAccessToOperations - локаторы кнопкок операций зависят от того, где мы находимся
-
-        // Работа с файлами
-
     }
 
     /**
@@ -79,8 +76,7 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
         switch (executionOfDocument.getTypeExecutionOperation()) {
 
             case CREATE_RESOLUTION:
-                for (Resolution resolution : document.getResolutionOfDocument())
-                    resolutionStepsMobile.createResolution(document, folder, resolution, executionPlace);
+                    resolutionStepsMobile.createResolution(document, folder, executionPlace);
                 break;
 
             case MOVE_TO_EXECUTION:
@@ -155,7 +151,7 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
             executionInFormOfDocument(document, folder, executionOfDocument, executionPlace);
         }
         // Выход из системы
-        internalPageStepsMobile.logout();
+        internalStepsMobile.logout();
 
         // Проверка выполненых операций
         verifyExecutionOnDifferentUsers(document, folder, executionOfDocument);
@@ -256,7 +252,7 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
         verifyExecutionOfDocument(document, folder, executionOfDocument, employee);
 
         // Выход из системы
-        internalPageStepsMobile.logout();
+        internalStepsMobile.logout();
 
     }
 
@@ -366,7 +362,7 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
         gridOfFoldersSteps.openItemInGrid(document.getDocumentType().getDocRegisterCardsName(), folder);
         //----------------------------------------------------------------ФОРМА - Документ
         // Ожидание и проверка кнопок тулбара
-        taskElementsMobile.getToolbarOfMenu().waitUntil(visible, 15000);
+        formElementsMobile.getToolbarOfMenu().waitUntil(visible, 15000);
         validateThatOperations().visibleWithRightAccessToOperations(document, currentUser);
 
     }
