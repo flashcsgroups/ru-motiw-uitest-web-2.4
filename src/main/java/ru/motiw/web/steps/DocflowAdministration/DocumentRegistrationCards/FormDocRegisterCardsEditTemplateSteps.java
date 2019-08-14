@@ -32,7 +32,7 @@ public class FormDocRegisterCardsEditTemplateSteps extends BaseSteps {
      * @return FormDocRegisterCardsEditTemplateSteps
      */
     public FormDocRegisterCardsEditTemplateSteps displayNameTemplate(DocRegisterCards registerCards) {
-        TemplateTabRCD();
+        getTemplateTabRCD();
         addDisplayNameTemplate(registerCards.getDisplayNameTemplate());
         return this;
     }
@@ -43,7 +43,7 @@ public class FormDocRegisterCardsEditTemplateSteps extends BaseSteps {
      *
      * @return FormDocRegisterCardsEditTemplateSteps
      */
-    public FormDocRegisterCardsEditTemplateSteps TemplateTabRCD() {
+    public FormDocRegisterCardsEditTemplateSteps getTemplateTabRCD() {
         formEditRCDTemplateElement.getTemplateSettingsTab().click();
         return page(FormDocRegisterCardsEditTemplateSteps.class);
     }

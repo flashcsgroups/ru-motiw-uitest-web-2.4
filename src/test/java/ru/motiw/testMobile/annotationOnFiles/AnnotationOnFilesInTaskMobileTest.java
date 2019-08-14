@@ -65,15 +65,6 @@ public class AnnotationOnFilesInTaskMobileTest extends AnnotationOnFilesInDocume
         newTaskStepsMobile = page(NewTaskStepsMobile.class);
     }
 
-
-    @Test(description = "Подготовка данных в web и Арм", dataProvider = "objectDataForVerifyingAnnotationOnFileInTask", dataProviderClass = AnnotationOnFilesInDocumentAndTaskMobile.class)
-    public void precondition1(Employee[] employee, Task task, Folder[] folders, AuthorOfAnnotation[] authorOfAnnotation) {
-
-        System.out.println(authorOfAnnotation[0].getEmployee().getName());
-        System.out.println(authorOfAnnotation[1].getEmployee().getName());
-    }
-
-
     /**
      * Подготовка данных в web и Арм
      *

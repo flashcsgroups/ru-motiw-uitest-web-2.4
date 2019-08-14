@@ -37,6 +37,7 @@ public class DocumentRegistrationCardsTest extends DocflowAdministration {
     private TaskTypesEditSteps formEditTaskTypes;
     private FormDocRegisterCardsEditFieldsSteps formDocRegisterCardsEditFieldsSteps;
     private FormDocRegisterCardsEditGeneralSteps formDocRegisterCardsEditGeneralSteps;
+    private FormDocRegisterCardsEditTemplateSteps formDocRegisterCardsEditTemplateSteps;
     private FormDocRegisterCardsEditConnectedRoutesSteps formDocRegisterCardsEditConnectedRoutesSteps;
     private FormDocRegisterCardsEditRightsSteps formDocRegisterCardsEditRightsSteps;
     private FormDocRegisterCardsEditTasksSteps formDocRegisterCardsEditTasksSteps;
@@ -49,6 +50,7 @@ public class DocumentRegistrationCardsTest extends DocflowAdministration {
         formEditTaskTypes = page(TaskTypesEditSteps.class);
         formDocRegisterCardsEditFieldsSteps = page(FormDocRegisterCardsEditFieldsSteps.class);
         formDocRegisterCardsEditGeneralSteps = page(FormDocRegisterCardsEditGeneralSteps.class);
+        formDocRegisterCardsEditTemplateSteps = page(FormDocRegisterCardsEditTemplateSteps.class);
         formDocRegisterCardsEditConnectedRoutesSteps = page(FormDocRegisterCardsEditConnectedRoutesSteps.class);
         formDocRegisterCardsEditRightsSteps = page(FormDocRegisterCardsEditRightsSteps.class);
         formDocRegisterCardsEditTasksSteps = page(FormDocRegisterCardsEditTasksSteps.class);
@@ -104,17 +106,11 @@ public class DocumentRegistrationCardsTest extends DocflowAdministration {
         /*
         * Устанавливаем настройки для РКД (регистрационная карточка документа) на вкладке - ШАБЛОНЫ ОТОБРАЖЕНИЯ
         * */
-        /*TemplateTabRCD().displayNameTemplate(registerCards);
-        //TODO проблемы с выбором вкладки ШАБЛОНЫ ОТОБРАЖЕНИЯ на небольшом мониторе
-        //В DocumentRegisterCards - НЕ переходит на вкладку  ШАБЛОНЫ ОТОБРАЖЕНИЯ - мешает поле поиска, которое  есть в  user/tab/user/DocRegisterCards/
-        // ЕСли вместо user/tab/user/DocRegisterCards/ использовать /user/DocRegisterCards/ (нет поля поиска) - то, там нет #flow в гриде РКД - BaseSteps.java:155
-        //Дописать спец.метод для /user/DocRegisterCards/ в BaseSteps.java или кликать в другое место или может каким то образом убрать поля поиска(если начать поиск, а потом вернуться) поле будет выше
+        formDocRegisterCardsEditTemplateSteps.getTemplateTabRCD().displayNameTemplate(registerCards);
 
         /*
          * Устанавливаем настройки для РКД (регистрационная карточка документа) на вкладке - ПРАВА
          */
-
-
         formDocRegisterCardsEditRightsSteps
                 .accessesRCD(registerCards)
                 .setSettingsChangingTheSignOfFinalVersion(registerCards)

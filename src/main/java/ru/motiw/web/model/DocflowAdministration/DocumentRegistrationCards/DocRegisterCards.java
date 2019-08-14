@@ -157,8 +157,7 @@ public class DocRegisterCards {
         return displayNameTemplate;
     }
 
-    public DocRegisterCards setDisplayNameTemplate(
-            String displayNameTemplate) {
+    public DocRegisterCards setDisplayNameTemplate(String displayNameTemplate) {
         this.displayNameTemplate = displayNameTemplate;
         return this;
     }
