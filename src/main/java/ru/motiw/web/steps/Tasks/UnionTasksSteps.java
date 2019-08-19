@@ -1,5 +1,6 @@
 package ru.motiw.web.steps.Tasks;
 
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriverException;
@@ -12,9 +13,14 @@ import ru.motiw.web.model.Tasks.Folder;
 import ru.motiw.web.model.Tasks.Task;
 import ru.motiw.web.steps.Home.InternalSteps;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static ru.motiw.utils.ElementUtil.scrollToAndClick;
+import static ru.motiw.utils.ElementUtil.scrollToElement;
 import static ru.motiw.utils.WindowsUtil.openInNewWindow;
 import static ru.motiw.web.model.URLMenu.TASKS;
 
@@ -129,9 +135,9 @@ public class UnionTasksSteps extends BaseSteps {
      */
 
     /* todo
-    * try  со старым с 2.1 .xpath("//div[@id='tree_folders']//div[contains(@id,'extdd')]//a//span")));
-    * для чего нужно непонятно, но без этого не работает
-    */
+     * try  со старым с 2.1 .xpath("//div[@id='tree_folders']//div[contains(@id,'extdd')]//a//span")));
+     * для чего нужно непонятно, но без этого не работает
+     */
     public UnionTasksSteps beforeAddFolder(int countPanelGrouping) {
         ensurePageLoaded();
         try {
@@ -215,6 +221,74 @@ public class UnionTasksSteps extends BaseSteps {
                         By.xpath("//tr[@aria-expanded=\"false\"]//div[contains(@class,\"plus x-tree-expander\")]"));
                 checkDisplayCreateAFolderInTheGrid(folder.getNameFolder(), folder.isUseFilter()); // проверяем созданную Папку
             }
+        }
+    }
+
+    /**
+     * Удаление объекта - Папка
+     */
+    public void deleteFolders(Folder[] folders) {
+        for (Folder folder : folders) {
+            sleep(2000);
+            unwrapAllNodes(unionTasksElements.getPlusSubsites(),
+                    By.xpath("//tr[@aria-expanded=\"false\"]//div[contains(@class,\"plus x-tree-expander\")]")); //  не работает
+
+            // Все элементы папок
+            ElementsCollection elementsCollection = $$(By.xpath("//span[contains(@class,'x-tree-node-text ')]/b[contains(text(),\"\")]"));
+
+            // Помещаем все названия папок в массив
+            ArrayList<String> namesOfFolders = new ArrayList<>();
+            for (SelenideElement element : elementsCollection) {
+                namesOfFolders.add(element.getText().split("[(/0)]")[0]);
+            }
+
+            System.out.println(namesOfFolders);
+            System.out.println(folder.getNameFolder());
+
+            // Если папка существует, то удаляем её
+            if (namesOfFolders.contains(folder.getNameFolder() + " ")) {
+                waitMaskForGridTask();
+                sleep(1000);
+                SelenideElement elementOfFolder = $(By.xpath("//span[contains(@class,'x-tree-node-text ')]/b[contains(text(),'"
+                        + parseNameFolder(folder.getNameFolder())[0] + "')]"));
+                elementOfFolder.shouldBe(visible).contextClick();
+
+                unionTasksElements.getDeleteFolder().waitUntil(visible, 2000).click(); // Удалить папку
+                $(By.xpath("//span[text()=\"Да\"]/ancestor::span[@class=\"x-btn-wrap x-btn-wrap-default-small \"]")).waitUntil(visible, 2000).click();
+                waitMaskForGridTask();
+                elementOfFolder.shouldNotBe(visible); // Проверяем что удаленная папка не отображается на Панели управления группировкой задач (ПУГЗ)
+            }
+        }
+    }
+
+
+    /**
+     * Удаление объекта - Папка (удаление по названию папки)
+     */
+    public void deleteAllFolders(String partOfNameFolder) {
+        // Удаление всех папок созданных автотестами
+        ElementsCollection elementsCollection = $$(By.xpath("//span[contains(@class,'x-tree-node-text ')]/b[contains(text(),'" + partOfNameFolder + "')]")); // подставлякм название папки
+
+        ArrayList<String> stringsText = new ArrayList<>();
+        for (SelenideElement element : elementsCollection) {
+            stringsText.add(element.getText());
+        }
+
+        for (String nameFolder : stringsText) {
+            unwrapAllNodes(unionTasksElements.getPlusSubsites(),
+                    By.xpath("//tr[@aria-expanded=\"false\"]//div[contains(@class,\"plus x-tree-expander\")]"));
+            SelenideElement elementOfFolder = $(By.xpath("//span[contains(@class,'x-tree-node-text ')]/b[contains(text(),'"
+                    + parseNameFolder(nameFolder)[0] + "')]"));
+            scrollToAndClick(elementOfFolder);
+            sleep(1000);
+            elementOfFolder.contextClick();
+            sleep(2000);
+            unionTasksElements.getDeleteFolder().click(); // Удалить папку
+
+            $(By.xpath("//div[contains(@class,\"x-component x-window-text x-box-item x-component-default\")]")).waitUntil(visible, 4000);
+            $(By.xpath("//span[text()=\"Да\"]/ancestor::span[@class=\"x-btn-wrap x-btn-wrap-default-small \"]")).click();
+            sleep(3000);
+            elementOfFolder.shouldNotBe(visible); // Проверяем что удаленная папка не отображается на Панели управления группировкой задач (ПУГЗ)
         }
     }
 

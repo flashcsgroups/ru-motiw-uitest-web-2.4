@@ -88,7 +88,7 @@ public class UnionTasksTest extends BaseTest {
 
         internalPageSteps.logout();
         Assert.assertTrue(loginPageSteps.isNotLoggedIn());
-        // TODO 0001 - Редактирование Папки + Удаление чистка после теста!!!
+        // TODO 0001 - Редактирование Папки
     }
 
     @Test(dependsOnMethods = {"verifyCreateFolder"})
@@ -134,6 +134,40 @@ public class UnionTasksTest extends BaseTest {
         internalPageSteps.logout();
         assertTrue(loginPageSteps.isNotLoggedIn());
 
+    }
+
+    @Test(dependsOnMethods = {"verifyDisplaySharedFolderTheNewUser"})
+    public void verifyDeleteFolder() {
+        loginPageSteps.loginAs(BaseTest.ADMIN);
+        assertThat("Check that the displayed menu item 8 (Logo; Tasks; Documents; Messages; Calendar; Library; Tools; Details)",
+                internalPageSteps.hasMenuUserComplete()); // Проверяем отображение п.м. на внутренней странице
+
+        //---------------------------------------------------------------- Задачи/Задачи
+        goToUnionTasks();
+        unionTasksSteps.beforeAddFolder(20)
+                // Удаляем Папки(/у)
+                .deleteFolders(folder);
+        internalPageSteps.logout();
+        Assert.assertTrue(loginPageSteps.isNotLoggedIn());
+    }
+
+
+    /**
+     * Для массового удаления папок с одинаковыми названиями созданные автотестами
+     */
+    //@Test()
+    public void deleteAllFolder() {
+        loginPageSteps.loginAs(BaseTest.ADMIN);
+        assertThat("Check that the displayed menu item 8 (Logo; Tasks; Documents; Messages; Calendar; Library; Tools; Details)",
+                internalPageSteps.hasMenuUserComplete()); // Проверяем отображение п.м. на внутренней странице
+
+        //---------------------------------------------------------------- Задачи/Задачи
+        goToUnionTasks();
+        unionTasksSteps.beforeAddFolder(20)
+                // Удаляем Папки(/у)
+                .deleteAllFolders("wD");
+        internalPageSteps.logout();
+        Assert.assertTrue(loginPageSteps.isNotLoggedIn());
     }
 
 }

@@ -22,8 +22,12 @@ public class UnionTasksElements {
     @FindBy(xpath = "//span[contains(text(), \"Добавить папку\")]")
     private SelenideElement addFolder;
 
+    @FindBy(xpath = "//span[contains(text(), \"Удалить папку\")]")
+    private SelenideElement deleteFolder;
+
     @FindBy(xpath = "(//div[@id='importfolder' and contains(@style,'visibility: visible')]//span)[1]")
     private SelenideElement editFolder;
+
 
     @FindBy(xpath = "//tr[@aria-expanded=\"false\"]//div[contains(@class,\"plus x-tree-expander\")]")
     private SelenideElement plusSubsites;
@@ -55,6 +59,13 @@ public class UnionTasksElements {
      */
     public SelenideElement getAddFolder() {
         return addFolder;
+    }
+
+    /*
+     * Удалить - Папка
+     */
+    public SelenideElement getDeleteFolder() {
+        return deleteFolder;
     }
 
     /**

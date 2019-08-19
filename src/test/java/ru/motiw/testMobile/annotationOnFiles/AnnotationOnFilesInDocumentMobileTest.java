@@ -162,11 +162,9 @@ public class AnnotationOnFilesInDocumentMobileTest extends AnnotationOnFilesInDo
                 .waitLoadMainPage(); // Ожидание открытия главной страницы
         //----------------------------------------------------------------ГРИД - Папка
         gridOfFoldersSteps.openFolder(folders[0]);
-        resolutionStepsMobile.createResolution(documentWithPdf, folders[0], GRID_FOLDER);
-        refresh();
-        resolutionStepsMobile.createResolution(documentWithImg, folders[0], GRID_FOLDER);
-        refresh();
-        resolutionStepsMobile.createResolution(documentWithPdfAndImg, folders[0], GRID_FOLDER);
+        resolutionStepsMobile.createAllResolutionsInDocument(documentWithPdf, folders[0], GRID_FOLDER);
+        resolutionStepsMobile.createAllResolutionsInDocument(documentWithImg, folders[0], GRID_FOLDER);
+        resolutionStepsMobile.createAllResolutionsInDocument(documentWithPdfAndImg, folders[0], GRID_FOLDER);
         // Выход из системы
         internalStepsMobile.logout();
     }

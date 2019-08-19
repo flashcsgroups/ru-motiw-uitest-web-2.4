@@ -9,6 +9,7 @@ import ru.motiw.web.elements.elementsweb.Administration.Users.UsersElements;
 import ru.motiw.web.elements.elementsweb.Internal.InternalElements;
 import ru.motiw.web.elements.elementsweb.Tasks.UnionTasks.UnionTasksElements;
 import ru.motiw.web.model.Administration.Users.*;
+import ru.motiw.web.model.Administration.Users.Module;
 import ru.motiw.web.steps.Home.InternalSteps;
 import ru.motiw.web.steps.Tasks.UnionTasksSteps;
 

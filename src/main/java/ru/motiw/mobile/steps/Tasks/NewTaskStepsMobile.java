@@ -17,8 +17,7 @@ import ru.motiw.web.model.Tasks.Task;
 import java.io.File;
 
 import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.page;
+import static com.codeborne.selenide.Selenide.*;
 import static org.testng.Assert.assertTrue;
 import static ru.motiw.mobile.model.Task.InnerGroupTabs.*;
 
@@ -425,10 +424,17 @@ public class NewTaskStepsMobile extends CardTaskStepsMobile {
      */
     public NewTaskStepsMobile saveTask() {
         newTaskFormElementsMobile.getButtonCreateTask().click();
-//        //Ждем появление маски загрузки
+        //Ждем появление маски загрузки
         loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.visible, 1000);
         //Ждем пока исчезнит маска загрузки
         loginPageElementsMobile.getMaskOfLoading().waitUntil(Condition.disappear, 10000);
+        // Иногда после первого нажатия на операцию сохранения происходит "ошибка при создании задачи" - пробуем выполнить операцию еще раз
+        try {
+            verifyThatToastOfNewTaskAppear();
+        } catch (Error e) {
+            newTaskFormElementsMobile.getButtonCreateTask().click();
+            verifyThatToastOfNewTaskAppear();
+        }
         return page(NewTaskStepsMobile.class);
 
     }
@@ -438,7 +444,7 @@ public class NewTaskStepsMobile extends CardTaskStepsMobile {
      * Переходим по ссылке в появившемся toast в созданную задачу
      */
     public NewTaskStepsMobile goToNewTaskViaToast() {
-       verifyThatToastOfNewTaskAppear();
+        verifyThatToastOfNewTaskAppear();
         //Переходим по ссылке в появившемся toast в созданную задачу
         loginPageElementsMobile.getTextOnToastOfNewTask().click();
         return page(NewTaskStepsMobile.class);
@@ -452,7 +458,6 @@ public class NewTaskStepsMobile extends CardTaskStepsMobile {
         loginPageElementsMobile.getTextOnToastOfNewTask().shouldHave(Condition.text("Создана задача №"));
         return page(NewTaskStepsMobile.class);
     }
-
 
 
     /**
@@ -475,7 +480,7 @@ public class NewTaskStepsMobile extends CardTaskStepsMobile {
     }
 
     /**
-     *  Проверки групп полей
+     * Проверки групп полей
      *
      * @return ValidateGroupFieldsStepsMobile
      */

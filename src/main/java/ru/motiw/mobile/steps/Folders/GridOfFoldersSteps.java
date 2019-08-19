@@ -75,7 +75,15 @@ public class GridOfFoldersSteps extends InternalStepsMobile {
      */
     public void clickContextMenuForItemInGrid(String nameOfItem) {
         gridOfFolderElementsMobile.getItemInTheGrid(nameOfItem).waitUntil(visible, 5000);
-        if ((gridOfFolderElementsMobile.getButtonOfOpenContextMenu(nameOfItem).is(visible))) {
+        if ((gridOfFolderElementsMobile.getButtonOfCloseContextMenu(nameOfItem).is(visible))) {
+            // click ContextMenu
+            gridOfFolderElementsMobile.getButtonOfCloseContextMenu(nameOfItem).click();
+            // Проверяем, что Кнопка открытия конт.меню появилась
+            gridOfFolderElementsMobile.getButtonOfOpenContextMenu(nameOfItem).shouldBe(visible);
+            // Проверяем, что конт.меню закрылось
+            gridOfFolderElementsMobile.getContextMenu().shouldNotBe(visible);
+        } else {
+            gridOfFolderElementsMobile.getButtonOfOpenContextMenu(nameOfItem).waitUntil(visible, 5000);
             // Скроллинг до объекта (задачи\документа) в гриде и клик
             scrollToAndClick(gridOfFolderElementsMobile.getButtonOfOpenContextMenu(nameOfItem));
             // Ждем скрытие маски на кнопке Открытия/закрытия конт.меню
@@ -87,14 +95,6 @@ public class GridOfFoldersSteps extends InternalStepsMobile {
             if (!internalElementsMobile.getToastWithText().is(text("Нет доступных операций"))) {
                 gridOfFolderElementsMobile.getContextMenu().shouldBe(visible);
             }
-
-        } else {
-            // click ContextMenu
-            gridOfFolderElementsMobile.getButtonOfCloseContextMenu(nameOfItem).click();
-            // Проверяем, что Кнопка открытия конт.меню появилась
-            gridOfFolderElementsMobile.getButtonOfOpenContextMenu(nameOfItem).shouldBe(visible);
-            // Проверяем, что конт.меню закрылось
-            gridOfFolderElementsMobile.getContextMenu().shouldNotBe(visible);
         }
     }
 

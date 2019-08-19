@@ -12,6 +12,7 @@ import ru.motiw.web.model.Administration.TasksTypes.SettingsForTaskTypeListField
 import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
 import ru.motiw.web.model.Administration.TypesOfTables.TypesOfTables;
 import ru.motiw.web.model.Administration.Users.*;
+import ru.motiw.web.model.Administration.Users.Module;
 import ru.motiw.web.model.CorrectionMethod;
 import ru.motiw.web.model.OpenFilesForEdit;
 import ru.motiw.web.model.ShiftDirection;

@@ -76,7 +76,7 @@ public class ExecutionDocumentStepsMobile extends DocumentStepsMobile {
         switch (executionOfDocument.getTypeExecutionOperation()) {
 
             case CREATE_RESOLUTION:
-                    resolutionStepsMobile.createResolution(document, folder, executionPlace);
+                    resolutionStepsMobile.createAllResolutionsInDocument(document, folder, executionPlace);
                 break;
 
             case MOVE_TO_EXECUTION:

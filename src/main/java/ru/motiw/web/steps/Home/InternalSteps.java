@@ -1,5 +1,6 @@
 package ru.motiw.web.steps.Home;
 
+import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
@@ -7,12 +8,16 @@ import org.openqa.selenium.TimeoutException;
 import ru.motiw.web.elements.elementsweb.Internal.InternalElements;
 import ru.motiw.web.steps.BaseSteps;
 
+import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Selenide.*;
+import static org.testng.AssertJUnit.fail;
 import static ru.motiw.web.model.URLMenu.INTERNAL_MENU;
 
 /**
@@ -94,6 +99,25 @@ public class InternalSteps extends BaseSteps {
         open(baseUrl + INTERNAL_MENU.getMenuURL());
         switchTo().defaultContent();
         $(internalElements.getLogout()).shouldBe(Condition.visible).click();
+        try {
+            verifyThatLoginPageAppear();
+        } catch (Error error) {
+            //Обрабатываем ситуацию, когда при попытке разлогинится появляется сообщение поверх окна браузера "Подтвердите действие на странице..."
+            try {
+                Robot r = new Robot(); //создаем робота для взаимодействия с alert-ом ошибки
+                r.keyPress(KeyEvent.VK_ENTER);  //закрываем alert ошибки
+                verifyThatLoginPageAppear();
+            } catch (AWTException e) {
+                fail("AWTException");
+            }
+        }
+    }
+
+    /**
+     * Проверка того, что мы на странице авторизациии
+     *
+     */
+    private void verifyThatLoginPageAppear() {
         $(By.cssSelector("#login")).waitUntil(visible, 10000);
         $(By.cssSelector("#login")).shouldBe(Condition.visible);
         $(By.cssSelector("#pass")).shouldBe(Condition.visible);

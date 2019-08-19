@@ -31,10 +31,10 @@ public abstract class BaseTest {
 
     @BeforeClass
     public void setUpConfigurations() throws Exception {
-        setDriverByName("chrome");
+        setDriverByName("chromeOnMac");
         /*VideoRecorder.conf()
                 .withVideoFolder("build/reports/video");*/
-        Configuration.baseUrl = http + "172.22.244.47";
+        Configuration.baseUrl = http + "172.20.10.7";
         Configuration.timeout = 8000;
         TextReport.onSucceededTest = true;
         TextReport.onFailedTest = true;
@@ -67,6 +67,10 @@ public abstract class BaseTest {
                 break;
             case "chrome":
                 System.setProperty("webdriver.chrome.driver", resourcesFolder + "chromedriver.exe");
+                Configuration.browser = "chrome";
+                break;
+            case "chromeOnMac":
+                System.setProperty("webdriver.chrome.driver", resourcesFolder + "chromedriver");
                 Configuration.browser = "chrome";
                 break;
             case "gecko":

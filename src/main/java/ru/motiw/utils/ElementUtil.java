@@ -160,6 +160,19 @@ public abstract class ElementUtil {
     }
 
     /**
+     * Скроллинг к элементу
+     * <p/>
+     * пример - scrollToAndClick()
+     *
+     * @param element элемент к к-му необходимо проскроллировать список
+     */
+    public static void scrollToElement(SelenideElement element) {
+        ((JavascriptExecutor) getWebDriver()).executeScript("arguments[0].scrollIntoView();"
+                , element);
+        sleep(200);
+    }
+
+    /**
      * Метод реализующий взаиодействие с полем ввода типа file, предварительно делая его видимым
      *
      * @param driver
