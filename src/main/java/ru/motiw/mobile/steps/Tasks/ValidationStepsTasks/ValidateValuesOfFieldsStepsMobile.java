@@ -81,7 +81,7 @@ public class ValidateValuesOfFieldsStepsMobile extends ValidateFieldsStepsMobile
             // СОТРУДНИК
             if (fieldObject.getFieldType() instanceof TypeListFieldsEmployee) {
                 //Проверка добавленых пользователей в поле задачи
-                //verifyUserInFieldOfRole(fieldObject.getValueEmployeeField(), newTaskFormElementsMobile.getInputInUserFieldTypeEmployee(fieldObject.getFieldName())); //todo существующий метод не подходит для случая, когда в поле несколько пользователей
+                //verifyUserInFieldOfRole(fieldObject.getValueEmployeeField(), newTaskFormElementsMobile.getInputInUserFieldTypeEmployee(fieldObject.getFieldName()));
                 //Проверка выбранных пользователей в форме выбора
                 openFormSelectUser(newTaskFormElementsMobile.getInputInUserFieldTypeEmployee(fieldObject.getFieldName()));
                 verifyUserInFormOfRole(fieldObject.getValueEmployeeField());
@@ -192,7 +192,7 @@ public class ValidateValuesOfFieldsStepsMobile extends ValidateFieldsStepsMobile
             }
         }
         //В случае, если employees == null - Проверяем, что элемент в списке не выделен. Нужно для проверки после удаления пользователя из поля раб.группы.
-        newTaskFormElementsMobile.getListOfUsers().shouldBe(CollectionCondition.sizeGreaterThan(0), 5000); //ожидание когда загрузится список пользователей. todo на http://motiwtest5.test.lan у админ не может удалить сам себя
+        newTaskFormElementsMobile.getListOfUsers().shouldBe(CollectionCondition.sizeGreaterThan(0), 5000); //ожидание когда загрузится список пользователей.
         newTaskFormElementsMobile.getSelectedUserInTheList().shouldNotBe(visible);
         newTaskFormElementsMobile.getInputForSearchUsers().sendKeys(Keys.chord(Keys.ESCAPE)); //Закрыть форму
 
@@ -244,7 +244,7 @@ public class ValidateValuesOfFieldsStepsMobile extends ValidateFieldsStepsMobile
             }
         }
         //В случае, если employees == null - Проверяем, что пользователь по умолчанию выбран в списке. Нужно для проверки поля Автор, после удаления пользователя добавленного при создании задачи остается только Автор по умолчанию.
-        newTaskFormElementsMobile.getListOfUsers().shouldBe(CollectionCondition.sizeGreaterThan(0), 5000); //ожидание когда загрузится список пользователей. todo на http://motiwtest5.test.lan админ не может удалить сам себя
+        newTaskFormElementsMobile.getListOfUsers().shouldBe(CollectionCondition.sizeGreaterThan(0), 5000); //ожидание когда загрузится список пользователей.
         newTaskFormElementsMobile.getSelectedUserInTheList(employeeDefault.getLastName()).shouldBe(visible);
         newTaskFormElementsMobile.getInputForSearchUsers().sendKeys(Keys.chord(Keys.ESCAPE)); //Закрыть форму
 

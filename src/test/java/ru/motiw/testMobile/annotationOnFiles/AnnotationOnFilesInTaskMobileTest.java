@@ -133,8 +133,8 @@ public class AnnotationOnFilesInTaskMobileTest extends AnnotationOnFilesInDocume
         cardTaskStepsMobile.openTab(FILES_TAB);
         //Комментирование на файле
         annotationOnFilesSteps
-                .addCommentOfPenOnFile(authorOfAnnotation[0])
-                .addCommentOfMarkerOnFile(authorOfAnnotation[0])
+                .addCommentOfPenOnPdfFile(authorOfAnnotation[0])
+                .addCommentOfMarkerOnPdfFile(authorOfAnnotation[0])
                 .validateThat().annotationPenAndMarkerOnPdfExist();
         // ------------------  Проверяем после перезагрузки страницы
         refresh();
@@ -192,7 +192,7 @@ public class AnnotationOnFilesInTaskMobileTest extends AnnotationOnFilesInDocume
                 .validateThat().annotationPenAndMarkerOnPdfExist();
         annotationOnFilesSteps.clickButtonOfListOfAuthorsAnnotationsOnPdf();
         // Пробуем удалить граф.комментарий Пользователя-А
-        annotationOnFilesSteps.eraseAnnotationOnFile(authorOfAnnotation[0])
+        annotationOnFilesSteps.eraseAnnotationOnPdfFile(authorOfAnnotation[0])
                 .validateThat()
                 .annotationControlsToolbarForPdfAppears()
                 .annotationPenAndMarkerOnPdfExist();
@@ -223,7 +223,7 @@ public class AnnotationOnFilesInTaskMobileTest extends AnnotationOnFilesInDocume
         cardTaskStepsMobile.openTab(FILES_TAB);
         // Добавляем комментарий под Пользователем-Б
         annotationOnFilesSteps.validateThat().annotationControlsToolbarForPdfAppears();
-        annotationOnFilesSteps.addCommentOfPenOnFile(authorOfAnnotation[1])
+        annotationOnFilesSteps.addCommentOfPenOnPdfFile(authorOfAnnotation[1])
                 .validateThat().annotationsFirstAndSecondAuthorOnPdfExist();
         // ------------------  Проверяем после перезагрузки страницы
         refresh();
@@ -267,7 +267,7 @@ public class AnnotationOnFilesInTaskMobileTest extends AnnotationOnFilesInDocume
         // Переходим на вкладку "Файлы"
         cardTaskStepsMobile.openTab(FILES_TAB);
         // ------------------ Проверяем удаление граф.комментария Пользователя-Б и отображение граф.комментария Пользователя-А
-        annotationOnFilesSteps.eraseAnnotationOnFile(authorOfAnnotation[1])
+        annotationOnFilesSteps.eraseAnnotationOnPdfFile(authorOfAnnotation[1])
                 .validateThat().annotationPenAndMarkerOnPdfExist();
         // ------------------  Проверяем после перезагрузки страницы
         refresh();

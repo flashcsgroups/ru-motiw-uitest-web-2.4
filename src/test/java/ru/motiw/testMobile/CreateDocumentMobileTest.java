@@ -70,24 +70,6 @@ public class CreateDocumentMobileTest extends DocflowAdministrationMobile {
         documentStepsMobile = page(DocumentStepsMobile.class);
         annotationOnFilesSteps = page(AnnotationOnFilesSteps.class);
     }
-//
-//    предусловия
-//
-//    создать папку (с признаком добавить всем? чтобы было  попадание задачи по докумету в папку  Пользователя, которого добавляем в блок МС)
-//    setAddSharedFolderForAll
-//
-//    потом все как в  verificationDocumentCreation
-//    Создать документ в вебе  - сейчас МС Согласование входящей корреспонденции - Постановка задачи
-//
-//            (если нужно заменить)
-//
-//
-//- попадание задачи по докумету в папку  Пользоввателя, которого добавляем в блок МС
-//
-//    АРМ:
-//    переход в папку
-//    переход в документ
-//    проверка карточки: кнопки операций , файл
 
     @Test(dataProvider = "objectDataForVerifyingCreateDocument", dataProviderClass = DocflowAdministrationMobile.class)
     public void preconditionInWeb(Department[] departments, Employee[] employee,

@@ -6,6 +6,7 @@ import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import ru.motiw.mobile.elements.Internal.FilesPreviewElementsMobile;
+import ru.motiw.utils.GenericDate;
 import ru.motiw.web.model.Administration.Users.Employee;
 import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
@@ -23,7 +24,6 @@ import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static org.testng.Assert.fail;
 import static ru.motiw.mobile.steps.ValidationStepsMobile.ImgForVerificationFiles.*;
-import static ru.motiw.utils.GenericDate.nowDateWithUnderScore;
 
 
 /**
@@ -32,6 +32,7 @@ import static ru.motiw.utils.GenericDate.nowDateWithUnderScore;
 public class ValidationAnnotationOnFilesStepsMobile {
 
     private FilesPreviewElementsMobile filesPreviewElementsMobile = page(FilesPreviewElementsMobile.class);
+    private GenericDate genericDate = page(GenericDate.class);
     private ImageDiffer imageDiffer = new ImageDiffer();
 
     /**
@@ -324,6 +325,7 @@ public class ValidationAnnotationOnFilesStepsMobile {
      * Сравнение скриншота с эталонным изображением
      *
      * @param expectedBufferedImage Скриншот эталонного изображения. Он должен быть снят именно на том мониторе, на котором будут запускаться тесты. Только в этом случае сравнение проходит успешно.
+     *                              В гите файл изображения сжимается и из-за этого сравнение падает. Нужно держать у себя локально несжатые версиии изображений, которые будут использоваться для проверки.
      * @return
      * @throws Exception
      */
@@ -359,8 +361,8 @@ public class ValidationAnnotationOnFilesStepsMobile {
         // Сохраняем полученные скриншоты на которых есть разница с эталонным изображением
         String mainFilePath = "build" + File.separator + "reports" + File.separator +
                 "tests" + File.separator + "ru" + File.separator + "motiw" + File.separator + "testMobile" + File.separator;
-        String nameScreenshotFile = "screenshot" + "_displaySize" + getWebDriver().manage().window().getSize() + "_" + nowDateWithUnderScore() +"_.png";
-        String nameDiffImageFile =  "diffImage" + "_displaySize" + getWebDriver().manage().window().getSize() + "_" + nowDateWithUnderScore() +"_.png";
+        String nameScreenshotFile = "screenshot" + "_displaySize" + getWebDriver().manage().window().getSize() + "_" + genericDate.nowDateWithUnderScore() +"_.png";
+        String nameDiffImageFile =  "diffImage" + "_displaySize" + getWebDriver().manage().window().getSize() + "_" + genericDate.nowDateWithUnderScore() +"_.png";
         ImageIO.write(actual.getImage(), "png", new File(mainFilePath + nameScreenshotFile)); // сделанный скриншот
         ImageIO.write(diff.getMarkedImage(), "png", new File(mainFilePath + nameDiffImageFile)); // разница скриншота с эталонным изображением
 

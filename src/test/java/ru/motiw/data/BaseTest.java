@@ -31,10 +31,10 @@ public abstract class BaseTest {
 
     @BeforeClass
     public void setUpConfigurations() throws Exception {
-        setDriverByName("chromeOnMac");
+        setDriverByName("chrome");
         /*VideoRecorder.conf()
                 .withVideoFolder("build/reports/video");*/
-        Configuration.baseUrl = http + "172.20.10.7";
+        Configuration.baseUrl = http + "172.22.244.49";
         Configuration.timeout = 8000;
         TextReport.onSucceededTest = true;
         TextReport.onFailedTest = true;

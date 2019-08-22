@@ -219,6 +219,7 @@ public class AnnotationOnFilesInDocumentMobileTest extends AnnotationOnFilesInDo
      */
     @Test(description = "Проверка добавления граф.комментария на png-файле под первым пользователем", dataProvider = "objectDataForVerifyingAnnotationOnPngFileInDocument", dataProviderClass = AnnotationOnFilesInDocumentAndTaskMobile.class, dependsOnMethods = "precondition")
     public void addAnnotationOnImageFromFirstUser(Document documentWithImg, Folder[] folders, AuthorOfAnnotation[] authorOfAnnotation) throws Exception {
+        internalStepsMobile.goToAuthorizationPage();
         loginStepsMobile
                 .loginAs(authorOfAnnotation[0].getEmployee())
                 .waitLoadMainPage(); // Ожидание открытия главной страницы
@@ -260,6 +261,7 @@ public class AnnotationOnFilesInDocumentMobileTest extends AnnotationOnFilesInDo
      */
     @Test(description = "Проверка добавления граф.комментария на двух файлах (Pdf и Png) одновременно под первым пользователем", dataProvider = "objectDataForVerifyingAnnotationOnPdfAndPngFilesInDocument", dataProviderClass = AnnotationOnFilesInDocumentAndTaskMobile.class, dependsOnMethods = "precondition")
     public void addAnnotationOnTwoFilesFromFirstUser(Document documentWithPdfAndPng, Folder[] folders, AuthorOfAnnotation[] authorOfAnnotation) throws Exception {
+        internalStepsMobile.goToAuthorizationPage();
         loginStepsMobile
                 .loginAs(authorOfAnnotation[0].getEmployee())
                 .waitLoadMainPage(); // Ожидание открытия главной страницы
@@ -529,7 +531,7 @@ public class AnnotationOnFilesInDocumentMobileTest extends AnnotationOnFilesInDo
         // Добавляем комментарий под Пользователем-Б
         annotationOnFilesSteps.validateThat().annotationControlsToolbarAppears();
         annotationOnFilesSteps.addCommentOfPenOnFile(authorOfAnnotation[1])
-                .validateThat().annotationsFirstAndSecondAuthorExist(); // todo  нужен коммен второго юзера на изображении - сейчас рисует как на пдф
+                .validateThat().annotationsFirstAndSecondAuthorExist();
         // ------------------  Проверяем после перезагрузки страницы
         refresh();
         formElementsMobile.getToolbarOfMenu().waitUntil(visible, 15000);  // Ожидание тулбара

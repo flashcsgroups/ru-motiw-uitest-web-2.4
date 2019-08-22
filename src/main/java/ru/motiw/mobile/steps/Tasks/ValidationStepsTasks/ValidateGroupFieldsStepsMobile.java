@@ -30,8 +30,7 @@ public class ValidateGroupFieldsStepsMobile extends ValidateValuesOfFieldsStepsM
         // TODO  xpath другой м.б написать - этот ищет все 4ре поля - хотя для других полей ведь тоже xpath одинаковые для раскрытого и закрытого поля. //span[contains(text(),'Ответственные руководители')]/../..//div[@class="x-input-el\ - не находит
 
         newTaskFormElementsMobile.getEndField().shouldBe(visible); // Окончание
-        newTaskFormElementsMobile.getTaskType().shouldBe(visible); // Тип задачи TODO не проходит на centos  т.к нет поля типа задачи пока просто закомментил
-
+        newTaskFormElementsMobile.getTaskType().shouldBe(visible); // Тип задачи TODO не проходит т.к есть какой-то баг, что в АРМе нет поля типа задачи. Возможно, в случае, если не было создано ранее задач.
         //----------------------------------------------------------------  Шаблон задачи
         verifyFieldTemplateOfTask();
 

@@ -323,8 +323,6 @@ public abstract class AnnotationOnFilesInDocumentAndTaskMobile extends BaseTest 
     public Object[][] objectDataForVerifyingAnnotationOnFileInTask() {
         return new Object[][]{
                 {
-                        //переменная объекта - ПОЛЬЗОВАТЕЛЬ
-                        employee,
                         //переменная объекта - ЗАДАЧА
                         task,
                         //переменная объекта - Папка

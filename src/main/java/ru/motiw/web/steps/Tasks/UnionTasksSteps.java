@@ -6,21 +6,19 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import ru.motiw.web.steps.BaseSteps;
 import ru.motiw.web.elements.elementsweb.Tasks.UnionTasks.EditFormFoldersElements;
 import ru.motiw.web.elements.elementsweb.Tasks.UnionTasks.UnionTasksElements;
 import ru.motiw.web.model.Tasks.Folder;
 import ru.motiw.web.model.Tasks.Task;
+import ru.motiw.web.steps.BaseSteps;
 import ru.motiw.web.steps.Home.InternalSteps;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static ru.motiw.utils.ElementUtil.scrollToAndClick;
-import static ru.motiw.utils.ElementUtil.scrollToElement;
 import static ru.motiw.utils.WindowsUtil.openInNewWindow;
 import static ru.motiw.web.model.URLMenu.TASKS;
 
@@ -241,9 +239,6 @@ public class UnionTasksSteps extends BaseSteps {
             for (SelenideElement element : elementsCollection) {
                 namesOfFolders.add(element.getText().split("[(/0)]")[0]);
             }
-
-            System.out.println(namesOfFolders);
-            System.out.println(folder.getNameFolder());
 
             // Если папка существует, то удаляем её
             if (namesOfFolders.contains(folder.getNameFolder() + " ")) {

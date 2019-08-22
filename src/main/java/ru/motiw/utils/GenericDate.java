@@ -1,6 +1,8 @@
 package ru.motiw.utils;
 
+import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Calendar;
 
 public class GenericDate {
@@ -27,8 +29,8 @@ public class GenericDate {
     /**
      * Метод создания даты равной сейчас (Текущая дата)
      */
-    public static String nowDateWithUnderScore() {
-        return sdfWithUnderScore.format(cal.getTime());
+    public String nowDateWithUnderScore() {
+        return sdfWithUnderScore.format(Date.from(Instant.now()));
     }
 
     /**
