@@ -67,7 +67,7 @@ public class UnionTasksTest extends BaseTest {
 
         //---------------------------------------------------------------- Задачи/Задачи
         goToUnionTasks();
-        unionTasksSteps.beforeAddFolder(20)
+        unionTasksSteps.beforeAddFolder(21)
                 // Добавляем Папки(/у)
                 .addFolders(new Folder[]{
                         folder[0].setNameFolder("wD_Smart_Box " + BaseTest.randomString(4)).setUseFilter(true).setFilterField("Начало").setChooseRelativeValue(true)
@@ -144,7 +144,7 @@ public class UnionTasksTest extends BaseTest {
 
         //---------------------------------------------------------------- Задачи/Задачи
         goToUnionTasks();
-        unionTasksSteps.beforeAddFolder(20)
+        unionTasksSteps.beforeAddFolder(21)
                 // Удаляем Папки(/у)
                 .deleteFolders(folder);
         internalPageSteps.logout();
@@ -163,7 +163,7 @@ public class UnionTasksTest extends BaseTest {
 
         //---------------------------------------------------------------- Задачи/Задачи
         goToUnionTasks();
-        unionTasksSteps.beforeAddFolder(20)
+        unionTasksSteps.beforeAddFolder(21)
                 // Удаляем Папки(/у)
                 .deleteAllFolders("wD");
         internalPageSteps.logout();

@@ -97,7 +97,7 @@ public class CreateTaskMobileTest extends TasksMobile {
         //---------------------------------------------------------------- Задачи/Задачи - Создание Папок
         if (folder != null) {
             goToUnionTasks();
-            unionTasksSteps.beforeAddFolder(20);
+            unionTasksSteps.beforeAddFolder(21);
             // Добавляем Папки(/у)
             unionTasksSteps.addFolders(new Folder[]{folder[0].setNameFolder("wD_Smart_Box " + randomString(4))
                     .setUseFilter(true).setFilterField("Начало").setChooseRelativeValue(true)

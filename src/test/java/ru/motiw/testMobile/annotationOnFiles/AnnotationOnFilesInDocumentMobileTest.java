@@ -90,7 +90,7 @@ public class AnnotationOnFilesInDocumentMobileTest extends AnnotationOnFilesInDo
         userPageSteps.createUser(employee[1].setDepartment(departments[0]));
         //---------------------------------------------------------------- Задачи/Задачи
         goToUnionTasks();
-        unionTasksSteps.beforeAddFolder(20);
+        unionTasksSteps.beforeAddFolder(21);
         // Добавляем Папки(/у)
         unionTasksSteps.addFolders(new Folder[]{folders[0].setNameFolder("wD_Smart_Box " + randomString(4))
                 .setUseFilter(true)
