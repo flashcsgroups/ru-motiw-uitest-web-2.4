@@ -115,7 +115,7 @@ public class UnionTasksTest extends BaseTest {
                 internalPageSteps.hasMenuUserComplete()); // Проверяем отображение п.м. на внутренней странице
 
         //---------------------------------------------------------------- Задачи/Задачи
-        goToUnionTasks().checkTheMapASharedFolderFromTheNewlyCreatedUser(folder[4], 20);
+        goToUnionTasks().checkTheMapASharedFolderFromTheNewlyCreatedUser(folder[4], 21);
 
         internalPageSteps.logout(); // Выход из системы
         assertTrue(loginPageSteps.isNotLoggedIn()); // Проверка того, что пользователь разлогинен
