@@ -201,7 +201,7 @@ public class UsersTest extends BaseTest {
 
         loginPageSteps.loginAs(workflow);
         assertTrue(loginPageSteps.newUserIsLoggedInAs(workflow));
-        userPageSteps.checkUserWorkflow(18);
+        userPageSteps.checkUserWorkflow(19);
 
         internalPageSteps.logout();
         assertTrue(loginPageSteps.isNotLoggedIn());
