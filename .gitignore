@@ -4,6 +4,9 @@
 /target/
 /.idea/
 /ru.motiw.ui.autotests.iml
+*.iml
+*.ipr
+*.iws
 /build/
 /video/
 # Исключение из игнорирования
