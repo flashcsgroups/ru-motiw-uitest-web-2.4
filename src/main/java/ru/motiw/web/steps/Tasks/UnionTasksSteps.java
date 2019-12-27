@@ -167,8 +167,8 @@ public class UnionTasksSteps extends BaseSteps {
     public void selectTheGroupInTheGridForUserComplete(SelenideElement panelGrouping, int countPanelGrouping) {
         waitMaskForGridTask();
         panelGrouping.click();
-//        $$(By.xpath("//ul[@id='clickcombo-1003-picker-listEl']//li[contains(@class, 'x-boundlist-item')]"))
-//                .shouldHaveSize(countPanelGrouping); // проверяем, кол-во зн-ий в панели группировок
+        $$(By.xpath("//ul[@id='clickcombo-1003-picker-listEl']//li[contains(@class, 'x-boundlist-item')]"))
+                .shouldHaveSize(countPanelGrouping); // проверяем, кол-во зн-ий в панели группировок
     }
 
     /**
