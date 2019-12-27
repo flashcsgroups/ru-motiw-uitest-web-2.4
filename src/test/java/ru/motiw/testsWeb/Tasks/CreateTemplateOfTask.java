@@ -15,6 +15,7 @@ import ru.motiw.web.steps.Login.LoginStepsSteps;
 import ru.motiw.web.steps.Tasks.TemplateOfTaskSteps;
 
 import static com.codeborne.selenide.Selenide.page;
+import static com.codeborne.selenide.Selenide.sleep;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static ru.motiw.web.model.URLMenu.TASK_TEMPLATES;
 import static ru.motiw.web.steps.BaseSteps.openSectionOnURL;
@@ -50,6 +51,7 @@ public class CreateTemplateOfTask extends Tasks {
 
         //---------------------------------------------------------------- Шаблоны задач
         openSectionOnURL(TASK_TEMPLATES.getMenuURL());
+        sleep(2000);
         gridTemplateOfTaskElements.getAddTemplateButton().waitUntil(Condition.visible, 5000);
 
         //Добавляем шаблон

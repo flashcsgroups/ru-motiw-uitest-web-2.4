@@ -38,6 +38,7 @@ public class UsersSteps extends DepartmentSteps {
      * @return строковое значение из поля Имя пользователя (login)
      */
     public String getAttrLoginName() {
+        sleep(1000);
         usersElements.getNameUserLogin().click();
         return usersElements.getVisibleEditor().attr("value");
     }
@@ -195,6 +196,7 @@ public class UsersSteps extends DepartmentSteps {
      */
     private UsersSteps searchDepartmentForAlias(Department department) {
         getFrameObject($(By.xpath("//*[contains (@src, 'selectdep')]")));
+        sleep(2000);
         $(usersElements.getFieldSearchDepForAlias()).shouldBe(visible);
         usersElements.getFieldSearchDepForAlias().click();
         usersElements.getFieldSearchDepForAlias().sendKeys(department.getDepartmentName());

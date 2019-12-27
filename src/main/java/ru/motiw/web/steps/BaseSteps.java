@@ -4,10 +4,7 @@ import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import org.openqa.selenium.By;
-import org.openqa.selenium.ElementNotVisibleException;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
@@ -221,6 +218,15 @@ public abstract class BaseSteps {
         } catch (NoSuchElementException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Очищаем поле через Ctrl+a+BACK_SPACE
+     *
+     */
+    public void clearTextInInputViaHotKeys(SelenideElement element) {
+        element.sendKeys(Keys.chord(Keys.CONTROL, "a"));
+        element.sendKeys(Keys.BACK_SPACE);
     }
 
 }

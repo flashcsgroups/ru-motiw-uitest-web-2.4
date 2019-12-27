@@ -69,8 +69,10 @@ public class NewRecordDirectoriesSteps extends BaseSteps {
         for (DirectoriesField directoriesItem : directoriesFields) {
             // СТРОКА
             if (directoriesItem.getFieldType() instanceof TypeListFieldsString) {
+                sleep(2000);
                 editDirectoriesElements.getAddRecordButton().click(); // Добавить запись
                 getFrameObject($(By.xpath("//iframe[contains(@src,'/user/dict_record_edit/')]")));
+                sleep(2000);
                 selectTheTypeOfField(editDirectoriesElements.getTypeFieldString(directoriesItem.getFieldName()));
                 sleep(500);
                 TypeListFieldsString fieldString = (TypeListFieldsString) directoriesItem.getFieldType();

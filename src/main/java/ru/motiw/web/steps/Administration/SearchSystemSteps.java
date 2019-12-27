@@ -34,6 +34,7 @@ public class SearchSystemSteps extends BaseSteps {
      * Проверка Загрузки страницы - ожидание наличия информации о индексировании
      */
     public SearchSystemSteps ensurePageLoaded() {
+        sleep(2000);
         $(By.xpath("//*[@id='indexingInfo']")).shouldBe(Condition.visible);
         $$(By.xpath("//table//tr")).shouldBe(CollectionCondition.size(13));
         return this;

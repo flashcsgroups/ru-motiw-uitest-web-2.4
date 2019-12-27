@@ -34,8 +34,7 @@ public class InternalSteps extends BaseSteps {
      * @return DepartmentElements
      */
     public InternalSteps searchFacilityOnTheGrid(String searchObject) {
-        internalElements.getSearch().setValue(searchObject);
-        internalElements.getSearch().pressEnter();
+        internalElements.getSearch().setValue(searchObject).pressEnter().pressEnter();
         sleep(1000);
         return this;
     }

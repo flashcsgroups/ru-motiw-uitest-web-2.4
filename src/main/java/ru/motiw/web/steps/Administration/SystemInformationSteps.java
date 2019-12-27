@@ -5,8 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import ru.motiw.web.steps.BaseSteps;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.page;
+import static com.codeborne.selenide.Selenide.*;
 import static org.testng.Assert.assertFalse;
 import static ru.motiw.web.model.URLMenu.SYSTEM_INFO;
 
@@ -37,6 +36,7 @@ public class SystemInformationSteps extends BaseSteps {
      * Проверка Загрузки страницы - ожидание наличия кнопки чейнджллога
      */
     public SystemInformationSteps ensurePageLoaded() {
+        sleep(2000);
         $(By.xpath("//input[@type='button' and @value='ChangeLog']")).shouldBe(Condition.visible);
         return this;
     }

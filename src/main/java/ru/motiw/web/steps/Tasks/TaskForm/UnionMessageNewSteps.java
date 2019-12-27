@@ -281,7 +281,8 @@ public class UnionMessageNewSteps extends BaseSteps {
             switchTo().frame($(By.cssSelector("#flow")));
             insetDescriptionTaskFormElements.getButtonSaveDescription().click();
             insetPlanningTaskFormElements.getCheckpointNameField().click();
-            insetDescriptionTaskFormElements.getEditorField().setValue(checkpoint.getName()); // Заполняем Название КТ
+            clearTextInInputViaHotKeys(insetDescriptionTaskFormElements.getEditorField());
+            insetDescriptionTaskFormElements.getEditorField().setValue(checkpoint.getName()).pressEnter(); // Заполняем Название КТ
             if (checkpoint.getIsReady()) {
                 insetPlanningTaskFormElements.getCheckboxReadyFirst().click();
             }
@@ -368,6 +369,7 @@ public class UnionMessageNewSteps extends BaseSteps {
             for (IWG anIwg : iwg) {
                 insetDescriptionTaskFormElements.getButtonAddIWG().click(); // Добавить ИРГ
                 getFrameObject($(By.xpath("//iframe[contains(@src,'/user/editiwg')]"))); // переходим во Фрейм формы добавления - ИРГ
+               sleep(2000);
                 $(iwgFormElements.getButtonIwgSave()).shouldBe(Condition.visible);
                 iwgFormElements.getInputIwgName().setValue(anIwg.getNameIWG()); // Название ИРГ
                 iwgFormElements.getInputIwgTaskType().click();
@@ -428,6 +430,7 @@ public class UnionMessageNewSteps extends BaseSteps {
      * Проверка Загрузки страницы - форма Создания задачи - отображение вкладок в форме задачи
      */
     private UnionMessageNewSteps ensurePageLoaded() {
+        sleep(2000); // todo если не постаивть sleep, то на linux из-за этого метода падает следующий вызываемый метод. На винде ошибки нет. Возможно, проблема в chromedriver-е 78 версии для linux, нужно будет проверить на новых версиях.
         List<SelenideElement> elementsTabsTask = new ArrayList<>();
         for (SelenideElement element : $$(By.xpath("//span[text()][ancestor::em[contains(@class,'x-tab')]][ancestor::li[not(@style='display: none;')]]"))) {
             elementsTabsTask.add(element);

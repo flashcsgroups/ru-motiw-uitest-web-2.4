@@ -38,7 +38,7 @@ public class FormDocRegisterCardsEditGeneralSteps extends BaseSteps {
         } else {
             selectionStatusFieldDocument.click();
             setValueStatesDocument.clear();
-            setValueStatesDocument.setValue(statesOnReview);
+            setValueStatesDocument.setValue(statesOnReview).pressEnter();
         }
         return this;
     }

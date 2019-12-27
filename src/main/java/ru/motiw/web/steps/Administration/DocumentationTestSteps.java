@@ -57,6 +57,7 @@ public class DocumentationTestSteps extends BaseSteps {
 
 
     private void checkPdfManuals() {
+            sleep(2000);
             //проверяем кол-во ссылок на pdf-мануалы
             documentationTestElements.getAllReferenceToPdfManual().shouldHaveSize(13);
             String parentWindowHandler = getWebDriver().getWindowHandle(); //Запоминаем окно в котором находимся

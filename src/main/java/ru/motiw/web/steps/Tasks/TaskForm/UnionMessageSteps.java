@@ -7,8 +7,7 @@ import ru.motiw.web.model.Administration.TasksTypes.TasksTypes;
 import ru.motiw.web.model.Administration.Users.Employee;
 import ru.motiw.web.model.Tasks.*;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.page;
+import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static ru.motiw.utils.WindowsUtil.newWindowForm;
 
@@ -148,6 +147,7 @@ public class UnionMessageSteps extends UnionMessageNewSteps {
      * Проверка загрузки формы задачи - отображение вкладок в форме созданной задачи
      */
     public UnionMessageSteps ensurePageLoaded() {
+        sleep(2000);
         if ($(unionMessageElements.getTabIWG()).isDisplayed()) {
             checkDisplayedTabsInTheShapeOfAnObject(By.xpath("//span[text()][ancestor::em[contains(@class,'x-tab')]][ancestor::li[not(@style='display: none;')]]"), 11,
                     By.xpath("//span[text()][ancestor::em[contains(@class,'x-tab')]][ancestor::li[not(@style='display: none;')]]"),
