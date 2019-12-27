@@ -95,6 +95,7 @@ public class AnnotationOnFilesSteps {
      * Открывает/Закрывает список кнопок-переключателей отображения комментариев
      */
     public AnnotationOnFilesSteps clickButtonOfListOfAuthorsAnnotations() {
+        sleep(2000);
         filesPreviewElementsMobile.getAnnotationTrigger().waitUntil(Condition.visible, 5000);
         filesPreviewElementsMobile.getAnnotationTrigger().click();
         return this;

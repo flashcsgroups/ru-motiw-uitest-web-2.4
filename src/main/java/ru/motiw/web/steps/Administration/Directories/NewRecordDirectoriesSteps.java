@@ -13,6 +13,7 @@ import ru.motiw.web.steps.BaseSteps;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
+import static org.testng.FileAssert.fail;
 import static ru.motiw.utils.WindowsUtil.newWindowForm;
 import static ru.motiw.web.model.Administration.TasksTypes.SettingsForTaskTypeListFields.NO;
 
@@ -69,8 +70,13 @@ public class NewRecordDirectoriesSteps extends BaseSteps {
         for (DirectoriesField directoriesItem : directoriesFields) {
             // СТРОКА
             if (directoriesItem.getFieldType() instanceof TypeListFieldsString) {
-                sleep(2000);
-                editDirectoriesElements.getAddRecordButton().click(); // Добавить запись
+                try {
+                    editDirectoriesElements.getAddRecordButton().click(); // Добавить запись
+                } catch (Error ignored){
+                    if (editDirectoriesElements.getAddRecordButton().isDisplayed()){
+                        editDirectoriesElements.getAddRecordButton().click(); // Добавить запись
+                    } else fail();
+                }
                 getFrameObject($(By.xpath("//iframe[contains(@src,'/user/dict_record_edit/')]")));
                 sleep(2000);
                 selectTheTypeOfField(editDirectoriesElements.getTypeFieldString(directoriesItem.getFieldName()));

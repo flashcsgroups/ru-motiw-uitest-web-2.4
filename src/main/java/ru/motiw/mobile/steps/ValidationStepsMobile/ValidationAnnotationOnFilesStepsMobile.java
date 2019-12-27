@@ -60,6 +60,7 @@ public class ValidationAnnotationOnFilesStepsMobile {
      * Проверяем, что панель инструментов отображется
      */
     public ValidationAnnotationOnFilesStepsMobile annotationControlsToolbarAppears() {
+        sleep(2000); // todo на linux без этого ожидания бывает ошибка. Поробовать на новой версии ChromeDriver или разбираться в чем причина.
         filesPreviewElementsMobile.getAnnotationControlsToolbar().waitUntil(Condition.exist, 10000);
         return this;
     }
@@ -79,6 +80,7 @@ public class ValidationAnnotationOnFilesStepsMobile {
      * Проверяем, что кнопка вкючения/выключения списка комментариев отображется
      */
     public ValidationAnnotationOnFilesStepsMobile annotationTriggerAppears() {
+        sleep(2000); // todo на linux без этого ожидания бывает ошибка. Поробовать на новой версии ChromeDriver или разбираться в чем причина.
         filesPreviewElementsMobile.getAnnotationTrigger().waitUntil(Condition.visible, 10000);
         return this;
     }

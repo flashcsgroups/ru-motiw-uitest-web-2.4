@@ -91,6 +91,7 @@ public class ValidateFilesStepsMobile extends CardStepsMobile {
      */
     public ValidateFilesStepsMobile verifyTextInFilesInPreviewOnDescriptionPage(String textInFile) {
         switchTo().frame($(By.xpath("(//iframe)[2]")));  //Переходим во фрейм просмотра файлов
+        sleep(2000);
         $(By.xpath("//div[@id=\"viewerContainer\"]//div[@class=\"textLayer\"]/div[contains(text(),'" + textInFile + "')]")).shouldBe(visible);
         switchTo().defaultContent();  //Уходим из фрейма просмотра файлов
         return this;

@@ -92,7 +92,7 @@ public class CreateTaskMobileTest extends TasksMobile {
      * Подготовка данных в web-интерфейсе
      */
     @Test(dataProvider = "objectDataTaskNewType", dataProviderClass = TasksMobile.class)
-    public void preconditionInWeb(Department departments, Employee[] author, Employee[] executiveManagers, Employee[] controller, Employee[] worker, Directories registerCardDirectories, Directories directories, TasksTypes tasksTypes, Folder[] folder, TemplateOfTask[] templateOfTasks) {
+    public void preconditionInWeb(Department departments, Employee[] author, Employee[] executiveManagers, Employee[] controller, Employee[] worker, Directories registerCardDirectories, Directories directories, TasksTypes tasksTypes, Folder[] folder, TemplateOfTask[] templateOfTasks) throws InterruptedException {
         loginPageSteps.loginAs(ADMIN);
         //---------------------------------------------------------------- Задачи/Задачи - Создание Папок
         if (folder != null) {
@@ -155,6 +155,7 @@ public class CreateTaskMobileTest extends TasksMobile {
         // ---------------- Шаблоны ЗАДАЧ
         if (templateOfTasks != null) {
             openSectionOnURL(TASK_TEMPLATES.getMenuURL());
+            sleep(2000);
             gridTemplateOfTaskElements.getAddTemplateButton().waitUntil(Condition.visible, 5000);
             //Добавляем шаблон
             templateOfTaskSteps.createTemplateOfTask(templateOfTasks);
