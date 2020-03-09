@@ -5,17 +5,6 @@
         <listener class-name="com.codeborne.selenide.testng.TextReport"/>
     </listeners>
 
-    <test name="module: PDA">
-        <classes>
-            <class name="ru.motiw.testsPda.UsersAuthorizationPDATest"/>
-            <class name="ru.motiw.testsPda.CreateTaskPDATest"/>
-            <class name="ru.motiw.testsPda.DocumentsPDATest"/>
-            <class name="ru.motiw.testsPda.SearchPDATest"/>
-            <class name="ru.motiw.testsPda.OptionsPDATest"/>
-            <class name="ru.motiw.testsPda.TodayPDATest"/>
-            <class name="ru.motiw.testsPda.HelpPDATest"/>
-        </classes>
-    </test>
 
     <test name="module: Users (Web)">
         <classes>
@@ -50,6 +39,21 @@
     <test name="module: Options (Web)">
         <classes>
             <class name="ru.motiw.testsWeb.EventTemplatesTest"/>
+        </classes>
+    </test>
+
+
+    <test name="module: Tasks (Mobile)">
+        <classes>
+            <class name="ru.motiw.testMobile.CreateTaskMobileTest"/>
+            <class name="ru.motiw.testMobile.annotationOnFiles.AnnotationOnFilesInTaskMobileTest"/>
+        </classes>
+    </test>
+
+    <test name="module: Documents (Mobile)">
+        <classes>
+            <class name="ru.motiw.testMobile.CreateDocumentMobileTest"/>
+            <class name="ru.motiw.testMobile.annotationOnFiles.AnnotationOnFilesInDocumentMobileTest"/>
         </classes>
     </test>
 

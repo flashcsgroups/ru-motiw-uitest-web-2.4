@@ -31,9 +31,7 @@ public abstract class BaseTest {
 
     @BeforeClass
     public void setUpConfigurations() throws Exception {
-        setDriverByName("chromeOnLinux");
-        /*VideoRecorder.conf()
-                .withVideoFolder("build/reports/video");*/
+        setDriverByName("chrome_linux");
         Configuration.baseUrl = http + "172.22.244.49";
         Configuration.timeout = 8000;
         TextReport.onSucceededTest = true;
@@ -65,16 +63,16 @@ public abstract class BaseTest {
                 System.setProperty("webdriver.ie.driver", resourcesFolder + "IEDriverServer.exe");
                 Configuration.browser = "ie";
                 break;
-            case "chrome":
+            case "chrome_windows":
                 System.setProperty("webdriver.chrome.driver", resourcesFolder + "chromedriver.exe");
                 Configuration.browser = "chrome";
                 break;
-            case "chromeOnLinux":
+            case "chrome_linux":
                 System.setProperty("webdriver.chrome.driver", resourcesFolder + "chromedriverForLinux");
                 Configuration.browser = "chrome";
                 Configuration.browserSize = "1920x1080";
                 break;
-            case "chromeOnMac":
+            case "chrome_mac":
                 System.setProperty("webdriver.chrome.driver", resourcesFolder + "chromedriver");
                 Configuration.browser = "chrome";
                 break;

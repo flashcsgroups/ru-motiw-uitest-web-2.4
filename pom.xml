@@ -6,7 +6,7 @@
 
     <groupId>ru.motiw</groupId>
     <artifactId>ru-motiw-uitest-web</artifactId>
-    <version>2.1</version>
+    <version>2.4</version>
     <name>MOTIW UI Testing Unit tests</name>
     <description>Motiw - functional GUI autotesting</description>
     <packaging>jar</packaging>
